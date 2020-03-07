@@ -7,7 +7,7 @@ printenv | sort
 wget --progress=bar:force:noscroll -O linux-agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.165.0/vsts-agent-linux-arm-2.165.0.tar.gz
 tar xzf linux-agent.tar.gz
 # ./bin/Agent.Listener configure --unattended \
-bash ./bin/installdependencies.sh
+sudo bash ./bin/installdependencies.sh
 ./config.sh --unattended \
   --url "${VSTS_URL}" \
   --work "${VSTS_WORK:-_work}" \
