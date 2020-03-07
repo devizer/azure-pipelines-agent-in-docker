@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 work=$HOME/pipeline-agent
 mkdir -p $work
 cd $work
