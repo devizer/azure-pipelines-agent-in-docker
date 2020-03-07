@@ -15,7 +15,7 @@ RUN \
  bash /tmp/install-DOTNET.sh; \
  ls -f -s /opt/dotnet /usr/local/bin/dotnet; dotnet --info; \
  \
- dotnet nuget locals all --clear; 
+ dotnet nuget locals all --clear; \ 
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
