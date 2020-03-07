@@ -1,5 +1,11 @@
 FROM ubuntu:xenial
 
+ARG VSTS_URL=https://devizer.visualstudio.com/ 
+ARG VSTS_PAT
+ARG VSTS_POOL
+ARG VSTS_AGENT 
+ARG VSTS_WORK
+
 ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_ROOT=/opt/dotnet \
  DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \

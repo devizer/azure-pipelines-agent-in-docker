@@ -9,6 +9,7 @@ tar xzf linux-agent.tar.gz
 # ./bin/Agent.Listener configure --unattended \
 sudo bash ./bin/installdependencies.sh
 ./config.sh --unattended \
+  --agent "${VSTS_AGENT:-$(hostname)}" \
   --url "${VSTS_URL}" \
   --work "${VSTS_WORK:-_work}" \
   --auth pat --token "$VSTS_PAT" --pool "${VSTS_POOL:-Default}" --replace & wait $!
