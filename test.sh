@@ -2,5 +2,5 @@
 
 docker image rm devizervlad/azpa
 cd armv7
-docker build -t devizervlad/azpa:1 .
+docker build --build-args VSTS_URL --build-args VSTS_POOL --build-args VSTS_POOL --build-args VSTS_PAT --build-args VSTS_WORK -t devizervlad/azpa:1 .
 
