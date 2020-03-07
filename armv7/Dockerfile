@@ -6,6 +6,8 @@ ENV \
  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
  DOTNET_CLI_TELEMETRY_OPTOUT=1 \
  DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=1
+
+COPY install-apa.sh /tmp/install-apa.sh
   
 RUN echo; \
  apt-get update -q; \
@@ -22,6 +24,7 @@ RUN echo; \
  ln -f -s /opt/dotnet/dotnet /usr/local/bin/dotnet; dotnet --info; \
  \
  dotnet nuget locals all --clear; \ 
+ sudo -u user bash /tmp/install-apa.sh; \
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
