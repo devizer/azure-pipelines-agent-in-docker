@@ -13,13 +13,15 @@ RUN \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; \
  bash /tmp/install-DOTNET.sh; \
- ls -f -s /opt/dotnet /usr/local/bin/dotnet; dotnet --info; \
+ ln -f -s /opt/dotnet/dotnet /usr/local/bin/dotnet; dotnet --info; \
  \
  dotnet nuget locals all --clear; \ 
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
+ Say "PATH is [$PATH]"; \
+ 
 
  
 
