@@ -5,7 +5,7 @@ cd $work
 Say "azure pipeline agent path: [$(pwd)]"
 printenv | sort
 suffix=linux-arm
-if [[ "$(uname -m)" == "x86_64" ]]; suffix=linux-x64; fi 
+if [[ "$(uname -m)" == "x86_64" ]]; then suffix=linux-x64; fi
 wget --progress=bar:force:noscroll -O linux-agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.165.0/vsts-agent-${suffix}-2.165.0.tar.gz
 tar xzf linux-agent.tar.gz
 # ./bin/Agent.Listener configure --unattended \
