@@ -2,5 +2,5 @@
 
 docker image rm devizervlad/azpa
 cd armv7
-docker build -t devizervlad/azpa:1 .
+time docker build -t devizervlad/azpa:1 .
 
