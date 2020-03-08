@@ -35,6 +35,7 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
- Say "PATH is [$PATH]"; \
+ Say "PATH is [$PATH]"; 
+
 
 CMD su -c "cd ~/pipeline-agent; ./run.sh" user
