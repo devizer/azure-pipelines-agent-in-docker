@@ -25,13 +25,13 @@ RUN echo; \
     echo "user    ALL=(ALL:ALL) NOPASSWD: ALL" | sudo EDITOR="tee -a" visudo; \
     printf "pass\npass\n" | passwd user; \
     passwd -u user; \
- Say "Installing PowerShell and NodeJS" \
-    script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s pwsh \
- Say "Installing dotnet" \
+ Say "Installing PowerShell and NodeJS"; \
+    script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s pwsh node; \
+ Say "Installing dotnet"; \
     curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; \
     bash /tmp/install-DOTNET.sh; \
     ln -f -s /opt/dotnet/dotnet /usr/local/bin/dotnet; dotnet --info; \
- Say "Cleanup" \
+ Say "Cleanup"; \
  dotnet nuget locals all --clear; \ 
  su -c "bash /tmp/install-apa.sh" user; \
  sudo rm -rf /var/lib/apt/lists/*; \
