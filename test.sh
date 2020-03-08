@@ -4,5 +4,5 @@
 docker image rm devizervlad/azpa
 cd armv7
 time docker build --build-arg VSTS_URL --build-arg VSTS_POOL --build-arg VSTS_AGENT --build-arg VSTS_PAT --build-arg VSTS_WORK -t devizervlad/azpa:1 .
-docker run --rm -t devizervlad/azpa:1 
+docker run --hotname agent007 --rm -it devizervlad/azpa:1 
 
