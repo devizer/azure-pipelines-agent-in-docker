@@ -17,7 +17,7 @@ COPY install-apa.sh /tmp/install-apa.sh
   
 RUN echo; \
  apt-get update -q; \
- apt-get install -yq apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget; apt-get clean; \
+ apt-get install -yq apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git; apt-get clean; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say "Confugure user 'user'"; \
    useradd -m -s /bin/bash user; \
@@ -36,3 +36,5 @@ RUN echo; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
  Say "PATH is [$PATH]"; \
+
+CMD su -c "cd ~/pipeline-agent; ./run.sh" user
