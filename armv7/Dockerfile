@@ -29,7 +29,7 @@ RUN echo; \
     script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s pwsh node; \
  Say "Installing dotnet"; \
     curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; \
-    export DOTNET_TARGET_DIR=/usr/share/dotnet
+    export DOTNET_TARGET_DIR=/usr/share/dotnet; \
     bash /tmp/install-DOTNET.sh; \
     ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet; \ 
     dotnet --info; \
