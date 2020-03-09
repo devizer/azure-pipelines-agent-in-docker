@@ -1,10 +1,10 @@
-FROM ubuntu:xenial
-
 ARG VSTS_URL="https://devizer.visualstudio.com/"
 ARG VSTS_PAT=undefined
 ARG VSTS_POOL=undefined
 ARG VSTS_AGENT=undefined 
 ARG VSTS_WORK=undefined
+
+FROM ubuntu:xenial
 
 ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_ROOT=/opt/dotnet \
