@@ -33,9 +33,12 @@ RUN echo; \
     bash /tmp/install-DOTNET.sh; \
     ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet; \ 
     dotnet --info; \
+ Say "Install Azure Pipelines Agent"; \
+ printenv | grep VSTS_ > /tmp/args; chown user /tmp/args; \
+ su -c "source /tmp/args; bash /tmp/install-apa.sh" user; \
+ rm -f /tmp/args; \
  Say "Cleanup"; \
  dotnet nuget locals all --clear; \ 
- su -c "bash /tmp/install-apa.sh" user; \
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
