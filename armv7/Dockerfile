@@ -1,10 +1,10 @@
+FROM ubuntu:xenial
+
 ARG VSTS_URL="https://devizer.visualstudio.com/"
 ARG VSTS_PAT=undefined
 ARG VSTS_POOL=undefined
 ARG VSTS_AGENT=undefined 
 ARG VSTS_WORK=undefined
-
-FROM ubuntu:xenial
 
 ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_ROOT=/opt/dotnet \
@@ -17,7 +17,7 @@ COPY install-apa.sh /tmp/install-apa.sh
   
 RUN echo; \
  apt-get update -q; \
- apt-get install -yq apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu procps; apt-get clean; \
+ apt-get install -yq apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu procps p7zip-full jq pv; apt-get clean; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say "Confugure user 'user'"; \
     useradd -m -s /bin/bash user; \
@@ -34,6 +34,7 @@ RUN echo; \
     ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet; \ 
     dotnet --info; \
  Say "Install Azure Pipelines Agent"; \
+ printenv | sort
  printenv | grep VSTS_ > /tmp/args; chown user /tmp/args; \
  su -c "source /tmp/args; bash /tmp/install-apa.sh" user; \
  rm -f /tmp/args; \
