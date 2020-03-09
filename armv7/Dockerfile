@@ -34,7 +34,7 @@ RUN echo; \
     ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet; \ 
     dotnet --info; \
  Say "Install Azure Pipelines Agent"; \
- printenv | sort
+ printenv | sort; \
  printenv | grep VSTS_ > /tmp/args; chown user /tmp/args; \
  su -c "source /tmp/args; bash /tmp/install-apa.sh" user; \
  rm -f /tmp/args; \
