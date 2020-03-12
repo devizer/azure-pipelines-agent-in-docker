@@ -2,7 +2,7 @@
 
 steps:
 
-  - bash: bash disable-ipv6.sh
+  - bash: bash cross-platform/disable-ipv6.sh
     displayName: 'Disable ipv6'
     
   - bash: |
