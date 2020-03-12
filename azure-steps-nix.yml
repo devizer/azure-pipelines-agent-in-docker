@@ -18,7 +18,7 @@ steps:
 
       docker exec -it $agentname bash -c '
        export VSTS_URL="https://devizer.visualstudio.com/";
-       export VSTS_PAT=wrsrvarnftw3phvby53z3lulef6r5kbyyrqne4pxxf2r65lgfjtq;
+       export VSTS_PAT='$VSTS_PAT';
        export VSTS_POOL=temp-pool;
        export VSTS_AGENT='$agentname'; 
        export VSTS_WORK=work;
