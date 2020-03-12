@@ -19,6 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /pre-configure
 COPY .  /pre-configure
+SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
  echo "Starting in '$(pwd)'"; \
