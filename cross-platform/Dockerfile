@@ -50,7 +50,7 @@ RUN echo; \
     popd >/dev/null; \
     if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
  Say "Cleanup"; \
- dotnet nuget locals all --clear; \ 
+ echo SKIP: dotnet nuget locals all --clear; \ 
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \

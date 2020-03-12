@@ -4,6 +4,7 @@ curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/t
 export DOTNET_TARGET_DIR=/usr/share/dotnet; 
 set +e
 Say "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER is '${DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER}'"
+export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 # what the hell on qemu-static?
 bash /tmp/install-DOTNET.sh;
 set -e 
