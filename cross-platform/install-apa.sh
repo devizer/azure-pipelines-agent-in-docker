@@ -3,7 +3,7 @@ work=$HOME/azure-pipelines-agent
 mkdir -p $work
 cd $work
 Say "azure pipeline agent path: [$(pwd)]"
-printenv | sort
+# printenv | sort
 suffix=linux-arm
 system="$(uname -m)"
 if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi

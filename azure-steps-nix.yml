@@ -17,7 +17,7 @@ steps:
        -v /var/run/docker.sock:/var/run/docker.sock \
        devizervlad/crossplatform-azure-pipelines-agent:latest
 
-      docker exec -it $agentname bash -c '
+      docker exec -t $agentname bash -c '
        export VSTS_URL="https://devizer.visualstudio.com/";
        export VSTS_PAT='$VSTS_PAT';
        export VSTS_POOL=temp-pool;
@@ -25,7 +25,7 @@ steps:
        export VSTS_WORK=work;
        /pre-configure/config-agent.sh'
 
-      docker exec -it $agentname bash -c "ls /var/run/docker.sock"
+      docker exec -t $agentname bash -c "ls /var/run/docker.sock"
   
     displayName: 'Build and test local x64 image'
 

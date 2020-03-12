@@ -1,7 +1,5 @@
 variables:
-    buildConfiguration: "Debug"
-    testProject: "Universe.CpuUsage.Tests/Universe.CpuUsage.Tests.csproj"
-    solution: "Universe.CpuUsage.sln"
+    Project: 'Azure Pipelines Agent in Docker'
 
 jobs:
 
@@ -18,5 +16,4 @@ jobs:
 
 trigger:
   - master
-
 
