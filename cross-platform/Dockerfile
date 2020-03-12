@@ -21,6 +21,7 @@ COPY .  /pre-configure
 SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
+ set -e; set -u; \
  echo "Starting in '$(pwd)'"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
@@ -56,7 +57,7 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
- Say "PATH is [$PATH]"; 
+ Say "FINISH. PATH is [$PATH]"; 
 
 VOLUME [ "/sys/fs/cgroup" ]
 

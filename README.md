@@ -10,17 +10,17 @@ azure pipeline agent in docker for armv7, arm64 and x86_64
 ### create container and configure azure pipeline agent
 ```
 docker run -d --restart on-failure --privileged \
- --name agent007 \ 
+ --name agent007 \
  --hostname agent007 \
  -v /sys/fs/cgroup:/sys/fs/cgroup \
- -v /var/run/docker.sock:/var/run/docker.sock \ 
- devizervlad/devizervlad/crossplatform-azure-pipeline-agent:latest
+ -v /var/run/docker.sock:/var/run/docker.sock \
+ devizervlad/crossplatform-azure-pipelines-agent:latest
 
-docker exec -it agent007 '
+docker exec -it agent007 bash -c '
  export VSTS_URL="https://devizer.visualstudio.com/";
  export VSTS_PAT=<your agent pool token>;
- export VSTS_POOL=armv7-pool;
- export VSTS_AGENT=armv7-agent; 
+ export VSTS_POOL=my-pool;
+ export VSTS_AGENT=my-agent-007; 
  export VSTS_WORK=work;
  /pre-configure/config-agent.sh'
 ```
