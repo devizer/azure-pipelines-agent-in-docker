@@ -27,7 +27,7 @@ if [[ ! -f /usr/local/bin/docker-compose ]]; then
   sudo curl --fail -ksSL -o /usr/local/bin/docker-compose "https://raw.githubusercontent.com/devizer/test-and-build/master/docker-compose/$dock_comp_ver/docker-compose-$(uname -s)-$(uname -m)" || true    
 fi
 if [[ -f /usr/local/bin/docker-compose ]]; then
-sudo chmod +x /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
 else
-Say "docker-compose $dock_comp_ver can not be installed for $(uname -s) $(uname -m)" 
+  Say "docker-compose $dock_comp_ver can not be installed for $(uname -s) $(uname -m)" 
 fi
