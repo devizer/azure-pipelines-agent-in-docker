@@ -45,9 +45,10 @@ steps:
 
   - bash: |
       set -e
+      mkdir -p Log
       
       cd cross-platform
-      time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+      time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest . | tee Log/x64-build-image-log.log
 
       agentname="temp-$(uname -m)-agent"
       docker rm -f $agentname || true
@@ -56,7 +57,7 @@ steps:
        --hostname $agentname \
        -v /sys/fs/cgroup:/sys/fs/cgroup \
        -v /var/run/docker.sock:/var/run/docker.sock \
-       devizervlad/crossplatform-azure-pipelines-agent:latest
+       devizervlad/crossplatform-azure-pipelines-agent:latest | tee Log/x64-install-agent.log
 
       docker exec -t $agentname bash -c '
        export VSTS_URL="https://devizer.visualstudio.com/";
