@@ -14,8 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=1 \
  container=docker \
  LC_ALL=en_US.UTF8 \
- LANG=en_US.UTF8 \
- DEBIAN_FRONTEND=noninteractive
+ LANG=en_US.UTF8 
 
 WORKDIR /pre-configure
 COPY .  /pre-configure
@@ -23,6 +22,7 @@ SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
  echo "Starting in '$(pwd)'"; \
+ find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
  apt-get install -yq locales systemd apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu procps p7zip-full jq pv; apt-get clean; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
@@ -60,5 +60,5 @@ RUN echo; \
 
 VOLUME [ "/sys/fs/cgroup" ]
 
-# CMD su -c "cd ~/pipeline-agent; ./run.sh" user
+# systemd should have pid=1 
 CMD ["/lib/systemd/systemd"]

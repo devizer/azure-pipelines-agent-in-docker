@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-work=$HOME/pipeline-agent
+work=$HOME/azure-pipelines-agent
 mkdir -p $work
 cd $work
 Say "azure pipeline agent path: [$(pwd)]"
