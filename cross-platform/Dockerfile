@@ -6,6 +6,9 @@ ARG VSTS_POOL=undefined
 ARG VSTS_AGENT=undefined 
 ARG VSTS_WORK=undefined
 
+VOLUME [ "/sys/fs/cgroup" ]
+VOLUME ["/var/run/docker.sock"]
+
 ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_ROOT=/usr/share/dotnet \
  DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
@@ -58,9 +61,6 @@ RUN echo; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
  Say "FINISH. PATH is [$PATH]"; 
-
-VOLUME [ "/sys/fs/cgroup" ]
-VOLUME ["/var/run/docker.sock"]
 
 # systemd should have pid=1 
 CMD ["/lib/systemd/systemd"]
