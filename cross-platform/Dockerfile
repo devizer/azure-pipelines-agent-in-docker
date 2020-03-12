@@ -14,9 +14,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=1 \
  container=docker \
  LC_ALL=en_US.UTF8 \
+ LANG=en_US.UTF8 \
  DEBIAN_FRONTEND=noninteractive
 
-COPY . /pre-configure
+WORKDIR /pre-configure
+COPY .  /pre-configure
   
 RUN echo; \
  apt-get update -q; \
@@ -28,19 +30,10 @@ RUN echo; \
     echo "user    ALL=(ALL:ALL) NOPASSWD: ALL" | sudo EDITOR="tee -a" visudo; \
     printf "pass\npass\n" | passwd user; \
     passwd -u user; \
- Say "Installing PowerShell and NodeJS"; \
-    script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s pwsh node; \
- Say "Installing dotnet"; \
-    curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; \
-    export DOTNET_TARGET_DIR=/usr/share/dotnet; \
-    bash /tmp/install-DOTNET.sh; \
-    ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet; \ 
-    dotnet --info; \
- Say "Install Azure Pipelines Agent"; \
- printenv | sort; \
- printenv | grep VSTS_ > /tmp/args; chown user /tmp/args; \
- su -c "source /tmp/args; bash /tmp/install-apa.sh" user; \
- rm -f /tmp/args; \
+ pushd /pre-configure/on-build >/dev/null; \
+ for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build"; bash -e "$f"; done; \
+ popd >/dev/null; \
+ if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
  Say "Cleanup"; \
  dotnet nuget locals all --clear; \ 
  sudo rm -rf /var/lib/apt/lists/*; \
