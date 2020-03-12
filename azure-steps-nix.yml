@@ -91,6 +91,10 @@ steps:
         docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
           -t devizervlad/crossplatform-azure-pipelines-agent:latest .
     displayName: 'x64+arm64+arm/v7: build and publish'
+
+  - bash: |
+        Show-System-Stat
+    displayName: 'Show-System-Stat'
         
   - task: PublishBuildArtifacts@1
     inputs:
