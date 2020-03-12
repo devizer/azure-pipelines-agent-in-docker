@@ -28,7 +28,7 @@ sudo ln -s /usr/arm-linux-gnueabihf/lib/librt.so.1 /lib/librt.so.1
 
 libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
 echo LIBICU: $libicu
-for p in zlib1g libicu55 $libicu liblttng-ust0 liburcu6 libkrb5-3 curl libcurl3 ; do
+for p in zlib1g libicu55 $libicu liblttng-ust0 liburcu4 libkrb5-3 curl libcurl3 ; do
   Say "Installing agent dependency '$p'"
-  sudo apt-get install -y -q ${p}:armhf ${p}
+  sudo apt-get install -y -q ${p}:armhf ${p} || true
 done
