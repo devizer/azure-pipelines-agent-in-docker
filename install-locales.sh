@@ -1,4 +1,5 @@
 # 11 minutes in qemu
+Say "Installing Locales"
 
 echo '
 # cs_CZ.UTF8 UTF-8
