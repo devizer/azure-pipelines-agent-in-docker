@@ -4,11 +4,12 @@ steps:
 
   - bash: |
       set -e
+      docker version || true
       cd cross-platform
       time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
 
       agentname="temp-$(uname -m)-agent"
-      docker rm -f $agentname
+      docker rm -f $agentname || true
       docker run -d --restart on-failure --privileged \
        --name $agentname \
        --hostname $agentname \
