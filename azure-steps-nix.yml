@@ -85,6 +85,8 @@ steps:
 
   - bash: |
         set -e
+        cd cross-platform || true 
+        Say "Buildxing in $(pwd)"
         echo "   login: ${#MY_DOCKER_LOGIN} chars, value: '${MY_DOCKER_LOGIN}'"
         echo "password: ${#MY_DOCKER_PASSWORD} chars"
         docker login -u "$MY_DOCKER_LOGIN" -p "$MY_DOCKER_PASSWORD"
