@@ -36,7 +36,7 @@ steps:
     displayName: 'Configure Docker'
 
   - bash: |
-        list-packages || list-packages || true
+        list-packages; list-packages || true
     displayName: 'List Packages'
 
   - bash: |
