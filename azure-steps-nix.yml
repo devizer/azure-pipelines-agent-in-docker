@@ -87,7 +87,7 @@ steps:
         set -e
         docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWORD"
         docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
-          devizervlad/crossplatform-azure-pipelines-agent:latest .
+          -t devizervlad/crossplatform-azure-pipelines-agent:latest .
     displayName: 'x64+arm64+arm/v7: build and publish'
         
   - task: PublishBuildArtifacts@1
