@@ -72,7 +72,7 @@ steps:
 
       docker exec -t $agentname bash -c '
        export VSTS_URL="https://devizer.visualstudio.com/";
-       export VSTS_PAT='$VSTS_PAT';
+       export VSTS_PAT='$MY_VSTS_PAT';
        export VSTS_POOL=temp-pool;
        export VSTS_AGENT='$agentname'; 
        export VSTS_WORK=work;
@@ -82,6 +82,8 @@ steps:
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world" | cat
     displayName: 'Build and test local x64 image'
+    env:
+      MY_VSTS_PAT: $(VSTS_PAT)
 
   - bash: |
         set -e
