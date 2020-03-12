@@ -52,7 +52,7 @@ steps:
       mkdir -p Log
       
       cd cross-platform
-      agentname="temp-$(uname -m)-agent"
+      agentname="test-$(uname -m)-agent-on-build"
       docker rm -f $agentname || true
 
       set -o pipefail # !important
