@@ -3,63 +3,62 @@
 steps:
 
   - bash: |
-        script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
-        # PART 2: EXPERIMENTAL
-          echo '
-          {
-            "experimental": true
-          }
-          ' | sudo tee /etc/docker/daemon.json
-        sudo systemctl restart docker
-        mkdir -p ~/.docker
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
+      # PART 2: EXPERIMENTAL
         echo '
-          {
-            "experimental": "enabled"
-          }
-          ' | tee ~/.docker/config.json
-        docker version
+        {
+          "experimental": true
+        }
+        ' | sudo tee /etc/docker/daemon.json
+      sudo systemctl restart docker
+      mkdir -p ~/.docker
+      echo '
+        {
+          "experimental": "enabled"
+        }
+        ' | tee ~/.docker/config.json
+      docker version
 
-        # register
-        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-        # list builders
-        Say "Builder INFO"
-        docker buildx ls
+      # register
+      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      # list builders
+      Say "Builder INFO"
+      docker buildx ls
 
-        Say "Docker INFO"
-        docker version || true
+      Say "Docker INFO"
+      docker version || true
     displayName: 'Configure Docker'
 
   - bash: |
-        list-packages || list-packages || true
+      list-packages || list-packages || true
     displayName: 'List Packages'
 
   - bash: |
-        set -e
-        
-        cd cross-platform
-        time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
-  
-        agentname="temp-$(uname -m)-agent"
-        docker rm -f $agentname || true
-        docker run -d --restart on-failure --privileged \
-         --name $agentname \
-         --hostname $agentname \
-         -v /sys/fs/cgroup:/sys/fs/cgroup \
-         -v /var/run/docker.sock:/var/run/docker.sock \
-         devizervlad/crossplatform-azure-pipelines-agent:latest
-  
-        docker exec -t $agentname bash -c '
-         export VSTS_URL="https://devizer.visualstudio.com/";
-         export VSTS_PAT='$VSTS_PAT';
-         export VSTS_POOL=temp-pool;
-         export VSTS_AGENT='$agentname'; 
-         export VSTS_WORK=work;
-         /pre-configure/config-agent.sh'
-  
-        docker exec -t $agentname bash -c "ls /var/run/docker.sock"
-        docker exec -t $agentname bash -c "tree /var/run -h"
-        docker exec -t $agentname bash -c "docker run -t --rm hello-world"
-  
+      set -e
+      
+      cd cross-platform
+      time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+
+      agentname="temp-$(uname -m)-agent"
+      docker rm -f $agentname || true
+      docker run -d --restart on-failure --privileged \
+       --name $agentname \
+       --hostname $agentname \
+       -v /sys/fs/cgroup:/sys/fs/cgroup \
+       -v /var/run/docker.sock:/var/run/docker.sock \
+       devizervlad/crossplatform-azure-pipelines-agent:latest
+
+      docker exec -t $agentname bash -c '
+       export VSTS_URL="https://devizer.visualstudio.com/";
+       export VSTS_PAT='$VSTS_PAT';
+       export VSTS_POOL=temp-pool;
+       export VSTS_AGENT='$agentname'; 
+       export VSTS_WORK=work;
+       /pre-configure/config-agent.sh'
+
+      docker exec -t $agentname bash -c "ls /var/run/docker.sock"
+      docker exec -t $agentname bash -c "tree /var/run -h"
+      docker exec -t $agentname bash -c "docker run -t --rm hello-world"
   displayName: 'Build and test local x64 image'
 
   - task: PublishBuildArtifacts@1
