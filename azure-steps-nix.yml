@@ -1,0 +1,34 @@
+# AGENT_OS=Linux|Darwin|Windows_NT
+
+steps:
+
+  - bash: |
+      set -e
+      cd cross-platform
+      time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+
+      agentname="temp-$(uname -m)-agent"
+      docker rm -f $agentname
+      docker run -d --restart on-failure --privileged \
+       --name $agentname \
+       --hostname $agentname \
+       -v /sys/fs/cgroup:/sys/fs/cgroup \
+       -v /var/run/docker.sock:/var/run/docker.sock \
+       devizervlad/crossplatform-azure-pipelines-agent:latest
+
+      docker exec -it $agentname bash -c '
+       export VSTS_URL="https://devizer.visualstudio.com/";
+       export VSTS_PAT=wrsrvarnftw3phvby53z3lulef6r5kbyyrqne4pxxf2r65lgfjtq;
+       export VSTS_POOL=temp-pool;
+       export VSTS_AGENT='$agentname'; 
+       export VSTS_WORK=work;
+       /pre-configure/config-agent.sh'
+
+      docker exec -it $agentname bash -c "ls /var/run/docker.sock"
+  
+    displayName: 'Build and test local x64 image'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.Repository.LocalPath)'
+      artifactName: '$(Agent.JobName)-$(Build.BuildNumber)'

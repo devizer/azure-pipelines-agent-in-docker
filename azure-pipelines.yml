@@ -1,0 +1,22 @@
+variables:
+    buildConfiguration: "Debug"
+    testProject: "Universe.CpuUsage.Tests/Universe.CpuUsage.Tests.csproj"
+    solution: "Universe.CpuUsage.sln"
+
+jobs:
+
+  - job: Ubuntu_18_04
+    variables:
+      OS: Linux
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+
+trigger:
+  - master
+
+
