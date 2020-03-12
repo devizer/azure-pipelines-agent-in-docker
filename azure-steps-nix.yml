@@ -59,7 +59,7 @@ steps:
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world"
-  displayName: 'Build and test local x64 image'
+    displayName: 'Build and test local x64 image'
 
   - task: PublishBuildArtifacts@1
     inputs:
