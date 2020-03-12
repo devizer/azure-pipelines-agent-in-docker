@@ -3,8 +3,35 @@
 steps:
 
   - bash: |
-      set -e
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
+      # PART 2: EXPERIMENTAL
+        echo '
+        {
+          "experimental": true
+        }
+        ' | sudo tee /etc/docker/daemon.json
+      sudo systemctl restart docker
+      mkdir -p ~/.docker
+      echo '
+        {
+          "experimental": "enabled"
+        }
+        ' | tee ~/.docker/config.json
+      docker version
+      
+      # register
+      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      # list builders
+      Say "Builder INFO"
+      docker buildx ls
+
+      Say "Docker INFO"
       docker version || true
+    displayName: 'Configure Docker'
+    
+  - bash: |
+      set -e
+      
       cd cross-platform
       time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest .
 
