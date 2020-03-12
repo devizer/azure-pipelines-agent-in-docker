@@ -60,6 +60,7 @@ RUN echo; \
  Say "FINISH. PATH is [$PATH]"; 
 
 VOLUME [ "/sys/fs/cgroup" ]
+VOLUME ["/var/run/docker.sock"]
 
 # systemd should have pid=1 
 CMD ["/lib/systemd/systemd"]
