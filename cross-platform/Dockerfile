@@ -1,11 +1,5 @@
 FROM ubuntu:xenial
 
-ARG VSTS_URL="https://devizer.visualstudio.com/"
-ARG VSTS_PAT=undefined
-ARG VSTS_POOL=undefined
-ARG VSTS_AGENT=undefined 
-ARG VSTS_WORK=undefined
-
 VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
 VOLUME [ "/var/run" ]
@@ -61,7 +55,7 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
- Say "FINISH. PATH is [$PATH]"; 
+ Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
 
 # systemd should have pid=1 
 CMD ["/lib/systemd/systemd"]
