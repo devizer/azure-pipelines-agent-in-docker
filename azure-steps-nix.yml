@@ -4,7 +4,9 @@ steps:
 
   - bash: |
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
-      sudo apt-get update -qq; sudo apt-get install -y -qq qemu-user qemu-user-static
+      sudo apt-get update -qq; 
+      sudo apt-get purge -qq man-db -y
+      sudo apt-get install -y -qq qemu-user qemu-user-static
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/Install-DOCKER.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
       # PART 2: EXPERIMENTAL
         echo '
