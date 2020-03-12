@@ -10,7 +10,7 @@ if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi
 wget --progress=bar:force:noscroll -O linux-agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.165.0/vsts-agent-${suffix}-2.165.0.tar.gz
 tar xzf linux-agent.tar.gz
 # ./bin/Agent.Listener configure --unattended \
-sudo bash ./bin/installdependencies.sh
+sudo bash ./bin/installdependencies.sh || true
 ./config.sh --unattended \
   --agent "${VSTS_AGENT:-$(hostname)}" \
   --url "${VSTS_URL}" \
