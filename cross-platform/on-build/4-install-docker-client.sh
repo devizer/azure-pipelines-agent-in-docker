@@ -15,7 +15,7 @@ sudo add-apt-repository \
 sudo apt-get update
 apt-cache policy docker-ce-cli
 sudo apt-get install -y docker-ce-cli pigz
-sudo docker version
+sudo docker version || true
 
 Say "Installing docker-compose 1.24.1"
 # sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
