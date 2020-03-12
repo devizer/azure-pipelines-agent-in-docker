@@ -16,6 +16,8 @@ sudo bash ./bin/installdependencies.sh || true
   --url "${VSTS_URL}" \
   --work "${VSTS_WORK:-_work}" \
   --auth pat --token "$VSTS_PAT" --pool "${VSTS_POOL:-Default}" --replace & wait $!
+  
+cat _diag/*.log || true
 
 function _ignore_() {
 ./bin/Agent.Listener configure --unattended \
