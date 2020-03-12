@@ -55,7 +55,7 @@ steps:
       agentname="test-$(uname -m)-agent-on-build"
       docker rm -f $agentname || true
 
-      set -o pipefail # !important
+      # set -o pipefail # !important
       time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
 
       docker run -d --restart on-failure --privileged \
@@ -71,7 +71,7 @@ steps:
        export VSTS_POOL=temp-pool;
        export VSTS_AGENT='$agentname'; 
        export VSTS_WORK=work;
-       /pre-configure/config-agent.sh' | tee Log/x64-install-agent.log
+       /pre-configure/config-agent.sh' #| tee Log/x64-install-agent.log
 
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
