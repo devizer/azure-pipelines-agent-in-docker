@@ -7,7 +7,8 @@ ARG VSTS_AGENT=undefined
 ARG VSTS_WORK=undefined
 
 VOLUME [ "/sys/fs/cgroup" ]
-VOLUME ["/var/run/docker.sock"]
+# VOLUME [ "/var/run/docker.sock" ]
+VOLUME [ "/var/run" ]
 
 ENV DEBIAN_FRONTEND=noninteractive \
  DOTNET_ROOT=/usr/share/dotnet \
