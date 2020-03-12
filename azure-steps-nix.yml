@@ -4,6 +4,7 @@ steps:
 
   - bash: |
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/Install-DOCKER.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
       # PART 2: EXPERIMENTAL
         echo '
         {
@@ -30,8 +31,16 @@ steps:
     displayName: 'Configure Docker'
 
   - bash: |
-      list-packages || list-packages || true
+        list-packages || list-packages || true
     displayName: 'List Packages'
+
+  - bash: |
+      Say "Builder INFO"
+      docker buildx ls
+
+      Say "Docker INFO"
+      docker version || true
+    displayName: 'Show Docker INFO'
 
   - bash: |
       set -e
