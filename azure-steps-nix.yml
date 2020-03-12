@@ -2,7 +2,7 @@
 
 steps:
 
-  - bash: bash cross-platform/disable-ipv6.sh
+  - bash: bash cross-platform/disable-ipv6.sh; sudo ifconfig -a || true
     displayName: 'Disable ipv6'
     
   - bash: |
