@@ -2,38 +2,38 @@
 
 steps:
 
-    - bash: |
-          script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
-          # PART 2: EXPERIMENTAL
-            echo '
-            {
-              "experimental": true
-            }
-            ' | sudo tee /etc/docker/daemon.json
-          sudo systemctl restart docker
-          mkdir -p ~/.docker
+  - bash: |
+        script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
+        # PART 2: EXPERIMENTAL
           echo '
-            {
-              "experimental": "enabled"
-            }
-            ' | tee ~/.docker/config.json
-          docker version
-  
-          # register
-          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          # list builders
-          Say "Builder INFO"
-          docker buildx ls
-  
-          Say "Docker INFO"
-          docker version || true
-      displayName: 'Configure Docker'
+          {
+            "experimental": true
+          }
+          ' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker
+        mkdir -p ~/.docker
+        echo '
+          {
+            "experimental": "enabled"
+          }
+          ' | tee ~/.docker/config.json
+        docker version
 
-    - bash: |
-          list-packages || list-packages || true
-      displayName: 'List Packages'
+        # register
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        # list builders
+        Say "Builder INFO"
+        docker buildx ls
 
-    - bash: |
+        Say "Docker INFO"
+        docker version || true
+  displayName: 'Configure Docker'
+
+  - bash: |
+        list-packages || list-packages || true
+    displayName: 'List Packages'
+
+  - bash: |
         set -e
         
         cd cross-platform
@@ -60,7 +60,7 @@ steps:
         docker exec -t $agentname bash -c "tree /var/run -h"
         docker exec -t $agentname bash -c "docker run -t --rm hello-world"
   
-      displayName: 'Build and test local x64 image'
+  displayName: 'Build and test local x64 image'
 
   - task: PublishBuildArtifacts@1
     inputs:
