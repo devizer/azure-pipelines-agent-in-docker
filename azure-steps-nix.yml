@@ -85,6 +85,8 @@ steps:
 
   - bash: |
         set -e
+        echo "   login: ${#DOCKER_LOGIN} chars"
+        echo "password: ${#DOCKER_PASSWORD} chars"
         docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWORD"
         docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
           -t devizervlad/crossplatform-azure-pipelines-agent:latest .
