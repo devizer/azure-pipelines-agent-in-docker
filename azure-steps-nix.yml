@@ -92,8 +92,8 @@ steps:
           -t devizervlad/crossplatform-azure-pipelines-agent:latest .
     displayName: 'x64+arm64+arm/v7: build and publish'
     env:
-      - MY_DOCKER_LOGIN: $(DOCKER_LOGIN)
-      - MY_DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+      MY_DOCKER_LOGIN: $(DOCKER_LOGIN)
+      MY_DOCKER_PASSWORD: $(DOCKER_PASSWORD)
 
   - bash: |
         Show-System-Stat
