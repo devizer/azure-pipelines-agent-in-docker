@@ -27,7 +27,7 @@ steps:
 
         Say "Docker INFO"
         docker version || true
-  displayName: 'Configure Docker'
+    displayName: 'Configure Docker'
 
   - bash: |
         list-packages || list-packages || true
