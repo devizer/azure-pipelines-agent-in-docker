@@ -22,8 +22,20 @@ COPY .  /pre-configure
   
 RUN echo; \
  apt-get update -q; \
- apt-get install -yq apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu procps p7zip-full jq pv; apt-get clean; \
+ apt-get install -yq systemd apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu procps p7zip-full jq pv; apt-get clean; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
+ Say "Confugure SystemD in docker"; \
+     pushd /lib/systemd/system/sysinit.target.wants/ \
+     && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
+     && rm -f /lib/systemd/system/multi-user.target.wants/* \
+     /etc/systemd/system/*.wants/* \
+     /lib/systemd/system/local-fs.target.wants/* \
+     /lib/systemd/system/sockets.target.wants/*udev* \
+     /lib/systemd/system/sockets.target.wants/*initctl* \
+     /lib/systemd/system/basic.target.wants/* \
+     /lib/systemd/system/anaconda.target.wants/* \
+     /lib/systemd/system/plymouth* \
+     /lib/systemd/system/systemd-update-utmp*; popd; \
  Say "Confugure user 'user'"; \
     useradd -m -s /bin/bash user; \
     usermod -aG sudo user; \ 
@@ -42,5 +54,7 @@ RUN echo; \
  sudo rm -rf /tmp/*; \
  Say "PATH is [$PATH]"; 
 
+VOLUME [ "/sys/fs/cgroup" ]
 
-CMD su -c "cd ~/pipeline-agent; ./run.sh" user
+# CMD su -c "cd ~/pipeline-agent; ./run.sh" user
+CMD ["/lib/systemd/systemd"]
