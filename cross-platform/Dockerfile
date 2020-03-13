@@ -52,6 +52,7 @@ RUN echo; \
     if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
  Say "Cleanup"; \
  echo SKIP: dotnet nuget locals all --clear; \ 
+ sudo rm -rf /pre-configure/bin || true; \
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
