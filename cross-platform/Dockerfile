@@ -50,7 +50,7 @@ RUN echo; \
     for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build"; bash -e "$f"; done; \
     popd >/dev/null; \
     if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
- Say "Cleanup"; \
+ Say "Clean-up"; \
  echo SKIP: dotnet nuget locals all --clear; \ 
  sudo rm -rf /pre-configure/bin || true; \
  sudo rm -rf /var/lib/apt/lists/*; \
