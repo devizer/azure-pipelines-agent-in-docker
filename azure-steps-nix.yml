@@ -9,7 +9,7 @@ steps:
       export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; 
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
       apt-get install -yqq tree
-      tree $NET_TEST_RUNNERS_INSTALL_DIR -h
+      tree $NET_TEST_RUNNERS_INSTALL_DIR -h || true
     displayName: 'Build local test runners'
     
   - bash: |
