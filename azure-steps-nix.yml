@@ -6,6 +6,13 @@ steps:
     displayName: 'Disable ipv6'
     
   - bash: |
+      export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; 
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
+      apt-get install -yqq tree
+      tree $NET_TEST_RUNNERS_INSTALL_DIR -h
+    displayName: 'Build local test runners'
+    
+  - bash: |
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
       sudo apt-get update -qq; 
       sudo apt-get purge -qq man-db -y
