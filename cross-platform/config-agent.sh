@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+[[ -f /version ]] && echo "Build Version: '$(cat /version)'" 
 cd /pre-configure
 printenv | grep VSTS_ > /tmp/args; 
 chown user /tmp/args; 
