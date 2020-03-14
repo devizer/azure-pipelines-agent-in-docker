@@ -49,7 +49,7 @@ RUN echo; \
     passwd -u user; \
  Say "Provisioning container"; \
     pushd /pre-configure/on-build >/dev/null; \
-    for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build"; bash -e "$f"; done; \
+    for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build for $(uname -m)"; bash -e "$f"; done; \
     popd >/dev/null; \
     if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
  Say "Clean-up"; \
