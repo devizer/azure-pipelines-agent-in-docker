@@ -20,7 +20,7 @@ sudo usermod -aG docker user || true
 sudo docker version || true
 
 mkdir -p /home/user/.docker || true
-echo '{ "experimental": "enabled" }' > tee /home/user/.docker/config.json || true
+echo '{ "experimental": "enabled" }' | tee /home/user/.docker/config.json || true
 chown -R user /home/user
 
 
