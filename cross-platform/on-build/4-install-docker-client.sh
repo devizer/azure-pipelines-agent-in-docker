@@ -24,7 +24,7 @@ echo '{ "experimental": "enabled" }' > tee /home/user/.docker/config.json || tru
 chown -R user /home/user
 
 
-Say "Installing docker-compose 1.24.1"
+Say "Installing docker-compose 1.24.1 for $(uname -m)"
 # sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dock_comp_ver=1.25.0 # is not yet compiled for arm64
 dock_comp_ver=1.24.1 # compiled for both armv7 and v7

@@ -28,6 +28,7 @@ RUN echo; \
  bash disable-ipv6.sh; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  bash install-locales.sh; \
+ bash config-system.sh; \
  Say "Configure SystemD in docker"; \
      pushd /lib/systemd/system/sysinit.target.wants/ \
      && ls | grep -v systemd-tmpfiles-setup | xargs rm -f  \
