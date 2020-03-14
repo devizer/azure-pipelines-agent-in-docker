@@ -14,14 +14,14 @@ ENV DEBIAN_FRONTEND=noninteractive \
  LC_ALL=en_US.UTF8 \
  LANG=en_US.UTF8 
 
-WORKDIR /pre-configure
+WORKDIR /
 COPY .  /pre-configure
 SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/version; \
- echo "Starting in '$(pwd)'"; \
+ echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
  apt-get install -yq locales systemd apt-utils apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree procps p7zip-full jq pv; apt-get clean; \
@@ -29,7 +29,7 @@ RUN echo; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  bash install-locales.sh; \
  bash config-system.sh; \
- Say "Configure SystemD in docker"; \
+ Say "Configure SystemD in docker for $(uname -m)"; \
      pushd /lib/systemd/system/sysinit.target.wants/ \
      && ls | grep -v systemd-tmpfiles-setup | xargs rm -f  \
      && rm -f /lib/systemd/system/multi-user.target.wants/* \
@@ -41,18 +41,18 @@ RUN echo; \
      /lib/systemd/system/anaconda.target.wants/* \
      /lib/systemd/system/plymouth* \
      /lib/systemd/system/systemd-update-utmp*; popd; \
- Say "Confugure user 'user'"; \
+ Say "Confugure user 'user' for $(uname -m)"; \
     useradd -m -s /bin/bash user; \
     usermod -aG sudo user; \ 
     echo "user    ALL=(ALL:ALL) NOPASSWD: ALL" | sudo EDITOR="tee -a" visudo; \
     printf "pass\npass\n" | passwd user; \
     passwd -u user; \
- Say "Provisioning container"; \
+ Say "Provisioning container for $(uname -m)"; \
     pushd /pre-configure/on-build >/dev/null; \
     for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build for $(uname -m)"; bash -e "$f"; done; \
     popd >/dev/null; \
     if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
- Say "Clean-up"; \
+ Say "Clean-up for $(uname -m)"; \
  echo SKIP: dotnet nuget locals all --clear; \ 
  sudo rm -f /pre-configure/on-build/*.core || true; \
  sudo rm -rf /pre-configure/bin || true; \
