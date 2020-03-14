@@ -22,3 +22,10 @@ trigger:
   branches:
     include:
       - master
+
+schedules:
+  - cron: "30 3 * * *"
+    displayName: 'Nightly rebuild (at 3:30)'
+    branches:
+      include:
+        - master
