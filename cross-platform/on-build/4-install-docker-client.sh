@@ -20,6 +20,11 @@ sudo groupadd docker || true
 sudo usermod -aG docker user || true
 sudo docker version || true
 
+echo '
+alias docker="sudo docker"
+alias docker-compose="sudo docker-compose"
+' >> /home/user/.bashrc
+
 mkdir -p /home/user/.docker /root/.docker || true
 echo '{ "experimental": "enabled" }' | tee /home/user/.docker/config.json || true
 echo '{ "experimental": "enabled" }' | tee /root/.docker/config.json || true
