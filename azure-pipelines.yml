@@ -14,6 +14,11 @@ jobs:
       - template: azure-steps-nix.yml
 
 
-trigger:
-  - master
+# trigger:
+#  - master
 
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
