@@ -16,6 +16,7 @@ sudo add-apt-repository \
 sudo apt-get update
 apt-cache policy docker-ce-cli
 sudo apt-get install -y docker-ce-cli pigz
+sudo groupadd docker || true
 sudo usermod -aG docker user || true
 sudo docker version || true
 
