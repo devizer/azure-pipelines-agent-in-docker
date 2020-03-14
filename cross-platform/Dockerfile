@@ -20,7 +20,7 @@ SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
  set -e; set -u; \
- build_date="$(date --utc \"+%F %T %Z\")"; echo $build_date>/version; \
+ build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/version; \
  echo "Starting in '$(pwd)'"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
