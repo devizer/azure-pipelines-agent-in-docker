@@ -21,6 +21,7 @@ SHELL ["/bin/bash", "-c"]
 RUN echo; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/version; \
+ cd /pre-configure; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
