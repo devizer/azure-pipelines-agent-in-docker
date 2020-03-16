@@ -5,8 +5,8 @@ mkdir -p $work
 pushd $work >/dev/null
 sudo apt-get install -y build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
 url=https://codeload.github.com/git/git/zip/$GIT_VER
-wget --no-check-certificate -O _git-src.zip "$url"  || curl -kfSL -o _git-src.zip "$url"
-unzip _git-src.zip
+wget -q --no-check-certificate -O _git-src.zip "$url"  || curl -kfSL -o _git-src.zip "$url"
+unzip -q _git-src.zip
 rm -f _git-src.zip
 cd git*
 
