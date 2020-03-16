@@ -1,16 +1,17 @@
 ### azure-pipeline-agent-in-docker
-azure pipeline agent in docker for armv7, arm64 and x86_64
+Azure pipelines agent in docker for armv7, arm64, and x86_64
 
 ### Key features
 - Preconfigured SystemD. Intended for background services testing. 
 - Azure pipelines agent configured as SystemD service.
-- Preinstalled latest Docker client with experimental features suck as buildx.
+- Preinstalled latest docker-compose and docker client with experimental features such as buildx.
 - Preconfigured `en_US.UTF8` as LC_ALL and LANG.
-- Preinstalled latest .net core, mono, node, nunit & xunit test runners, etc.
+- Preinstalled latest .Net core, Mono, Node, NUnit & xUnit test runners, etc.
 - Supported 3 architectures: armv7 (native), arm64 (arm32 binaries with armhf dependencies) and x86_64 (native).
   
-### create container and configure azure pipeline agent
+### Create container and Configure azure pipelines agent
 ```
+# Create container and make it start on boot
 docker run -d --restart on-failure --privileged \
  --name agent007 \
  --hostname agent007 \
@@ -18,6 +19,7 @@ docker run -d --restart on-failure --privileged \
  -v /var/run/docker.sock:/var/run/docker.sock \
  devizervlad/crossplatform-azure-pipelines-agent:latest
 
+# Configure azure pipelines agent 
 docker exec -it agent007 bash -c '
  export VSTS_URL="https://devizer.visualstudio.com/";
  export VSTS_PAT=<your agent pool token>;
