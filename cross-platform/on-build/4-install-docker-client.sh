@@ -46,10 +46,10 @@ if [[ $(uname -m) == x86_64 ]]; then
       Say "docker-compose $dock_comp_ver can not be installed for $(uname -s) $(uname -m)" 
     fi
  else
-    Say "Installing docker-compose 1.24.1 for $(uname -m) using pip"
+    Say "Installing docker-compose 1.25.4/1.21.2 for $(uname -m) using pip3"
     sudo apt-get install -y python3-pip libffi-dev libssl-dev
     # optional
-    sudo -H pip3 install --upgrade pip
+    sudo -H pip3 install --no-cache-dir --upgrade pip
     # build/install
-    time sudo pip3 install docker-compose==1.25.4 || time sudo pip3 install docker-compose==1.21.2
+    time sudo pip3 install --no-cache-dir docker-compose==1.25.4 || time sudo pip3 install --no-cache-dir docker-compose==1.21.2
  fi

@@ -17,3 +17,8 @@ rm -rf $(basename $work)
 bash -c "git --version"
 
 popd >/dev/null
+
+Say "Strip git"
+pushd /usr/local/libexec/git-core
+strip * || true
+popd
