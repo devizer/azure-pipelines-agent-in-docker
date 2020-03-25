@@ -7,7 +7,7 @@ Say "azure pipeline agent path: [$(pwd)]"
 suffix=linux-arm
 system="$(uname -m)"
 if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi
-url=https://vstsagentpackage.azureedge.net/agent/2.165.2/vsts-agent-${suffix}-2.165.2.tar.gz
+url=https://vstsagentpackage.azureedge.net/agent/2.165.0/vsts-agent-${suffix}-2.165.0.tar.gz
 wget --progress=bar:force:noscroll -O linux-agent.tar.gz $url
 tar xzf linux-agent.tar.gz
 rm -f linux-agent.tar.gz
