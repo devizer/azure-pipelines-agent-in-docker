@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-[[ -f /version ]] && echo "Build Version: '$(cat /version)'" 
+[[ -f /version ]] && echo "Build Version: '$(cat /version)'"
+if [[ -n "${HOST_DOCKER_GROUP_ID}" ]]; then
+   sudo groupmod -g "${HOST_DOCKER_GROUP_ID}" docker
+fi 
 cd /pre-configure
 printenv | grep VSTS_ > /tmp/args; 
 chown user /tmp/args; 

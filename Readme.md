@@ -20,7 +20,9 @@ docker run -d --restart on-failure --privileged \
  devizervlad/crossplatform-azure-pipelines-agent:latest
 
 # Configure azure pipelines agent 
+HOST_DOCKER_GROUP_ID=$(getent group docker | awk -F: '{printf $3}')
 docker exec -it agent007 bash -c '
+ export HOST_DOCKER_GROUP_ID='$HOST_DOCKER_GROUP_ID';
  export VSTS_URL="https://devizer.visualstudio.com/";
  export VSTS_PAT=<your agent pool token>;
  export VSTS_POOL=my-pool;
