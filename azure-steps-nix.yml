@@ -112,6 +112,7 @@ steps:
 
   - bash: |
         Show-System-Stat
+    condition: succeededOrFailed()
     displayName: 'Show-System-Stat'
         
   - task: PublishBuildArtifacts@1
