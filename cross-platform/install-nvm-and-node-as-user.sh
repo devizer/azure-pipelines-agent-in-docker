@@ -11,4 +11,5 @@ nvm install --lts
 Say "Node Version: $(node --version)"
 time npm install yarn --global
 time yarn config set network-timeout 600000 -g
+nvm cache clear
 
