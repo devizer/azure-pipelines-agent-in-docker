@@ -1,0 +1,1 @@
+try-and-retry sudo apt-get install mysql-client postgresql-client -y
