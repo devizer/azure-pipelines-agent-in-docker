@@ -101,6 +101,7 @@ steps:
       df -h -T
       docker rm -f $(docker ps -aq)
       docker iamge rm $(docker image ls -a -q)
+      docker iamge rm -f devizervlad/crossplatform-azure-pipelines-agent
       df -h -T
     displayName: 'free space'
 
