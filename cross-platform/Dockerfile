@@ -32,8 +32,8 @@ RUN echo; \
  bash config-system.sh; \
  Say "Configure SystemD in docker for $(uname -m)"; \
      pushd /lib/systemd/system/sysinit.target.wants/ \
-     && ls | grep -v systemd-tmpfiles-setup | xargs rm -f  \
-     && rm -f /lib/systemd/system/multi-user.target.wants/* \
+     && echo "SKIP ls | grep -v systemd-tmpfiles-setup | xargs rm -f"  \
+     && echo SKIP rm -f /lib/systemd/system/multi-user.target.wants/* \
      /etc/systemd/system/*.wants/* \
      /lib/systemd/system/local-fs.target.wants/* \
      /lib/systemd/system/sockets.target.wants/*udev* \

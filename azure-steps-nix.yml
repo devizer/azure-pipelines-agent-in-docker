@@ -78,8 +78,9 @@ steps:
        --name $agentname \
        --hostname $agentname \
        -v /sys/fs/cgroup:/sys/fs/cgroup \
-       -v /var/run/docker.sock:/var/run/docker.sock \
        devizervlad/crossplatform-azure-pipelines-agent:latest 
+
+       #-v /var/run/docker.sock:/var/run/docker.sock \
 
       docker exec -t $agentname bash -c '
        export VSTS_URL="https://devizer.visualstudio.com/";
@@ -92,6 +93,7 @@ steps:
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world" | cat
+      true
       
     displayName: 'Build and test local x64 image'
     env:
