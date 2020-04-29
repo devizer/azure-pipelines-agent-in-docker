@@ -45,3 +45,4 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 systemctl enable azure-pipelines-agent.service
 systemctl start azure-pipelines-agent.service
+Say "Completed: config-agent.sh, azure-pipelines-agent started"
