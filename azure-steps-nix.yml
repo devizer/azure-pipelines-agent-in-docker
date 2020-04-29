@@ -92,9 +92,17 @@ steps:
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world" | cat
+      
     displayName: 'Build and test local x64 image'
     env:
       MY_VSTS_PAT: $(VSTS_PAT)
+
+  - bash: |
+      df -h -T
+      docker rm -f $(docker ps -aq)
+      docker iamge rm -f $(docker image ls -a -q)
+      df -h -T
+    displayName: 'free space'
 
   - bash: |
         set -e
