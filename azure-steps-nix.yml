@@ -90,6 +90,8 @@ steps:
        export VSTS_WORK=work;
        /pre-configure/config-agent.sh' #| tee Log/x64-install-agent.log
 
+      # if docker is not available?
+      set +e
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world" | cat
