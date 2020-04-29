@@ -98,11 +98,11 @@ steps:
       MY_VSTS_PAT: $(VSTS_PAT)
 
   - bash: |
-      df -h -T
+      df -T
       docker rm -f $(docker ps -aq)
-      docker iamge rm $(docker image ls -a -q)
-      docker iamge rm -f devizervlad/crossplatform-azure-pipelines-agent
-      df -h -T
+      docker image rm $(docker image ls -a -q)
+      docker image rm -f devizervlad/crossplatform-azure-pipelines-agent
+      df -T
     displayName: 'free space'
 
   - bash: |
