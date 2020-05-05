@@ -52,7 +52,7 @@ RUN echo; \
     pushd /pre-configure/on-build >/dev/null; \
     for f in $(ls -1 *.sh | sort); do Say "TRY '$f' from on-build for $(uname -m)"; bash -e "$f"; done; \
     popd >/dev/null; \
-    if [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
+    if false && [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
  Say "Clean-up for $(uname -m)"; \
  echo SKIP: dotnet nuget locals all --clear; \
  chown -R user /home/user; \
