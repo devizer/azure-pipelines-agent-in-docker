@@ -2,15 +2,20 @@
 # should be run as USER
 set -e
 
+# same as install git
+sudo apt-get install -y -qq build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
+
 # sudo does work in su's subshell?
 if [[ -z "${NVM_DIR:-}" ]]; then
   export NVM_DIR="/opt/nvm"
   export NVM_DIR="$HOME/.nvm"
 fi
 Say "Installing nvm to $NVM_DIR as $(whoami)" 
-script=https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh; 
+script=https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh; 
 (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+Say "Activating nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+Say "nvm install --lts"
 nvm install --lts
 Say "Node installed as [$(nvm which current)]"
 strip $(nvm which current)
