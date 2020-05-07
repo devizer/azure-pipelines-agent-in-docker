@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# same as install git
+sudo apt-get install -y -qq build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
+
 export NVM_DIR=/opt/nvm
 Say "Installing NodeJS LTS as $(whoami)";
 mkdir -p $NVM_DIR

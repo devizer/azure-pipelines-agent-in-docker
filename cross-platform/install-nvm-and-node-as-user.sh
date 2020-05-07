@@ -2,9 +2,6 @@
 # should be run as USER
 set -e
 
-# same as install git
-sudo apt-get install -y -qq build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
-
 # sudo does work in su's subshell?
 if [[ -z "${NVM_DIR:-}" ]]; then
   export NVM_DIR="/opt/nvm"
