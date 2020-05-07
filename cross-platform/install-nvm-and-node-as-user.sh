@@ -2,12 +2,12 @@
 # should be run as USER
 set -e
 
-export NVM_DIR="/opt/nvm"
-export NVM_DIR="$HOME/.nvm"
-echo $NVM_DIR | sudo tee /etc/NVM_DIR
-sudo mkdir -p $NVM_DIR
-sudo chown -R user:user $NVM_DIR
-Say "Installing nvm to $NVM_DIR" 
+# sudo does work in su's subshell?
+if [[ -z "${NVM_DIR:-}" ]]; then
+  export NVM_DIR="/opt/nvm"
+  export NVM_DIR="$HOME/.nvm"
+fi
+Say "Installing nvm to $NVM_DIR as $(whoami)" 
 script=https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh; 
 (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
