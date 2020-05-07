@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# since 2.1.166 a native arm64 agent is used. and this script is no longer needed 
 
 Say "Installing armhf packages on aarch64 OS"
 #Enable installation of armhf packages

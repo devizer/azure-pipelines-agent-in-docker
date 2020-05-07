@@ -51,5 +51,6 @@ if [[ $(uname -m) == x86_64 ]]; then
     # optional
     sudo -H pip3 install --no-cache-dir --upgrade pip
     # build/install
-    time sudo pip3 install --no-cache-dir docker-compose==1.25.4 || time sudo pip3 install --no-cache-dir docker-compose==1.21.2
+    time sudo pip3 install --no-cache-dir docker-compose==1.25.4
  fi
+

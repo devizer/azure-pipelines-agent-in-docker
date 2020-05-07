@@ -4,10 +4,10 @@ Azure pipelines agent in docker for armv7, arm64, and x86_64
 ### Key features
 - Preconfigured SystemD. Intended for background services testing. 
 - Azure pipelines agent configured as SystemD service. Self-update is fully supported.
-- Pre-installed latest docker-compose and docker client with experimental features such as buildx.
+- Pre-installed latest docker-compose and Docker CE client with experimental features such as buildx.
+- Pre-installed latest .Net core, Mono, Node LTS, NUnit & xUnit test runners, git, etc.
+- Supported 3 architectures: armv7, arm64 and x86_64.
 - Preconfigured `en_US.UTF8` as LC_ALL and LANG.
-- Pre-installed latest .Net core, Mono, Node, NUnit & xUnit test runners, git, etc.
-- Supported 3 architectures: armv7 (native), arm64 (arm32 binaries with armhf dependencies) and x86_64 (native).
   
 ### Create container and Configure azure pipelines agent
 ```

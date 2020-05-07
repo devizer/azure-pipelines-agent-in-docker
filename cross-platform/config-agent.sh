@@ -28,7 +28,7 @@ KillSignal=SIGINT
 SyslogIdentifier=azure-pipelines-agent
 User=user
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
-DEBIAN_FRONTEND=noninteractive
+Environment=DEBIAN_FRONTEND=noninteractive
 Environment=DOTNET_ROOT=/usr/share/dotnet
 Environment=DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 Environment=DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1

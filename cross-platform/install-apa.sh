@@ -9,7 +9,7 @@ system="$(uname -m)"
 if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi
 if [[ "$system" == "aarch64" ]]; then suffix=linux-arm64; fi
 # url=https://vstsagentpackage.azureedge.net/agent/2.165.2/vsts-agent-${suffix}-2.165.2.tar.gz
-url=https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-${suffix}-2.168.1.tar.gz
+url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.168.2.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 
