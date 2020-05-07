@@ -10,7 +10,8 @@ unzip -q _git-src.zip
 rm -f _git-src.zip
 cd git*
 
-time make prefix=/usr/local all
+cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
+time make prefix=/usr/local all -j${cpus}
 sudo make prefix=/usr/local install
 cd ../..
 rm -rf $(basename $work)
