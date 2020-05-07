@@ -124,6 +124,7 @@ steps:
 
   - bash: |
         Show-System-Stat
+        df -T || true
     condition: succeededOrFailed()
     displayName: 'Show-System-Stat'
         
