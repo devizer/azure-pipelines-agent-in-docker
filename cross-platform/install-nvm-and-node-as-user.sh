@@ -18,7 +18,7 @@ Say "Node installed as [$(nvm which current)]"
 strip $(nvm which current)
 node_path=$(dirname `nvm which current`)
 new_PATH="$PATH:$node_path"
-printf "\n\nPATH=\"${new_PATH}\"" | sudo tee -a /etc/environment
+printf "\n\nexport PATH=\"${new_PATH}\"" | tee -a ~./bashrc
 Say "Node Version: $(node --version)"
 time npm install yarn --global
 time yarn config set network-timeout 600000 -g
