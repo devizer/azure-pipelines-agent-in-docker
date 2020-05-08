@@ -3,10 +3,22 @@ variables:
 
 jobs:
 
-  - job: Bionic_Based
+  - job: Focal_20_Based
     variables:
       OS: Linux
-      TAG: latest
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
+      BASE_IMAGE: focal
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Bionic_18_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
       BASE_IMAGE: bionic
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -15,10 +27,10 @@ jobs:
     steps:
       - template: azure-steps-nix.yml
 
-  - job: Xenial_Based
+  - job: Xenial_16_Based
     variables:
       OS: Linux
-      TAG: xenial
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
       BASE_IMAGE: xenial
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -26,7 +38,6 @@ jobs:
       vmImage: 'ubuntu-18.04'
     steps:
       - template: azure-steps-nix.yml
-
 
 # trigger:
 #  - master
