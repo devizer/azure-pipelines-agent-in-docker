@@ -15,7 +15,7 @@ Say "Looking for node path as $(whoami) for /etc/environment"
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
 node_path=$(dirname `nvm which current || true` || true)
 new_PATH="$PATH:$node_path"
-printf "\n\nPATH=\"${new_PATH}\"" | sudo tee -a /etc/environment
+printf "\n\nPATH=\"${new_PATH}\"\n" | sudo tee -a /etc/environment
 
 
 # script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s node;

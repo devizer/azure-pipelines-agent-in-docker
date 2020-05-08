@@ -10,3 +10,11 @@ bash /tmp/install-DOTNET.sh;
 set -e 
 ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet;  
 dotnet --info; 
+
+# support for .NET Core tools 
+mdkir -p /home/user/.dotnet/tools
+chown -R user:user /home/user/.dotnet/tools
+source /etc/environment
+new_PATH="/home/user/.dotnet/tools:$PATH"
+Say "New PATH for /etc/environment: [$new_PATH]"
+printf "\n\nPATH=\"\"\n" > /etc/environment
