@@ -3,9 +3,23 @@ variables:
 
 jobs:
 
-  - job: Ubuntu_18_04
+  - job: Bionic based image (on Ubuntu_18_04 host)
     variables:
       OS: Linux
+      TAG: latest
+      BASE_IMAGE: bionic
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Xenial based image (on Ubuntu_18_04 host)
+    variables:
+      OS: Linux
+      TAG: xenial
+      BASE_IMAGE: xenial
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:

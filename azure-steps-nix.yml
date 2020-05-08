@@ -72,7 +72,7 @@ steps:
       docker rm -f $agentname || true
 
       # set -o pipefail # !important
-      time docker build -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
+      time docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
 
       docker run -d --restart on-failure --privileged \
        --name $agentname \
@@ -115,7 +115,7 @@ steps:
         echo "   login: ${#MY_DOCKER_LOGIN} chars, value: '${MY_DOCKER_LOGIN}'"
         echo "password: ${#MY_DOCKER_PASSWORD} chars"
         docker login -u "$MY_DOCKER_LOGIN" -p "$MY_DOCKER_PASSWORD"
-        docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
+        docker buildx build --build-arg BASE_IMAGE=${BASE_IMAGE} --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
           -t devizervlad/crossplatform-azure-pipelines-agent:latest .
     displayName: 'x64+arm64+arm/v7: build and publish'
     env:

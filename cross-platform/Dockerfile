@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:${BASE_IMAGE}
 
 VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
