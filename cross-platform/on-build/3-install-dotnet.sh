@@ -12,7 +12,7 @@ ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet;
 dotnet --info; 
 
 # support for .NET Core tools 
-mdkir -p /home/user/.dotnet/tools
+mkdir -p /home/user/.dotnet/tools
 chown -R user:user /home/user/.dotnet/tools
 source /etc/environment
 new_PATH="/home/user/.dotnet/tools:$PATH"
