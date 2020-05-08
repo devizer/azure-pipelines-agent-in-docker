@@ -3,7 +3,7 @@ variables:
 
 jobs:
 
-  - job: Bionic based image (on Ubuntu_18_04 host)
+  - job: Bionic_Based
     variables:
       OS: Linux
       TAG: latest
@@ -15,7 +15,7 @@ jobs:
     steps:
       - template: azure-steps-nix.yml
 
-  - job: Xenial based image (on Ubuntu_18_04 host)
+  - job: Xenial_Based
     variables:
       OS: Linux
       TAG: xenial
