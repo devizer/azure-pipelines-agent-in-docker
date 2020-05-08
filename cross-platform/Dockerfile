@@ -25,7 +25,8 @@ RUN echo; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
- apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates curl libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils; apt-get clean; \
+ libcurl3=$(apt-cache search libcurl3 | grep -E '^libcurl3 ' | awk '{print $1}'); \
+ apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates curl $libcurl3 gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils; apt-get clean; \
  bash disable-ipv6.sh; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  bash install-locales.sh; \
