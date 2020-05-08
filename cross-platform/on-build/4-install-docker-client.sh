@@ -9,10 +9,13 @@ try-and-retry bash -c "curl -fsSL https://download.docker.com/linux/$ID/gpg | su
 try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 # second is optional
 # try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 7EA0A9C3F273FCD8
-sudo add-apt-repository \
- "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID \
- $(lsb_release -cs) \
- stable"
+if [[ "$UBUNTU_CODENAME" == focal ]]; then
+  echo "deb https://download.docker.com/linux/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/docker.list
+else
+ sudo add-apt-repository \
+ "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID $(lsb_release -cs) stable"
+fi
+
 sudo apt-get update
 apt-cache policy docker-ce-cli
 sudo apt-get install -y docker-ce-cli pigz
