@@ -1,3 +1,4 @@
+ARG BASE_IMAGE
 FROM ubuntu:${BASE_IMAGE}
 
 VOLUME [ "/sys/fs/cgroup" ]
