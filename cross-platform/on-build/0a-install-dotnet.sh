@@ -9,7 +9,7 @@ export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 bash /tmp/install-DOTNET.sh;
 set -e 
 ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet;  
-dotnet --info; 
+dotnet --info || true; 
 
 # support for .NET Core tools 
 mkdir -p /home/user/.dotnet/tools
