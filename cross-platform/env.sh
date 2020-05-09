@@ -6,6 +6,7 @@ if false && [[ "$(uname -m)" == aarch64 ]]; then
   export LD_LIBRARY_PATH="/usr/arm-linux-gnueabihf/lib/"
 fi
 
+echo "Path is [$PATH]"
 if [[ -s /etc/NVM_DIR ]]; then
   NVM_DIR=$(cat /etc/NVM_DIR)
   if [[ -s "$NVM_DIR/nvm.sh" ]]; then
