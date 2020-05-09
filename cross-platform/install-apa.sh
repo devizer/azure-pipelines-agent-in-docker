@@ -13,7 +13,7 @@ url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 
-wget --no-check-certificate --progress=bar:force:noscroll -O linux-agent.tar.gz $url
+try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O linux-agent.tar.gz $url
 tar xzf linux-agent.tar.gz
 rm -f linux-agent.tar.gz
 # ./bin/Agent.Listener configure --unattended \
