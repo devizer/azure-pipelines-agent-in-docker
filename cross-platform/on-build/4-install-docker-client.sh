@@ -6,19 +6,25 @@ source /etc/os-release
 smart-apt-install apt-transport-https ca-certificates curl gnupg2 software-properties-common 
 try-and-retry bash -c "curl -fsSL https://download.docker.com/linux/$ID/gpg | sudo apt-key add -"
 
-try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D ||
+  try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D ||
+  curl -fksSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ||
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - ||
+  true
+
 # second is optional
 # try-and-retry sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 7EA0A9C3F273FCD8
 if [[ "$UBUNTU_CODENAME" == focal ]]; then
-  echo "deb https://download.docker.com/linux/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/docker.list
+  # bionic also works
+  echo "deb https://download.docker.com/linux/ubuntu eoan stable" | sudo tee /etc/apt/sources.list.d/docker.list
 else
  sudo add-apt-repository \
  "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID $(lsb_release -cs) stable"
 fi
 
-sudo apt-get update
+sudo apt-get update --allow-unauthenticated
 apt-cache policy docker-ce-cli
-sudo apt-get install -y docker-ce-cli pigz
+sudo apt-get install --allow-unauthenticated -y -q docker-ce-cli pigz
 sudo groupadd docker || true
 sudo usermod -aG docker user || true
 sudo docker version || true
