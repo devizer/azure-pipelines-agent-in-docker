@@ -17,4 +17,4 @@ chown -R user:user /home/user/.dotnet/tools
 source /etc/environment
 new_PATH="/home/user/.dotnet/tools:$PATH"
 Say "New PATH for /etc/environment: [$new_PATH]"
-printf "\n\nPATH=\"\"\n" > /etc/environment
+printf "\n\nPATH=\"$new_PATH\"\n" >> /etc/environment
