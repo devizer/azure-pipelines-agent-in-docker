@@ -3,22 +3,22 @@ variables:
 
 jobs:
 
-  - job: Focal_20_Based
-    variables:
-      OS: Linux
-      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
-      BASE_IMAGE: focal
-    timeoutInMinutes: 599
-    cancelTimeoutInMinutes: 1
-    pool:
-      vmImage: 'ubuntu-18.04'
-    steps:
-      - template: azure-steps-nix.yml
+#  - job: Focal_20_Based
+#    variables:
+#      OS: Linux
+#      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
+#      BASE_IMAGE: focal
+#    timeoutInMinutes: 599
+#    cancelTimeoutInMinutes: 1
+#    pool:
+#      vmImage: 'ubuntu-18.04'
+#    steps:
+#      - template: azure-steps-nix.yml
 
   - job: Bionic_18_Based
     variables:
       OS: Linux
-      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic -t devizervlad/crossplatform-azure-pipelines-agent:latest" 
       BASE_IMAGE: bionic
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
