@@ -8,6 +8,14 @@ Azure pipelines agent in docker for armv7, arm64, and x86_64
 - Pre-installed latest .Net core, Mono, Node LTS, NUnit & xUnit test runners, git, etc.
 - Supported 3 architectures: armv7, arm64 and x86_64.
 - Preconfigured `en_US.UTF8` as LC_ALL and LANG.
+
+| Tag | Base Image  | SSL ver | 
+|-----|---|---|
+|focal, **latest**| Ubuntu 20.04 LTS, Focal Fossa|1.1.1f|
+|bionic |Ubuntu 18.04.5 LTS, Bionic Beaver|1.1.1|
+|xenial |Ubuntu 16.04 LTS, Xenial Xerus|1.0.2g|
+|~~buster~~|~~Debian 10, Buster~~|~~1.1.1d~~|
+|stretch|Debian 9, Stretch|1.1.01|
   
 ### Create container and Configure azure pipelines agent
 ```
