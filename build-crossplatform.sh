@@ -4,9 +4,11 @@
 docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest
 
 # build nunit and xunit test runners
+set -e
 export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; 
 export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=$(pwd)/cross-platform/bin/opt/net-test-runners;
-script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
+script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E -e bash
+set +e
 
 
 # docker image rm -f $(docker image ls -aq)
