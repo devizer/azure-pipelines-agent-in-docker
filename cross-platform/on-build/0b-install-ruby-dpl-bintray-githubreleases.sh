@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo ":ssl_verify_mode: 0" | tee -a ~/.gemrc
-source /etc/os-relase
+source /etc/os-release
 if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
     Say "Skipping dpl, dpl-releases, dpl-bintray on Debian Jessie";
 else
