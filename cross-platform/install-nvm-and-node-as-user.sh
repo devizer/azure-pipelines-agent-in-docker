@@ -15,7 +15,7 @@ Say "Activating nvm"
 Say "nvm install --lts"
 nvm install --lts
 Say "Node installed as [$(nvm which current)]"
-strip $(nvm which current)
+strip $(nvm which current) || true
 node_path=$(dirname `nvm which current`)
 new_PATH="$PATH:$node_path"
 printf "\n\nexport PATH=\"\$PATH:$node_path\"" | tee -a ~/.bashrc

@@ -19,7 +19,8 @@ chown -R user:user /home/user/.dotnet/tools
 source /etc/environment
 new_PATH="/home/user/.dotnet/tools:$PATH"
 Say "New PATH for /etc/environment: [$new_PATH]"
-printf "\n\nPATH=\"$new_PATH\"\n" >> /etc/environment
+sed '/PATH/d' /etc/environment
+printf "\nPATH=$new_PATH\n" >> /etc/environment
 
 printf "\n\nexport PATH=\"\$PATH:/home/user/.dotnet/tools\"" | tee -a /home/user/.bashrc
 chown user:user /home/user/.bashrc
