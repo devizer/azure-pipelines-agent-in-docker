@@ -4,5 +4,5 @@
 docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest
 # docker image rm -f $(docker image ls -aq)
 cd cross-platform
-time docker build --build-arg BASE_IMAGE=fccal -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+time docker build --build-arg BASE_IMAGE=focal -t devizervlad/crossplatform-azure-pipelines-agent:latest .
 # docker run --restart on-failure --name agent007 --privileged --hostname agent007 -it devizervlad/azpa:latest 
