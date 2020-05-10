@@ -12,5 +12,5 @@ set +e
 
 # docker image rm -f $(docker image ls -aq)
 cd cross-platform
-time docker build --build-arg BASE_IMAGE=debian:buster -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+time docker build --build-arg BASE_IMAGE=debian:buster -t devizervlad/crossplatform-azure-pipelines-agent:temp .
 # docker run --restart on-failure --name agent007 --privileged --hostname agent007 -it devizervlad/azpa:latest 
