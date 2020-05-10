@@ -10,8 +10,7 @@ export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=$(pwd)/cross-platform/bin/opt/
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E -e bash
 set +e
 
-
 # docker image rm -f $(docker image ls -aq)
 cd cross-platform
-time docker build --build-arg BASE_IMAGE=focal -t devizervlad/crossplatform-azure-pipelines-agent:latest .
+time docker build --build-arg BASE_IMAGE=debian:buster -t devizervlad/crossplatform-azure-pipelines-agent:latest .
 # docker run --restart on-failure --name agent007 --privileged --hostname agent007 -it devizervlad/azpa:latest 

@@ -7,7 +7,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
-      BASE_IMAGE: focal
+      BASE_IMAGE: 'ubuntu:focal'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
@@ -19,7 +19,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic" 
-      BASE_IMAGE: bionic
+      BASE_IMAGE: 'ubuntu:bionic'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
@@ -31,11 +31,47 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
-      BASE_IMAGE: xenial
+      BASE_IMAGE: 'ubuntu:xenial'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
       vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Buster_10_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
+      BASE_IMAGE: 'debian:buster'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Stretch_9_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
+      BASE_IMAGE: 'debian:stretch'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Jessie_8_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
+      BASE_IMAGE: 'debian:jessie'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
     steps:
       - template: azure-steps-nix.yml
 

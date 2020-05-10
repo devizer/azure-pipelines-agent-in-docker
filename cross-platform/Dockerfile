@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM ubuntu:${BASE_IMAGE}
+FROM ${BASE_IMAGE}
 
 VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
