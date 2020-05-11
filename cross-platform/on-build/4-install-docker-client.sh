@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+source /etc/os-release
+if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+  Say "SKIPPING Docker for jessie"
+  exit 0;
+fi 
+
 Say "Installing the latest docker from the official docker repo"
 # Recommended: aufs-tools cgroupfs-mount | cgroup-lite pigz libltdl7
 source /etc/os-release

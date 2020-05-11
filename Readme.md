@@ -1,5 +1,5 @@
 ### azure-pipeline-agent-in-docker
-Azure pipelines agent in docker for armv7, arm64, and x86_64
+Azure pipelines agent in docker for _**armv7**_, _**arm64**_, and _**x86_64**_
 
 ### Key features
 - Preconfigured SystemD. Intended for background services testing. 
