@@ -28,6 +28,7 @@ RUN echo; \
  apt-get update -q; \
  apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils; \
  bash install-libcurl.sh; \
+ echo insecure >> ~/.curlrc; \
  bash disable-ipv6.sh; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  bash install-locales.sh; \
