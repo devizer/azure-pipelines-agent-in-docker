@@ -15,7 +15,7 @@ Azure pipelines agent in docker for armv7, arm64, and x86_64
 |bionic |Ubuntu 18.04.5 LTS, Bionic Beaver|1.1.1|
 |xenial |Ubuntu 16.04 LTS, Xenial Xerus|1.0.2g|
 |buster|Debian 10.3, Buster|1.1.1d|
-|stretch|Debian 9, Stretch|1.1.0l, 1.0.2u|
+|stretch|Debian 9.12, Stretch|1.1.0l, 1.0.2u|
   
 ### Create container and Configure azure pipelines agent
 ```
