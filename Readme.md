@@ -9,7 +9,7 @@ Azure pipelines agent in docker for armv7, arm64, and x86_64
 - Supported 3 architectures: armv7, arm64 and x86_64.
 - Preconfigured `en_US.UTF8` as LC_ALL and LANG.
 
-| Tag | Base Image  | SSL ver | 
+| Image Tags | Base Image  | SSL Ver | 
 |-----|---|---|
 |focal, **latest**| Ubuntu 20.04 LTS, Focal Fossa|1.1.1f|
 |bionic |Ubuntu 18.04.5 LTS, Bionic Beaver|1.1.1|
