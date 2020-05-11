@@ -26,14 +26,13 @@ pushd $work
 rm -rf *
 url=https://www.openssl.org/source/openssl-1.1.1g.tar.gz
 url=https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
-wget --no-check-certificate -O _openssl.tgz $url || curl -ksSL -o _openssl.tgz $url
+try-and-retry wget --no-check-certificate -O _openssl.tgz $url || curl -ksSL -o _openssl.tgz $url
 tar -zxf _openssl.tgz
 cd openssl*
 # ./config --prefix=/usr/local
 ./config --prefix=/usr/local/ssl
 time make -j${cpus}
 time sudo make install
-
 popd; rm -rf $work
 
 
@@ -44,7 +43,7 @@ mkdir -p $work
 pushd $work
 rm -rf *
 url=https://www.python.org/ftp/python/$ver/Python-$ver.tgz
-wget --no-check-certificate -O _python.tgz $url || curl -ksSL -o _python.tgz $url
+try-and-retry wget --no-check-certificate -O _python.tgz $url || curl -ksSL -o _python.tgz $url
 tar -zxf _python.tgz
 cd Python*
 
@@ -59,8 +58,9 @@ _ssl _ssl.c \
 time ./configure          2>&1 | tee ~/configure-python-$ver.log    # 26 sec --enable-optimizations? no
 time make -j${cpus}       2>&1 | tee ~/make-python-$ver.log         # 1m 16 sec
 time sudo make install    2>&1 | tee ~/install-python-$ver.log      # ~ 4 min
+popd; rm -rf $work
+
 # upgrade:
 sudo pip3 install -U pip
 sudo pip3 install -U setuptools
 
-popd; rm -rf $work
