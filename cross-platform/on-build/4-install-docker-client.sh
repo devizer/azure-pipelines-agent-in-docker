@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source /etc/os-release
-if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+if false && [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
   Say "SKIPPING Docker for jessie"
   exit 0;
 fi 
@@ -9,7 +9,7 @@ fi
 Say "Installing the latest docker from the official docker repo"
 # Recommended: aufs-tools cgroupfs-mount | cgroup-lite pigz libltdl7
 source /etc/os-release
-smart-apt-install apt-transport-https ca-certificates curl gnupg2 software-properties-common 
+smart-apt-install apt-transport-https ca-certificates curl gnupg2 software-properties-common pigz 
 try-and-retry bash -c "curl -fsSL https://download.docker.com/linux/$ID/gpg | sudo apt-key add -"
 
 try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D ||
@@ -29,8 +29,18 @@ else
 fi
 
 sudo apt-get update --allow-unauthenticated
-apt-cache policy docker-ce-cli
-sudo apt-get install --allow-unauthenticated -y -q docker-ce-cli pigz
+
+# Debian 8 has docker-ce only
+if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+    apt-cache policy docker-ce
+    sudo apt-get install --allow-unauthenticated -y -q docker-ce
+    systemctl disable docker.service
+    systemctl disable docker.socket
+    rm -f /usr/bin/dockerd
+else
+    apt-cache policy docker-ce-cli
+    sudo apt-get install --allow-unauthenticated -y -q docker-ce-cli 
+fi
 sudo groupadd docker || true
 sudo usermod -aG docker user || true
 sudo docker version || true
