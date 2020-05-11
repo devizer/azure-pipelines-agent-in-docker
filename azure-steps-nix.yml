@@ -126,7 +126,7 @@ steps:
         fi
         docker buildx build \
           --build-arg BASE_IMAGE=${BASE_IMAGE} \
-          --platform linux/amd64,linux/arm64,linux/arm/v7 --push \
+          --platform $platform --push \
           ${TAGS} .
     displayName: 'x64+arm64+arm/v7: build and publish'
     env:
