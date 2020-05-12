@@ -24,8 +24,8 @@ work=$HOME/build/openssl-src
 mkdir -p $work
 pushd $work
 rm -rf *
-url=https://www.openssl.org/source/openssl-1.1.1g.tar.gz
 url=https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
+url=https://www.openssl.org/source/openssl-1.1.1g.tar.gz
 try-and-retry wget --no-check-certificate -O _openssl.tgz $url || curl -ksSL -o _openssl.tgz $url
 tar -zxf _openssl.tgz
 cd openssl*
@@ -64,3 +64,5 @@ popd; rm -rf $work
 sudo pip3 install -U pip
 sudo pip3 install -U setuptools
 
+Say "Installed: Python [$(python3 --version)] with ssl [$(python3 -c 'import ssl; print(ssl.OPENSSL_VERSION);')]"
+ 
