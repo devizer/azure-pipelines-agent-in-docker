@@ -26,7 +26,9 @@ RUN echo; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
- apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common htop mc lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils; \
+ apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
+    lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils \
+    build-essential autoconf automake libtool flex bison; \
  bash install-libcurl.sh; \
  echo insecure >> ~/.curlrc; \
  bash disable-ipv6.sh; \

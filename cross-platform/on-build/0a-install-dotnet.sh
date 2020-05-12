@@ -12,6 +12,7 @@ ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet;
 
 # next line fails on 20.04 only for armv7 and arm64 only  
 dotnet --info || true; 
+rm -rf /root/.dotnet/tools/* || true
 
 # support for .NET Core tools 
 mkdir -p /home/user/.dotnet/tools
