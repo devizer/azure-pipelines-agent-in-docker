@@ -1,4 +1,5 @@
-﻿#!/usr/bin/env bash
+﻿
+#!/usr/bin/env bash
 if [[ -z "$(command -v python3 || true)" ]]; then
     smart-apt-install python3 || true
 fi
