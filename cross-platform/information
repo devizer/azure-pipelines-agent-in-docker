@@ -5,9 +5,11 @@ function get1stline() {
   rm -f /tmp/.a-log
 }
 
-libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}' | tr '\r\n' ', ') 
-echo "Base Image:     ${BASE_IMAGE}
-dotnet sdk:     $(dotnet --list-sdks | awk '{print $1}' | tr '\r\n' ', ')
+libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g') 
+sqlite=$(sqlite3 --version | awk '{print $1 ", " $2 " " $3}')
+dpl=$(gem list dpl  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
+echo "Base Image:     ${BASE_DOCKER_IMAGE}
+dotnet sdk:     $(dotnet --list-sdks | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g')
 mono:           $(mono --version | head -1)
 xunit.console:  $(get1stline  xunit.console)
 nunit3-console: $(get1stline 'nunit3-console --version')
@@ -23,4 +25,10 @@ python3:        $(python3 --version)
 pip3:           $(pip3 --version)
 pwsh:           $(pwsh --version)
 bash:           $BASH_VERSION
+sqlite3 shell:  $sqlite
+mysql client:   $(mysql --version)
+psql client:    $(psql --version)
+ruby:           $(ruby --version)
+gem:            $(gem --version)
+deploy tools:   $dpl
 "

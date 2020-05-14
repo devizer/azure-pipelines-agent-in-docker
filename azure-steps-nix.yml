@@ -72,7 +72,7 @@ steps:
       mkdir -p Log
       
       cd cross-platform
-      agentname="test-$(uname -m)-agent-on-build"
+      agentname="test-agent-on-build"
       docker rm -f $agentname || true
 
       # set -o pipefail # !important
@@ -98,11 +98,17 @@ steps:
       docker exec -t $agentname bash -c "ls /var/run/docker.sock"
       docker exec -t $agentname bash -c "tree /var/run -h"
       docker exec -t $agentname bash -c "docker run -t --rm hello-world" | cat
+      # DO NOT REMOVE LOCAL IMAGE for the VERSIONs Report step 
       true
       
     displayName: 'Build and test local x64 image'
     env:
       MY_VSTS_PAT: $(VSTS_PAT)
+
+  - bash: |
+      Say "/VERSION"
+      docker exec -t test-agent-on-build cat /VERSION 
+    displayName: 'VERSIONs Report'
 
   - bash: |
       df -T
