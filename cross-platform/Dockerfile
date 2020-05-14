@@ -21,7 +21,7 @@ SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
  set -e; set -u; \
- build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/version; \
+ build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/VERSION; \
  cd /pre-configure; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
@@ -67,6 +67,8 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
+ bash information >> /VERSION; \
+ Say "cat /VERSION for $(uname -m)"; cat /VERSION; \
  Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
 
 # systemd should have pid=1 

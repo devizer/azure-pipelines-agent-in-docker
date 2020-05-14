@@ -6,7 +6,7 @@ sudo apt-get install -y -qq build-essential libssl-dev libcurl4-gnutls-dev libex
 Say "Installing NodeJS LTS as $(whoami)";
 
 source /etc/os-release
-if [[ "$VERSION_ID" == "10" && "$ID" == "debian" ]]; then
+if true || [[ "$VERSION_ID" == "10" && "$ID" == "debian" ]]; then
     # network does not work properly for Buster over qemu
     Say "Installing Node LTS using custom installer"
     script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s node
