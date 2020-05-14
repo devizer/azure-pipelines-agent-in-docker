@@ -1,4 +1,5 @@
-﻿if [[ -z "$(command -v python3 || true)" ]]; then
+﻿#!/usr/bin/env bash
+if [[ -z "$(command -v python3 || true)" ]]; then
     smart-apt-install python3 || true
 fi
 script="https://bootstrap.pypa.io/get-pip.py"
