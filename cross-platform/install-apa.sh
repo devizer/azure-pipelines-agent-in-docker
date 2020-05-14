@@ -16,8 +16,12 @@ url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.
 try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O linux-agent.tar.gz $url
 tar xzf linux-agent.tar.gz
 rm -f linux-agent.tar.gz
-# ./bin/Agent.Listener configure --unattended \
-sudo bash ./bin/installdependencies.sh || true
+source /etc/os-release
+if [[ "$UBUNTU_CODENAME" == "xenial" ]]; then
+    sudo bash ./bin/installdependencies.sh || true
+else
+    url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS=true bash -e && echo "Successfully installed .NET Core Dependencies" || true
+fi
 mkdir -p $HOME/work
 ./config.sh --unattended \
   --agent "${VSTS_AGENT:-$(hostname)}" \
