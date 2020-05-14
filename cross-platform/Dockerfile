@@ -68,6 +68,7 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
+ export BASE_DOCKER_IMAGE; \
  bash information >> /VERSION; \
  Say "cat /VERSION for $(uname -m)"; cat /VERSION; \
  Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
