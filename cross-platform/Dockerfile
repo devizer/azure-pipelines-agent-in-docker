@@ -21,6 +21,7 @@ COPY .  /pre-configure
 SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
+ export BASE_DOCKER_IMAGE; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/VERSION; \
  cd /pre-configure; \
@@ -68,7 +69,6 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
- export BASE_DOCKER_IMAGE; \
  bash information >> /VERSION; \
  Say "cat /VERSION for $(uname -m)"; cat /VERSION; \
  Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
