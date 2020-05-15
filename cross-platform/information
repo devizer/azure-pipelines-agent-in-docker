@@ -5,7 +5,6 @@ function get1stline() {
   rm -f /tmp/.a-log
 }
 
-
 libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g') 
 sqlite=$(sqlite3 --version | awk '{print $1 ", " $2 " " $3}')
 dpl=$(gem list dpl  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
@@ -32,7 +31,6 @@ docker-compose: $(docker-compose --version), $(docker-compose version | grep Ope
 python3:        $(python3 --version)
 pip3:           $(pip3 --version)
 pip:            $(pip --version)
-wheel:          $(wheel --version)
 bash:           $BASH_VERSION
 sqlite3 shell:  $sqlite
 mysql client:   $(mysql --version)
