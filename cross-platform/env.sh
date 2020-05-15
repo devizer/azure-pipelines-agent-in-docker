@@ -15,6 +15,19 @@ if [[ -s /etc/NVM_DIR ]]; then
   fi
 fi
 
+if [[ -d /etc/agent-path.d ]]; then
+    for file in $(ls -1 /etc/agent-path.d/*); do 
+        while read path; do
+            if [[ -d "${path}" ]]; then
+                Say "Adding '$path' to the PATH from $(basename file)"
+                export PATH="$path:$PATH"
+             else
+                Say "Skipping '$path' for PATH from $(basename file). Directory does not exists"
+            fi
+        done <"${file}"
+    done
+fi
+
 if [[ -d /home/user/.dotnet/tools ]]; then
   export PATH="$PATH:/home/user/.dotnet/tools"
 fi
