@@ -4,7 +4,7 @@ source /etc/os-release
 if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
     if [[ "$(uname -m)" == arm* ]]; then
         mkdir -p /opt
-        pushd opt
+        pushd /opt
         url=https://raw.githubusercontent.com/devizer/glist/master/bin/portable-ruby-2.6.0-armhf-jessie.tar.gz
         file=$(basename $url)
         Say "Downloading [$url] to $(pwd)/${file}"
