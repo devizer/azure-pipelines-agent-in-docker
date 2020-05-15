@@ -7,8 +7,11 @@ steps:
     
   - bash: |
       BUILD_URL="${ENDPOINT_URL_SYSTEMVSSCONNECTION}${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID}"
+      JOB_URL="${BUILD_URL}&view=logs&j=${SYSTEM_JOBID}"
       echo "##vso[task.setvariable variable=BUILD_URL]$BUILD_URL"
+      echo "##vso[task.setvariable variable=JOB_URL]$JOB_URL"
       echo "BUILD_URL: ${BUILD_URL}"
+      echo "JOB_URL: ${BUILD_URL}"
     displayName: 'VARS'
       
     
@@ -83,7 +86,11 @@ steps:
       docker rm -f $agentname || true
 
       # set -o pipefail # !important
-      time docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
+      time docker build \
+        --build-arg BUILD_URL="${BUILD_URL}" \
+        --build-arg JOB_URL="${JOB_URL}" \
+        --build-arg BASE_IMAGE="${BASE_IMAGE}" \
+        -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
 
       docker run -d --restart on-failure --privileged \
        --name $agentname \
@@ -138,7 +145,8 @@ steps:
           platform="linux/amd64,linux/arm64,linux/arm/v7"
         fi
         docker buildx build \
-          --build-arg BASE_IMAGE=${BASE_IMAGE} \
+          --build-arg BUILD_URL="${BUILD_URL}" --build-arg JOB_URL="${JOB_URL}" \
+          --build-arg BASE_IMAGE="${BASE_IMAGE}" \
           --platform $platform --push \
           ${TAGS} .
     displayName: 'x64+arm64+arm/v7: build and publish'

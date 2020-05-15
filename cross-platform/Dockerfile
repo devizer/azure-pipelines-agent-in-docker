@@ -1,4 +1,7 @@
-ARG BASE_IMAGE
+ARG BASE_IMAGE 
+ARG BUILD_URL 
+ARG JOB_URL 
+
 FROM ${BASE_IMAGE}
 
 VOLUME [ "/sys/fs/cgroup" ]
@@ -26,6 +29,7 @@ RUN echo; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/VERSION; \
  echo $BUILD_URL >> /VERSION; \
+ echo $JOB_URL >> /VERSION; \
  cd /pre-configure; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
