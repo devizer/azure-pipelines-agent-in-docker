@@ -1,8 +1,9 @@
 ARG BASE_IMAGE 
+FROM ${BASE_IMAGE}
+
+ARG BASE_IMAGE 
 ARG BUILD_URL 
 ARG JOB_URL 
-
-FROM ${BASE_IMAGE}
 
 VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
