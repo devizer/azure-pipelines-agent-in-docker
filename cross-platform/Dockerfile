@@ -14,7 +14,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
  container=docker \
  LC_ALL=en_US.UTF8 \
  LANG=en_US.UTF8 \
- BASE_DOCKER_IMAGE=${BASE_IMAGE}
+ BASE_DOCKER_IMAGE=${BASE_IMAGE} \
+ BUILD_URL=${BUILD_URL}
 
 WORKDIR /
 COPY .  /pre-configure
@@ -24,6 +25,7 @@ RUN echo; \
  export BASE_DOCKER_IMAGE; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; echo $build_date>/VERSION; \
+ echo $BUILD_URL >> /VERSION; \
  cd /pre-configure; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \

@@ -10,7 +10,7 @@ if true || [[ "$VERSION_ID" == "10" && "$ID" == "debian" ]]; then
     # network does not work properly for Buster over qemu
     Say "Installing Node LTS using custom installer"
     script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s node
-    node_path=$(dirname $(ls /opt/node/node*/bin/node))
+    node_path=$(dirname $(ls -1 /opt/node/node*/bin/node))
     Say "New node_path via custom node installer is: [$node_path]"
 else
     export NVM_DIR=/opt/nvm
