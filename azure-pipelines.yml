@@ -3,7 +3,7 @@ variables:
 
 jobs:
 
-  - job: Focal_20_Based
+  - job: Focal_20_04_Based
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
@@ -15,7 +15,7 @@ jobs:
     steps:
       - template: azure-steps-nix.yml
 
-  - job: Bionic_18_Based
+  - job: Bionic_18_04_Based
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic" 
@@ -27,7 +27,7 @@ jobs:
     steps:
       - template: azure-steps-nix.yml
 
-  - job: Xenial_16_Based
+  - job: Xenial_16_04_Based
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
