@@ -9,7 +9,6 @@ libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}'
 sqlite=$(sqlite3 --version | awk '{print $1 ", " $2 " " $3}')
 dpl=$(gem list dpl  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
 echo "\
-Base Image:     ${BASE_DOCKER_IMAGE}
 dotnet sdk:     $(dotnet --list-sdks | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g')
 pwsh:           $(pwsh --version)
 mono:           $(mono --version | head -1)

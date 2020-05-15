@@ -30,10 +30,10 @@ RUN echo; \
  export BASE_DOCKER_IMAGE; \
  set -e; set -u; \
  build_date="$(date --utc '+%F %T %Z')"; \
- echo "Build date:        $build_date" >> /VERSION; \
- echo "BASE_DOCKER_IMAGE: $BASE_DOCKER_IMAGE" >> /VERSION; \
- echo "BUILD_URL:         $BUILD_URL" >> /VERSION; \
- echo "JOB_URL:           $JOB_URL" >> /VERSION; \
+ echo "Build date:     $build_date" >> /VERSION; \
+ echo "Base Image:     $BASE_DOCKER_IMAGE" >> /VERSION; \
+ echo "BUILD_URL:      $BUILD_URL" >> /VERSION; \
+ echo "JOB_URL:        $JOB_URL" >> /VERSION; \
  cd /pre-configure; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
