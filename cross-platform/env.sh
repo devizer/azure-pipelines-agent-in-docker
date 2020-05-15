@@ -19,4 +19,8 @@ if [[ -d /home/user/.dotnet/tools ]]; then
   export PATH="$PATH:/home/user/.dotnet/tools"
 fi
 
+if [[ -d /opt/portable-ruby/bin ]]; then
+  export PATH="/opt/portable-ruby/bin:$PATH"
+fi
+
 echo "Path is [$PATH]"
