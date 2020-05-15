@@ -19,6 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
  LANG=en_US.UTF8 \
  BASE_DOCKER_IMAGE=${BASE_IMAGE} \
  BUILD_URL=${BUILD_URL}
+ JOB_URL=${JOB_URL}
 
 WORKDIR /
 COPY .  /pre-configure
