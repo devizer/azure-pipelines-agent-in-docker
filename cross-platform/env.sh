@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# for agent 1.166+ it is not needed
 if false && [[ "$(uname -m)" == aarch64 ]]; then
   # Add arm-linux-gnueabihf libs to LD_LIBRARY_PATH
   # (This tells ld where it can find libs in addition to the default /lib dir,
