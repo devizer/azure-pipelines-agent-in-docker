@@ -37,6 +37,9 @@ if [[ -d /opt/portable-ruby/bin ]]; then
 fi
 
 file=/usr/local/share/ssl/cacert.pem
-test -s $file && export CURL_CA_BUNDLE="$file"
+if [[ -s $file ]]; then
+    export CURL_CA_BUNDLE="$file"
+    echo "CURL_CA_BUNDLE is [$CURL_CA_BUNDLE]"
+fi
 
 echo "Path is [$PATH]"
