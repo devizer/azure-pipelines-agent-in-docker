@@ -30,6 +30,7 @@ RUN echo; \
  export BASE_DOCKER_IMAGE BUILD_URL JOB_URL; \
  set -e; set -u; \
  cd /pre-configure; \
+ mkdir -p /etc/agent-path.d; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \

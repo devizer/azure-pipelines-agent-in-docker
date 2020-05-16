@@ -30,6 +30,8 @@ new_PATH="$PATH:$node_path"
 sed '/PATH/d' /etc/environment
 printf "\nPATH=${new_PATH}\n" | sudo tee /etc/environment
 
+echo $node_path > /etc/agent-path.d/dotnet
+
 # script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s node;
 
 # yarn config set network-timeout 600000 -g

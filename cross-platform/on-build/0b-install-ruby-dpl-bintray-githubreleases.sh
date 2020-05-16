@@ -12,6 +12,7 @@ if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
         tar xzf _$file
         rm -f _$file
         export PATH="/opt/portable-ruby/bin:$PATH"
+        echo /opt/portable-ruby/bin > /etc/agent-path.d/ruby
         Say "Installing dpl dpl-releases dpl-bintray via gem"
         gem install dpl dpl-releases dpl-bintray
         popd
