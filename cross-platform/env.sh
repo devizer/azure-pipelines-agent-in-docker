@@ -36,4 +36,7 @@ if [[ -d /opt/portable-ruby/bin ]]; then
   export PATH="/opt/portable-ruby/bin:$PATH"
 fi
 
+file=/usr/local/share/ssl/cacert.pem
+test -s $file && export CURL_CA_BUNDLE="$file"
+
 echo "Path is [$PATH]"
