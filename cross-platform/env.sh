@@ -36,6 +36,11 @@ if [[ -d /opt/portable-ruby/bin ]]; then
   export PATH="/opt/portable-ruby/bin:$PATH"
 fi
 
+if [[ -s /usr/local/go/bin/go ]]; then
+  export PATH="/usr/local/go/bin:$PATH"
+  export GOROOT=/usr/local/go
+fi
+
 file=/usr/local/share/ssl/cacert.pem
 if [[ -s $file ]]; then
     export CURL_CA_BUNDLE="$file"
