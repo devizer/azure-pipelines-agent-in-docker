@@ -17,7 +17,7 @@ if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
         gem install dpl dpl-releases dpl-bintray
         popd
     elif [[ "$(uname -m)" == x86_64 ]]; then
-        smart-apt-install install curl wget gnupg2 sudo mc ncdu nano software-properties-common -y;
+        smart-apt-install curl wget gnupg2 sudo mc ncdu nano software-properties-common -y;
         Say "Attaching ppa:brightbox/ruby-ng for ruby 2.5"
         echo "" | sudo add-apt-repository ppa:brightbox/ruby-ng; 
         pushd /etc/apt/sources.list.d; for f in *; do sed -i 's/jessie/trusty/g' $f; done; popd; 
