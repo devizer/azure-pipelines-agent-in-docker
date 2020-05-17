@@ -3,7 +3,7 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/insta
 echo /usr/local/go/bin > /etc/agent-path.d/go
 
 GIT_LFS_VER=${GIT_LFS_VER:-v2.11.0}
-Say "Installing GIT-LFS $GIT_LFS_VER"
+Say "Installing GIT-LFS $GIT_LFS_VER from source"
  
 work=$HOME/build/git-lfs-src
 mkdir -p $work
