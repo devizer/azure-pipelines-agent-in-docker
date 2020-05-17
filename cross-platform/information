@@ -5,6 +5,8 @@ function get1stline() {
   rm -f /tmp/.a-log
 }
 
+source /pre-configure/env.sh
+
 libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g') 
 sqlite=$(sqlite3 --version | awk '{print $1 ", " $2 " " $3}')
 dpl=$(gem list dpl  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
