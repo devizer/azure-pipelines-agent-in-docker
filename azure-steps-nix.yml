@@ -196,14 +196,14 @@ steps:
     displayName: 'ARM64 Exec information'
 
   - bash: |
-      bash run-crossplatform-cmd.sh arm "ARM Show VERSION" "cat /VERSION"
+      bash run-crossplatform-cmd.sh arm "ARM-V7 Show VERSION" "cat /VERSION"
     condition: succeededOrFailed()
     displayName: 'ARM-v7 Show VERSION'
 
   - bash: |
-      bash run-crossplatform-cmd.sh arm "ARM Exec information" "bash /pre-configure/information"
+      bash run-crossplatform-cmd.sh arm "ARM-V7 Exec information" "bash /pre-configure/information"
     condition: succeededOrFailed()
-    displayName: 'ARM Exec information'
+    displayName: 'ARM-V7 Exec information'
 
   - task: PublishBuildArtifacts@1
     inputs:
