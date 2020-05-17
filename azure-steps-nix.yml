@@ -205,6 +205,15 @@ steps:
     condition: succeededOrFailed()
     displayName: 'ARM-V7 Exec information'
 
+  - bash: |
+      Show-System-Stat
+      Say "The free space"
+      df -T || true
+      Say "Docker status"
+      sudo systemctl status docker | cat || true
+    condition: succeededOrFailed()
+    displayName: 'Show-System-Stat'
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: '$(Build.Repository.LocalPath)'
