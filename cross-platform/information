@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 function get1stline() {
   eval "$1" >/tmp/.a-log
   cat /tmp/.a-log | head -1
@@ -15,6 +15,8 @@ build_date="$(date --utc '+%F %T %Z')";
 echo "\
 Build date:     $build_date
 Base Image:     $BASE_DOCKER_IMAGE
+Commit:         $BUILD_SOURCEVERSION
+Branch:         $BUILD_SOURCEBRANCHNAME
 Build Url:      $BUILD_URL
 Job Url:        $JOB_URL
 dotnet sdk:     $(dotnet --list-sdks | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g')

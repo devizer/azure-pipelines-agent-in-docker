@@ -3,7 +3,11 @@ FROM ${BASE_IMAGE}
 
 ARG BASE_IMAGE 
 ARG BUILD_URL 
-ARG JOB_URL 
+ARG JOB_URL
+# commit id
+ARG BUILD_SOURCEVERSION 
+# master, etc
+ARG BUILD_SOURCEBRANCHNAME 
 
 VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
@@ -20,14 +24,17 @@ ENV DEBIAN_FRONTEND=noninteractive \
  LANG=en_US.UTF8 \
  BASE_DOCKER_IMAGE=${BASE_IMAGE} \
  BUILD_URL=${BUILD_URL} \
- JOB_URL=${JOB_URL}
+ JOB_URL=${JOB_URL} \
+ BUILD_SOURCEVERSION=${BUILD_SOURCEVERSION} \
+ BUILD_SOURCEBRANCHNAME=${BUILD_SOURCEBRANCHNAME}
+ 
 
 WORKDIR /
 COPY .  /pre-configure
 SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
- export BASE_DOCKER_IMAGE BUILD_URL JOB_URL; \
+ export BASE_DOCKER_IMAGE BUILD_URL JOB_URL BUILD_SOURCEVERSION BUILD_SOURCEBRANCHNAME; \
  set -e; set -u; \
  cd /pre-configure; \
  mkdir -p /etc/agent-path.d; \
