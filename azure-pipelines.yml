@@ -7,6 +7,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
+      TAG: focal
       BASE_IMAGE: 'ubuntu:focal'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -18,7 +19,8 @@ jobs:
   - job: Bionic_18_04_Based
     variables:
       OS: Linux
-      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic" 
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+      TAG: bionic
       BASE_IMAGE: 'ubuntu:bionic'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -31,6 +33,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
+      TAG: xenial
       BASE_IMAGE: 'ubuntu:xenial'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -43,6 +46,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
+      TAG: buster
       BASE_IMAGE: 'debian:buster'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -55,6 +59,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
+      TAG: stretch
       BASE_IMAGE: 'debian:stretch'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
@@ -67,6 +72,7 @@ jobs:
     variables:
       OS: Linux
       TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
+      TAG: jessie
       BASE_IMAGE: 'debian:jessie'
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1

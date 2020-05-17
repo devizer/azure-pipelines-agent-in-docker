@@ -164,7 +164,47 @@ steps:
         sudo systemctl status docker | cat || true
     condition: succeededOrFailed()
     displayName: 'Show-System-Stat'
-        
+    
+  - bash: |
+      df -T
+      docker rm -f $(docker ps -aq)
+      docker image rm $(docker image ls -a -q)
+      docker image rm -f devizervlad/crossplatform-azure-pipelines-agent
+      df -T
+      Say "Sleeping for 60 seconds"
+      sleep 60
+    displayName: 'again free space'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh amd64 "Amd64 Show VERSION" "cat /VERSION"
+    condition: succeededOrFailed()
+    displayName: 'Amd64 Show VERSION'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh amd64 "Amd64 Exec information" "bash /pre-configure/information"
+    condition: succeededOrFailed()
+    displayName: 'Amd64 Exec information'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh arm64 "ARM64 Show VERSION" "cat /VERSION"
+    condition: succeededOrFailed()
+    displayName: 'ARM64 Show VERSION'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh arm64 "ARM64 Exec information" "bash /pre-configure/information"
+    condition: succeededOrFailed()
+    displayName: 'ARM64 Exec information'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh arm "ARM Show VERSION" "cat /VERSION"
+    condition: succeededOrFailed()
+    displayName: 'ARM-v7 Show VERSION'
+
+  - bash: |
+      bash run-crossplatform-cmd.sh arm "ARM Exec information" "bash /pre-configure/information"
+    condition: succeededOrFailed()
+    displayName: 'ARM Exec information'
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: '$(Build.Repository.LocalPath)'
