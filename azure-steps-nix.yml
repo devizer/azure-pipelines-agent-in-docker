@@ -67,7 +67,12 @@ steps:
     displayName: 'Configure Docker'
 
   - bash: |
-        list-packages; list-packages || true
+      bash -e update-qemu-binfmt_misc.sh
+    displayName: 'update-qemu-binfmt_misc.sh'
+
+
+  - bash: |
+      list-packages || true
     displayName: 'List Packages'
 
   - bash: |
