@@ -48,7 +48,9 @@ prefix=/usr/local/qemu-${QEMU_VER}
     --static \
     --enable-linux-user
 
-time make -j8
+cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
+Say "Building qemu-arm and qemu-aarch64 using $cpus cores"
+time make -j${cpus}
 sudo make install
 sudo ln -s -f $prefix/bin/qemu-arm /usr/bin/qemu-arm-static
 sudo ln -s -f $prefix/bin/qemu-aarch64 /usr/bin/qemu-aarch64-static
