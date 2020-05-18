@@ -2,6 +2,8 @@
 # work=$HOME/build/azure-pipeline-agent-in-docker; mkdir -p $(dirname $work); cd $(dirname $work); git clone https://github.com/devizer/azure-pipeline-agent-in-docker || true; cd azure-pipeline-agent-in-docker; git pull; time bash build-crossplatform.sh
 
 docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest
+docker buildx inspect --bootstrap
+
 
 # build nunit and xunit test runners
 set -e
