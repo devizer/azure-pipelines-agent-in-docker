@@ -17,6 +17,7 @@ Build date:     $build_date
 Base Image:     $BASE_DOCKER_IMAGE
 Commit:         $BUILD_SOURCEVERSION
 Branch:         $BUILD_SOURCEBRANCHNAME
+Build Id:       $BUILD_BUILDID
 Build Url:      $BUILD_URL
 Job Url:        $JOB_URL
 dotnet sdk:     $(dotnet --list-sdks | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g')

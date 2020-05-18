@@ -91,6 +91,9 @@ steps:
         --build-arg BASE_IMAGE="${BASE_IMAGE}" \
         --build-arg BUILD_URL="${BUILD_URL}" \
         --build-arg JOB_URL="${JOB_URL}" \
+        --build-arg BUILD_SOURCEVERSION="${BUILD_SOURCEVERSION}" \
+        --build-arg BUILD_SOURCEBRANCHNAME="${BUILD_SOURCEBRANCHNAME}" \
+        --build-arg BUILD_BUILDID="${BUILD_BUILDID}" \
         -t devizervlad/crossplatform-azure-pipelines-agent:latest . #| tee Log/x64-build-image-log.log
 
       docker run -d --restart on-failure --privileged \
@@ -149,6 +152,9 @@ steps:
           --build-arg BASE_IMAGE="${BASE_IMAGE}" \
           --build-arg BUILD_URL="${BUILD_URL}" \
           --build-arg JOB_URL="${JOB_URL}" \
+          --build-arg BUILD_SOURCEVERSION="${BUILD_SOURCEVERSION}" \
+          --build-arg BUILD_SOURCEBRANCHNAME="${BUILD_SOURCEBRANCHNAME}" \
+          --build-arg BUILD_BUILDID="${BUILD_BUILDID}" \
           --platform $platform --push \
           ${TAGS} .
     displayName: 'x64+arm64+arm/v7: build and publish'
