@@ -84,6 +84,7 @@ RUN echo; \
  chown -R user /home/user; \
  sudo rm -f /pre-configure/on-build/*.core || true; \
  sudo rm -f /pre-configure/*.core || true; \
+ sudo rm -rf /root/build || true; \
  sudo rm -rf /pre-configure/bin || true; \
  sudo rm -rf /var/lib/apt/lists/*; \
  sudo rm -rf /var/cache/apt/*; \

@@ -3,7 +3,7 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/insta
 echo /usr/local/go/bin > /etc/agent-path.d/go
 
 GIT_LFS_VER=${GIT_LFS_VER:-v2.11.0}
-Say "Installing GIT-LFS $GIT_LFS_VER from source"
+Say "Downloading GIT-LFS $GIT_LFS_VER source from github"
  
 work=$HOME/build/git-lfs-src
 mkdir -p $work
@@ -13,7 +13,8 @@ rm -rf *
 git clone https://github.com/git-lfs/git-lfs
 cd git-lfs*
 git checkout $GIT_LFS_VER
-make -B
+Say "Building GIT-LFS $GIT_LFS_VER"
+time make -B
 sudo mv bin/git-lfs /usr/local/bin/git-lfs
 
 # the right way
