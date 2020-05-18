@@ -4,6 +4,10 @@ cat /proc/sys/fs/binfmt_misc/qemu-arm
 Say "Content /proc/sys/fs/binfmt_misc/qemu-aarch64"
 cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 
+Say "Tunring on apt sources"
+sudo sed -i 's/# deb /deb  /g' /etc/apt/sources.list
+cat /etc/apt/sources.list
+
 Say "Installing qemu build dependencies"
 sudo apt-get build-dep qemu -y
 
