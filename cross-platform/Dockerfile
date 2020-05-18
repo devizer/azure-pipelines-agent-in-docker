@@ -77,6 +77,8 @@ RUN echo; \
     for f in $(ls -1 *.sh | sort); do echo "PATH: [$PATH]"; Say "TRY '$f' from on-build for $(uname -m)"; bash -e "$f"; done; \
     popd >/dev/null; \
     if false && [[ "$(uname -m)" == aarch64 ]]; then bash -e /pre-configure/arm32-on-arm64.sh; fi; \ 
+ Say "Generating /VERSION"; \
+ bash information >> /VERSION; \
  Say "Clean-up for $(uname -m)"; \
  echo SKIP: dotnet nuget locals all --clear; \
  chown -R user /home/user; \
@@ -86,7 +88,6 @@ RUN echo; \
  sudo rm -rf /var/cache/apt/*; \
  sudo rm -rf /var/tmp/*; \
  sudo rm -rf /tmp/*; \
- bash information >> /VERSION; \
  Say "cat /VERSION for $(uname -m)"; cat /VERSION; \
  Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
 
