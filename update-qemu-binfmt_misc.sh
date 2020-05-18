@@ -7,8 +7,10 @@ cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 
 Say "Turning on apt sources"
 sudo sed -i 's/# deb-src /deb-src  /g' /etc/apt/sources.list
-cat /etc/apt/sources.list
-sudo apt-get update -qq
+Say "Tuned /etc/apt/sources.list"
+cat -n /etc/apt/sources.list
+Say "apt-get update"
+sudo apt-get update
 
 Say "Installing qemu build dependencies"
 sudo apt-get build-dep qemu -y
