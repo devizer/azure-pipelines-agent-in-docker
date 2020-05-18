@@ -10,5 +10,5 @@ if [[ "$sha" == "" ]]; then
   Say "Skipping: architecture [$arch] not found for ${TAG}"
 else
   Say "$info for [${TAG}] running [${arch}]"
-  docker run -it --rm "devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha} bash -c "$cmd" || exit 1
+  docker run -it --rm "devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha}" bash -c "$cmd" || exit 1
 fi
