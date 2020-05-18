@@ -11,7 +11,10 @@ if [[ "$sha" == "" ]]; then
   Say "Skipping: architecture [$arch] not found for ${TAG}"
 else
   Say "${TAG}:$info Free space"
-  docker image rm -f $(docker image ls | grep devizervlad/crossplatform-azure-pipelines-agent | awk '{print $3}') >/dev/null 2>/dev/null
+  docker rm -f $(docker ps -aq) 2>/dev/null
+  docker image rm $(docker image ls -a -q) 2>/dev/null
+  docker image rm -f devizervlad/crossplatform-azure-pipelines-agent2>/dev/null
+  docker image rm -f $(docker image ls | grep devizervlad/crossplatform-azure-pipelines-agent | awk '{print $3}') 2>/dev/null # >/dev/null 2>/dev/null
   Say "${TAG}:$info Pull devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha} for [${TAG}] running [${arch}]"
   docker pull "devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha}" >/dev/null
   Say "${TAG}:$info for [${TAG}] running [${arch}]"
