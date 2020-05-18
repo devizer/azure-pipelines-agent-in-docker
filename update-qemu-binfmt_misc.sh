@@ -8,7 +8,9 @@ cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 Say "Turning on apt sources"
 sudo sed -i 's/# deb-src /deb-src  /g' /etc/apt/sources.list
 # remove duplicate lines
-cat /etc/apt/sources.list | awk '!x[$0]++' > /tmp/sources.list; sudo mv -f /tmp/sources.list /etc/apt/sources.list  
+cat /etc/apt/sources.list | awk '!x[$0]++' > /tmp/sources.list; sudo mv -f /tmp/sources.list /etc/apt/sources.list
+# cut deb-src  [arch=amd64] https://download.docker.com/
+sudo sed -i.bak '/^deb-src .*download\.docker\.com.*/d' /etc/apt/sources.list
 Say "Tuned /etc/apt/sources.list"
 cat -n /etc/apt/sources.list
 Say "apt-get update"
