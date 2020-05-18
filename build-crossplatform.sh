@@ -18,7 +18,7 @@ export TAGS="-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
 export TAG=xenial
 export BASE_IMAGE='ubuntu:xenial'
 platform="linux/amd64"
-
+# revert to push
 cd cross-platform
 time docker buildx build \
   --build-arg BASE_IMAGE="${BASE_IMAGE}" \
@@ -27,7 +27,7 @@ time docker buildx build \
   --build-arg BUILD_SOURCEVERSION="${BUILD_SOURCEVERSION}" \
   --build-arg BUILD_SOURCEBRANCHNAME="${BUILD_SOURCEBRANCHNAME}" \
   --build-arg BUILD_BUILDID="${BUILD_BUILDID}" \
-  --platform $platform \
+  --platform $platform --load \
   ${TAGS} .
 
 # docker run --restart on-failure --name agent007 --privileged --hostname agent007 -it devizervlad/azpa:latest 
