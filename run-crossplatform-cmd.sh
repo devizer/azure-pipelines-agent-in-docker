@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 arch=arm64 # arm64 | arm | amd64
 arch=$1
 info=$2
