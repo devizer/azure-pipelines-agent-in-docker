@@ -47,4 +47,6 @@ if [[ -s $file ]]; then
     echo "CURL_CA_BUNDLE is [$CURL_CA_BUNDLE]"
 fi
 
+path=$(sed 's/:/\n/g' <<< "$PATH" | awk '!x[$0]++' | sed ':a;N;$!ba;s/\n/:/g')
+export PATH="$PATH"
 echo "Path is [$PATH]"
