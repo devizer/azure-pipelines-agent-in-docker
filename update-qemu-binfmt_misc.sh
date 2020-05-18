@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 Say "Content /proc/sys/fs/binfmt_misc/qemu-arm"
 cat /proc/sys/fs/binfmt_misc/qemu-arm
@@ -5,7 +6,7 @@ Say "Content /proc/sys/fs/binfmt_misc/qemu-aarch64"
 cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 
 Say "Turning on apt sources"
-sudo sed -i 's/# deb /deb  /g' /etc/apt/sources.list
+sudo sed -i 's/# deb-src /deb-src  /g' /etc/apt/sources.list
 cat /etc/apt/sources.list
 apt-get update -qq
 
