@@ -48,5 +48,5 @@ if [[ -s $file ]]; then
 fi
 
 path=$(sed 's/:/\n/g' <<< "$PATH" | awk '!x[$0]++' | sed ':a;N;$!ba;s/\n/:/g')
-export PATH="$PATH"
+export PATH="$path"
 echo "Path is [$PATH]"
