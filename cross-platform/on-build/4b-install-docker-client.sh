@@ -33,7 +33,7 @@ sudo apt-get update --allow-unauthenticated || sudo apt-get update --allow-unaut
 # Debian 8 has docker-ce only
 if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
     apt-cache policy docker-ce
-    sudo apt-get update --allow-unauthenticated docker-ce
+    smart-apt-install docker-ce
     systemctl disable docker.service
     systemctl disable docker.socket
     rm -f /usr/bin/dockerd
