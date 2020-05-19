@@ -25,7 +25,7 @@ export BASE_IMAGE='ubuntu:xenial'
 platform="linux/amd64"
 platform="linux/amd64,linux/arm64"
 platform="linux/amd64,linux/arm64,linux/arm/v7"
-# revert to push
+# revert to --push
 cd cross-platform
 time docker buildx build \
   --build-arg BASE_IMAGE="${BASE_IMAGE}" \
