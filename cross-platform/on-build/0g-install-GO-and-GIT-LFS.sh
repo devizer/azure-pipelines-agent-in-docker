@@ -14,7 +14,7 @@ git clone https://github.com/git-lfs/git-lfs
 cd git-lfs*
 git checkout $GIT_LFS_VER
 Say "Downloading dependencies for GIT-LFS $GIT_LFS_VER"
-time try-and-retry go mod download
+time try-and-retry timeout 666 go mod download
 Say "Building GIT-LFS $GIT_LFS_VER"
 time make -B
 sudo mv bin/git-lfs /usr/local/bin/git-lfs
