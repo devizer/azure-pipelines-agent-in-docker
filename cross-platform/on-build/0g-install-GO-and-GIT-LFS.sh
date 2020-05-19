@@ -13,6 +13,8 @@ rm -rf *
 git clone https://github.com/git-lfs/git-lfs
 cd git-lfs*
 git checkout $GIT_LFS_VER
+Say "Downloading dependencies for GIT-LFS $GIT_LFS_VER"
+go mod download -x
 Say "Building GIT-LFS $GIT_LFS_VER"
 time make -B
 sudo mv bin/git-lfs /usr/local/bin/git-lfs
