@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # work=$HOME/build/azure-pipeline-agent-in-docker; mkdir -p $(dirname $work); cd $(dirname $work); git clone https://github.com/devizer/azure-pipeline-agent-in-docker || true; cd azure-pipeline-agent-in-docker; git pull; time bash build-crossplatform.sh
+set -e
 
 docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest
 docker buildx inspect --bootstrap
@@ -30,5 +31,7 @@ time docker buildx build \
   --build-arg BUILD_BUILDID="${BUILD_BUILDID}" \
   --platform $platform --load \
   ${TAGS} .
+
+Say "Built with --load only"
 
 # docker run --restart on-failure --name agent007 --privileged --hostname agent007 -it devizervlad/azpa:latest 
