@@ -17,7 +17,7 @@ Say "apt-get update"
 sudo apt-get update
 
 Say "Installing qemu build dependencies"
-sudo apt-get build-dep qemu -y
+time sudo apt-get build-dep qemu -y
 
 QEMU_VER=5.0.0 # 5.0.0 | 4.2.0 | 4.1.1
 Say "Building qemu ${QEMU_VER}"
