@@ -9,7 +9,6 @@ sudo apt-get install qemu-user-static -y
 docker buildx inspect --bootstrap
 docker buildx ls
 
-
 # build nunit and xunit test runners
 set -e
 export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; 

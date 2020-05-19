@@ -10,11 +10,18 @@ sha=$(echo $json | jq -r '.manifests[] | if .platform.architecture == "'$arch'" 
 if [[ "$sha" == "" ]]; then
   Say "Skipping: architecture [$arch] not found for ${TAG}"
 else
+  Say "${TAG}:$info Removing all the containers and images"
+  docker rm -f $(docker ps -aq) 
+  docker image rm $(docker image ls -a -q) 
+  docker image rm -f devizervlad/crossplatform-azure-pipelines-agent >/dev/null
+  docker image rm -f $(docker image ls | grep devizervlad/crossplatform-azure-pipelines-agent | awk '{print $3}') # >/dev/null 2>/dev/null
+  Say "${TAG}:$info Containers"
+  docker ps -a
+  Say "${TAG}:$info Images"
+  docker image ls
   Say "${TAG}:$info Free space"
-  docker rm -f $(docker ps -aq) 2>/dev/null
-  docker image rm $(docker image ls -a -q) 2>/dev/null
-  docker image rm -f devizervlad/crossplatform-azure-pipelines-agent2>/dev/null
-  docker image rm -f $(docker image ls | grep devizervlad/crossplatform-azure-pipelines-agent | awk '{print $3}') 2>/dev/null # >/dev/null 2>/dev/null
+  df -T
+
   Say "${TAG}:$info Pull devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha} for [${TAG}] running [${arch}]"
   docker pull "devizervlad/crossplatform-azure-pipelines-agent:${TAG}@${sha}" >/dev/null
   Say "${TAG}:$info for [${TAG}] running [${arch}]"
