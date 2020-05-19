@@ -20,6 +20,7 @@ sudo mv bin/git-lfs /usr/local/bin/git-lfs
 # the right way
 go clean -cache
 
+rm -rf ~/go || true
 
 popd
 rm -rf $work
