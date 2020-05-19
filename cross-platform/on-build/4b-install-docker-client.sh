@@ -28,18 +28,18 @@ else
  "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID $(lsb_release -cs) stable"
 fi
 
-sudo apt-get update --allow-unauthenticated
+sudo apt-get update --allow-unauthenticated || sudo apt-get update --allow-unauthenticated || sudo apt-get update --allow-unauthenticated
 
 # Debian 8 has docker-ce only
 if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
     apt-cache policy docker-ce
-    sudo apt-get install --allow-unauthenticated -y -q docker-ce
+    sudo apt-get update --allow-unauthenticated docker-ce
     systemctl disable docker.service
     systemctl disable docker.socket
     rm -f /usr/bin/dockerd
 else
     apt-cache policy docker-ce-cli
-    sudo apt-get install --allow-unauthenticated -y -q docker-ce-cli 
+    smart-apt-install docker-ce-cli 
 fi
 sudo groupadd docker || true
 sudo usermod -aG docker user || true

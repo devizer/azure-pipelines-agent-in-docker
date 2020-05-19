@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+export container=docker
+
 # for agent 1.166+ it is not needed
 if false && [[ "$(uname -m)" == aarch64 ]]; then
   # Add arm-linux-gnueabihf libs to LD_LIBRARY_PATH

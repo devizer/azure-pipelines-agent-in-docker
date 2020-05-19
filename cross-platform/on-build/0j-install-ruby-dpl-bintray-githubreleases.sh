@@ -21,9 +21,9 @@ if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
         Say "Attaching ppa:brightbox/ruby-ng for ruby 2.5"
         echo "" | sudo add-apt-repository ppa:brightbox/ruby-ng; 
         pushd /etc/apt/sources.list.d; for f in *; do sed -i 's/jessie/trusty/g' $f; done; popd; 
-        sudo apt-get update
+        try-and-retry sudo apt-get update
         Say "Installing ruby 2.5";
-        apt-get install ruby2.5-dev ruby2.5 -y
+        smart-apt-install ruby2.5-dev ruby2.5 -y
         ruby --version
         gem --version
         Say "Installing dpl dpl-releases dpl-bintray via gem"
@@ -37,7 +37,7 @@ if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
 else
     Say "Installing ruby-dev via apt"
     # gem=$(apt-cache search gem | grep -E '^gem ' | awk '{print $1}')
-    sudo apt-get install -y ruby-dev
+    smart-apt-install -y ruby-dev
     Say "Installing dpl dpl-releases dpl-bintray via gem"
     sudo gem install dpl dpl-releases dpl-bintray
 fi

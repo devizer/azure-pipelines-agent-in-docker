@@ -3,7 +3,7 @@ GIT_VER=${GIT_VER:-v2.26.2}
 work=$HOME/build/git-src
 mkdir -p $work
 pushd $work >/dev/null
-sudo apt-get install -y build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip 
+smart-apt-install build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip 
 url=https://codeload.github.com/git/git/zip/$GIT_VER
 wget -q --no-check-certificate -O _git-src.zip "$url"  || curl -kfSL -o _git-src.zip "$url"
 unzip -q _git-src.zip
