@@ -6,6 +6,7 @@ docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest || tru
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 docker buildx inspect --bootstrap
+docker buildx ls
 
 
 # build nunit and xunit test runners
