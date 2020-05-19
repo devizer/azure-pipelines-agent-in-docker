@@ -14,10 +14,11 @@ set +e
 
 # docker image rm -f $(docker image ls -aq)
 export OS=Linux
-export TAGS="-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+export TAGS="-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
 export TAG=xenial
 export BASE_IMAGE='ubuntu:xenial'
 platform="linux/amd64"
+platform="linux/amd64,linux/arm64,linux/arm/v7"
 # revert to push
 cd cross-platform
 time docker buildx build \
