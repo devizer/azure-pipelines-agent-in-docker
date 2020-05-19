@@ -4,6 +4,7 @@ set -e
 
 docker image rm -f devizervlad/crossplatform-azure-pipelines-agent:latest || true
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+sudo apt-get install qemu-user-static -y
 
 docker buildx inspect --bootstrap
 docker buildx ls
