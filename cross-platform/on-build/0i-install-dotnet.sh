@@ -8,7 +8,8 @@ export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 # what the hell on qemu-static?
 bash /tmp/install-DOTNET.sh;
 set -e 
-ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet;
+ln="ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet"
+eval "sudo $ln" || sudo "$ln" 
 echo ${DOTNET_TARGET_DIR} > /etc/agent-path.d/dotnet
 
 # next line fails on 20.04 only for armv7 and arm64 only  
