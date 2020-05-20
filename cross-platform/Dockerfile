@@ -45,13 +45,14 @@ RUN echo; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -q; \
- apt-get install -yq locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
+ apt-get install -yq curl sudo; \
+ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
+ smart-apt-install locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
     lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils \
     build-essential autoconf automake libtool flex bison; \
  bash install-libcurl.sh; \
  echo insecure >> ~/.curlrc; \
  bash disable-ipv6.sh; \
- script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  bash install-locales.sh; \
  bash config-system.sh; \
  Say "Configure SystemD in docker for $(uname -m)"; \
