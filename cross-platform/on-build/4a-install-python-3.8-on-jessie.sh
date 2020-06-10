@@ -29,8 +29,8 @@ url=https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
 try-and-retry wget --no-check-certificate -O _openssl.tgz $url || curl -ksSL -o _openssl.tgz $url
 tar -zxf _openssl.tgz
 cd openssl*
-# ./config --prefix=/usr/local
-./config --prefix=/usr/local/ssl
+./config --prefix=/usr/local
+# ./config --prefix=/usr/local/ssl
 time make -j${cpus}
 time sudo make install
 popd; rm -rf $work
@@ -48,7 +48,7 @@ tar -zxf _python.tgz
 cd Python*
 
 echo '
-SSL=/usr/local/ssl
+SSL=/usr/local
 _ssl _ssl.c \
        -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
        -L$(SSL)/lib -lssl -lcrypto
