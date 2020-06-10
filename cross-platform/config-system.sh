@@ -15,3 +15,5 @@ APT::Compressor::xz::CompressArg:: "-1";
 APT::Compressor::bzip2::CompressArg:: "-1";
 APT::Compressor::lzma::CompressArg:: "-1";
 ' | sudo tee /etc/apt/apt.conf.d/99Z_Custom
+
+sudo apt-get purge mandb

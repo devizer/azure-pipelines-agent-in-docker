@@ -15,6 +15,8 @@ steps:
       echo "   JOB_URL: ${JOB_URL}"
     displayName: 'Shared VARS'
       
+  - bash: sudo apt-get purge mandb -y || true
+    displayName: 'purge mandb'
     
   - bash: |
       export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; 
