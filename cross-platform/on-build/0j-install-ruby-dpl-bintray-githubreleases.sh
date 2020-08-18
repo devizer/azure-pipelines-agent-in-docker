@@ -37,7 +37,7 @@ if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
 else
     Say "Installing ruby-dev via apt"
     # gem=$(apt-cache search gem | grep -E '^gem ' | awk '{print $1}')
-    smart-apt-install -y ruby-dev
+    smart-apt-install ruby-dev
     Say "Installing dpl dpl-releases dpl-bintray via gem"
     sudo gem install dpl dpl-releases dpl-bintray
 fi
