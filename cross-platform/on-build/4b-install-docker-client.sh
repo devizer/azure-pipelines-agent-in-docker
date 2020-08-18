@@ -58,10 +58,11 @@ chown -R user /home/user
 smart-apt-install python3-pip libffi-dev libssl-dev
 
 if [[ $(uname -m) == x86_64 ]]; then 
-    Say "Installing precompiled docker-compose 1.24.1 for $(uname -m)"
+    Say "Installing precompiled docker-compose 1.26.2 for $(uname -m)"
     # sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     dock_comp_ver=1.25.0 # is not yet compiled for arm64
     dock_comp_ver=1.24.1 # compiled for both armv7 and v7
+    dock_comp_ver=1.26.2
     sudo curl --fail -ksSL -o /usr/local/bin/docker-compose "https://github.com/docker/compose/releases/download/$dock_comp_ver/docker-compose-$(uname -s)-$(uname -m)" || true
     if [[ ! -f /usr/local/bin/docker-compose ]]; then
       sudo curl --fail -ksSL -o /usr/local/bin/docker-compose "https://raw.githubusercontent.com/devizer/test-and-build/master/docker-compose/$dock_comp_ver/docker-compose-$(uname -s)-$(uname -m)" || true    
@@ -72,10 +73,11 @@ if [[ $(uname -m) == x86_64 ]]; then
       Say "docker-compose $dock_comp_ver can not be installed for $(uname -s) $(uname -m)" 
     fi
  else
-    Say "Installing docker-compose 1.25.4/1.21.2 for $(uname -m) using pip3"
+    
+    Say "Installing docker-compose 1.26.2 for $(uname -m) using pip3"
     # sudo apt-get install -y python3-pip libffi-dev libssl-dev
     # optional
     sudo -H pip3 install --no-cache-dir --upgrade pip || sudo -H pip3 install --upgrade pip 
     # build/install
-    time sudo pip3 install --no-cache-dir docker-compose==1.25.4 || time sudo pip3 install docker-compose==1.25.4
+    time sudo pip3 install --no-cache-dir docker-compose==1.26.2 || time sudo pip3 install docker-compose==1.26.2
  fi

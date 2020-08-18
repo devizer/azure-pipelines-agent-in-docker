@@ -2,6 +2,7 @@
 # apt-get install unzip binutils bsdutils build-essential wget -y
 set -e
 url=https://www.sqlite.org/2020/sqlite-amalgamation-3310100.zip
+url=https://www.sqlite.org/2020/sqlite-amalgamation-3330000.zip
 work=$HOME/build/sqlite3-src
 mkdir -p $work
 pushd $work
