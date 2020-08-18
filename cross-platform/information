@@ -53,3 +53,5 @@ echo "\
 
 Packages marked by asterisk are distribution independent for debian and its derivatives
 "
+
+# TODO: just uncomment rm -f *.core || true

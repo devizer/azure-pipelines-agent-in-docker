@@ -84,6 +84,7 @@ RUN echo; \
  Say "Clean-up for $(uname -m)"; \
  echo SKIP: dotnet nuget locals all --clear; \
  chown -R user /home/user; \
+ echo "Core dumps: $(ls *.core)" \
  sudo rm -f /pre-configure/on-build/*.core || true; \
  sudo rm -f /pre-configure/*.core || true; \
  sudo rm -rf /root/build || true; \
