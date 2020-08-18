@@ -10,12 +10,15 @@ if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi
 if [[ "$system" == "aarch64" ]]; then suffix=linux-arm64; fi
 # url=https://vstsagentpackage.azureedge.net/agent/2.165.2/vsts-agent-${suffix}-2.165.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.168.2.tar.gz
+url=https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-${suffix}-2.173.0.tar.gz
+filename=$(basename $url)
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
+# https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-linux-arm64-2.173.0.tar.gz
 
-try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O linux-agent.tar.gz $url
-tar xzf linux-agent.tar.gz
-rm -f linux-agent.tar.gz
+try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O "$filename" $url
+tar xzf "$filename"
+rm -f "$filename"
 source /etc/os-release
 if false && [[ "$UBUNTU_CODENAME" == "xenial" ]]; then
     sudo bash ./bin/installdependencies.sh || true
