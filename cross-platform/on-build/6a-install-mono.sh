@@ -8,3 +8,6 @@ Say "Strip /usr/lib/mono/**.so"
 pushd /usr/lib/mono 
 find -name '*.so' | xargs strip || true
 popd 
+
+Say "Installing libgdiplus"
+smart-apt-install libgdiplus
