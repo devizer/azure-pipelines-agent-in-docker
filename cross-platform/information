@@ -8,6 +8,7 @@ function get1stline() {
 source /pre-configure/env.sh
 
 libssl=$(apt-cache search libssl | grep -E '^libssl[\.0-9]* ' | awk '{print $1}' | sed ':a;N;$!ba;s/\n/, /g') 
+libgdiplus=$(apt-cache policy libgdiplus | grep -E '(I|i)nstalled' | awk '{print $NF}') 
 sqlite=$(sqlite3 --version | awk '{print $1 ", " $2 " " $3}')
 dpl=$(gem list dpl  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
 build_date="$(date --utc '+%F %T %Z')"; 
@@ -26,6 +27,7 @@ echo "\
 * msbuild:        $(msbuild /nologo /version)
 * nuget:          $(get1stline nuget)
 * paket:          $(paket --version)
+  libgdiplus:     $libgdiplus
 * xunit.console:  $(get1stline  xunit.console)
 * nunit3-console: $(get1stline 'nunit3-console --version')
 * node:           $(node --version)
