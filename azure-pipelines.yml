@@ -12,7 +12,7 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
 
@@ -25,7 +25,7 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
 
@@ -38,7 +38,7 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
 
@@ -51,7 +51,7 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
 
@@ -64,7 +64,7 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
 
@@ -77,10 +77,10 @@ jobs:
     timeoutInMinutes: 599
     cancelTimeoutInMinutes: 1
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
       - template: azure-steps-nix.yml
-
+        
 # trigger:
 #  - master
 
@@ -89,7 +89,7 @@ trigger:
   branches:
     include:
       - master
-
+      
 schedules:
   - cron: "30 3 * * *"
     displayName: 'Nightly rebuild (at 3:30)'
