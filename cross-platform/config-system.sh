@@ -17,3 +17,5 @@ APT::Compressor::lzma::CompressArg:: "-1";
 ' | sudo tee /etc/apt/apt.conf.d/99Z_Custom
 
 # sudo apt-get purge man-db -y
+
+chmod +x /pre-configure/information
