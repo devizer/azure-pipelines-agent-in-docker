@@ -2,7 +2,7 @@
 work=$HOME/azure-pipelines-agent
 mkdir -p $work
 cd $work
-Say "azure pipeline agent path: [$(pwd)]"
+Say "Azure Pipelines Agent path: [$(pwd)]"
 # printenv | sort
 suffix=linux-arm
 system="$(uname -m)"
@@ -17,21 +17,30 @@ filename=$(basename $url)
 # https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-linux-arm64-2.173.0.tar.gz
 
 try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O "$filename" $url
-tar xzf "$filename"
+Say "Extracting $filename"
+if [[ "$(command -v pv)" != "" ]]; then
+    pv "$filename" | tar xzf -
+else
+    tar xzf "$filename"
+fi 
 rm -f "$filename"
 source /etc/os-release
+Say "Checking .NET Core dependencies"
 if false && [[ "$UBUNTU_CODENAME" == "xenial" ]]; then
     sudo bash ./bin/installdependencies.sh || true
 else
     url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS=true bash -e && echo "Successfully installed .NET Core Dependencies" || true
 fi
-mkdir -p $HOME/work
+Say "Configuraring Azure Pipelines Agent for the '${VSTS_POOL:-Default}' pool"
+agent_work_folder="${VSTS_WORK:-$HOME/work}"
+mkdir -p "$agent_work_folder"
 ./config.sh --unattended \
   --agent "${VSTS_AGENT:-$(hostname)}" \
   --url "${VSTS_URL}" \
-  --work "${VSTS_WORK:-$HOME/work}" \
+  --work "$agent_work_folder" \
   --auth pat --token "$VSTS_PAT" --pool "${VSTS_POOL:-Default}" --replace & wait $!
   
+Say "Configuration log for Azure Pipelines Agent"
 cat _diag/*.log || true
 
 function _ignore_() {
