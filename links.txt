@@ -1,0 +1,6 @@
+Running a self-hosted agent in Docker
+https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops
+
+Azure Pipelines Agent docker image for x64 only
+https://hub.docker.com/_/microsoft-azure-pipelines-vsts-agent
+

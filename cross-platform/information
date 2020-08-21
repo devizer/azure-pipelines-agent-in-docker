@@ -11,7 +11,11 @@ libssl=$(apt-cache search libssl 2>/dev/null| grep -E '^libssl[\.0-9]* ' | awk '
 libgdiplus=$(apt-cache policy libgdiplus 2>/dev/null | grep -E '(I|i)nstalled' | awk '{print $NF}') 
 sqlite=$(sqlite3 --version 2>/dev/null | awk '{print $1 ", " $2 " " $3}')
 dpl=$(gem list dpl 2>/dev/null  | grep dpl | sed ':a;N;$!ba;s/\n/, /g')
-build_date="$(date --utc '+%F %T %Z')"; 
+if [[ -f /etc/image-build-date ]]; then 
+    build_date="$(cat /etc/image-build-date)"
+else 
+    build_date="$(date --utc '+%F %T %Z')";
+fi 
 
 echo "\
   Build date:     $build_date
