@@ -25,4 +25,10 @@ pushd /usr/local/libexec/git-core
 strip * || true
 popd
 
+Say "git version"
+git --version
+Say "Force git http version to HTTP/1.1"
 git config --global http.version HTTP/1.1
+Say "git configuration"
+git config -l
+
