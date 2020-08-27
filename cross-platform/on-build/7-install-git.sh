@@ -24,3 +24,5 @@ Say "Strip git"
 pushd /usr/local/libexec/git-core
 strip * || true
 popd
+
+git config --global http.version HTTP/1.1
