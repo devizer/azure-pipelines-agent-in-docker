@@ -30,44 +30,44 @@ jobs:
           BASE_IMAGE: 'debian:buster'
           SLIM: 'true'
 
-        Bionic_18_04_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
-          TAG: bionic
-          BASE_IMAGE: 'ubuntu:bionic'
-          
-        Xenial_16_04_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
-          TAG: xenial
-          BASE_IMAGE: 'ubuntu:xenial'
-          
         Stretch_9_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
           TAG: stretch
           BASE_IMAGE: 'debian:stretch'
 
-        Jessie_8_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
-          TAG: jessie
-          BASE_IMAGE: 'debian:jessie'
+        Slim_Stretch_9_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
+          TAG: stretch
+          BASE_IMAGE: 'debian:stretch'
+          SLIM: 'true'
 
+        Bionic_18_04_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+          TAG: bionic
+          BASE_IMAGE: 'ubuntu:bionic'
+          
         Slim_Bionic_18_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic-slim"
           TAG: bionic
           BASE_IMAGE: 'ubuntu:bionic'
           SLIM: 'true'
 
+        Xenial_16_04_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
+          TAG: xenial
+          BASE_IMAGE: 'ubuntu:xenial'
+          
         Slim_Xenial_16_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
           TAG: xenial
           BASE_IMAGE: 'ubuntu:xenial'
           SLIM: 'true'
-        
-        Slim_Stretch_9_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
-          TAG: stretch
-          BASE_IMAGE: 'debian:stretch'
-          SLIM: 'true'
-          
+
+        Jessie_8_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
+          TAG: jessie
+          BASE_IMAGE: 'debian:jessie'
+
         Slim_Jessie_8_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
           TAG: jessie
