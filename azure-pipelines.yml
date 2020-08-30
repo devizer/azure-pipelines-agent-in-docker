@@ -1,9 +1,8 @@
 variables:
     Project: 'Azure Pipelines Agent in Docker'
 
-strategy: 
-    parallel: 5
-    maxParallel: 5
+stages:
+  stage: Pipelines_Agent
     jobs:
     
       - job: Focal_20_04_Based
