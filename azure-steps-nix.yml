@@ -68,9 +68,9 @@ steps:
       docker version || true
     displayName: 'Configure Docker'
 
-  - bash: |
-      bash -e update-qemu-binfmt_misc.sh
-    displayName: 'update-qemu-binfmt_misc.sh'
+#  - bash: |
+#      bash -e update-qemu-binfmt_misc.sh
+#    displayName: 'update-qemu-binfmt_misc.sh'
 
 
   - bash: |
