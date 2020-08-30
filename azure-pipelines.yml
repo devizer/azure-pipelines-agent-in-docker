@@ -1,169 +1,169 @@
 variables:
     Project: 'Azure Pipelines Agent in Docker'
 
-    jobs:
-    
-      - job: Focal_20_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
-          TAG: focal
-          BASE_IMAGE: 'ubuntu:focal'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Focal_20_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal-slim -t devizervlad/crossplatform-azure-pipelines-agent:latest-slim"
-          TAG: focal
-          BASE_IMAGE: 'ubuntu:focal'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Buster_10_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
-          TAG: buster
-          BASE_IMAGE: 'debian:buster'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Buster_10_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster-slim"
-          TAG: buster
-          BASE_IMAGE: 'debian:buster'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Bionic_18_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
-          TAG: bionic
-          BASE_IMAGE: 'ubuntu:bionic'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Xenial_16_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
-          TAG: xenial
-          BASE_IMAGE: 'ubuntu:xenial'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Stretch_9_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
-          TAG: stretch
-          BASE_IMAGE: 'debian:stretch'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Jessie_8_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
-          TAG: jessie
-          BASE_IMAGE: 'debian:jessie'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Bionic_18_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic-slim"
-          TAG: bionic
-          BASE_IMAGE: 'ubuntu:bionic'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Xenial_16_04_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
-          TAG: xenial
-          BASE_IMAGE: 'ubuntu:xenial'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Stretch_9_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
-          TAG: stretch
-          BASE_IMAGE: 'debian:stretch'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
-    
-      - job: Slim_Jessie_8_Based
-        variables:
-          OS: Linux
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
-          TAG: jessie
-          BASE_IMAGE: 'debian:jessie'
-          SLIM: 'true'
-        timeoutInMinutes: 599
-        cancelTimeoutInMinutes: 1
-        pool:
-          vmImage: 'ubuntu-20.04'
-        steps:
-          - template: azure-steps-nix.yml
+jobs:
+
+  - job: Focal_20_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
+      TAG: focal
+      BASE_IMAGE: 'ubuntu:focal'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Focal_20_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal-slim -t devizervlad/crossplatform-azure-pipelines-agent:latest-slim"
+      TAG: focal
+      BASE_IMAGE: 'ubuntu:focal'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Buster_10_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
+      TAG: buster
+      BASE_IMAGE: 'debian:buster'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Buster_10_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster-slim"
+      TAG: buster
+      BASE_IMAGE: 'debian:buster'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Bionic_18_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+      TAG: bionic
+      BASE_IMAGE: 'ubuntu:bionic'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Xenial_16_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
+      TAG: xenial
+      BASE_IMAGE: 'ubuntu:xenial'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Stretch_9_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
+      TAG: stretch
+      BASE_IMAGE: 'debian:stretch'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Jessie_8_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
+      TAG: jessie
+      BASE_IMAGE: 'debian:jessie'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Bionic_18_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic-slim"
+      TAG: bionic
+      BASE_IMAGE: 'ubuntu:bionic'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Xenial_16_04_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
+      TAG: xenial
+      BASE_IMAGE: 'ubuntu:xenial'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Stretch_9_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
+      TAG: stretch
+      BASE_IMAGE: 'debian:stretch'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
+
+  - job: Slim_Jessie_8_Based
+    variables:
+      OS: Linux
+      TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
+      TAG: jessie
+      BASE_IMAGE: 'debian:jessie'
+      SLIM: 'true'
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
 
 # trigger:
 #  - master
