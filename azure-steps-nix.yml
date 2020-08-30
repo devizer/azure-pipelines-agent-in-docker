@@ -137,6 +137,11 @@ steps:
     displayName: 'VERSIONs Report'
 
   - bash: |
+      Say "Docker Images"
+      docker image ls 
+    displayName: 'List Docker Images'
+
+  - bash: |
       df -T
       docker rm -f $(docker ps -aq)
       docker image rm $(docker image ls -a -q)
