@@ -15,7 +15,10 @@ steps:
       echo "   JOB_URL: ${JOB_URL}"
     displayName: 'Shared VARS'
       
-  - bash: sudo apt-get purge man-db -y || true
+  - bash: printenv | sort
+    displayName: 'Show Env Vars'
+
+  - bash: sudo apt-get purge man-db -y -qq || true
     displayName: 'purge man-db'
     
   - bash: |
