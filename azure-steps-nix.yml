@@ -95,6 +95,7 @@ steps:
 
       # set -o pipefail # !important
       time docker build \
+        --build-arg SLIM_IMAGE="${SLIM}" \
         --build-arg BASE_IMAGE="${BASE_IMAGE}" \
         --build-arg BUILD_URL="${BUILD_URL}" \
         --build-arg JOB_URL="${JOB_URL}" \
@@ -156,6 +157,7 @@ steps:
           platform="linux/amd64,linux/arm64,linux/arm/v7"
         fi
         docker buildx build \
+          --build-arg SLIM_IMAGE="${SLIM}" \
           --build-arg BASE_IMAGE="${BASE_IMAGE}" \
           --build-arg BUILD_URL="${BUILD_URL}" \
           --build-arg JOB_URL="${JOB_URL}" \
