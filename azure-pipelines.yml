@@ -74,12 +74,12 @@ jobs:
           BASE_IMAGE: 'debian:jessie'
           SLIM: 'true'
           
-      timeoutInMinutes: 599
-      cancelTimeoutInMinutes: 1
-      pool:
-        vmImage: 'ubuntu-20.04'
-      steps:
-        - template: azure-steps-nix.yml
+    timeoutInMinutes: 599
+    cancelTimeoutInMinutes: 1
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+      - template: azure-steps-nix.yml
 
 # trigger:
 #  - master
