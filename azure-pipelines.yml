@@ -1,8 +1,6 @@
 variables:
     Project: 'Azure Pipelines Agent in Docker'
 
-stages:
-  stage: Pipelines_Agent
     jobs:
     
       - job: Focal_20_04_Based
