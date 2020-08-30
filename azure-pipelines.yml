@@ -3,7 +3,7 @@ variables:
 
 jobs:
 
-  - job: BuildX_Docker_Images
+  - job: Build
     strategy:
       maxParallel: 4
       matrix:
