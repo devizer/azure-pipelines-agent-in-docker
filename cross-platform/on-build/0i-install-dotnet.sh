@@ -14,8 +14,9 @@ ln="ln -f -s ${DOTNET_TARGET_DIR}/dotnet /usr/local/bin/dotnet"
 eval "sudo $ln" || sudo "$ln" 
 echo ${DOTNET_TARGET_DIR} > /etc/agent-path.d/dotnet
 
-# next line fails on 20.04 only for armv7 and arm64 only  
+# next line fails on 20.04 only for armv7 and arm64 only in qemu  
 dotnet --info || true; 
+
 rm -rf /root/.dotnet/tools/* || true
 
 # support for .NET Core tools 
