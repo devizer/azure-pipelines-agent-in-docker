@@ -74,8 +74,8 @@ jobs:
           TAG: jessie
           BASE_IMAGE: 'debian:jessie'
           SLIM: 'true'
-          
-    timeoutInMinutes: 599
+
+    timeoutInMinutes: 300
     cancelTimeoutInMinutes: 1
     pool:
       vmImage: 'ubuntu-20.04'
