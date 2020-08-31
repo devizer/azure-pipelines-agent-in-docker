@@ -1,5 +1,6 @@
 variables:
     Project: 'Azure Pipelines Agent in Docker'
+    OS: 'Linux'
 
 jobs:
 
@@ -15,7 +16,7 @@ jobs:
         
         Slim_Focal_20_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal-slim -t devizervlad/crossplatform-azure-pipelines-agent:latest-slim"
-          TAG: focal
+          TAG: focal-slim
           BASE_IMAGE: 'ubuntu:focal'
           SLIM: 'true'
           
@@ -26,7 +27,7 @@ jobs:
 
         Slim_Buster_10_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster-slim"
-          TAG: buster
+          TAG: buster-slim
           BASE_IMAGE: 'debian:buster'
           SLIM: 'true'
 
@@ -37,7 +38,7 @@ jobs:
 
         Slim_Stretch_9_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
-          TAG: stretch
+          TAG: stretch-slim
           BASE_IMAGE: 'debian:stretch'
           SLIM: 'true'
 
@@ -48,7 +49,7 @@ jobs:
           
         Slim_Bionic_18_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic-slim"
-          TAG: bionic
+          TAG: bionic-slim
           BASE_IMAGE: 'ubuntu:bionic'
           SLIM: 'true'
 
@@ -59,13 +60,13 @@ jobs:
           
         Slim_Xenial_16_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
-          TAG: xenial
+          TAG: xenial-slim
           BASE_IMAGE: 'ubuntu:xenial'
           SLIM: 'true'
 
         Jessie_8_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
-          TAG: jessie
+          TAG: jessie-slim
           BASE_IMAGE: 'debian:jessie'
 
         Slim_Jessie_8_Based:
