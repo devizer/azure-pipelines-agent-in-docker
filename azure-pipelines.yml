@@ -42,6 +42,17 @@ jobs:
           BASE_IMAGE: 'debian:stretch'
           SLIM: 'true'
 
+        Jessie_8_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
+          TAG: jessie-slim
+          BASE_IMAGE: 'debian:jessie'
+
+        Slim_Jessie_8_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
+          TAG: jessie
+          BASE_IMAGE: 'debian:jessie'
+          SLIM: 'true'
+
         Bionic_18_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
           TAG: bionic
@@ -62,17 +73,6 @@ jobs:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
           TAG: xenial-slim
           BASE_IMAGE: 'ubuntu:xenial'
-          SLIM: 'true'
-
-        Jessie_8_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
-          TAG: jessie-slim
-          BASE_IMAGE: 'debian:jessie'
-
-        Slim_Jessie_8_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
-          TAG: jessie
-          BASE_IMAGE: 'debian:jessie'
           SLIM: 'true'
 
     timeoutInMinutes: 300
