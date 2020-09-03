@@ -11,7 +11,7 @@ if [[ "$system" == "aarch64" ]]; then suffix=linux-arm64; fi
 # url=https://vstsagentpackage.azureedge.net/agent/2.165.2/vsts-agent-${suffix}-2.165.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.168.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-${suffix}-2.173.0.tar.gz
-url=https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-${suffix}-2.174.1.tar.gz
+url=https://vstsagentpackage.azureedge.net/agent/2.174.1/vsts-agent-${suffix}-2.174.1.tar.gz
 filename=$(basename $url)
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
