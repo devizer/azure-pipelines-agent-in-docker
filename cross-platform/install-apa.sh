@@ -14,6 +14,7 @@ url=https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-${suffix}-2.
 url=https://vstsagentpackage.azureedge.net/agent/2.174.1/vsts-agent-${suffix}-2.174.1.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.174.2/vsts-agent-${suffix}-2.174.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.174.3/vsts-agent-${suffix}-2.174.3.tar.gz
+url=https://vstsagentpackage.azureedge.net/agent/2.175.2/vsts-agent-${suffix}-2.175.2.tar.gz
 filename=$(basename $url)
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
