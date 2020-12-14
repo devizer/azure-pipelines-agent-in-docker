@@ -6,7 +6,7 @@ jobs:
 
   - job: Build
     strategy:
-      maxParallel: 6
+      maxParallel: 4
       matrix:
         
         Focal_20_04_Based:
