@@ -55,7 +55,7 @@ echo '{ "experimental": "enabled" }' | tee /home/user/.docker/config.json || tru
 echo '{ "experimental": "enabled" }' | tee /root/.docker/config.json || true
 chown -R user /home/user
 
-smart-apt-install python3-pip libffi-dev libssl-dev
+smart-apt-install python3-pip python3-dev libffi-dev libssl-dev
 
 if [[ $(uname -m) == x86_64 ]]; then 
     Say "Installing precompiled docker-compose 1.26.2 for $(uname -m)"
@@ -77,8 +77,9 @@ if [[ $(uname -m) == x86_64 ]]; then
     Say "Installing docker-compose 1.26.2 for $(uname -m) using pip3"
     # sudo apt-get install -y python3-pip libffi-dev libssl-dev
     # optional
-    sudo -H pip3 install --no-cache-dir --upgrade pip || sudo -H pip3 install --upgrade pip 
+    sudo -H pip3 install --no-cache-dir --upgrade pip || sudo -H pip3 install --upgrade pip
     # build/install
     # time sudo pip3 install --no-cache-dir docker-compose==1.26.2 || time sudo pip3 install docker-compose==1.26.2
-    time sudo pip3 install --no-cache-dir docker-compose==1.28.2 || time sudo pip3 install docker-compose==1.28.2
+    export CRYPTOGRAPHY_DONT_BUILD_RUST=1
+    time pip3 install --no-cache-dir docker-compose==1.28.2 || time sudo pip3 install docker-compose==1.28.2
  fi
