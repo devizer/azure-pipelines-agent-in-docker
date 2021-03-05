@@ -3,6 +3,7 @@
 set -e
 url=https://www.sqlite.org/2020/sqlite-amalgamation-3310100.zip
 url=https://www.sqlite.org/2020/sqlite-amalgamation-3330000.zip
+url=https://www.sqlite.org/2021/sqlite-amalgamation-3340100.zip
 work=$HOME/build/sqlite3-src
 mkdir -p $work
 pushd $work
