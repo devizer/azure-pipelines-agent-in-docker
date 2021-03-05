@@ -9,10 +9,11 @@ jobs:
       maxParallel: 4
       matrix:
 
-        Bullseye_11_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bullseye"
-          TAG: bullseye
-          BASE_IMAGE: 'debian:bullseye'
+#        Waiting for docker
+#        Bullseye_11_Based:
+#          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bullseye"
+#          TAG: bullseye
+#          BASE_IMAGE: 'debian:bullseye'
 
         Focal_20_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
