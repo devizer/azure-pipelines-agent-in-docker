@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # GIT_VER=${GIT_VER:-v2.26.2}
-GIT_VER=${GIT_VER:-v2.28.0}
+# GIT_VER=${GIT_VER:-v2.28.0}
+GIT_VER=${GIT_VER:-v2.30.1}
 work=$HOME/build/git-src
 mkdir -p $work
 pushd $work >/dev/null
