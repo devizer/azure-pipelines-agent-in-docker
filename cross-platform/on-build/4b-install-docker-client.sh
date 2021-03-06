@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source /etc/os-release
-if false && [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+if false && [[ "${VERSION_ID:-}" == "8" && "$ID" == "debian" ]]; then
   Say "SKIPPING Docker for jessie"
   exit 0;
 fi 
@@ -23,6 +23,8 @@ try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyser
 if [[ "$UBUNTU_CODENAME" == focal ]]; then
   # bionic also works
   echo "deb https://download.docker.com/linux/ubuntu eoan stable" | sudo tee /etc/apt/sources.list.d/docker.list
+elif [[ "$PRETTY_NAME" == *"bullseye/sid"* ]]; then
+  echo "deb https://download.docker.com/linux/debian buster stable" | sudo tee /etc/apt/sources.list.d/docker.list
 else
  sudo add-apt-repository \
  "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID $(lsb_release -cs) stable"
