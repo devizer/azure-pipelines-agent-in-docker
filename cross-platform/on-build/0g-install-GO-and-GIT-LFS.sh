@@ -2,7 +2,8 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-GO.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 echo /usr/local/go/bin > /etc/agent-path.d/go
 
-GIT_LFS_VER=${GIT_LFS_VER:-v2.11.0}
+# GIT_LFS_VER=${GIT_LFS_VER:-v2.11.0}
+GIT_LFS_VER=${GIT_LFS_VER:-v2.13.2}
 Say "Downloading GIT-LFS $GIT_LFS_VER source from github"
  
 work=$HOME/build/git-lfs-src
