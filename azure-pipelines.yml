@@ -15,6 +15,12 @@ jobs:
           TAG: bullseye
           BASE_IMAGE: 'debian:bullseye'
 
+        Slim_Bullseye_11_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bullseye"
+          TAG: bullseye-slim
+          BASE_IMAGE: 'debian:bullseye'
+          SLIM: 'true'
+
         Focal_20_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
           TAG: focal
