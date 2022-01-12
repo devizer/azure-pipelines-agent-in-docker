@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # GIT_VER=${GIT_VER:-v2.26.2}
 # GIT_VER=${GIT_VER:-v2.28.0}
-GIT_VER=${GIT_VER:-v2.30.1}
-work=$HOME/build/git-src
+GIT_VER=${GIT_VER:-v2.34.1}
+TRANSIENT_BUILDS="${TRANSIENT_BUILDS:-$HOME/build}"
+work=$TRANSIENT_BUILDS/build/git-src
 mkdir -p $work
 pushd $work >/dev/null
 smart-apt-install build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip 
