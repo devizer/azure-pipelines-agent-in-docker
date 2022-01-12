@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 function install_7z() {
-  work=~/build/7zip-16.02
+  TRANSIENT_BUILDS="${TRANSIENT_BUILDS:-$HOME/build}"
+  work=$TRANSIENT_BUILDS/build/7zip-16.02
   mkdir -p $work
   pushd $work
   url=https://downloads.sourceforge.net/p7zip/p7zip_16.02_src_all.tar.bz2
