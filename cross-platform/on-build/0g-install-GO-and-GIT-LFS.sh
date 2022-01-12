@@ -7,6 +7,8 @@ GIT_LFS_VER=${GIT_LFS_VER:-v2.13.2}
 Say "Downloading GIT-LFS $GIT_LFS_VER source from github"
  
 work=$HOME/build/git-lfs-src
+TRANSIENT_BUILDS="${TRANSIENT_BUILDS:-$HOME/build}"
+work=$TRANSIENT_BUILDS/build/git-lfs-src
 mkdir -p $work
 pushd $work >/dev/null
 rm -rf *
