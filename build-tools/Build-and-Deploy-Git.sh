@@ -84,7 +84,7 @@ function Build-Git() {
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
-    Say "jq 1.6"
+    Say "jq 1.6 on $KEY"
     export INSTALL_PREFIX=/opt/jq
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     bash -eu install-jq-1.6.sh
