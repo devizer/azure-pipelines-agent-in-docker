@@ -20,7 +20,7 @@ jobs:
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
-    displayName: 'GCC @ Publish'
+    displayName: 'Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: 'Deploy-it-by-$(Agent.JobName)'
