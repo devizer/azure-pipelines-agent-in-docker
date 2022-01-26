@@ -20,25 +20,25 @@ INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 Say "Building GIT [${GIT_VER}] into ${INSTALL_PREFIX}"
 time make prefix="$INSTALL_PREFIX" all -j${cpus}
 sudo make prefix="$INSTALL_PREFIX" install
-Say "Strip $INSTALL_PREFIX/bin/*"
-pushd "$INSTALL_PREFIX/bin"
-sudo strip * || true
-popd
-Say "Strip $INSTALL_PREFIX/libexec/git-core/*"
-pushd "$INSTALL_PREFIX/libexec/git-core"
-sudo strip * || true
-popd
+if [[ -d "$INSTALL_PREFIX/bin" ]]; then
+  Say "Strip $INSTALL_PREFIX/bin/*"
+  pushd "$INSTALL_PREFIX/bin"
+  sudo strip * || true
+  popd
+  Say "Strip $INSTALL_PREFIX/libexec/git-core/*"
+  pushd "$INSTALL_PREFIX/libexec/git-core"
+  sudo strip * || true
+  popd
+else 
+  Say --Display-As=Error "Can't strip, build failed"
+fi
+
 cd ../..
 rm -rf $(basename $work)
 export PATH="$INSTALL_PREFIX/bin:$PATH"
 bash -c "git --version"
 
 popd >/dev/null
-
-Say "Strip git"
-pushd /usr/local/libexec/git-core
-strip * || true
-popd
 
 Say "git version"
 git --version
