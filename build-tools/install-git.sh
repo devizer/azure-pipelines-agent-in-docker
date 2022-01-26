@@ -36,10 +36,9 @@ fi
 
 popd
 rm -rf "$work"
+
 export PATH="$INSTALL_PREFIX/bin:$PATH"
 bash -c "git --version"
-
-popd >/dev/null
 
 Say "git version"
 git --version
