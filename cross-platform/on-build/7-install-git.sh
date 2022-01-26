@@ -16,10 +16,11 @@ cd git*
 Say "GCC $(gcc --version)"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
-time make prefix=/usr/local all -j${cpus}
-sudo make prefix=/usr/local install
+time make prefix="$INSTALL_PREFIX" all -j${cpus}
+sudo make prefix="$INSTALL_PREFIX" install
 cd ../..
 rm -rf $(basename $work)
+export PATH="$INSTALL_PREFIX/bin:$PATH"
 bash -c "git --version"
 
 popd >/dev/null
