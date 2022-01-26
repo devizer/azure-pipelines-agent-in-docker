@@ -1,0 +1,23 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/*'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+    cd build-tools
+    bash -e Build-and-Deploy-Git.sh
+  displayName: 'build'
+
+- task: PublishBuildArtifacts@1
+  condition: succeededOrFailed()
+  displayName: 'GCC @ Publish'
+  inputs:
+    pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+    artifactName: 'Deploy-it-by-$(Agent.JobName)'
