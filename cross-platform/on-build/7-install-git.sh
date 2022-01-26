@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # GIT_VER=${GIT_VER:-v2.26.2}
 # GIT_VER=${GIT_VER:-v2.28.0}
-GIT_VER=${GIT_VER:-v2.34.1}
+# GIT_VER=${GIT_VER:-v2.34.1}
+GIT_VER=${GIT_VER:-v2.35.0}
 TRANSIENT_BUILDS="${TRANSIENT_BUILDS:-$HOME/build}"
 work=$TRANSIENT_BUILDS/build/git-src
 mkdir -p $work
@@ -16,9 +17,12 @@ cd git*
 Say "GCC $(gcc --version)"
 cpus=$(nproc)
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
+Say "Building GIT [${GIT_VER}] into ${INSTALL_PREFIX}"
 time make prefix="$INSTALL_PREFIX" all -j${cpus}
 sudo make prefix="$INSTALL_PREFIX" install
+Say "Strip $INSTALL_PREFIX/bin/*"
 sudo strip "$INSTALL_PREFIX/bin/*" || true
+Say "Strip $INSTALL_PREFIX/libexec/git-core/*"
 sudo strip "$INSTALL_PREFIX/libexec/git-core/*" || true
 cd ../..
 rm -rf $(basename $work)
