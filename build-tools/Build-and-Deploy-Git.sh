@@ -61,14 +61,20 @@ function Build-Git() {
   for cmd in Say try-and-retry; do
     docker cp /usr/local/bin/$cmd "$container":/usr/bin/$cmd
   done
-  docker cp /tmp/build-gcc-utilities.sh "$container":/tmp/build-gcc-utilities.sh
+  for cmd in *.sh; do
+    Say "copying $container:/work/$cmd"
+    docker cp $cmd "$container":/work/$cmd
+  done
+
+  docker cp /tmp/build-gcc-utilities.sh "$container":/work/build-gcc-utilities.sh
 
 
   cat <<-'EOF' > /tmp/provisioning-$KEY
     set -e
+    cd /work
     Say --Reset-Stopwatch
     export DEBIAN_FRONTEND=noninteractive
-    source /tmp/build-gcc-utilities.sh
+    source build-gcc-utilities.sh
     prepare_os
     script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash
 
@@ -76,13 +82,14 @@ function Build-Git() {
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
     Say "jq 1.6"
-    # export INSTALL_PREFIX=/opt/jq
-    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/jq-1.6-install.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
-    # bash jq-1.6-install.sh
+    export INSTALL_PREFIX=/opt/jq
+    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    bash -eu install-jq-1.6.sh
 
     Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
-    # export INSTALL_PREFIX=/opt/7z
+    export INSTALL_PREFIX=/opt/7z
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7z-install-7zip-16.02-2016-05-21.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    bash -eu install-7zip-16.02-2016-05-21.sh
 
     if [[ -n "${USEGCC:-}" ]]; then
       Say "Install GCC "${USEGCC:-}" on $KEY"
@@ -92,7 +99,8 @@ function Build-Git() {
     Say "Build GIT on $KEY"
     export INSTALL_PREFIX=/opt/git
     # export CFLAGS="-std=gnu99" CPPFLAGS="-std=gnu99" CXXFLAGS="-std=gnu99"
-    script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7-install-git.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7-install-git.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    bash -eu install-git.sh
 
     Say "COMPLETE on $KEY"
 EOF
