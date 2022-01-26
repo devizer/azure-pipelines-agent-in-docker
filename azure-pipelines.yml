@@ -97,10 +97,15 @@ jobs:
 #  - master
 
 trigger:
-  batch: true
   branches:
     include:
-      - master
+    - master
+  paths:
+    include:
+    - '*'
+    exclude:
+    - 'build-tools/*'
+    - 'azure-pipelines-build-tools.yml'
       
 #schedules:
 #  - cron: "30 3 * * *"
