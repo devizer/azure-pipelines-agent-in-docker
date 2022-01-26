@@ -57,7 +57,7 @@ function Build-Git() {
   docker rm -f $container || true
   Say "Start container [$IMAGE] for [$KEY]"
   tmp=/tmp/git-$KEY; mkdir -p $tmp; rm -rf $tmp/*
-  docker run -d --privileged --hostname "$container" --name "$container" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
+  docker run -d --privileged --hostname "$container" --name "$container" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'mkdir -p /work; tail -f /dev/null'
   for cmd in Say try-and-retry; do
     docker cp /usr/local/bin/$cmd "$container":/usr/bin/$cmd
   done
