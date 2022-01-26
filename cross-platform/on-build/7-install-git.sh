@@ -22,11 +22,11 @@ time make prefix="$INSTALL_PREFIX" all -j${cpus}
 sudo make prefix="$INSTALL_PREFIX" install
 Say "Strip $INSTALL_PREFIX/bin/*"
 pushd "$INSTALL_PREFIX/bin"
-sudo strip "*" || true
+sudo strip * || true
 popd
 Say "Strip $INSTALL_PREFIX/libexec/git-core/*"
 pushd "$INSTALL_PREFIX/libexec/git-core"
-sudo strip "*" || true
+sudo strip * || true
 popd
 cd ../..
 rm -rf $(basename $work)
