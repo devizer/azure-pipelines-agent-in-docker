@@ -14,10 +14,12 @@ rm -f _git-src.zip
 cd git*
 
 Say "GCC $(gcc --version)"
-cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
+cpus=$(nproc)
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 time make prefix="$INSTALL_PREFIX" all -j${cpus}
 sudo make prefix="$INSTALL_PREFIX" install
+sudo strip "$INSTALL_PREFIX/bin/*" || true
+sudo strip "$INSTALL_PREFIX/libexec/git-core/*" || true
 cd ../..
 rm -rf $(basename $work)
 export PATH="$INSTALL_PREFIX/bin:$PATH"
