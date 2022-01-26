@@ -76,18 +76,20 @@ function Build-Git() {
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
     Say "jq 1.6"
-    export INSTALL_PREFIX=/opt/jq
-    script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/jq-1.6-install.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    # export INSTALL_PREFIX=/opt/jq
+    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/jq-1.6-install.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    # bash jq-1.6-install.sh
 
-    Say "7-ZIP ver 16.02 2016-05-21"
-    export INSTALL_PREFIX=/opt/7z
-    script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7z-install-7zip-16.02-2016-05-21.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
+    # export INSTALL_PREFIX=/opt/7z
+    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7z-install-7zip-16.02-2016-05-21.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
-    if [[ -n "$USEGCC" ]]; then
+    if [[ -n "${USEGCC:-}" ]]; then
+      Say "Install GCC "${USEGCC:-}" on $KEY"
       export GCC_INSTALL_VER="$USEGCC" GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     fi
 
-    Say "Build GIT"
+    Say "Build GIT on $KEY"
     export INSTALL_PREFIX=/opt/git
     # export CFLAGS="-std=gnu99" CPPFLAGS="-std=gnu99" CXXFLAGS="-std=gnu99"
     script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7-install-git.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
