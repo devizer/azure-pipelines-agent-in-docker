@@ -1,5 +1,5 @@
 set -eu
-sudo apt-get install make autoconf build-essential libtool sudo wget curl htop mc cmake pv jq p7zip xz-utils -y -qq
+sudo apt-get install make autoconf build-essential libtool sudo wget curl htop mc cmake pv jq p7zip xz-utils -y -q
 
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 
