@@ -32,6 +32,7 @@ mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
 function Grab-Folder() {
   local from="$1"
   local to="$2"
+  Say "Repack [$from] as [$to]"
   local tmp="${TRANSIENT_BUILDS}/grab-$to"
   mkdir -p "$tmp"
   rm -rf "$tmp/*"
@@ -40,8 +41,10 @@ function Grab-Folder() {
     rm -rf man || true
     source /tmp/build-gcc-utilities.sh
     sudo chown -R root:root .
+    Say "Repack $DEPLOY_DIR/$to.tar.gz"
     tar cf - . | gzip -9 > $DEPLOY_DIR/$to.tar.gz
     build_all_known_hash_sums $DEPLOY_DIR/$to.tar.gz
+    Say "Repack $DEPLOY_DIR/$to.tar.xz"
     tar cf - . | xz -z -9 -e > $DEPLOY_DIR/$to.tar.xz
     build_all_known_hash_sums $DEPLOY_DIR/$to.tar.xz
   popd
