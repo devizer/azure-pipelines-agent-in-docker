@@ -6,18 +6,21 @@ trigger:
     include:
     - 'build-tools/*'
 
-pool:
-  vmImage: ubuntu-latest
+jobs:
+- job: Build
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 180
 
-steps:
-- script: |
-    cd build-tools
-    bash -e Build-and-Deploy-Git.sh
-  displayName: 'build'
+  steps:
+  - script: |
+      cd build-tools
+      bash -e Build-and-Deploy-Git.sh
+    displayName: 'build'
 
-- task: PublishBuildArtifacts@1
-  condition: succeededOrFailed()
-  displayName: 'GCC @ Publish'
-  inputs:
-    pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
-    artifactName: 'Deploy-it-by-$(Agent.JobName)'
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'GCC @ Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Deploy-it-by-$(Agent.JobName)'
