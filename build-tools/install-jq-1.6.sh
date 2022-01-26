@@ -11,7 +11,7 @@ tar xzf jq-1.6.tar.gz
 rm -f jq-1.6.tar.gz
 cd jq*
 autoreconf -fi
-./configure --prefix="${INSTALL_PREFIX}" --disable-maintainer-mode
+./configure --prefix="${INSTALL_PREFIX}" --disable-maintainer-mode --with-oniguruma=builtin
 sudo make -j install
 if [[ -d "${INSTALL_PREFIX}/bin" ]]; then
   pushd "${INSTALL_PREFIX}/bin"
