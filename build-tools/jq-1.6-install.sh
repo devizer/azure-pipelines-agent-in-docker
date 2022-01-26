@@ -15,12 +15,12 @@ autoreconf -fi
 sudo make -j install
 if [[ -d "${INSTALL_PREFIX}/bin" ]]; then
   pushd "${INSTALL_PREFIX}/bin"
-    strip jq onig*
+    strip jq onig* || true
   popd
 fi
 if [[ -d "${INSTALL_PREFIX}/lib" ]]; then
   pushd "${INSTALL_PREFIX}/lib"
-    strip *libjq*so* *libonig*so*
+    strip *libjq*so* *libonig*so* || true
   popd
 fi
 
