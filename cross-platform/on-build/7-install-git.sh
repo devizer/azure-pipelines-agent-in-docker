@@ -19,7 +19,7 @@ cpus=$(nproc)
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 Say "Building GIT [${GIT_VER}] into ${INSTALL_PREFIX}"
 # time make prefix="$INSTALL_PREFIX" all -j${cpus}
-time sudo make prefix="$INSTALL_PREFIX" install
+time sudo make prefix="$INSTALL_PREFIX" install -j
 if [[ -d "$INSTALL_PREFIX/bin" ]]; then
   Say "Strip $INSTALL_PREFIX/bin/*"
   pushd "$INSTALL_PREFIX/bin"
