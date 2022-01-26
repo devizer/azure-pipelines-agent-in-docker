@@ -8,7 +8,7 @@ set -e; set -u; set -o pipefail
 
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash
 
-try-and-retry apt-get install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
+smart-apt-install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
 
 # docker buildx imagetools inspect --raw "$image" | jq
 # error: Required C99 support is in a test phase.  Please see git-compat-util.h for more details.
