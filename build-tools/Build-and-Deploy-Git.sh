@@ -57,21 +57,20 @@ function Build-Git() {
   docker rm -f $container || true
   Say "Start container [$IMAGE] for [$KEY]"
   tmp=/tmp/git-$KEY; mkdir -p $tmp; rm -rf $tmp/*
-  docker run -d --privileged --hostname "$container" --name "$container" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'mkdir -p /work; tail -f /dev/null'
+  docker run -d --privileged --hostname "$container" --name "$container" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
   for cmd in Say try-and-retry; do
     docker cp /usr/local/bin/$cmd "$container":/usr/bin/$cmd
   done
   for cmd in *.sh; do
-    Say "copying $container:/work/$cmd"
-    docker cp $cmd "$container":/work/$cmd
+    Say "copying $container:/root/$cmd"
+    docker cp $cmd "$container":/root/$cmd
   done
 
-  docker cp /tmp/build-gcc-utilities.sh "$container":/work/build-gcc-utilities.sh
-
+  docker cp /tmp/build-gcc-utilities.sh "$container":/root/build-gcc-utilities.sh
 
   cat <<-'EOF' > /tmp/provisioning-$KEY
     set -e
-    cd /work
+    cd /root
     Say --Reset-Stopwatch
     export DEBIAN_FRONTEND=noninteractive
     source build-gcc-utilities.sh
