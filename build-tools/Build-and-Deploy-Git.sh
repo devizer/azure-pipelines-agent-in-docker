@@ -113,6 +113,6 @@ EOF
   Grab-Folder "/usr/local" "7z-16.02-$KEY"
 }
 
-# KEY="x86_64"   IMAGE="debian:${DEBIAN_VER}"          Build-Git
-# KEY="arm32v7"  IMAGE="arm32v7/debian:${DEBIAN_VER}"  Build-Git
+KEY="x86_64"   IMAGE="debian:${DEBIAN_VER}"          Build-Git
+KEY="arm32v7"  IMAGE="arm32v7/debian:${DEBIAN_VER}"  Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:${DEBIAN_VER}"  Build-Git
