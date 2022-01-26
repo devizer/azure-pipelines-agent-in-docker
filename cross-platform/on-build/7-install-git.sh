@@ -21,9 +21,13 @@ Say "Building GIT [${GIT_VER}] into ${INSTALL_PREFIX}"
 time make prefix="$INSTALL_PREFIX" all -j${cpus}
 sudo make prefix="$INSTALL_PREFIX" install
 Say "Strip $INSTALL_PREFIX/bin/*"
-sudo strip "$INSTALL_PREFIX/bin/*" || true
+pushd "$INSTALL_PREFIX/bin"
+sudo strip "*" || true
+popd
 Say "Strip $INSTALL_PREFIX/libexec/git-core/*"
-sudo strip "$INSTALL_PREFIX/libexec/git-core/*" || true
+pushd "$INSTALL_PREFIX/libexec/git-core"
+sudo strip "*" || true
+popd
 cd ../..
 rm -rf $(basename $work)
 export PATH="$INSTALL_PREFIX/bin:$PATH"
