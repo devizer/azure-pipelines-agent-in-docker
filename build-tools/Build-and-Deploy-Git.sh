@@ -77,7 +77,7 @@ function Build-Git() {
 
     Say "jq 1.6"
     export INSTALL_PREFIX=/opt/jq
-    script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/jq-1.6-install.sh
+    script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/jq-1.6-install.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
     Say "7-ZIP ver 16.02 2016-05-21"
     export INSTALL_PREFIX=/opt/7z
