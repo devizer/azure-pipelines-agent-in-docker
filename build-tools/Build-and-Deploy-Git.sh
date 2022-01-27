@@ -167,4 +167,4 @@ EOF
 
 KEY="x86_64"   IMAGE="debian:7"          Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:8"  Build-Git
-KEY="arm32v7"  IMAGE="arm32v7/debian:7"  Build-Git
+KEY="arm32v7"  IMAGE="arm32v7/debian:8"  Build-Git
