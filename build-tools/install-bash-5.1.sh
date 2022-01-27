@@ -1,4 +1,4 @@
-﻿set -eu
+set -eu
 # sudo apt-get install make autoconf build-essential libtool sudo wget curl htop mc cmake pv jq p7zip xz-utils -y -q
 smart-apt-install build-essential gettext zlib1g-dev
 
