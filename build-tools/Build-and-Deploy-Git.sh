@@ -54,6 +54,12 @@ function Fix-All-Git-Symlinks() {
 function Grab-Folder() {
   local from="$1"
   local to="$2"
+  # if skipped
+  if [[ -f "$from/skipped" ]]; then
+    echo "" > "$DEPLOY_DIR/$to is skipped"
+    return;
+  fi
+
   Say "Repack [$from] as [$to]"
   local tmp="${TRANSIENT_BUILDS}/grab-$to"
   mkdir -p "$tmp"
