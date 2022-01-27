@@ -104,12 +104,21 @@ function Build-Git() {
     prepare_os
     script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash
 
+    test -f /etc/os-release && source /etc/os-release
+    OS_VER="${ID:-}:${VERSION_ID:-}"
+
+
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
-    Say "BASH 5.1 on $KEY"
+    Say "BASH 5.1 on $KEY" # ok on Debian:7
     export INSTALL_PREFIX=/opt/bash
     bash -eu install-bash-5.1.sh
+
+    if [[ "$OS_VER" == "debian:7" ]]; then 
+      Say "INSTALL AUTOMAKE"; 
+      bash -e install-automake.sh; 
+    fi
 
     Say "jq 1.6 on $KEY"
     export INSTALL_PREFIX=/opt/jq
