@@ -29,6 +29,28 @@ mkdir -p "$DEPLOY_DIR"
 mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
 
 
+function Fix-Git-Symlink() {
+  local from="$1"
+  local to="$2"
+  if cmp -s "$from" "$to"; then
+    cmd="ln -f -s $to $from"
+    echo "OK FOR SYMLINKING: $cmd"
+    eval $cmd
+  fi
+}
+
+function Fix-All-Git-Symlinks() {
+  local dir="$1"
+  if [[ -s "${dir}/bin/git" ]]; then
+    pushd "${dir}/bin" >/dev/null
+    for f in git-*; do Fix-Git-Symlink $f git; done
+    cd ../libexec/git-core
+    for f in git-*; do Fix-Git-Symlink $f ../../bin/git; done
+    popd >/dev/null
+  fi
+}
+
+
 function Grab-Folder() {
   local from="$1"
   local to="$2"
@@ -37,6 +59,7 @@ function Grab-Folder() {
   mkdir -p "$tmp"
   rm -rf "$tmp/*"
   docker cp "$container":"$from/." "$tmp"
+  Fix-All-Git-Symlinks "$tmp"
   pushd $tmp
     rm -rf man || true
     source /tmp/build-gcc-utilities.sh
@@ -122,5 +145,5 @@ EOF
 }
 
 KEY="x86_64"   IMAGE="debian:${DEBIAN_VER}"          Build-Git
-KEY="arm64v8"  IMAGE="arm64v8/debian:${DEBIAN_VER}"  Build-Git
-KEY="arm32v7"  IMAGE="arm32v7/debian:${DEBIAN_VER}"  Build-Git
+# KEY="arm64v8"  IMAGE="arm64v8/debian:${DEBIAN_VER}"  Build-Git
+# KEY="arm32v7"  IMAGE="arm32v7/debian:${DEBIAN_VER}"  Build-Git
