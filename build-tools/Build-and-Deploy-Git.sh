@@ -115,15 +115,21 @@ function Build-Git() {
     export INSTALL_PREFIX=/opt/bash
     bash -eu install-bash-5.1.sh
 
-    if [[ "$OS_VER" == "debian:7" ]]; then 
+    if false && [[ "$OS_VER" == "debian:7" ]]; then 
       Say "INSTALL AUTOMAKE"; 
       bash -e install-automake.sh; 
     fi
 
-    Say "jq 1.6 on $KEY"
-    export INSTALL_PREFIX=/opt/jq
-    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
-    bash -eu install-jq-1.6.sh
+    if [[ "$OS_VER" == "debian:7" ]]; then
+      Say "Skipping jq 1.6 on $KEY"
+      mkdir -p /opt/jq
+      touch /opt/jq/skipped
+    esle
+      Say "jq 1.6 on $KEY"
+      export INSTALL_PREFIX=/opt/jq
+      # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+      bash -eu install-jq-1.6.sh
+    fi
 
     Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
     export INSTALL_PREFIX=/opt/7z
