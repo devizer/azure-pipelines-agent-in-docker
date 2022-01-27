@@ -84,6 +84,10 @@ function Build-Git() {
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
+    Say "BASH 5.1 on $KEY"
+    export INSTALL_PREFIX=/opt/bash
+    bash -eu install-bash-5.1.sh
+
     Say "jq 1.6 on $KEY"
     export INSTALL_PREFIX=/opt/jq
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
@@ -111,11 +115,12 @@ EOF
   docker cp /tmp/provisioning-$KEY "$container":/tmp/provisioning-$KEY
   docker exec -t -e USEGCC="${USEGCC:-}" -e GIT_VER="$GIT_VER" -e KEY="$KEY" "$container" bash -e -c "source /tmp/provisioning-$KEY"
 
+  Grab-Folder "/opt/bash"  "bash-5.1-$KEY"
   Grab-Folder "/opt/jq"    "jq-1.6-$KEY"
   Grab-Folder "/opt/git"   "git-${GIT_VER}-$KEY"
   Grab-Folder "/usr/local" "7z-16.02-$KEY"
 }
 
-KEY="arm64v8"  IMAGE="arm64v8/debian:${DEBIAN_VER}"  Build-Git
 KEY="x86_64"   IMAGE="debian:${DEBIAN_VER}"          Build-Git
+KEY="arm64v8"  IMAGE="arm64v8/debian:${DEBIAN_VER}"  Build-Git
 KEY="arm32v7"  IMAGE="arm32v7/debian:${DEBIAN_VER}"  Build-Git
