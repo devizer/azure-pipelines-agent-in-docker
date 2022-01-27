@@ -124,7 +124,7 @@ function Build-Git() {
       Say "Skipping jq 1.6 on $KEY"
       mkdir -p /opt/jq
       touch /opt/jq/skipped
-    esle
+    else
       Say "jq 1.6 on $KEY"
       export INSTALL_PREFIX=/opt/jq
       # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
