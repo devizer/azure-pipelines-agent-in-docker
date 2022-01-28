@@ -3,7 +3,7 @@ sudo apt-get install make autoconf build-essential libtool sudo wget curl htop m
 
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 
-work=$HOME/src/jq-1.6
+work=$HOME/build/jq-1.6-src
 mkdir -p $work
 pushd $work
 curl -kSL -o jq-1.6.tar.gz https://github.com/stedolan/jq/releases/download/jq-1.6/jq-1.6.tar.gz

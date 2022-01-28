@@ -9,7 +9,7 @@ url=https://ftp.gnu.org/gnu/bash/bash-5.1.16.tar.gz
 
 Say "Installing [$url] for [$(uname -a)]"
 file=$(basename $url)
-work=$HOME/src/bash-stable-src
+work=$HOME/build/bash-stable-src
 mkdir -p $work
 pushd $work >/dev/null
 wget -q --no-check-certificate -O _$file "$url"  || curl -kfSL -o _$file "$url"

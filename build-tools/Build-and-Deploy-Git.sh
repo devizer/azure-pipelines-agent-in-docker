@@ -50,7 +50,6 @@ function Fix-All-Git-Symlinks() {
   fi
 }
 
-
 function Grab-Folder() {
   local from="$1"
   local to="$2"
@@ -113,12 +112,15 @@ function Build-Git() {
     test -f /etc/os-release && source /etc/os-release
     OS_VER="${ID:-}:${VERSION_ID:-}"
 
-
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
 
+    Say "NANO 6"
+    export INSTALL_PREFIX=/opt/local-links/nano
+    bash -eu install-nano.sh
+
     Say "BASH 5.1 on $KEY" # ok on Debian:7
-    export INSTALL_PREFIX=/opt/bash
+    export INSTALL_PREFIX=/opt/local-links/bash
     bash -eu install-bash-5.1.sh
 
     if false && [[ "$OS_VER" == "debian:7" ]]; then 
@@ -132,13 +134,13 @@ function Build-Git() {
       touch /opt/jq/skipped
     else
       Say "jq 1.6 on $KEY"
-      export INSTALL_PREFIX=/opt/jq
+      export INSTALL_PREFIX=/opt/local-links/jq
       # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
       bash -eu install-jq-1.6.sh
     fi
 
     Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
-    export INSTALL_PREFIX=/opt/7z
+    export INSTALL_PREFIX=/opt/local-links/7z
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7z-install-7zip-16.02-2016-05-21.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     bash -eu install-7zip-16.02-2016-05-21.sh
 
@@ -148,7 +150,7 @@ function Build-Git() {
     fi
 
     Say "Build GIT on $KEY"
-    export INSTALL_PREFIX=/opt/git
+    export INSTALL_PREFIX=/opt/local-links/git
     # export CFLAGS="-std=gnu99" CPPFLAGS="-std=gnu99" CXXFLAGS="-std=gnu99"
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7-install-git.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     bash -eu install-git.sh
@@ -159,12 +161,13 @@ EOF
   docker cp /tmp/provisioning-$KEY "$container":/tmp/provisioning-$KEY
   docker exec -t -e USEGCC="${USEGCC:-}" -e GIT_VER="$GIT_VER" -e KEY="$KEY" "$container" bash -e -c "source /tmp/provisioning-$KEY"
 
-  Grab-Folder "/opt/bash"  "bash-5.1-$KEY"
-  Grab-Folder "/opt/jq"    "jq-1.6-$KEY"
-  Grab-Folder "/opt/git"   "git-${GIT_VER}-$KEY"
-  Grab-Folder "/usr/local" "7z-16.02-$KEY"
+  Grab-Folder "/opt/local-links/nano"  "nano-6.0-$KEY"
+  Grab-Folder "/opt/local-links/bash"  "bash-5.1-$KEY"
+  Grab-Folder "/opt/local-links/jq"    "jq-1.6-$KEY"
+  Grab-Folder "/opt/local-links/git"   "git-${GIT_VER}-$KEY"
+  Grab-Folder "/usr/local"             "7z-16.02-$KEY"
 }
 
-KEY="x86_64"   IMAGE="debian:7"          Build-Git
+KEY="x86_64"   IMAGE="debian:8"          Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:8"  Build-Git
 KEY="arm32v7"  IMAGE="arm32v7/debian:8"  Build-Git
