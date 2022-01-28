@@ -1,4 +1,5 @@
-﻿INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
+#!/usr/bin/env bash
+INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 
 smart-apt-install libncurses-dev
 
