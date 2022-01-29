@@ -143,8 +143,11 @@ export TMPDIR=/tmp
 ' | tee -a $work/root/.bashrc
 
 echo "nameserver 8.8.8.8" > $work/etc/resolv.conf
+
+# CLEAN UP
 rm -f $work/usr/bin/qemu-*-static
 rm -rf $work/tmp/*
+sudo rm -rf $work/var/log/* $work/var/tmp/*
 
   Say "Replace aboslute simlinks to relative [$work]"
   Say " ... in $(pwd)"
