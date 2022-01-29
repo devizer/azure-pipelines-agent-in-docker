@@ -69,13 +69,14 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   
   source /tmp/build-gcc-utilities.sh
   prepare_os
+  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
   Say "FOR HTOP on $KEY"
-  apt-get install -y -q libncurses5 libncurses5-dev ncurses-bin
-  apt-get install -y -q libncursesw5 libncursesw5-dev
+  apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin
+  apt-get install -y -qq libncursesw5 libncursesw5-dev
 
   Say "FOR GIT on $KEY"
-  apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
+  apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq
 
   rm -rf /var/cache/apt/*;
   rm -rf /var/lib/apt/*
