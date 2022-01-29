@@ -40,7 +40,7 @@ function replace_links_to_relative() {
           pwd="$(pwd)"
         echo "$target <-- $l [$depth] ($pwd) $new_target"
         echo $cmd
-        eval "$cmd"
+        eval "$cmd" || true
         echo ""
       fi
       cd "$root"
