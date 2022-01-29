@@ -70,6 +70,7 @@ docker cp /tmp/build-gcc-utilities.sh "container-$KEY":/tmp/build-gcc-utilities.
 cat <<-'EOF' > /tmp/provisioning-$KEY
   set -e
   Say --Reset-Stopwatch
+  source /tmp/build-gcc-utilities.sh
   prepare_os
 
   Say "FOR HTOP on $KEY"
