@@ -77,7 +77,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   apt-get install -y -qq libncursesw5 libncursesw5-dev
 
   Say "FOR GIT on $KEY"
-  apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq
+  apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq
 
   rm -rf /var/cache/apt/*;
   rm -rf /var/lib/apt/*
@@ -171,9 +171,9 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
+KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
-KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
 KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
 KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
