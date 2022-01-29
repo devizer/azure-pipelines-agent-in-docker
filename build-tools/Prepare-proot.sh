@@ -8,6 +8,7 @@ set -e; set -u; set -o pipefail
 
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
 
+
 sudo apt-get install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash > /dev/null
 smart-apt-install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
@@ -166,7 +167,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   popd
 
   Say "Copy artifact"
-  cp -f $work.tar.xz $SYSTEM_ARTIFACTSDIRECTORY/$work.tar.xz
+  cp -f $work.tar.xz $SYSTEM_ARTIFACTSDIRECTORY/$(basename $work.tar.xz)
 
 }
 
