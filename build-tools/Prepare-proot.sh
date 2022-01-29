@@ -162,7 +162,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
-  tar cf - . | pv | xz -z -9 -e --threads=2 > $work.tar.xz
+  sudo tar cf - . | pv | xz -z -9 -e --threads=2 > $work.tar.xz
   popd
 
   Say "Copy artifact"
