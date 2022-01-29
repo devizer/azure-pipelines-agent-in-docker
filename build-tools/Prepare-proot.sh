@@ -1,4 +1,4 @@
-﻿# https://github.com/nmilosev/termux-fedora/blob/master/termux-fedora.sh
+# https://github.com/nmilosev/termux-fedora/blob/master/termux-fedora.sh
 # image="debian:8"
 # image="multiarch/debian-debootstrap:arm64-jessie"
 # image="arm64v8/debian:8"

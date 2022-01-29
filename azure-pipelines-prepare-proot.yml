@@ -17,7 +17,7 @@ jobs:
   - script: |
         cd build-tools
         bash -e Prepare-proot.sh
-    displayName: 'Run a multi-line script'
+    displayName: 'Batch of images'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
