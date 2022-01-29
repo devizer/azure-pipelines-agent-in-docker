@@ -1,19 +1,27 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/Prepare-proot.sh'
 
-pool:
-  vmImage: ubuntu-latest
+jobs:
+- job: Prepare
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  steps:
+  - script: |
+        cd build-tools
+        bash -e Prepare-proot.sh
+    displayName: 'Run a multi-line script'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Deploy-it-by-$(Agent.JobName)'
