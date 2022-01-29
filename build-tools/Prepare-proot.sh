@@ -9,15 +9,11 @@ set -e; set -u; set -o pipefail
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
 
 sudo apt-get install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
-
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash > /dev/null
-
 smart-apt-install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
 
 Say "Registering binary formats for qemu-user-static"
 docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null
-
-
 # docker buildx imagetools inspect --raw "$image" | jq
 
 for f in build-gcc-utilities.sh; do
@@ -70,6 +66,7 @@ docker cp /tmp/build-gcc-utilities.sh "container-$KEY":/tmp/build-gcc-utilities.
 cat <<-'EOF' > /tmp/provisioning-$KEY
   set -e
   Say --Reset-Stopwatch
+  
   source /tmp/build-gcc-utilities.sh
   prepare_os
 
@@ -153,10 +150,12 @@ rm -rf $work/tmp/*
   Say " ... in $(pwd)"
   # [[ "$(command -v symlinks)" == "" ]] && apt-get install -y -q symlinks
   # chroot /home/user/system symlinks -cr .
+  sudo chown -R $(whoami) "$work"
   replace_links_to_relative "$work"
-
+  
   Say "Pack $IMAGE as [$work.tar.xz]"
   Say " ... in $(pwd)"
+  sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
   tar cf - . | pv | xz -z -9 -e --threads=4 > $work.tar.xz
