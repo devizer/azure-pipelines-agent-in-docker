@@ -17,7 +17,7 @@ jobs:
   - script: |
         set -e
         cd build-tools
-        sudo bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-proot.sh
+        sudo bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-proot.sh"
         sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
     displayName: 'Batch of images'
 
