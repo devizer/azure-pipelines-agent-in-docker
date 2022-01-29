@@ -2,7 +2,7 @@
 set -eu
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 
-apt-get install libncurses-dev -y -qq
+apt-get install git libncurses-dev -y -qq
 
 
 url="https://ftp.gnu.org/gnu/nano/nano-6.0.tar.gz"
