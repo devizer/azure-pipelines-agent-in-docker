@@ -103,10 +103,10 @@ for f in build-gcc-utilities.sh; do
   try-and-retry curl -kSL -o /tmp/$f https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/$f
 done
 
-for ver in 8.5.0 10.3.0 11.2.0; do
+for ver in "" 8.5.0 10.3.0 11.2.0; do
   IMAGE="multiarch/debian-debootstrap:arm64-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
 
-for ver in 8.5.0 9.4.0 10.3.0 11.2.0; do
+for ver in "" 8.5.0 9.4.0 10.3.0 11.2.0; do
   IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
