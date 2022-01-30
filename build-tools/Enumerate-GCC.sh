@@ -76,6 +76,10 @@ CSOURCE
     echo "OS=$OS_VER ARCH=$(uname -m) GCC=$(get_gcc_version) CONTAINER=$CONTAINER" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
     gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
 
+    Say "GCC VERBOSE"
+    echo 'void main(){}' > source.c
+    gcc -v source.c 2>&1 | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/verbose.log"
+
     Say "COMPLETE"
 EOF
 
