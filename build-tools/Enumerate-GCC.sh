@@ -73,8 +73,8 @@ CSOURCE
     Say "Acceptance Test and COLLECT_GCC_OPTIONS"
     gcc -v acceptance-test.c -o acceptance-test
     ./acceptance-test
-    gcc --version 2>&1 | head -1 >> "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
-    gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" >> "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
+    echo "OS=$OS_VER ARCH=$(uname -m) GCC=$(get_gcc_version) CONTAINER=$CONTAINER" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
+    gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
 
     Say "COMPLETE"
 EOF
