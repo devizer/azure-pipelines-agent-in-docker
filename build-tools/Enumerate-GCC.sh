@@ -34,8 +34,24 @@ mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
     docker cp $cmd "$CONTAINER":/usr/bin/$file_name_only
   done
 
+cat <<-'CSOURCE' > /tmp/acceptance-test.c
+#include <gnu/libc-version.h>
+#include <stdio.h>
+int main() 
+{
+    printf("gcc.major: %d\n", __GNUC__);
+    printf("gcc.minor: %d\n", __GNUC_MINOR__);
+    printf("gcc.patch: %d\n", __GNUC_PATCHLEVEL__);
+    printf("buildtime.glibc.major: %d\n", __GLIBC__);
+    printf("buildtime.glibc.minor: %d\n", __GLIBC_MINOR__);
+    printf("runtime.glibc: %s\n", gnu_get_libc_version());
+    return 0;
+}
+CSOURCE
+
   cat <<-'EOF' > /tmp/provisioning-$CONTAINER
     set -e
+    mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
     cd /root
     Say --Reset-Stopwatch
     export DEBIAN_FRONTEND=noninteractive
@@ -52,10 +68,19 @@ mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
       export GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     fi
 
+
+
+    Say "Acceptance Test and COLLECT_GCC_OPTIONS"
+    gcc -v acceptance-test.c -o acceptance-test
+    ./acceptance-test
+    gcc --version 2>&1 | head -1 >> "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
+    gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" >> "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
+
     Say "COMPLETE"
 EOF
 
   docker cp /tmp/provisioning-$CONTAINER "$CONTAINER":/tmp/provisioning-$CONTAINER
+  docker cp /tmp/acceptance-test.c "$CONTAINER":/root/acceptance-test.c
   docker exec -t -e GCC_INSTALL_VER="$GCC_INSTALL_VER" -e IMAGE="$IMAGE" -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" -e CONTAINER="$CONTAINER" $CONTAINER \
          bash -c "source /tmp/provisioning-$CONTAINER"
 
