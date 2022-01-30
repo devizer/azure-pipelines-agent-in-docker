@@ -52,7 +52,6 @@ mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
       export GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     fi
 
-    source /tmp/provisioning-$CONTAINER
     Say "COMPLETE"
 EOF
 
