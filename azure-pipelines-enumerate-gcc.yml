@@ -1,0 +1,29 @@
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/*'
+
+
+jobs:
+- job: Enum
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+
+
+  steps:
+  - script: |
+        set -e
+        cd build-tools
+        sudo bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -eu Enumerate-GCC.sh"
+        sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
+    displayName: 'ENUMERATE'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
