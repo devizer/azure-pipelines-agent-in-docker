@@ -57,7 +57,7 @@ CSOURCE
     export DEBIAN_FRONTEND=noninteractive
     source /usr/bin/build-gcc-utilities.sh
     prepare_os
-    script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash
+    script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
     test -f /etc/os-release && source /etc/os-release
     OS_VER="${ID:-}:${VERSION_ID:-}"
