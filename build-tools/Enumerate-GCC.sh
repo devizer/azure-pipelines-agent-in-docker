@@ -70,9 +70,9 @@ for f in build-gcc-utilities.sh; do
 done
 
 for ver in 8.5.0 10.3.0 11.2.0; do
-  IMAGE="multiarch/debian:arm64-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
+  IMAGE="multiarch/debian-debootstrap:arm64-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
 
 for ver in 8.5.0 9.4.0 10.3.0 11.2.0; do
-  IMAGE="multiarch/debian:armhf-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
+  IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
