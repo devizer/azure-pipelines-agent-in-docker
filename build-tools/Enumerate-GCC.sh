@@ -73,12 +73,15 @@ CSOURCE
     Say "Acceptance Test and COLLECT_GCC_OPTIONS"
     gcc -v acceptance-test.c -o acceptance-test
     ./acceptance-test
-    echo "OS=$OS_VER ARCH=$(uname -m) GCC=$(get_gcc_version) CONTAINER=$CONTAINER" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
-    gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/summary.report"
+    echo "OS=$OS_VER ARCH=$(uname -m) GCC=$(get_gcc_version) CONTAINER=$CONTAINER" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
+    gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
 
     Say "GCC VERBOSE"
     echo 'void main(){}' > source.c
-    gcc -v source.c 2>&1 | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/verbose.log"
+    gcc -v source.c 2>&1 | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-verbose.log"
+
+    Say "GCC Configured with"
+    gcc -v source.c 2>&1 | grep -E '^Configured\ with:' | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-configured-with.log"
 
     Say "COMPLETE"
 EOF
