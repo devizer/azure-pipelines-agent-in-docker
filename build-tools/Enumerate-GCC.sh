@@ -105,9 +105,9 @@ for f in build-gcc-utilities.sh; do
   try-and-retry curl -kSL -o /tmp/$f https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/$f
 done
 
-# IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="" Jump-Into-Container --reset
-# IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="8.5.0" Jump-Into-Container --reset
-# function __IGNORE__() {
+IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="" Jump-Into-Container --reset
+IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="8.5.0" Jump-Into-Container --reset
+function __IGNORE__() {
 
 # CUSTOM GCC
 for ver in 8.5.0 10.3.0 11.2.0; do
@@ -134,12 +134,11 @@ for ubuntu in 14.04 16.04 18.04 20.04 21.10 22.04; do
   IMAGE="arm64v8/ubuntu:${ubuntu}" GCC_INSTALL_VER="" Jump-Into-Container --reset || true
 done
 
-# } # ignore
+} # ignore
 
 function Get-Sub-Directories() {
   echo "$(find "." -maxdepth 1 -type d | grep -v -E '^\.$' | sort -V)"; 
 }
-
 
 set +e
 Say "Final REPORT"
@@ -148,7 +147,7 @@ echo "" > FINAL-REPORT.txt
 for dir in $(Get-Sub-Directories .); do
   pushd $dir
     cat gcc-summary.report | tee -a ../FINAL-REPORT.txt
-    printf "--------------------------\n\n"
+    printf "--------------------------\n\n" | tee -a ../FINAL-REPORT.txt
   popd
 done
 set -e
