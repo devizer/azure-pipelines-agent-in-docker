@@ -73,7 +73,9 @@ CSOURCE
     Say "Acceptance Test and COLLECT_GCC_OPTIONS"
     gcc -v acceptance-test.c -o acceptance-test
     ./acceptance-test
-    echo "OS=$OS_VER ARCH=$(uname -m) GCC=$(get_gcc_version) IMAGE=$IMAGE" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
+    type="System"; if [[ -n "${GCC_INSTALL_VER:-}" ]]; then type="Custom"; fi
+
+    echo "GCC=$(get_gcc_version) [$type] ARCH=$(uname -m) OS=$OS_VER IMAGE=$IMAGE" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
     gcc -v acceptance-test.c 2>&1 | grep -E "^COLLECT_GCC_OPTIONS" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
 
     Say "GCC VERBOSE"
@@ -81,7 +83,7 @@ CSOURCE
     gcc -v source.c 2>&1 | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-verbose.log"
 
     Say "GCC Configured with"
-    gcc -v source.c 2>&1 | grep -E '^Configured\ with:' | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-configured-with.log"
+    gcc -v source.c 2>&1 | grep -E '^Configured\ with:' | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-configured-with.log" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/gcc-summary.report"
 
     Say "COMPLETE"
 EOF
@@ -103,10 +105,50 @@ for f in build-gcc-utilities.sh; do
   try-and-retry curl -kSL -o /tmp/$f https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/$f
 done
 
+IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="" Jump-Into-Container --reset
+IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="8.5.0" Jump-Into-Container --reset
+
+finction __IGNORE__() {
+
 for ver in "" 8.5.0 10.3.0 11.2.0; do
-  IMAGE="multiarch/debian-debootstrap:arm64-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
+  IMAGE="multiarch/debian-debootstrap:arm64-${debian}" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
 
 for ver in "" 8.5.0 9.4.0 10.3.0 11.2.0; do
-  IMAGE="multiarch/debian-debootstrap:armhf-jessie" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
+  IMAGE="multiarch/debian-debootstrap:armhf-${debian}" GCC_INSTALL_VER="$ver" Jump-Into-Container --reset
 done
+
+# system GCC on arm32 Debian
+for debian in wheezy stretch buster bullseye; do
+  IMAGE="multiarch/debian-debootstrap:armhf-${debian}" GCC_INSTALL_VER="" Jump-Into-Container --reset
+done
+
+# system GCC on arm64 Debian
+for debian in stretch buster bullseye; do
+  IMAGE="multiarch/debian-debootstrap:arm64-${debian}" GCC_INSTALL_VER="" Jump-Into-Container --reset || true
+done
+
+# system GCC on arm 32+64 Ubuntu
+for ubuntu in 14.04 16.04 18.04 20.04 21.10 22.04; do
+  IMAGE="arm32v7/ubuntu:${ubuntu}" GCC_INSTALL_VER="" Jump-Into-Container --reset || true
+  IMAGE="arm64v8/ubuntu:${ubuntu}" GCC_INSTALL_VER="" Jump-Into-Container --reset || true
+done
+
+}
+
+function Get-Sub-Directories() {
+  echo "$(find "." -maxdepth 1 -type d | grep -v -E '^\.$' | sort -V)"; 
+}
+
+
+set +e
+Say "Final REPORT"
+pushd $SYSTEM_ARTIFACTSDIRECTORY
+echo "" > FINAL-REPORT.txt
+for dir in $(Get-Sub-Directories .); do
+  pushd $dir
+    cat gcc-summary.report | tee -a ../FINAL-REPORT.txt
+    printf "--------------------------\n\n"
+  popd
+done
+set -e
