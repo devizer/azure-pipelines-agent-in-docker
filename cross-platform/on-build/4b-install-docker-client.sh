@@ -12,10 +12,10 @@ source /etc/os-release
 smart-apt-install apt-transport-https ca-certificates curl gnupg2 software-properties-common pigz 
 try-and-retry bash -c "curl -fsSL https://download.docker.com/linux/$ID/gpg | sudo apt-key add -"
 
-try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D ||
-  try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D ||
-  curl -fksSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ||
-  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - ||
+# try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D 
+# try-and-retry timeout 100 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D 
+  curl -fksSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || true
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - || true
   true
 
 # second is optional

@@ -42,6 +42,7 @@ SHELL ["/bin/bash", "-c"]
 RUN echo; \
  export SLIM_IMAGE BASE_DOCKER_IMAGE BUILD_URL JOB_URL BUILD_SOURCEVERSION BUILD_SOURCEBRANCHNAME BUILD_BUILDID; \
  set -e; set -u; \
+ Say --Reset-Stopwatch; \
  cd /pre-configure; \
  mkdir -p /etc/agent-path.d; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
