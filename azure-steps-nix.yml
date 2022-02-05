@@ -92,7 +92,7 @@ steps:
       set -e
       mkdir -p Log
 
-      export TARGET_DIR=/tmp/provisioning-build; mkdir -p $TARGET_DIR
+      export TARGET_DIR=$(pwd)/cross-platform/tmp/provisioning-build; mkdir -p $TARGET_DIR
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
 
       
