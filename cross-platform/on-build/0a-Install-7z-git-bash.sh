@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash

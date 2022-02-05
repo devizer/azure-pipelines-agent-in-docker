@@ -36,6 +36,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /
 COPY .  /pre-configure
+COPY /tmp/provisioning-build /usr/local/bin
 SHELL ["/bin/bash", "-c"]
   
 RUN echo; \
@@ -45,6 +46,8 @@ RUN echo; \
  mkdir -p /etc/agent-path.d; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
+ source build-gcc-utilities.sh; \
+ prepare_os; \
  apt-get update -q; \
  apt-get install -yq curl sudo; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
