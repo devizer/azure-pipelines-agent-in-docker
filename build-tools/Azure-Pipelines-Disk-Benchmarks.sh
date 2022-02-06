@@ -18,11 +18,11 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
-ws="$(Get-Working-Set-for-Directory-in-KB "/")"
-Say "Default / (the root), WORKING SET: $ws KB"
-time sudo File-IO-Benchmark 'ROOT' / "${ws}K" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-root-benchmark.console.txt"
+ws="$(Get-Working-Set-for-Directory-in-KB "/")"; ws=$((ws/1024))
+Say "Default / (the root), WORKING SET: $ws MB"
+time sudo File-IO-Benchmark 'ROOT' / "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-root-benchmark.console.txt"
 
-ws="$(Get-Working-Set-for-Directory-in-KB "/")"
-Say "Default /mnt, WORKING SET: $ws KB"
-time sudo File-IO-Benchmark '/MNT' /mnt "${ws}K" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-mnt-benchmark.console.txt"
+ws="$(Get-Working-Set-for-Directory-in-KB "mnt")"; ; ws=$((ws/1024))
+Say "Default /mnt, WORKING SET: $ws MB"
+time sudo File-IO-Benchmark '/MNT' /mnt "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-mnt-benchmark.console.txt"
 
