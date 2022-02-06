@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source /etc/os-release
-if false && [[ "${VERSION_ID:-}" == "8" && "$ID" == "debian" ]]; then
+if false && [[ "${ID:-}:${VERSION_ID:-}" == "debian:8" ]]; then
   Say "SKIPPING Docker for jessie"
   exit 0;
 fi 
@@ -57,7 +57,11 @@ echo '{ "experimental": "enabled" }' | tee /home/user/.docker/config.json || tru
 echo '{ "experimental": "enabled" }' | tee /root/.docker/config.json || true
 chown -R user /home/user
 
-smart-apt-install python3-pip python3-dev libffi-dev libssl-dev
+Say "Install DOCKER-COMPOSE
+url=https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-Docker-Compose.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash -e
+
+exit 0;
+
 
 if [[ $(uname -m) == x86_64 ]]; then 
     Say "Installing precompiled docker-compose 1.26.2 for $(uname -m)"
