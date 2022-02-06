@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/Azure-Pipelines-Disk-Benchmark.sh'
+
+jobs:
+- job: BENCHMARK
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 180
+
+  steps:
+  - script: |
+      cd build-tools
+      source Azure-Pipelines-Disk-Benchmarks.sh
+    displayName: 'build'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
