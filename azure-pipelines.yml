@@ -14,16 +14,41 @@ jobs:
           TAG: jessie-slim
           BASE_IMAGE: 'debian:jessie'
 
-        Slim_Jessie_8_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
-          TAG: jessie
-          BASE_IMAGE: 'debian:jessie'
-          SLIM: 'true'
+        Stretch_9_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
+          TAG: stretch
+          BASE_IMAGE: 'debian:stretch'
 
         Bullseye_11_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bullseye"
           TAG: bullseye
           BASE_IMAGE: 'debian:bullseye'
+
+        Buster_10_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
+          TAG: buster
+          BASE_IMAGE: 'debian:buster'
+
+        Xenial_16_04_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
+          TAG: xenial
+          BASE_IMAGE: 'ubuntu:xenial'
+
+        Bionic_18_04_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
+          TAG: bionic
+          BASE_IMAGE: 'ubuntu:bionic'
+          
+        Focal_20_04_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
+          TAG: focal
+          BASE_IMAGE: 'ubuntu:focal'
+
+        Slim_Jessie_8_Based:
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie-slim"
+          TAG: jessie
+          BASE_IMAGE: 'debian:jessie'
+          SLIM: 'true'
 
         Slim_Bullseye_11_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bullseye"
@@ -31,32 +56,17 @@ jobs:
           BASE_IMAGE: 'debian:bullseye'
           SLIM: 'true'
 
-        Focal_20_04_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal -t devizervlad/crossplatform-azure-pipelines-agent:latest"
-          TAG: focal
-          BASE_IMAGE: 'ubuntu:focal'
-
         Slim_Focal_20_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:focal-slim -t devizervlad/crossplatform-azure-pipelines-agent:latest-slim"
           TAG: focal-slim
           BASE_IMAGE: 'ubuntu:focal'
           SLIM: 'true'
           
-        Buster_10_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster"
-          TAG: buster
-          BASE_IMAGE: 'debian:buster'
-
         Slim_Buster_10_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:buster-slim"
           TAG: buster-slim
           BASE_IMAGE: 'debian:buster'
           SLIM: 'true'
-
-        Stretch_9_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch"
-          TAG: stretch
-          BASE_IMAGE: 'debian:stretch'
 
         Slim_Stretch_9_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:stretch-slim"
@@ -65,21 +75,11 @@ jobs:
           SLIM: 'true'
 
 
-        Bionic_18_04_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic"
-          TAG: bionic
-          BASE_IMAGE: 'ubuntu:bionic'
-          
         Slim_Bionic_18_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bionic-slim"
           TAG: bionic-slim
           BASE_IMAGE: 'ubuntu:bionic'
           SLIM: 'true'
-
-        Xenial_16_04_Based:
-          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial"
-          TAG: xenial
-          BASE_IMAGE: 'ubuntu:xenial'
 
         Slim_Xenial_16_04_Based:
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:xenial-slim"
