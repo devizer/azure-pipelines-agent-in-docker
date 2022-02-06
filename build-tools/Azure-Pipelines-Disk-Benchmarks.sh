@@ -5,7 +5,7 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 function Get-Free-Space-For-Directory-in-KB() {
     local dir="${1}"
     pushd "$dir" >/dev/null
-      df -Ph . | tail -1 | awk '{print $4}'
+      df -P . | tail -1 | awk '{print $4}'
     popd >/dev/null
 }
 
