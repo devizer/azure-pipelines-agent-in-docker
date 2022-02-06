@@ -21,10 +21,11 @@ function is_container_exists() {
 }
 
 function is_container_running() {
-    local name=$1
+    local name="$1"
     local isRunning="false"
     # TODO: filter by names only
-    if [[ -n "$(docker ps | grep $name || true)" ]]; then
+    # better: docker ps | awk -v name="$name" 'NR!=1 && $NF==name {print $NF}'
+    if [[ -n "$(docker ps | awk -v name="$name" 'NR!=1 && $NF==name {print $NF}' || true)" ]]; then
         isRunning=true
     fi
     echo $isRunning
