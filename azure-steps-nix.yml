@@ -168,7 +168,8 @@ steps:
         echo "password: ${#MY_DOCKER_PASSWORD} chars"
         docker login -u "$MY_DOCKER_LOGIN" -p "$MY_DOCKER_PASSWORD"
         if [[ "${BASE_IMAGE}" == "debian:jessie" ]]; then
-          platform="linux/amd64,linux/arm/v7"
+          # platform="linux/amd64,linux/arm/v7"
+          platform="linux/amd64,linux/arm64,linux/arm/v7"
         else
           platform="linux/amd64,linux/arm64,linux/arm/v7"
         fi
