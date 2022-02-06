@@ -18,6 +18,14 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
+Say "sudo cat /proc/mdstat"
+sudo cat /proc/mdstat || true
+Say "cat /proc/mdstat"
+cat /proc/mdstat || true
+Say "lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOIN"
+lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOIN
+
+
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "Default /mnt, WORKING SET: $ws MB"
 time sudo File-IO-Benchmark '/MNT' /mnt "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-mnt-benchmark.console.txt"
