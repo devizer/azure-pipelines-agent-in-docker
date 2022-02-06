@@ -42,7 +42,7 @@ echo "\
 * git:            $(git --version 2>/dev/null)
 * git lfs:        $(git-lfs --version 2>/dev/null)
 * docker:         $(docker --version 2>/dev/null)
-* docker-compose: $(docker-compose --version 2>/dev/null), $(docker-compose version  2>/dev/null| grep OpenSSL)
+* docker-compose: $(docker-compose --version 2>/dev/null)
 * go:             $(go version 2>/dev/null)
   gcc:            $(gcc --version | head -1 2>/dev/null)
   python3:        $(python3 --version 2>/dev/null)

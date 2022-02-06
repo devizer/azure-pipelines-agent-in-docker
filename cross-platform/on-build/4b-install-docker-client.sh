@@ -58,6 +58,7 @@ echo '{ "experimental": "enabled" }' | tee /root/.docker/config.json || true
 chown -R user /home/user
 
 Say "Install DOCKER-COMPOSE"
+export DCVER=2.2.2 DCDIR=/usr/local/bin
 url=https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-Docker-Compose.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash -e
 
 exit 0;
