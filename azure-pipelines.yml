@@ -6,7 +6,7 @@ jobs:
 
   - job: Build
     strategy:
-      maxParallel: 6
+      maxParallel: 5
       matrix:
 
         'Jessie 8':
