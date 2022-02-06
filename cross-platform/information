@@ -47,7 +47,9 @@ echo "\
   python3:        $(python3 --version 2>/dev/null)
   pip3:           $(pip3 --version 2>/dev/null)
   pip:            $(pip --version 2>/dev/null)
-  bash:           $BASH_VERSION
+* bash:           $(bash --version)
+* jq:             $(jq --version)
+  7z:             $(7z | grep -v -e '^$' | awk 'NR==1 {print $3}' 2>/dev/null)
 * sqlite3 shell:  $sqlite
   mysql client:   $(mysql --version 2>/dev/null)
   psql client:    $(psql --version 2>/dev/null)
