@@ -16,7 +16,7 @@ jobs:
   - script: |
       cd build-tools
       source Azure-Pipelines-Disk-Benchmarks.sh
-    displayName: 'build'
+    displayName: 'Lets Rock'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
