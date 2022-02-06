@@ -3,7 +3,9 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/insta
 echo /usr/local/go/bin > /etc/agent-path.d/go
 
 # GIT_LFS_VER=${GIT_LFS_VER:-v2.11.0}
-GIT_LFS_VER=${GIT_LFS_VER:-v2.13.2}
+# GIT_LFS_VER=${GIT_LFS_VER:-v2.13.2}
+# GIT_LFS_VER=${GIT_LFS_VER:-v2.13.3}
+GIT_LFS_VER=${GIT_LFS_VER:-v3.0.2}
 Say "Downloading GIT-LFS $GIT_LFS_VER source from github"
  
 work=$HOME/build/git-lfs-src
@@ -21,6 +23,9 @@ time try-and-retry timeout 666 go mod download
 Say "Building GIT-LFS $GIT_LFS_VER"
 time make -B
 sudo mv bin/git-lfs /usr/local/bin/git-lfs
+Say "git-lfs executable version: $(git-lfs --version)"
+Say "Installing: [git lfs install] "
+git lfs install
 
 # the right way
 go clean -cache
