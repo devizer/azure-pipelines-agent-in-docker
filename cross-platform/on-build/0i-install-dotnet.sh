@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 Say "Installing dotnet"; 
 export DOTNET_TARGET_DIR=/usr/share/dotnet 
-export DOTNET_VERSIONS="2.1 2.2 3.0 3.1 5.0"
+export DOTNET_VERSIONS="2.1 2.2 3.0 3.1 5.0 6.0"
 if [[ "$SLIM_IMAGE" == "true" ]]; then export DOTNET_VERSIONS="5.0"; fi
 curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; 
 set +e
