@@ -18,7 +18,7 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
-ws="$(Get-Working-Set-for-Directory-in-KB "mnt")"; ws=$((ws/1024))
+ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "Default /mnt, WORKING SET: $ws MB"
 time sudo File-IO-Benchmark '/MNT' /mnt "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/default-mnt-benchmark.console.txt"
 
