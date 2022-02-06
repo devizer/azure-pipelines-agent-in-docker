@@ -1,6 +1,11 @@
 set -eu; set -o pipefail
 
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash >/dev/null
+Say --Reset-Stopwatch
+
+Say "apt-get install util-linux fio"
+sudo apt-get install util-linux fio -y -qq >/dev/null
+
 
 function Get-Free-Space-For-Directory-in-KB() {
     local dir="${1}"
@@ -22,8 +27,8 @@ Say "sudo cat /proc/mdstat"
 sudo cat /proc/mdstat || true
 Say "cat /proc/mdstat"
 cat /proc/mdstat || true
-Say "lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOIN"
-lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOIN
+Say "lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT"
+sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
