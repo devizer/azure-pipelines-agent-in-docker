@@ -82,10 +82,10 @@ function Test-Raid0-on-Loop() {
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
 
     Drop-FS-Cache
-    Smart-Fio 'RAID-${LOOP_TYPE}-2Gb' /raid-${LOOP_TYPE} "1999M" 20 3
+    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "1999M" 20 3
     Say "Created: $LOG_FILE"
     Drop-FS-Cache
-    Smart-Fio 'RAID-${LOOP_TYPE}-4Gb' /raid-${LOOP_TYPE} "3999M" 20 3
+    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "3999M" 20 3
     Say "Created: $LOG_FILE"
 
     Wrap-Cmd sudo cat /proc/mdstat
@@ -107,7 +107,7 @@ LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
 LOOP_TYPE=Direct LOOP_DIRECT_IO=on Test-Raid0-on-Loop
 
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
-Smart-Fio 'Small-ROOT' /mnt "1G" 15 3
+Smart-Fio 'Small-ROOT' / "1G" 15 3
 
 
 exit;
