@@ -1,5 +1,8 @@
 set -eu; set -o pipefail
 
+sudo swapoff /mnt/swapfile
+rm -f /mnt/swapfile
+
 CMD_COUNT=0
 function Wrap-Cmd() {
     local cmd="$*"
@@ -62,7 +65,7 @@ function Smart-Fio() {
 function Test-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=$((9*1025))
+    size=$((10*1025))
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
