@@ -8,6 +8,7 @@ function Wrap-Cmd() {
     CMD_COUNT=$((CMD_COUNT+1))
     local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") ${cmd}.log"
     eval "$@" |& tee "$fileName"
+    LOG_FILE="$fileName"
 }
 
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash >/dev/null
@@ -34,6 +35,11 @@ function Get-Working-Set-for-Directory-in-KB() {
     local ret=$((16*1024*1024))
     if [[ "$ret" -gt "$maxKb" ]]; then ret="$maxKb"; fi
     echo "$ret";
+}
+
+function Parse-Fio() {
+    # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
+    cat fio.log | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}'
 }
 
 function Test-Raid0-on-Loop() {
@@ -68,8 +74,10 @@ function Test-Raid0-on-Loop() {
 
     Drop-FS-Cache
     Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-2Gb' /raid-${LOOP_TYPE} "1999M" 20 3
+    Say "Created: $LOG_FILE"
     Drop-FS-Cache
     Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-4Gb' /raid-${LOOP_TYPE} "3999M" 20 3
+    Say "Created: $LOG_FILE"
 
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
