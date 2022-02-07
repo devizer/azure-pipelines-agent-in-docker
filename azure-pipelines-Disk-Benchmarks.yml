@@ -29,7 +29,7 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'Sleep 30 seconds'
 
-    - task: PublishBuildArtifacts@1
+  - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
     displayName: 'Retry Publish'
     inputs:
