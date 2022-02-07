@@ -49,11 +49,16 @@ function Setup-Raid0() {
     # sudo mdadm --create --verbose /dev/md0 --level=raid0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
     yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 /dev/loop21 /dev/loop22 || true
     
-    Say "Sync?"
-    for i in {1..3}; do
-      sleep 3
-      sudo mdadm --detail /dev/md0 || true
-    done
+    Say "sleep 3 seconds"
+    sleep 3
+    
+    Say "mdadm --detail"
+    sudo mdadm --detail /dev/md0 || true
+
+    Say "sudo mkfs.ext2 /dev/md0"
+    sudo mkfs.ext2 /dev/md0
+
+    Say "df -h -T"
 
     Say "Setup-Raid0 complete"
 }
