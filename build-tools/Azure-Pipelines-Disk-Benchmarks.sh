@@ -4,6 +4,21 @@ export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchma
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
+
+function Free-Loop-Buffers() {
+    local cfile="${TMPDIR:-/tmp}/mem-stress"
+    rm -f "$cfile"
+    cat <<-'MEM_STRESS_C' > "$cfile.c"
+    #include <stdlib.h>
+    #include <sys/sysinfo.h>
+    void main() {
+    for(long int i = 1; ; ++i) { const unsigned char *ptr = malloc (1000000); }
+    }
+MEM_STRESS_C
+    gcc -O0 $cfile.c -o $cfile
+    $cfile
+}
+
 CMD_COUNT=0
 function Wrap-Cmd() {
     local cmd="$*"
@@ -51,6 +66,7 @@ function Smart-Fio() {
     fi
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
     Drop-FS-Cache
+    Say "Free-Loop-Buffers"; time Free-Loop-Buffers
     Wrap-Cmd sudo File-IO-Benchmark "$@"
     local logFile="$LOG_FILE"
     cat "$logFile" | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}' | tee /tmp/4speed
