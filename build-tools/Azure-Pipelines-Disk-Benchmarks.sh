@@ -4,6 +4,11 @@ export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchma
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
+sudo fdisk -l
+sudo df -h -T
+
+
+
 
 function Free-Loop-Buffers() {
     return;
