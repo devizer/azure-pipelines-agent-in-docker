@@ -74,22 +74,34 @@ function Test-Raid0-on-Loop() {
 
     Say "sudo mkfs.ext2 /dev/md0; and mount"
     Wrap-Cmd sudo mkdir -p /raid-${LOOP_TYPE}
-    Wrap-Cmd sudo mkfs.ext2 /dev/md0
-    Wrap-Cmd sudo mount -o noatime /dev/md0 /raid-${LOOP_TYPE}
+    # wrap next two lines to parameters
+    if [[ "$FS" == EXT2 ]]; then
+      Wrap-Cmd sudo mkfs.ext2 /dev/md0
+      Wrap-Cmd sudo mount -o noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
+    elif [[ "$FS" == EXT4 ]]; then
+      Wrap-Cmd sudo mkfs.ext4 /dev/md0
+      Wrap-Cmd sudo mount -o noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
+    elif [[ "$FS" == BTRFS ]]; then
+      Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
+      Wrap-Cmd mount -t btrfs $loop "$path" -o defaults,noatime,nodiratime,commit=1000
+    elif [[ "$FS" == BTRFS-Сompressed ]]; then
+      Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
+      Wrap-Cmd mount -t btrfs $loop "$path" -o defaults,noatime,nodiratime,compress-force=lzo,commit=1000
+    else
+      echo "WRONG FS [$FS]"
+      exit 77
+    fi
     Wrap-Cmd sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
     Wrap-Cmd ls -la /raid-${LOOP_TYPE}
     Wrap-Cmd sudo df -h -T
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
-
-    Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "2000M" 40 0
-    Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "4000M" 40 0
-    Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-8Gb" /raid-${LOOP_TYPE} "8000M" 40 0
-    Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-16Gb" /raid-${LOOP_TYPE} "16000M" 40 0
+    
+    local workingSetList="1 2 3 4 5 8 16"
+    for workingSet in $workingSetList; do
+      local sz=$((workingSet * 100)) # 1024
+      Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" 40 0
+    done
 
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
@@ -106,11 +118,15 @@ function Test-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
-LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
-LOOP_TYPE=Direct LOOP_DIRECT_IO=on Test-Raid0-on-Loop
+for fs in BTRFS EXT2 EXT4 BTRFS-Сompressed; do
+  FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
+  FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
+done
 
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 Smart-Fio 'Small-ROOT' / "1G" 15 3
+
+exit 0;
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
