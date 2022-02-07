@@ -110,24 +110,12 @@ LOOP_TYPE=Direct LOOP_DIRECT_IO=on Test-Raid0-on-Loop
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 Smart-Fio 'Small-ROOT' / "1G" 15 3
 
-
-exit;
-
-Say "Small /mnt"
-sudo Drop-FS-Cache
-time sudo File-IO-Benchmark 'Small /mnt' /mnt "1G" 15 3 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.small-benchmark.console.txt"
-Say "Small ROOT"
-sudo Drop-FS-Cache
-time sudo File-IO-Benchmark 'Small ROOT' / "1G" 15 3 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/root.small-benchmark.console.txt"
-
-sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
-time sudo File-IO-Benchmark 'LARGE /mnt' /mnt "${ws}M" 60 15 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.large-benchmark.console.txt"
+Smart-Fio 'LARGE-/mnt-{$ws}MB' /mnt "${ws}M" 60 15
 
-sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/")"; ws=$((ws/1024))
 Say "LARGE / (the root), WORKING SET: $ws MB"
-time sudo File-IO-Benchmark 'Large ROOT' / "${ws}M" 60 15 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/root.large-benchmark.console.txt"
+Smart-Fio 'Large-ROOT-{$ws}MB' / "${ws}M" 60 15
 
 
