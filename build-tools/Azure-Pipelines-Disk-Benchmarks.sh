@@ -18,6 +18,7 @@ Say "/mnt disk: [$sdb_path]"
 
 function Reset-Sdb-Disk() {
     Say "Reset-Sdb-Disk [$sdb_path]"
+    sudo umount /mnt
     echo "d
 n
 p
