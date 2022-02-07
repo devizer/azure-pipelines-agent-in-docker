@@ -82,10 +82,10 @@ function Test-Raid0-on-Loop() {
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
 
     Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "1999M" 20 3
+    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "1999M" 20 0
     Say "Created: $LOG_FILE"
     Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "3999M" 20 3
+    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "3999M" 20 0
     Say "Created: $LOG_FILE"
 
     Wrap-Cmd sudo cat /proc/mdstat
