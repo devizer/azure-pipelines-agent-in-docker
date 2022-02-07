@@ -34,4 +34,4 @@ jobs:
     displayName: 'Retry Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
-      artifactName: '$(Agent.JobName)'
+      artifactName: '$(Agent.JobName) (Retry)'
