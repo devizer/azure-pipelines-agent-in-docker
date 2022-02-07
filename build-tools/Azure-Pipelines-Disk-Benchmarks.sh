@@ -42,7 +42,7 @@ function Smart-Fio() {
     Wrap-Cmd sudo File-IO-Benchmark "$@"
     local logFile="$LOG_FILE"
     cat "$logFile" | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}' | tee /tmp/4speed
-    info="|$(printf "%-40s" "$1") |"
+    info="| $(printf "%-40s" "$1") |"
     for line in {1..4}; do
       local speed="$(cat "/tmp/4speed" | awk -v line="$line" 'NR==line {print $1}')"
       info="${info}$(printf "%15s" "$speed") |"
