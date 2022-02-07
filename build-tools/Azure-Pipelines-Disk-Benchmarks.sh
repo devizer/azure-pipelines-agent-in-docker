@@ -92,7 +92,7 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=1000
     elif [[ "$FS" == BTRFS-Сompressed ]]; then
       Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo,commit=1000
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=1000
     else
       echo "WRONG FS [$FS]"
       exit 77
