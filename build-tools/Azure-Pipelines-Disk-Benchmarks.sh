@@ -185,11 +185,9 @@ function Test-Raid0-on-Loop() {
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
 export KEEP_FIO_TEMP_FILES=""
-Smart-Fio 'Small-ROOT' / "1G" 15 3
-Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 
 
-for SECOND_DISK_MODE in LOOP BLOCK; do #order matters
+for SECOND_DISK_MODE in BLOCK; do #order matters: LOOP and later BLOCK
     if [[ "$SECOND_DISK_MODE" == "BLOCK" ]]; then
       Reset-Sdb-Disk
     fi
@@ -201,6 +199,9 @@ for SECOND_DISK_MODE in LOOP BLOCK; do #order matters
 done
 
 exit;
+# BEFORE Reset-Sdb-Disk
+Smart-Fio 'Small-ROOT' / "1G" 15 3
+Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
