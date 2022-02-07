@@ -4,7 +4,10 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 Say --Reset-Stopwatch
 
 Say "apt-get install util-linux fio"
-sudo apt-get install util-linux fio -y -qq >/dev/null
+sudo apt-get install util-linux fio tree -y -qq >/dev/null
+tree -a -h -u /mnt |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.tree.txt"
+exit 0;
+
 
 function Get-Free-Space-For-Directory-in-KB() {
     local dir="${1}"
@@ -29,19 +32,21 @@ cat /proc/mdstat || true
 Say "lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT"
 sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 
+Say "Small /mnt"
 sudo Drop-FS-Cache
 time sudo File-IO-Benchmark 'Small /mnt' /mnt "1G" 15 3 | tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.small-benchmark.console.txt"
+Say "Small ROOT"
 sudo Drop-FS-Cache
 time sudo File-IO-Benchmark 'Small ROOT' / "1G" 15 3 | tee "$SYSTEM_ARTIFACTSDIRECTORY/root.small-benchmark.console.txt"
 
 sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
-Say "Default /mnt, WORKING SET: $ws MB"
+Say "LARGE /mnt, WORKING SET: $ws MB"
 time sudo File-IO-Benchmark 'LARGE /mnt' /mnt "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.large-benchmark.console.txt"
 
 sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/")"; ws=$((ws/1024))
-Say "Default / (the root), WORKING SET: $ws MB"
+Say "LARGE / (the root), WORKING SET: $ws MB"
 time sudo File-IO-Benchmark 'Large ROOT' / "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/root.large-benchmark.console.txt"
 
 
