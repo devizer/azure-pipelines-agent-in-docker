@@ -41,8 +41,8 @@ function Smart-Fio() {
     local total_report_file="$SYSTEM_ARTIFACTSDIRECTORY/total-report.md";
     if [[ ! -e "$total_report_file" ]]; then
         echo "
-| Volume Benchmark Options                 |     Seq Read   |    Seq Write   |   Random Read  |  Random Write  |
-| ---------------------------------------- | -------------: | -------------: | -------------: | -------------: |" > "$total_report_file"
+| Volume Benchmark Options                |     Seq Read   |    Seq Write   |   Random Read  |  Random Write  |
+| --------------------------------------- | -------------: | -------------: | -------------: | -------------: |" > "$total_report_file"
     fi
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
     Drop-FS-Cache
