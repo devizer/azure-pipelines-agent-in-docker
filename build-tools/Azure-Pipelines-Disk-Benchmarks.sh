@@ -128,7 +128,7 @@ function Test-Raid0-on-Loop() {
     
     local size_scale=1024 duration=50  # RELEASE
     # local size_scale=10 duration=3     # DEBUG
-    local workingSetList="16 1 2 3 4 5 8"
+    local workingSetList="16 8 5 4 3 2 1"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
       Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
