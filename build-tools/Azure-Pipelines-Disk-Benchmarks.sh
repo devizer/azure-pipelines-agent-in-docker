@@ -42,7 +42,7 @@ function Setup-Raid0() {
     Say "sudo losetup -a"
     sudo losetup -a
     Say "mdadm --zero-superblock --verbose --force /dev/loop{21,22}"
-    mdadm --zero-superblock --verbose --force /dev/loop{21,22}
+    sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
 
     Say "mdadm --create ..."
