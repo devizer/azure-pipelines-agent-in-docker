@@ -55,7 +55,7 @@ function Smart-Fio() {
 function Test-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=$((2*1025))
+    size=$((9*1025))
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=off /dev/loop21 /mnt/disk-on-mnt
@@ -83,11 +83,13 @@ function Test-Raid0-on-Loop() {
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
 
     Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "1999M" 20 0
-    Say "Created: $LOG_FILE"
+    Smart-Fio "RAID-${LOOP_TYPE}-2Gb" /raid-${LOOP_TYPE} "2000M" 40 0
     Drop-FS-Cache
-    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "3999M" 20 0
-    Say "Created: $LOG_FILE"
+    Smart-Fio "RAID-${LOOP_TYPE}-4Gb" /raid-${LOOP_TYPE} "4000M" 40 0
+    Drop-FS-Cache
+    Smart-Fio "RAID-${LOOP_TYPE}-8Gb" /raid-${LOOP_TYPE} "8000M" 40 0
+    Drop-FS-Cache
+    Smart-Fio "RAID-${LOOP_TYPE}-16Gb" /raid-${LOOP_TYPE} "16000M" 40 0
 
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
@@ -112,10 +114,10 @@ Smart-Fio 'Small-ROOT' / "1G" 15 3
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
-Smart-Fio 'LARGE-/mnt-{$ws}MB' /mnt "${ws}M" 60 15
+Smart-Fio "LARGE-/mnt-${ws}MB" /mnt "${ws}M" 60 15
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/")"; ws=$((ws/1024))
 Say "LARGE / (the root), WORKING SET: $ws MB"
-Smart-Fio 'Large-ROOT-{$ws}MB' / "${ws}M" 60 15
+Smart-Fio "Large-ROOT-${ws}MB" / "${ws}M" 60 15
 
 
