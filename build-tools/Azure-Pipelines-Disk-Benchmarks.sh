@@ -4,6 +4,7 @@ CMD_COUNT=0
 function Wrap-Cmd() {
     local cmd="$*"
     cmd="${cmd//[\/]/\ ∕}"
+    cmd="${cmd//[:]/˸}"
     Say "$cmd"
     CMD_COUNT=$((CMD_COUNT+1))
     local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") ${cmd}.log"
