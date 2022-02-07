@@ -1,4 +1,6 @@
 set -eu; set -o pipefail
+script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash >/dev/null
+Say --Reset-Stopwatch
 
 export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 sudo swapoff /mnt/swapfile
@@ -66,8 +68,6 @@ function Wrap-Cmd() {
     LOG_FILE="$fileName"
 }
 
-script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash >/dev/null
-Say --Reset-Stopwatch
 
 Say "apt-get install util-linux fio"
 sudo apt-get install util-linux fio tree -y -qq >/dev/null
