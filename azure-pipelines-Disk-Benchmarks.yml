@@ -10,7 +10,7 @@ jobs:
 - job: BENCHMARK
   pool:
     vmImage: 'ubuntu-20.04'
-  timeoutInMinutes: 180
+  timeoutInMinutes: 360
 
   steps:
   - script: |
