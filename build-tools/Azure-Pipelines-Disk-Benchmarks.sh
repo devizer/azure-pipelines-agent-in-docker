@@ -6,6 +6,7 @@ Say --Reset-Stopwatch
 Say "apt-get install util-linux fio"
 sudo apt-get install util-linux fio tree -y -qq >/dev/null
 sudo tree -a -h -u /mnt |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.tree.txt"
+Say "SWAPON"
 sudo swapon |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/swapon.txt"
 sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
 
