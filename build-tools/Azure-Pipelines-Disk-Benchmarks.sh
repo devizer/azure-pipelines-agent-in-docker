@@ -83,9 +83,9 @@ Wrap-Cmd sudo umount /raid-buffered
 Wrap-Cmd sudo mdadm --stop /dev/md0
 Wrap-Cmd sudo cat /proc/mdstat
 Say "UnMap loop"
-Wrap-Cmd losetup -d /dev/loop{21,22}
-Wrap-Cmd losetup -a
-Wrap-Cmd losetup -l
+Wrap-Cmd sudo losetup -d /dev/loop{21,22}
+Wrap-Cmd sudo losetup -a
+Wrap-Cmd sudo losetup -l
 Wrap-Cmd rm -v -f /mnt/disk-on-mnt /disk-on-root
 
 exit;
