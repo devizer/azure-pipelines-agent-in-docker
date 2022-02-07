@@ -38,6 +38,13 @@ function Get-Working-Set-for-Directory-in-KB() {
 }
 
 function Smart-Fio() {
+    local total_report_file="$SYSTEM_ARTIFACTSDIRECTORY/total-report.md";
+    if [[ ! -e "$total_report_file" ]]; then
+        echo "
+| Volume Benchmark Options                 |     Seq Read   |    Seq Write   |   Random Read  |  Random Write  |
+| ---------------------------------------- | -------------: | -------------: | -------------: | -------------: |
+" > "$total_report_file"
+    fi
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
     Drop-FS-Cache
     Wrap-Cmd sudo File-IO-Benchmark "$@"
@@ -48,8 +55,8 @@ function Smart-Fio() {
       local speed="$(cat "/tmp/4speed" | awk -v line="$line" 'NR==line {print $1}')"
       info="${info}$(printf "%15s" "$speed") |"
     done
-    echo "$info" | tee -a "$SYSTEM_ARTIFACTSDIRECTORY/total-report.md"
-    echo "";
+    echo "$info" | tee -a "$total_report_file" >/dev/null
+    cat "$total_report_file"
 }
 
 function Test-Raid0-on-Loop() {
