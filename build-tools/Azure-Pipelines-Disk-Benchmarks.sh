@@ -104,9 +104,13 @@ function Test-Raid0-on-Loop() {
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
     local workingSetList="1 2 3 4 5 8 16"
+    # Release
+    local size_scale=1024 duration=50
+    # Debug
+    # local size_scale=10 duration=3
     for workingSet in $workingSetList; do
-      local sz=$((workingSet * 100)) # 1024
-      Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" 40 0
+      local sz=$((workingSet * size_scale))
+      Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
     done
 
     Wrap-Cmd sudo cat /proc/mdstat
