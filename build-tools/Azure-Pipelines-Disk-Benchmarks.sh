@@ -98,14 +98,16 @@ function Test-Raid0-on-Loop() {
       echo "WRONG FS [$FS]"
       exit 77
     fi
+    Say "FREE SPACE AFTER MOUNTING of the RAID"
+    Wrap-Cmd sudo df -h -T
     Wrap-Cmd sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
     Wrap-Cmd ls -la /raid-${LOOP_TYPE}
     Wrap-Cmd sudo df -h -T
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
-    # local size_scale=1024 duration=50  # RELEASE
-    local size_scale=10 duration=3     # DEBUG
+    local size_scale=1024 duration=50  # RELEASE
+    # local size_scale=10 duration=3     # DEBUG
     local workingSetList="1 2 3 4 5 8 16"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
