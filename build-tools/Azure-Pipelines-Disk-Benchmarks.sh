@@ -26,7 +26,6 @@ sudo apt-get install util-linux fio tree -y -qq >/dev/null
 Wrap-Cmd sudo tree -a -h -u /mnt
 Wrap-Cmd sudo swapon
 sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
-exit 0;
 
 
 function Get-Free-Space-For-Directory-in-KB() {
