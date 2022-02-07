@@ -36,7 +36,7 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
-function Setup-Raid0() {
+function Test-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
     size=$((2*1025))
@@ -57,35 +57,38 @@ function Setup-Raid0() {
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
     Say "sudo mkfs.ext2 /dev/md0; and mount"
+    Wrap-Cmd sudo mkdir -p /raid-${LOOP_TYPE}
     Wrap-Cmd sudo mkfs.ext2 /dev/md0
-    Wrap-Cmd sudo mkdir -p /raid-buffered
-    Wrap-Cmd sudo mount -o noatime /dev/md0 /raid-buffered
-    Wrap-Cmd sudo chown -R "$(whoami)" /raid-buffered
-    Wrap-Cmd ls -la /raid-buffered
+    Wrap-Cmd sudo mount -o noatime /dev/md0 /raid-${LOOP_TYPE}
+    Wrap-Cmd sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
+    Wrap-Cmd ls -la /raid-${LOOP_TYPE}
     Wrap-Cmd sudo df -h -T
 
-    Say "Setup-Raid0 complete"
+    Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
+
+    Drop-FS-Cache
+    Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-2Gb' /raid-${LOOP_TYPE} "1999M" 20 3
+    Drop-FS-Cache
+    Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-4Gb' /raid-${LOOP_TYPE} "3999M" 20 3
+
+    Wrap-Cmd sudo cat /proc/mdstat
+    Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
+    Say "Destory /raid-${LOOP_TYPE}"
+    Wrap-Cmd sudo umount /raid-${LOOP_TYPE}
+    Wrap-Cmd sudo mdadm --stop /dev/md0
+    Wrap-Cmd sudo cat /proc/mdstat
+    Say "UnMap loop"
+    Wrap-Cmd sudo losetup -d /dev/loop{21,22}
+    Wrap-Cmd sudo losetup -a
+    Wrap-Cmd sudo losetup -l
+    Wrap-Cmd sudo rm -v -f /mnt/disk-on-mnt /disk-on-root
 }
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
-Setup-Raid0
+LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
+LOOP_TYPE=Direct LOOP_DIRECT_IO=on Test-Raid0-on-Loop
 
-Drop-FS-Cache
-Wrap-Cmd sudo File-IO-Benchmark 'RAID-Buffered-4Gb' /raid-buffered "3999M" 20 3
-Wrap-Cmd sudo File-IO-Benchmark 'RAID-Buffered-2Gb' /raid-buffered "1999M" 20 3
-
-Wrap-Cmd sudo cat /proc/mdstat
-Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
-Say "Destory /raid-buffered"
-Wrap-Cmd sudo umount /raid-buffered
-Wrap-Cmd sudo mdadm --stop /dev/md0
-Wrap-Cmd sudo cat /proc/mdstat
-Say "UnMap loop"
-Wrap-Cmd sudo losetup -d /dev/loop{21,22}
-Wrap-Cmd sudo losetup -a
-Wrap-Cmd sudo losetup -l
-Wrap-Cmd rm -v -f /mnt/disk-on-mnt /disk-on-root
 
 exit;
 
