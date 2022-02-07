@@ -8,7 +8,6 @@ sudo apt-get install util-linux fio tree -y -qq >/dev/null
 sudo tree -a -h -u /mnt |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.tree.txt"
 sudo swapon |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/swapon.txt"
 sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
-exit 0;
 
 
 function Get-Free-Space-For-Directory-in-KB() {
@@ -26,6 +25,33 @@ function Get-Working-Set-for-Directory-in-KB() {
     if [[ "$ret" -gt "$maxKb" ]]; then ret="$maxKb"; fi
     echo "$ret";
 }
+
+function Setup-Raid0() {
+    local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
+    local size=$(((freeSpace-500*1000)/1024))
+    size=1000
+    Say "Allocate ${size} as /mnt/disk-on-mnt"
+    sudo fallocate -l "${size}M" /mnt/disk-on-mnt
+    size2=1000
+    Say "Allocate ${size2} as /disk-on-root"
+    sudo fallocate -l "${size}M" /disk-on-root
+    Say "sudo losetup /dev/loop21 /mnt/disk-on-mnt"
+    sudo losetup /dev/loop21 /mnt/disk-on-mnt
+    Say "sudo losetup /dev/loop22 /disk-on-root"
+    sudo losetup /dev/loop22 /disk-on-root
+    Say "sudo losetup -a"
+    sudo losetup -a
+    Say "mdadm --create ..."
+    sudo mdadm --create --verbose /dev/md5 --level=0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
+    Say "mdadm --detail ..."
+    sudo mdadm --detail /dev/md5 || true
+
+    Say "Setup-Raid0 complete"
+}
+
+Setup-Raid0
+
+
 
 Say "sudo cat /proc/mdstat"
 sudo cat /proc/mdstat || true
