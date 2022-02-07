@@ -6,7 +6,9 @@ export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchma
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
+Say "sudo fdisk -l"
 sudo fdisk -l
+Say "sudo df -h -T"
 sudo df -h -T
 
 sdb_path="/dev/sdb"
@@ -15,7 +17,7 @@ sdb_path="${sdb_path::-1}"
 Say "/mnt disk: [$sdb_path]"
 
 function Reset-Sdb-Disk() {
-    Say "Reset-Sdb-Disk"
+    Say "Reset-Sdb-Disk [$sdb_path]"
     echo "d
 n
 p
