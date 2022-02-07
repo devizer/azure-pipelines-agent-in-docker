@@ -39,16 +39,15 @@ function Get-Working-Set-for-Directory-in-KB() {
 function Setup-Raid0() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=1000
+    size=2000
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
-    size2=1000
+    size2=2000
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=off /dev/loop21 /mnt/disk-on-mnt
     Wrap-Cmd sudo losetup --direct-io=off /dev/loop22 /disk-on-root
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
     Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
-
 
     Say "mdadm --create ..."
     yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 /dev/loop21 /dev/loop22 || true
@@ -60,71 +59,35 @@ function Setup-Raid0() {
 
     Say "sudo mkfs.ext2 /dev/md0; and mount"
     Wrap-Cmd sudo mkfs.ext2 /dev/md0
-    Wrap-Cmd sudo mkdir -p /raid
-    Wrap-Cmd sudo mount -o noatime /dev/md0 /raid 
-    Wrap-Cmd sudo chown -R "$(whoami)" /raid
-    Wrap-Cmd ls -la /raid
+    Wrap-Cmd sudo mkdir -p /raid-buffered
+    Wrap-Cmd sudo mount -o noatime /dev/md0 /raid-buffered
+    Wrap-Cmd sudo chown -R "$(whoami)" /raid-buffered
+    Wrap-Cmd ls -la /raid-buffered
     Wrap-Cmd sudo df -h -T
 
     Say "Setup-Raid0 complete"
 }
-
-function Setup-Raid0-Prev() {
-    local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
-    local size=$(((freeSpace-500*1000)/1024))
-    size=1000
-    Say "Allocate ${size} as /mnt/disk-on-mnt"
-    sudo fallocate -l "${size}M" /mnt/disk-on-mnt
-    size2=1000
-    Say "Allocate ${size2} as /disk-on-root"
-    sudo fallocate -l "${size}M" /disk-on-root
-    Say "sudo losetup /dev/loop21 /mnt/disk-on-mnt"
-    sudo losetup --direct-io 0 /dev/loop21 /mnt/disk-on-mnt
-    Say "sudo losetup /dev/loop22 /disk-on-root"
-    sudo losetup --direct-io 0 /dev/loop22 /disk-on-root
-    Say "sudo losetup -a"
-    sudo losetup -a
-    Say "sudo losetup -a"
-    sudo losetup -a
-    Say "mdadm --zero-superblock --verbose --force /dev/loop{21,22}"
-    sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
-
-
-    Say "mdadm --create ..."
-    # sudo mdadm --create --verbose /dev/md0 --level=raid0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
-    yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 /dev/loop21 /dev/loop22 || true
-    
-    Say "sleep 3 seconds"
-    sleep 3
-
-    Say "mdadm --detail"
-    sudo mdadm --detail /dev/md0 || true
-
-    Say "sudo mkfs.ext2 /dev/md0; and mount"
-    sudo mkfs.ext2 /dev/md0
-    sudo mkdir -p /raid
-    sudo mount -o noatime /dev/md0 /raid 
-    sudo chown -R "$(whoami)" /raid
-    ls -la /raid
-
-    Say "df -h -T"
-    sudo df -h -T
-
-    Say "Setup-Raid0 complete"
-}
-
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
 Setup-Raid0
 
 Drop-FS-Cache
-Wrap-Cmd sudo File-IO-Benchmark 'RAID' /raid "1900M" 20 3
+Wrap-Cmd sudo File-IO-Benchmark 'RAID' /raid-buffered "3900M" 20 3
 
 
 Wrap-Cmd sudo cat /proc/mdstat
-Wrap-Cmd cat /proc/mdstat 
 Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
+Say "Destory /raid-buffered"
+Wrap-Cmd sudo umount /raid-buffered
+Wrap-Cmd sudo mdadm --stop /dev/md0
+Wrap-Cmd sudo cat /proc/mdstat
+Say "UnMap loop"
+Wrap-Cmd losetup -d /dev/loop{21,22}
+Wrap-Cmd losetup -a
+Wrap-Cmd losetup -l
+Wrap-Cmd rm -v -f /mnt/disk-on-mnt /disk-on-root
+
 exit;
 
 Say "Small /mnt"
