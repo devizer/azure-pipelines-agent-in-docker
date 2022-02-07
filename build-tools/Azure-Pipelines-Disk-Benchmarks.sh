@@ -7,6 +7,11 @@ sudo rm -f /mnt/swapfile
 sudo fdisk -l
 sudo df -h -T
 
+sdb_path="/dev/sdb"
+sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
+sdb_path="${sdb_path::-1}"
+Say "/mnt disk: [$sdb_path]"
+
 function Reset-Sdb-Disk() {
     Say "Reset-Sdb-Disk"
     echo "d
@@ -21,13 +26,13 @@ p
 
 
 w
-" | sudo fdisk /dev/sdb
+" | sudo fdisk "${sdb_path}"
 
-    mkswap /dev/sdb1
-    swapon /dev/sdb1
+    mkswap ${sdb_path}1
+    swapon ${sdb_path}1
     Say "swapon"
     swapon
-    sdb2size="$(sudo fdisk -l /dev/sdb | grep "/dev/sdb2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
+    sdb2size="$(sudo fdisk -l ${sdb_path} | grep "${sdb_path}2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
     Say "sdb2size: [$sdb2size] KB"
 
 }
@@ -118,7 +123,7 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
       second_raid_disk="/dev/loop21"
     else
-      second_raid_disk="/dev/sdb2"
+      second_raid_disk="${sdb_path}2"
     fi
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
@@ -184,7 +189,6 @@ function Test-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
-export KEEP_FIO_TEMP_FILES=""
 
 
 for SECOND_DISK_MODE in BLOCK; do #order matters: LOOP and later BLOCK
@@ -200,6 +204,7 @@ done
 
 exit;
 # BEFORE Reset-Sdb-Disk
+export KEEP_FIO_TEMP_FILES=""
 Smart-Fio 'Small-ROOT' / "1G" 15 3
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 
