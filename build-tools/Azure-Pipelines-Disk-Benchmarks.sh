@@ -55,8 +55,12 @@ function Setup-Raid0() {
     Say "mdadm --detail"
     sudo mdadm --detail /dev/md0 || true
 
-    Say "sudo mkfs.ext2 /dev/md0"
+    Say "sudo mkfs.ext2 /dev/md0; and mount"
     sudo mkfs.ext2 /dev/md0
+    sudo mkdir -p /raid
+    sudo mount -o noatime /dev/md0 /raid 
+    sudo chown -R "$(whoami)" /raid
+    ls -la /raid
 
     Say "df -h -T"
     sudo df -h -T
