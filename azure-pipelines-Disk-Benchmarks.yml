@@ -24,3 +24,14 @@ jobs:
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
+
+  - script: 'sleep 30'
+    condition: succeededOrFailed()
+    displayName: 'Sleep 30 seconds'
+
+    - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Retry Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
