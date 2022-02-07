@@ -42,7 +42,7 @@ function Setup-Raid0() {
     Say "sudo losetup -a"
     sudo losetup -a
     Say "mdadm --create ..."
-    sudo mdadm --create --verbose /dev/md5 --level=0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
+    sudo mdadm --create --verbose /dev/md1 --level=1  --raid-devices=2 /dev/loop21 /dev/loop22 || true
     Say "mdadm --detail ..."
     sudo mdadm --detail /dev/md5 || true
 
