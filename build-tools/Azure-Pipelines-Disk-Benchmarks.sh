@@ -5,7 +5,7 @@ Say --Reset-Stopwatch
 
 Say "apt-get install util-linux fio"
 sudo apt-get install util-linux fio tree -y -qq >/dev/null
-tree -a -h -u /mnt |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.tree.txt"
+sudo tree -a -h -u /mnt |& tee tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.tree.txt"
 exit 0;
 
 
