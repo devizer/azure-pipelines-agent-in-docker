@@ -1,7 +1,7 @@
 set -eu; set -o pipefail
 
 sudo swapoff /mnt/swapfile
-rm -f /mnt/swapfile
+sudo rm -f /mnt/swapfile
 
 CMD_COUNT=0
 function Wrap-Cmd() {
