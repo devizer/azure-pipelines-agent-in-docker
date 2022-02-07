@@ -7,7 +7,30 @@ sudo rm -f /mnt/swapfile
 sudo fdisk -l
 sudo df -h -T
 
+function Reset-Sdb-Disk() {
+    Say "Reset-Sdb-Disk"
+    echo "d
+n
+p
+1
 
++1000M
+n
+p
+2
+
+
+w
+" | sudo fdisk /dev/sdb
+
+    mkswap /dev/sdb1
+    swapon /dev/sdb1
+    Say "swapon"
+    swapon
+    sdb2size="$(sudo fdisk -l /dev/sdb | grep "/dev/sdb2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
+    Say "sdb2size: [$sdb2size] KB"
+
+}
 
 
 function Free-Loop-Buffers() {
@@ -90,16 +113,21 @@ function Test-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
     size=$((12*1025))
-    Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
+    if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
+      Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
+      Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
+      second_raid_disk="/dev/loop21"
+    else
+      second_raid_disk="/dev/sdb2"
+    fi
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
-    Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
     Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
-    Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
+    # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
     Say "mdadm --create ..."
-    yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 /dev/loop21 /dev/loop22 || true
+    yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
     
     Say "sleep 3 seconds?"
     sleep 3
@@ -133,12 +161,12 @@ function Test-Raid0-on-Loop() {
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
-    local size_scale=1024 duration=50  # RELEASE
-    # local size_scale=10 duration=3     # DEBUG
+    # local size_scale=1024 duration=50  # RELEASE
+    local size_scale=10 duration=3     # DEBUG
     local workingSetList="1 2 3 4 5 8 16"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
-      Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
+      Smart-Fio "RAID-${LOOP_TYPE}-${SECOND_DISK_MODE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
     done
 
     Wrap-Cmd sudo cat /proc/mdstat
@@ -156,16 +184,23 @@ function Test-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
-export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
-for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
-  FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
-  FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
+export KEEP_FIO_TEMP_FILES=""
+Smart-Fio 'Small-ROOT' / "1G" 15 3
+Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
+
+
+for SECOND_DISK_MODE in LOOP BLOCK; do #order matters
+    if [[ "$SECOND_DISK_MODE" == "BLOCK" ]]; then
+      Reset-Sdb-Disk
+    fi
+    export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
+    for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
+        FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
+        FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
+    done
 done
 
-export KEEP_FIO_TEMP_FILES=""
-Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
-Smart-Fio 'Small-ROOT' / "1G" 15 3
-
+exit;
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
