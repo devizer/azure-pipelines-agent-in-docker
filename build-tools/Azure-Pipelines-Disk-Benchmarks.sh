@@ -65,7 +65,7 @@ function Smart-Fio() {
 function Test-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=$((10*1025))
+    size=$((12*1025))
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
@@ -111,7 +111,7 @@ function Test-Raid0-on-Loop() {
     
     local size_scale=1024 duration=50  # RELEASE
     # local size_scale=10 duration=3     # DEBUG
-    local workingSetList="1 2 3 4 5 8 16"
+    local workingSetList="16 1 2 3 4 5 8"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
       Smart-Fio "RAID-${LOOP_TYPE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
