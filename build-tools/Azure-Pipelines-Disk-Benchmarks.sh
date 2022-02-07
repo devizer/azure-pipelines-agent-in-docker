@@ -127,16 +127,14 @@ Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
 Setup-Raid0
 
-Wrap-Cmd sudo File-IO-Benchmark 'RAID' /raid "1900M" 15 3
+Drop-FS-Cache
+Wrap-Cmd sudo File-IO-Benchmark 'RAID' /raid "1900M" 20 3
+
+
+Wrap-Cmd sudo cat /proc/mdstat
+Wrap-Cmd cat /proc/mdstat 
+Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 exit;
-
-
-Say "sudo cat /proc/mdstat"
-sudo cat /proc/mdstat || true
-Say "cat /proc/mdstat"
-cat /proc/mdstat || true
-Say "lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT"
-sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 
 Say "Small /mnt"
 sudo Drop-FS-Cache
