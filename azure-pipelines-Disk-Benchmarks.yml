@@ -25,7 +25,7 @@ jobs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
-  - script: 'sleep 30'
+  - script: 'sudo df -h -T; sleep 30;'
     condition: succeededOrFailed()
     displayName: 'Sleep 30 seconds'
 
