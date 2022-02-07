@@ -48,8 +48,12 @@ function Setup-Raid0() {
     Say "mdadm --create ..."
     # sudo mdadm --create --verbose /dev/md0 --level=raid0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
     yes | sudo mdadm --create /dev/md0 --force --level=1 --raid-devices=2 /dev/loop21 /dev/loop22 || true
-    Say "mdadm --detail ..."
-    sudo mdadm --detail /dev/md0 || true
+    
+    Say "Sync?"
+    for i in {1..10}; do
+      sleep 1
+      sudo mdadm --detail /dev/md0 || true
+    done
 
     Say "Setup-Raid0 complete"
 }
