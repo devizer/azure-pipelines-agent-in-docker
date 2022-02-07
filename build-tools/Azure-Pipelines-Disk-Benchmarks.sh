@@ -18,7 +18,10 @@ Say "/mnt disk: [$sdb_path]"
 
 function Reset-Sdb-Disk() {
     Say "Reset-Sdb-Disk [$sdb_path]"
+    Drop-FS-Cache
+    Say "sudo umount /mnt"
     sudo umount /mnt
+    Say "Execute fdisk"
     echo "d
 n
 p
@@ -35,8 +38,9 @@ w
 
     Say "fdisk -l ${sdb_path}"
     sudo fdisk -l ${sdb_path}
-    sudo mkswap ${sdb_path}1
-    sudo swapon ${sdb_path}1
+    sleep 5
+    sudo mkswap "${sdb_path}1"
+    sudo swapon "${sdb_path}1"
     Say "swapon"
     sudo swapon
     sdb2size="$(sudo fdisk -l ${sdb_path} | grep "${sdb_path}2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
