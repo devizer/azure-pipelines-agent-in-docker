@@ -39,9 +39,8 @@ function Get-Working-Set-for-Directory-in-KB() {
 function Setup-Raid0() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=2000
+    size=$((2*1025))
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
-    size2=2000
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=off /dev/loop21 /mnt/disk-on-mnt
     Wrap-Cmd sudo losetup --direct-io=off /dev/loop22 /disk-on-root
