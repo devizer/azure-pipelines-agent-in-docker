@@ -124,7 +124,7 @@ function Test-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
-for fs in BTRFS EXT2 EXT4 BTRFS-Сompressed; do
+for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
   FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
   FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
 done
