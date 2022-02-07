@@ -51,7 +51,7 @@ function Setup-Raid0() {
     
     Say "sleep 3 seconds"
     sleep 3
-    
+
     Say "mdadm --detail"
     sudo mdadm --detail /dev/md0 || true
 
@@ -59,6 +59,7 @@ function Setup-Raid0() {
     sudo mkfs.ext2 /dev/md0
 
     Say "df -h -T"
+    sudo df -h -T
 
     Say "Setup-Raid0 complete"
 }
