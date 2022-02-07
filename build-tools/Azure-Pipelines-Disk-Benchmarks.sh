@@ -1,5 +1,6 @@
 set -eu; set -o pipefail
 
+export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
@@ -77,7 +78,7 @@ function Test-Raid0-on-Loop() {
     Say "mdadm --create ..."
     yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 /dev/loop21 /dev/loop22 || true
     
-    Say "sleep 3 seconds"
+    Say "sleep 3 seconds?"
     sleep 3
 
     Wrap-Cmd sudo mdadm --detail /dev/md0
@@ -132,11 +133,13 @@ function Test-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
+export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
   FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
   FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
 done
 
+export KEEP_FIO_TEMP_FILES=""
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 Smart-Fio 'Small-ROOT' / "1G" 15 3
 
