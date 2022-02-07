@@ -46,7 +46,7 @@ function Setup-Raid0() {
 
 
     Say "mdadm --create ..."
-    sudo mdadm --create --verbose /dev/md0 --level=0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
+    sudo mdadm --create --verbose /dev/md0 --level=raid0  --raid-devices=2 /dev/loop21 /dev/loop22 || true
     Say "mdadm --detail ..."
     sudo mdadm --detail /dev/md0 || true
 
