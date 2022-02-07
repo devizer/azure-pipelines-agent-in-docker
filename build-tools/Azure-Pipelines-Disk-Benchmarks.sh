@@ -67,7 +67,7 @@ function Smart-Fio() {
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
     Drop-FS-Cache
     Say "Free-Loop-Buffers"; time Free-Loop-Buffers
-    Wrap-Cmd sudo File-IO-Benchmark "$@"
+    Wrap-Cmd sudo -E File-IO-Benchmark "$@"
     local logFile="$LOG_FILE"
     cat "$logFile" | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}' | tee /tmp/4speed
     info="| $(printf "%-40s" "$1") |"
