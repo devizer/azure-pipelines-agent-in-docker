@@ -6,6 +6,8 @@ sudo rm -f /mnt/swapfile
 
 
 function Free-Loop-Buffers() {
+    return;
+    # wrong - volumes are switched into readonly mode
     local cfile="${TMPDIR:-/tmp}/mem-stress"
     rm -f "$cfile"
     cat <<-'MEM_STRESS_C' > "$cfile.c"
