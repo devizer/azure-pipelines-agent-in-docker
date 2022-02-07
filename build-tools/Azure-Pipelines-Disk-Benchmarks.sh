@@ -46,7 +46,7 @@ function Smart-Fio() {
     for line in {1..4}; do
       local speed="$(cat "$logFile" | awk -v line="$line" 'NR==line {print $1}')"
       info="${info}$(printf "%15s" "$speed") |"
-    fi
+    done
     echo $info | tee "$SYSTEM_ARTIFACTSDIRECTORY/total-report.md"
 }
 
