@@ -159,7 +159,6 @@ export KEEP_FIO_TEMP_FILES=""
 Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
 Smart-Fio 'Small-ROOT' / "1G" 15 3
 
-exit 0;
 
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
