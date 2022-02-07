@@ -49,6 +49,9 @@ function Setup-Raid0() {
     Say "Setup-Raid0 complete"
 }
 
+Say "/etc/mdadm/mdadm.conf"
+sudo cat /etc/mdadm/mdadm.conf |& tee "$SYSTEM_ARTIFACTSDIRECTORY/mdadm.conf" || true
+
 Setup-Raid0
 
 
@@ -62,19 +65,19 @@ sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 
 Say "Small /mnt"
 sudo Drop-FS-Cache
-time sudo File-IO-Benchmark 'Small /mnt' /mnt "1G" 15 3 | tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.small-benchmark.console.txt"
+time sudo File-IO-Benchmark 'Small /mnt' /mnt "1G" 15 3 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.small-benchmark.console.txt"
 Say "Small ROOT"
 sudo Drop-FS-Cache
-time sudo File-IO-Benchmark 'Small ROOT' / "1G" 15 3 | tee "$SYSTEM_ARTIFACTSDIRECTORY/root.small-benchmark.console.txt"
+time sudo File-IO-Benchmark 'Small ROOT' / "1G" 15 3 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/root.small-benchmark.console.txt"
 
 sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/mnt")"; ws=$((ws/1024))
 Say "LARGE /mnt, WORKING SET: $ws MB"
-time sudo File-IO-Benchmark 'LARGE /mnt' /mnt "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.large-benchmark.console.txt"
+time sudo File-IO-Benchmark 'LARGE /mnt' /mnt "${ws}M" 60 15 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/mnt.large-benchmark.console.txt"
 
 sudo Drop-FS-Cache
 ws="$(Get-Working-Set-for-Directory-in-KB "/")"; ws=$((ws/1024))
 Say "LARGE / (the root), WORKING SET: $ws MB"
-time sudo File-IO-Benchmark 'Large ROOT' / "${ws}M" 60 15 | tee "$SYSTEM_ARTIFACTSDIRECTORY/root.large-benchmark.console.txt"
+time sudo File-IO-Benchmark 'Large ROOT' / "${ws}M" 60 15 |& tee "$SYSTEM_ARTIFACTSDIRECTORY/root.large-benchmark.console.txt"
 
 
