@@ -12,6 +12,7 @@ function Wrap-Cmd-With-Key() {
 function Wrap-Cmd() {
     local cmd="$*"
     cmd="${orig//[\/]/∕}"
+    Say "$cmd"
     CMD_COUNT=$((CMD_COUNT+1))
     local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") $cmd"
     eval "$@" |& tee "$fileName"
