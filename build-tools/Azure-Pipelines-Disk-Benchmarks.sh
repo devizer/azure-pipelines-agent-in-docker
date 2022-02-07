@@ -37,9 +37,17 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
-function Parse-Fio() {
+function Smart-Fio() {
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
-    cat fio.log | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}'
+    Wrap-Cmd sudo File-IO-Benchmark "$@"
+    local logFile="$LOG_FILE"
+    cat "$logFile" | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}' | tee /tmp/4speed
+    info="|$(printf "%40s" "$1") |"
+    for line in {1..4}; do
+      local speed="$(cat "$logFile" | awk -v line="$line" 'NR==line {print $1}')"
+      info="${info}$(printf "%15s" "$speed") |"
+    fi
+    echo $info | tee "$SYSTEM_ARTIFACTSDIRECTORY/total-report.md"
 }
 
 function Test-Raid0-on-Loop() {
@@ -73,10 +81,10 @@ function Test-Raid0-on-Loop() {
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
 
     Drop-FS-Cache
-    Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-2Gb' /raid-${LOOP_TYPE} "1999M" 20 3
+    Smart-Fio 'RAID-${LOOP_TYPE}-2Gb' /raid-${LOOP_TYPE} "1999M" 20 3
     Say "Created: $LOG_FILE"
     Drop-FS-Cache
-    Wrap-Cmd sudo File-IO-Benchmark 'RAID-${LOOP_TYPE}-4Gb' /raid-${LOOP_TYPE} "3999M" 20 3
+    Smart-Fio 'RAID-${LOOP_TYPE}-4Gb' /raid-${LOOP_TYPE} "3999M" 20 3
     Say "Created: $LOG_FILE"
 
     Wrap-Cmd sudo cat /proc/mdstat
@@ -96,6 +104,9 @@ Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
 LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
 LOOP_TYPE=Direct LOOP_DIRECT_IO=on Test-Raid0-on-Loop
+
+Smart-Fio 'Small-/mnt' /mnt "1G" 15 3
+Smart-Fio 'Small-ROOT' /mnt "1G" 15 3
 
 
 exit;
