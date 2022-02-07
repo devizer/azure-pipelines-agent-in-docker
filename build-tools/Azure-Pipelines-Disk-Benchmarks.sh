@@ -16,7 +16,7 @@ function Free-Loop-Buffers() {
     }
 MEM_STRESS_C
     gcc -O0 $cfile.c -o $cfile
-    $cfile
+    $cfile || true
 }
 
 CMD_COUNT=0
