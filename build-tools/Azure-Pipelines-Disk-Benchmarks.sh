@@ -51,8 +51,8 @@ function Setup-Raid0() {
     Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
     size2=1000
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
-    Wrap-Cmd sudo losetup --direct-io 0 /dev/loop21 /mnt/disk-on-mnt
-    Wrap-Cmd sudo losetup --direct-io 0 /dev/loop22 /disk-on-root
+    Wrap-Cmd sudo losetup --direct-io=off /dev/loop21 /mnt/disk-on-mnt
+    Wrap-Cmd sudo losetup --direct-io=off /dev/loop22 /disk-on-root
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
     Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
