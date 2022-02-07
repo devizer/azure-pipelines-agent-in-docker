@@ -73,8 +73,8 @@ Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 Setup-Raid0
 
 Drop-FS-Cache
-Wrap-Cmd sudo File-IO-Benchmark 'RAID' /raid-buffered "3900M" 20 3
-
+Wrap-Cmd sudo File-IO-Benchmark 'RAID Buffered 4Gb' /raid-buffered "3999M" 20 3
+Wrap-Cmd sudo File-IO-Benchmark 'RAID Buffered 2Gb' /raid-buffered "1999M" 20 3
 
 Wrap-Cmd sudo cat /proc/mdstat
 Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
