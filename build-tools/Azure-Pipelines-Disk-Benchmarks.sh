@@ -207,6 +207,7 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     fi
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
     for fs in EXT2 BTRFS-Сompressed BTRFS EXT4; do
+        # On each benchmark we recreate file system so all the buffers are flushed
 
         # local size_scale=1024 duration=50  # RELEASE
         local size_scale=10 duration=3     # DEBUG
