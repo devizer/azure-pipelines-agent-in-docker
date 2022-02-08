@@ -2,6 +2,21 @@ set -eu; set -o pipefail
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash >/dev/null
 Say --Reset-Stopwatch
 
+CMD_COUNT=0
+function Wrap-Cmd() {
+    local cmd="$*"
+    cmd="${cmd//[\/]/\ ∕}"
+    cmd="${cmd//[:]/˸}"
+    Say "$cmd"
+    CMD_COUNT=$((CMD_COUNT+1))
+    local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") ${cmd}.log"
+    eval "$@" |& tee "$fileName"
+    LOG_FILE="$fileName"
+}
+
+Wrap-Cmd sudo lsof
+
+
 export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
@@ -10,6 +25,9 @@ Say "sudo fdisk -l"
 sudo fdisk -l
 Say "sudo df -h -T"
 sudo df -h -T
+
+Wrap-Cmd sudo lsof
+
 
 sdb_path="/dev/sdb"
 sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
@@ -63,18 +81,6 @@ function Free-Loop-Buffers() {
 MEM_STRESS_C
     gcc -O0 $cfile.c -o $cfile
     $cfile || true
-}
-
-CMD_COUNT=0
-function Wrap-Cmd() {
-    local cmd="$*"
-    cmd="${cmd//[\/]/\ ∕}"
-    cmd="${cmd//[:]/˸}"
-    Say "$cmd"
-    CMD_COUNT=$((CMD_COUNT+1))
-    local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") ${cmd}.log"
-    eval "$@" |& tee "$fileName"
-    LOG_FILE="$fileName"
 }
 
 
