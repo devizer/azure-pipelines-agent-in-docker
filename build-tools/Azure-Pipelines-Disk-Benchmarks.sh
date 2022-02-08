@@ -14,7 +14,7 @@ function Wrap-Cmd() {
     LOG_FILE="$fileName"
 }
 
-Wrap-Cmd sudo lsof
+Wrap-Cmd sudo lsof >/dev/null
 
 
 export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
@@ -26,7 +26,7 @@ sudo fdisk -l
 Say "sudo df -h -T"
 sudo df -h -T
 
-Wrap-Cmd sudo lsof
+Wrap-Cmd sudo lsof >/dev/null
 
 
 sdb_path="/dev/sdb"
@@ -191,12 +191,14 @@ function Test-Raid0-on-Loop() {
 
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
+
     Say "Destory /raid-${LOOP_TYPE}"
     Wrap-Cmd sudo umount /raid-${LOOP_TYPE}
     Wrap-Cmd sudo mdadm --stop /dev/md0
     Wrap-Cmd sudo cat /proc/mdstat
     Say "UnMap loop"
-    Wrap-Cmd sudo losetup -d /dev/loop{21,22}
+    Wrap-Cmd sudo losetup -d /dev/loop22
+    if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then Wrap-Cmd sudo losetup -d /dev/loop21; fi
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
     Wrap-Cmd sudo rm -v -f /mnt/disk-on-mnt /disk-on-root
