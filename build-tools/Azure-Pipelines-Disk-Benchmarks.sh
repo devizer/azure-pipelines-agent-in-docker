@@ -16,7 +16,6 @@ function Wrap-Cmd() {
 
 Wrap-Cmd sudo lsof >/dev/null
 
-
 export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
