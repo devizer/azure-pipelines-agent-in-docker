@@ -182,10 +182,11 @@ function Test-Raid0-on-Loop() {
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 
+    Drop-FS-Cache
     Say "Destory /raid-${LOOP_TYPE}"
     Wrap-Cmd sudo umount /raid-${LOOP_TYPE}
-    sleep 9
-    Wrap-Cmd sudo try-and-retry mdadm --stop /dev/md0
+    Drop-FS-Cache; sleep 9; Drop-FS-Cache;
+    Wrap-Cmd sudo try-and-retry mdadm --stop /dev/md0 # SOMETIMES FAILS 1/17th (ext4 for example)
     Wrap-Cmd sudo cat /proc/mdstat
     Say "UnMap loop"
     Wrap-Cmd sudo losetup -d /dev/loop22
