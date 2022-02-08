@@ -147,10 +147,7 @@ function Test-Raid0-on-Loop() {
 
     Say "mdadm --create ..."
     yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
-    
-    Say "sleep 3 seconds?"
-    sleep 3
-
+    sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
     Say "sudo mkfs.ext2 /dev/md0; and mount"
@@ -163,10 +160,10 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
       Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == BTRFS ]]; then
-      Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
+      Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
     elif [[ "$FS" == BTRFS-Сompressed ]]; then
-      Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
+      Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier
     else
       echo "WRONG FS [$FS]"
@@ -194,7 +191,9 @@ function Test-Raid0-on-Loop() {
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then Wrap-Cmd sudo losetup -d /dev/loop21; fi
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
-    Wrap-Cmd sudo rm -v -f /mnt/disk-on-mnt /disk-on-root
+    Wrap-Cmd sudo rm -v -f /disk-on-root
+    if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then rm -v -f /mnt/disk-on-mnt; fi
+
 }
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
@@ -206,21 +205,19 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
       Reset-Sdb-Disk
     fi
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
-    for fs in EXT2 BTRFS-Сompressed BTRFS EXT4; do
-        # On each benchmark we recreate file system so all the buffers are flushed
-
-        size_scale=1024 DURATION=50  # RELEASE
-        size_scale=10 DURATION=3     # DEBUG
-        workingSetList="1 2 3 4 5 8 16"
-        for workingSet in $workingSetList; do
-            WORKING_SET_SIZE_TITLE="$workingSet"
-            WORKING_SET_REAL_SIZE="$((workingSet * size_scale))"
-            for LOOP_DIRECT_IO in off on; do
-                LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
+    for LOOP_DIRECT_IO in off on; do
+        LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
+        for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
+            size_scale=1024 DURATION=50  # RELEASE
+            size_scale=10 DURATION=3     # DEBUG
+            workingSetList="1 2 3 4 5 8 16"
+            for workingSet in $workingSetList; do
+                WORKING_SET_SIZE_TITLE="$workingSet"
+                WORKING_SET_REAL_SIZE="$((workingSet * size_scale))"
+                # On each benchmark we recreate file system so all the buffers are flushed
                 FS=$fs Test-Raid0-on-Loop
             done
         done
-
     done
 done
 
