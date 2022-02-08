@@ -146,7 +146,16 @@ function Test-Raid0-on-Loop() {
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
     Say "mdadm --create ..."
-    yes | sudo mdadm --create /dev/md0 --force --chunk=32 --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22
+    yes | sudo mdadm --create /dev/md0 --chunk=32 --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
+    local err=$?
+    if [[ $? -eq 0 ]]; then
+      Say "Success: mdadm --create"
+    elif [[ $? -eq 141 ]]; then
+      Say "Warning 141 by mdadm --create, but ok"
+    else
+      Say --Display-As=Error "mdadm --create failed. Exit Code [$err]"
+    fi
+
     sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
