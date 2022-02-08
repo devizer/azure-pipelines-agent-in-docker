@@ -45,7 +45,7 @@ n
 p
 1
 
-+1000M
++100M
 n
 p
 2
@@ -57,8 +57,8 @@ w
     Say "fdisk -l ${sdb_path}"
     sudo fdisk -l ${sdb_path}
     sleep 5
-    sudo mkswap -f "${sdb_path}1" # || true # DEBUG ONLY
-    sudo swapon -f "${sdb_path}1" # || true # DEBUG ONLY
+    sudo mkswap -f "${sdb_path}1" || true # DEBUG ONLY
+    sudo swapon -f "${sdb_path}1" || true # DEBUG ONLY
     Say "swapon"
     sudo swapon
     sdb2size="$(sudo fdisk -l ${sdb_path} | grep "${sdb_path}2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
@@ -69,7 +69,7 @@ w
 
 function Free-Loop-Buffers() {
     return;
-    # wrong - volumes are switched into readonly mode
+    # wrong - volumes are switched into readonly mode cauze of OOM
     local cfile="${TMPDIR:-/tmp}/mem-stress"
     rm -f "$cfile"
     cat <<-'MEM_STRESS_C' > "$cfile.c"
@@ -111,8 +111,8 @@ function Smart-Fio() {
     local total_report_file="$SYSTEM_ARTIFACTSDIRECTORY/total-report.md";
     if [[ ! -e "$total_report_file" ]]; then
         echo "
-| Volume Benchmark Options                |     Seq Read   |    Seq Write   |   Random Read  |  Random Write  |
-| --------------------------------------- | -------------: | -------------: | -------------: | -------------: |" > "$total_report_file"
+| Volume Benchmark Options                 |    Seq Read   |   Seq Write   |  Random Read  | Random Write  |
+| ---------------------------------------- | ------------: | ------------: | ------------: | ------------: |" > "$total_report_file"
     fi
     # 1 - seq read, 2 - seq write, 3 - random read, 4 - random write
     Drop-FS-Cache
@@ -120,10 +120,10 @@ function Smart-Fio() {
     Wrap-Cmd sudo -E File-IO-Benchmark "$@"
     local logFile="$LOG_FILE"
     cat "$logFile" | awk '$1 == "READ:" || $1 == "WRITE:" {print $2}' | awk -F'=' '{print $2}' | tee /tmp/4speed
-    info="| $(printf "%-40s" "$1") |"
+    info="| $(printf "%-41s" "$1") |"
     for line in {1..4}; do
       local speed="$(cat "/tmp/4speed" | awk -v line="$line" 'NR==line {print $1}')"
-      info="${info}$(printf "%15s" "$speed") |"
+      info="${info}$(printf "%14s" "$speed") |"
     done
     echo "$info" | tee -a "$total_report_file" >/dev/null
     cat "$total_report_file"
@@ -181,8 +181,8 @@ function Test-Raid0-on-Loop() {
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
-    # local size_scale=1024 duration=50  # RELEASE
-    local size_scale=10 duration=3     # DEBUG
+    local size_scale=1024 duration=50  # RELEASE
+    # local size_scale=10 duration=3     # DEBUG
     local workingSetList="1 2 3 4 5 8 16"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
@@ -219,7 +219,7 @@ for SECOND_DISK_MODE in BLOCK; do #order matters: LOOP and later BLOCK
     done
 done
 
-exit;
+exit; # DEBUG, but already gathered
 # BEFORE Reset-Sdb-Disk
 export KEEP_FIO_TEMP_FILES=""
 Smart-Fio 'Small-ROOT' / "1G" 15 3
