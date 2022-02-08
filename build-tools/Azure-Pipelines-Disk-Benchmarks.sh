@@ -158,7 +158,7 @@ function Test-Raid0-on-Loop() {
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
       Wrap-Cmd sudo mkfs.ext2 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
       Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
