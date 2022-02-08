@@ -184,7 +184,8 @@ function Test-Raid0-on-Loop() {
 
     Say "Destory /raid-${LOOP_TYPE}"
     Wrap-Cmd sudo umount /raid-${LOOP_TYPE}
-    Wrap-Cmd sudo mdadm --stop /dev/md0
+    sleep 9
+    Wrap-Cmd sudo try-and-retry mdadm --stop /dev/md0
     Wrap-Cmd sudo cat /proc/mdstat
     Say "UnMap loop"
     Wrap-Cmd sudo losetup -d /dev/loop22
