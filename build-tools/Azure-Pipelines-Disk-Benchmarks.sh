@@ -209,13 +209,12 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     for fs in EXT2 BTRFS-Сompressed BTRFS EXT4; do
         # On each benchmark we recreate file system so all the buffers are flushed
 
-        # local size_scale=1024 duration=50  # RELEASE
-        local size_scale=10 duration=3     # DEBUG
-        local workingSetList="1 2 3 4 5 8 16"
+        size_scale=1024 DURATION=50  # RELEASE
+        size_scale=10 DURATION=3     # DEBUG
+        workingSetList="1 2 3 4 5 8 16"
         for workingSet in $workingSetList; do
             WORKING_SET_SIZE_TITLE="$workingSet"
-            WORKING_SET_REAL_SIZE=$((workingSet * size_scale))
-            DURATION="${duration}"
+            WORKING_SET_REAL_SIZE="$((workingSet * size_scale))"
             for LOOP_DIRECT_IO in off on; do
                 LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
                 FS=$fs Test-Raid0-on-Loop
