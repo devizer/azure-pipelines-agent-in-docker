@@ -209,7 +209,7 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
         LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
         for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
             size_scale=1024 DURATION=50  # RELEASE
-            size_scale=10 DURATION=3     # DEBUG
+            # size_scale=10 DURATION=3     # DEBUG
             workingSetList="1 2 3 4 5 8 16"
             for workingSet in $workingSetList; do
                 WORKING_SET_SIZE_TITLE="$workingSet"
