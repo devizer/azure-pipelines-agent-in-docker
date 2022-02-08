@@ -180,13 +180,7 @@ function Test-Raid0-on-Loop() {
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
-    # local size_scale=1024 duration=50  # RELEASE
-    local size_scale=10 duration=3     # DEBUG
-    local workingSetList="1 2 3 4 5 8 16"
-    for workingSet in $workingSetList; do
-      local sz=$((workingSet * size_scale))
-      Smart-Fio "RAID-${LOOP_TYPE}-${SECOND_DISK_MODE}-${FS}-${workingSet}Gb"  /raid-${LOOP_TYPE} "${sz}M" ${duration} 0
-    done
+    Smart-Fio "RAID-${LOOP_TYPE}-${SECOND_DISK_MODE}-${FS}-${WORKING_SET_SIZE_TITLE}Gb"  /raid-${LOOP_TYPE} "${WORKING_SET_REAL_SIZE}M" ${DURATION} 0
 
     Wrap-Cmd sudo cat /proc/mdstat
     Wrap-Cmd sudo lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
@@ -213,8 +207,20 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     fi
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
     for fs in EXT2 BTRFS-Сompressed BTRFS EXT4; do
-        FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
-        FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
+
+        # local size_scale=1024 duration=50  # RELEASE
+        local size_scale=10 duration=3     # DEBUG
+        local workingSetList="1 2 3 4 5 8 16"
+        for workingSet in $workingSetList; do
+            WORKING_SET_SIZE_TITLE="$workingSet"
+            WORKING_SET_REAL_SIZE=$((workingSet * size_scale))
+            DURATION="${duration}"
+            for LOOP_DIRECT_IO in off on; do
+                LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
+                FS=$fs Test-Raid0-on-Loop
+            done
+        done
+
     done
 done
 
