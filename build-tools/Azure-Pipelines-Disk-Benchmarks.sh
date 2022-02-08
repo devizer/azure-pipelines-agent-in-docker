@@ -158,7 +158,7 @@ function Test-Raid0-on-Loop() {
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
       Wrap-Cmd sudo mkfs.ext2 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000 /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
       Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
@@ -212,7 +212,7 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
       Reset-Sdb-Disk
     fi
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
-    for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
+    for fs in EXT2 BTRFS-Сompressed BTRFS EXT4; do
         FS=$fs LOOP_TYPE=Buffered LOOP_DIRECT_IO=off Test-Raid0-on-Loop
         FS=$fs LOOP_TYPE=Direct   LOOP_DIRECT_IO=on  Test-Raid0-on-Loop
     done
