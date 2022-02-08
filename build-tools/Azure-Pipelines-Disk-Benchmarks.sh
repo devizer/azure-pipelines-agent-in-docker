@@ -158,17 +158,17 @@ function Test-Raid0-on-Loop() {
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
       Wrap-Cmd sudo mkfs.ext2 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,nobarrier /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,nobarrier /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == BTRFS ]]; then
       Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,barrier=0
 
     elif [[ "$FS" == BTRFS-Сompressed ]]; then
       Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=1000,data=writeback,barrier=0
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,barrier=0
     else
       echo "WRONG FS [$FS]"
       exit 77
