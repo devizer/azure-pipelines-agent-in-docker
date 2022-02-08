@@ -158,16 +158,17 @@ function Test-Raid0-on-Loop() {
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
       Wrap-Cmd sudo mkfs.ext2 /dev/md0
-      Wrap-Cmd sudo mount -o noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
-      Wrap-Cmd sudo mount -o noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == BTRFS ]]; then
       Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=1000
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=1000,data=writeback,barrier=0
+
     elif [[ "$FS" == BTRFS-Сompressed ]]; then
       Wrap-Cmd sudo mkfs.btrfs -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=1000
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=1000,data=writeback,barrier=0
     else
       echo "WRONG FS [$FS]"
       exit 77
@@ -180,8 +181,8 @@ function Test-Raid0-on-Loop() {
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
-    local size_scale=1024 duration=50  # RELEASE
-    # local size_scale=10 duration=3     # DEBUG
+    # local size_scale=1024 duration=50  # RELEASE
+    local size_scale=10 duration=3     # DEBUG
     local workingSetList="1 2 3 4 5 8 16"
     for workingSet in $workingSetList; do
       local sz=$((workingSet * size_scale))
@@ -207,7 +208,7 @@ Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 
 
 
-for SECOND_DISK_MODE in BLOCK; do #order matters: LOOP and later BLOCK
+for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     if [[ "$SECOND_DISK_MODE" == "BLOCK" ]]; then
       Reset-Sdb-Disk
     fi
