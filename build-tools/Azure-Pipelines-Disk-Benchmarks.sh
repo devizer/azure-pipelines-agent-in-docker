@@ -146,7 +146,7 @@ function Test-Raid0-on-Loop() {
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
     Say "mdadm --create ..."
-    yes | sudo mdadm --create /dev/md0 --force --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
+    yes | sudo mdadm --create /dev/md0 --force --chunk=32 --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22
     sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
