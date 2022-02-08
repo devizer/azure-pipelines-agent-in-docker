@@ -192,7 +192,7 @@ function Test-Raid0-on-Loop() {
     Wrap-Cmd sudo losetup -a
     Wrap-Cmd sudo losetup -l
     Wrap-Cmd sudo rm -v -f /disk-on-root
-    if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then rm -v -f /mnt/disk-on-mnt; fi
+    if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then Wrap-Cmd sudo rm -v -f /mnt/disk-on-mnt; fi
 
 }
 
