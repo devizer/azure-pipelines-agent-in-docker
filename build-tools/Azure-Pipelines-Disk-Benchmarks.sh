@@ -20,9 +20,9 @@ sdb_path="${sdb_path::-1}"
 sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 
-# tune /mnt
+# tune /mnt, data=writeback is not an option
 Wrap-Cmd sudo mount
-Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0,data=writeback "${sdb_path}1" /mnt
+Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0 "${sdb_path}1" /mnt
 Wrap-Cmd sudo mount
 exit;
 
