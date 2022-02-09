@@ -23,6 +23,7 @@ Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 # tune /mnt, data=writeback is not an option
 Wrap-Cmd sudo mount
 Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0 "${sdb_path}1" /mnt
+Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0 "${sda_path}1" /
 Wrap-Cmd sudo mount
 exit;
 
