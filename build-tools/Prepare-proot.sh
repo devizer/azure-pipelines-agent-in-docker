@@ -175,7 +175,6 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 }
 
 KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
-exit;
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
