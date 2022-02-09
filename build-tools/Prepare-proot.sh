@@ -70,6 +70,8 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   
   source /tmp/build-gcc-utilities.sh
   prepare_os
+  
+  # adjust_os_repo; configure_os_locale; apt-get install curl get -y -qq
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
   Say "FOR HTOP on $KEY"
@@ -172,6 +174,8 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 }
 
 KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
+exit;
+
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
 KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot

@@ -165,6 +165,7 @@ function Test-Raid0-on-Loop() {
       Say "Warning 141 by mdadm --create, but ok"
     else
       Say --Display-As=Error "mdadm --create failed. Exit Code [$err]"
+      exit $err
     fi
 
     sleep 1
@@ -229,7 +230,7 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
     for LOOP_DIRECT_IO in off on; do
         LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
-        for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
+        for fs in BTRFS-Compressed BTRFS EXT4 EXT2; do
             size_scale=1024 DURATION=50  # RELEASE
             # size_scale=10 DURATION=3     # DEBUG
             workingSetList="1 2 3 4 5 8 16"
