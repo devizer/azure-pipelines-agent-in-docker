@@ -113,6 +113,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash -e && echo "Successfully installed .NET Core Dependencies"
 
   if [[ "$os_ver" != "debian:7" ]]; then
+    apt-get install libcurl3-gnutls -y || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     Say "TOOLS (jq git bash 7z nano) for [$(uname -m)]"
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   fi
