@@ -17,11 +17,12 @@ function Wrap-Cmd() {
 sdb_path="/dev/sdb"
 sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
 sdb_path="${sdb_path::-1}"
-Say "/mnt disk: [$sdb_path]"
+sba_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sba_path="/dev/sdb";
+Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 
 # tune /mnt
 Wrap-Cmd sudo mount
-Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0 "${sdb_path}1" /mnt
+Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0,data=writeback "${sdb_path}1" /mnt
 Wrap-Cmd sudo mount
 exit;
 
@@ -174,7 +175,7 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo mount -o defaults,noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=2000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=2000,barrier=0,data=writeback /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == BTRFS ]]; then
       Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
