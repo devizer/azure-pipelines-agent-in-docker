@@ -78,24 +78,23 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     grep "Unpacking\|Setting"
   }
 
-  Say "FOR .Net Core"
+  Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
   awk --version || true
   grep --version || true
   url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
 
-  Say "FOR HTOP on $KEY"
+  Say "FOR HTOP on $KEY, [$(get_linux_os_id) $(uname -m)]"
   apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
   apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
 
-  Say "FOR GIT on $KEY"
+  Say "FOR GIT on $KEY, [$(get_linux_os_id) $(uname -m)]"
   apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
-
 
   source /etc/os-release
   os_ver="${ID:-}:${VERSION_ID:-}"
   function Install-BZIP2() {
-    if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]]; then
-      Say "BZIP2 for $KEY"
+    if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]] || [[ "$os_ver" == "debian:9" ]]; then
+      Say "BZIP2 for $KEY, [$(get_linux_os_id) $(uname -m)]"
       work=/rmp/bzip-src
       mkdir -p "$work"
       pushd "$work"
@@ -110,7 +109,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   # Install-BZIP2
 
   if [[ "$(getconf LONG_BIT)" == "32" ]]; then
-    Say "FAKE UNAME on $KEY"
+    Say "FAKE UNAME on $KEY, [$(get_linux_os_id) $(uname -m)]"
     uname="$(command -v uname)"
     sudo cp "${uname}" /usr/bin/uname-bak;
     script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
@@ -118,17 +117,15 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
   fi
 
-  Say "uname -m: [$(uname -m)]"
-
   if [[ "$os_ver" != "debian:7" ]]; then
-    Say "TOOLS (jq git bash 7z nano) for [$(uname -m)]"
+    Say "TOOLS (jq git bash 7z nano) for [$(get_linux_os_id) $(uname -m)]"
     apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   fi
 
   rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
 
-  Say "COMPLETE on $KEY"
+  Say "COMPLETE on $KEY, [$(get_linux_os_id) $(uname -m)]"
 
 EOF
 
@@ -185,11 +182,11 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
+KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
-KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
 KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
 KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
