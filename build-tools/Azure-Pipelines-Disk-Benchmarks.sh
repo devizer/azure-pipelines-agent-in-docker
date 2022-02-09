@@ -14,7 +14,18 @@ function Wrap-Cmd() {
     LOG_FILE="$fileName"
 }
 
-Wrap-Cmd sudo lsof >/dev/null
+sdb_path="/dev/sdb"
+sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
+sdb_path="${sdb_path::-1}"
+Say "/mnt disk: [$sdb_path]"
+
+# tune /mnt
+Wrap-Cmd sudo mount
+Wrap-Cmd sudo mount -o remount,rw,noatime,nodiratime,commit=2000,barrier=0 "${sdb_path}1" /mnt
+Wrap-Cmd sudo mount
+exit;
+
+# Wrap-Cmd sudo lsof >/dev/null
 
 export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
 sudo swapoff /mnt/swapfile
@@ -28,10 +39,6 @@ sudo df -h -T
 Wrap-Cmd sudo lsof >/dev/null
 
 
-sdb_path="/dev/sdb"
-sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
-sdb_path="${sdb_path::-1}"
-Say "/mnt disk: [$sdb_path]"
 
 function Reset-Sdb-Disk() {
     Say "Reset-Sdb-Disk [$sdb_path]"
@@ -167,7 +174,7 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo mount -o defaults,noatime,nodiratime /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == EXT4 ]]; then
       Wrap-Cmd sudo mkfs.ext4 /dev/md0
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=1000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=2000,barrier=0 /dev/md0 /raid-${LOOP_TYPE}
     elif [[ "$FS" == BTRFS ]]; then
       Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
