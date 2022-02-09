@@ -78,9 +78,6 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     grep "Unpacking\|Setting"
   }
 
-  Say "aria2"
-  apt-get install aria2 -y -qq | apt-mini-log
-
   Say "FOR HTOP on $KEY"
   apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
   apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
@@ -93,17 +90,21 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   source /etc/os-release
   os_ver="${ID:-}:${VERSION_ID:-}"
-  if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]]; then
-    Say "BZIP2 for $KEY"
-    work=/rmp/bzip-src
-    mkdir -p "$work"
-    pushd "$work"
-    git clone git://sourceware.org/git/bzip2.git
-    cd bzip2*
-    time make -j install
-    popd
-    rm -rf "$work"
-  fi
+  function Install-BZIP2() {
+    if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]]; then
+      Say "BZIP2 for $KEY"
+      work=/rmp/bzip-src
+      mkdir -p "$work"
+      pushd "$work"
+      git clone git://sourceware.org/git/bzip2.git
+      cd bzip2*
+      time make -j install
+      popd
+      rm -rf "$work"
+    fi
+  }
+
+  # Install-BZIP2
 
   if [[ "$(getconf LONG_BIT)" == "32" ]]; then
     Say "FAKE UNAME on $KEY"
