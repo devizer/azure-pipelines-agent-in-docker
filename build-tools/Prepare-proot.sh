@@ -74,6 +74,9 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   # adjust_os_repo; configure_os_locale; apt-get install curl get -y -qq
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
+  Say "aria2"
+  apt-get install aria2 -y -qq
+
   Say "FOR HTOP on $KEY"
   apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin
   apt-get install -y -qq libncursesw5 libncursesw5-dev
