@@ -5,7 +5,7 @@ Say --Reset-Stopwatch
 CMD_COUNT=0
 function Wrap-Cmd() {
     local cmd="$*"
-    cmd="${cmd//[\/]/\ ∕}"
+    cmd="${cmd//[\/]/\∕}"
     cmd="${cmd//[:]/˸}"
     Say "$cmd"
     CMD_COUNT=$((CMD_COUNT+1))
@@ -184,6 +184,7 @@ function Test-Raid0-on-Loop() {
       Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
     elif [[ "$FS" == BTRFS-Compressed ]]; then
+      # slower? 
       Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier
     else

@@ -118,7 +118,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   Say "uname -m: [$(uname -m)]"
 
   Say "FOR DotNet Core"
-  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash -e && echo "Successfully installed .NET Core Dependencies"
+  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
 
   if [[ "$os_ver" != "debian:7" ]]; then
     Say "TOOLS (jq git bash 7z nano) for [$(uname -m)]"
