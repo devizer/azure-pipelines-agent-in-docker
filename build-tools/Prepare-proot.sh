@@ -79,8 +79,8 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   }
 
   Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
-  awk --version || true
-  grep --version || true
+  awk --version | head -1 || true
+  grep --version | head -1 || true
   url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
 
   Say "FOR HTOP on $KEY, [$(get_linux_os_id) $(uname -m)]"
@@ -173,7 +173,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
-  sudo tar cf - . | pv | xz -z -9 -e --threads=2 > $work.tar.xz
+  time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > $work.tar.xz)
   popd
 
   Say "Copy artifact"
@@ -182,8 +182,8 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
-KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
+KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
