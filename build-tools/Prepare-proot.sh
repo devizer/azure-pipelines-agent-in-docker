@@ -78,6 +78,11 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     grep "Unpacking\|Setting"
   }
 
+  Say "FOR .Net Core"
+  awk --version || true
+  grep --version || true
+  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
+
   Say "FOR HTOP on $KEY"
   apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
   apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
@@ -85,8 +90,6 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   Say "FOR GIT on $KEY"
   apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
 
-  rm -rf /var/cache/apt/*;
-  rm -rf /var/lib/apt/*
 
   source /etc/os-release
   os_ver="${ID:-}:${VERSION_ID:-}"
@@ -117,14 +120,13 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   Say "uname -m: [$(uname -m)]"
 
-  Say "FOR DotNet Core"
-  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
-
   if [[ "$os_ver" != "debian:7" ]]; then
     Say "TOOLS (jq git bash 7z nano) for [$(uname -m)]"
     apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   fi
+
+  rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
 
   Say "COMPLETE on $KEY"
 
