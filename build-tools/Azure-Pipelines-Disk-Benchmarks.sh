@@ -17,7 +17,7 @@ function Wrap-Cmd() {
 sdb_path="/dev/sdb"
 sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
 sdb_path="${sdb_path::-1}"
-sba_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sba_path="/dev/sdb";
+sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 
 # tune /mnt
