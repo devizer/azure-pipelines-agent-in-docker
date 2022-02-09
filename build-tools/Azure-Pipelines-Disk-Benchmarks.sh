@@ -229,7 +229,7 @@ for SECOND_DISK_MODE in LOOP; do #order matters: LOOP and later BLOCK
     export KEEP_FIO_TEMP_FILES="yes" # non empty string keeps a file between benchmarks
     for LOOP_DIRECT_IO in off on; do
         LOOP_TYPE=Buffered; [[ "$LOOP_DIRECT_IO" == on ]] && LOOP_TYPE=Direct
-        for fs in EXT4 BTRFS-Сompressed BTRFS EXT2; do
+        for fs in BTRFS-Сompressed BTRFS EXT4 EXT2; do
             size_scale=1024 DURATION=50  # RELEASE
             # size_scale=10 DURATION=3     # DEBUG
             workingSetList="1 2 3 4 5 8 16"
