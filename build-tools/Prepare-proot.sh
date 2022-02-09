@@ -74,22 +74,26 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   # adjust_os_repo; configure_os_locale; apt-get install curl get -y -qq
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
+  function apt-mini-log {
+    grep "Unpacking\|Setting"
+  }
+
   Say "aria2"
-  apt-get install aria2 -y -qq
+  apt-get install aria2 -y -qq | apt-mini-log
 
   Say "FOR HTOP on $KEY"
-  apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin
-  apt-get install -y -qq libncursesw5 libncursesw5-dev
+  apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
+  apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
 
   Say "FOR GIT on $KEY"
-  apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq
+  apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
 
   rm -rf /var/cache/apt/*;
   rm -rf /var/lib/apt/*
 
   source /etc/os-release
   os_ver="${ID:-}:${VERSION_ID:-}"
-  if [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]]; then
+  if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]]; then
     Say "BZIP2 for $KEY"
     work=/rmp/bzip-src
     mkdir -p "$work"
@@ -116,7 +120,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash -e && echo "Successfully installed .NET Core Dependencies"
 
   if [[ "$os_ver" != "debian:7" ]]; then
-    apt-get install libcurl3-gnutls -y || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
+    apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     Say "TOOLS (jq git bash 7z nano) for [$(uname -m)]"
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   fi
@@ -157,12 +161,12 @@ rm -f $work/usr/bin/qemu-*-static
 rm -rf $work/tmp/*
 sudo rm -rf $work/var/log/* $work/var/tmp/*
 
-  Say "Replace aboslute simlinks to relative [$work]"
+  Say "Do Not Replace aboslute simlinks to relative [$work]"
   Say " ... in $(pwd)"
   # [[ "$(command -v symlinks)" == "" ]] && apt-get install -y -q symlinks
   # chroot /home/user/system symlinks -cr .
   sudo chown -R $(whoami) "$work"
-  replace_links_to_relative "$work"
+  # replace_links_to_relative "$work"
   
   Say "Pack $IMAGE as [$work.tar.xz]"
   Say " ... in $(pwd)"
@@ -174,6 +178,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
   Say "Copy artifact"
   cp -f $work.tar.xz $SYSTEM_ARTIFACTSDIRECTORY/$(basename $work.tar.xz)
+  Say "Done artifact: $KEY"
 
 }
 
