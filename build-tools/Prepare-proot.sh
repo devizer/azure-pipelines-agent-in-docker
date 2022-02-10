@@ -123,9 +123,9 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   grep --version | head -1 || true
   url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
   for package in libunwind8 libuuid1 liblttng-ust0; do
-    echo "TRY $package"
+    echo "TRY install the [$package] package"
     apt-get install -y -qq $package | apt-mini-log || true
-  do
+  done
 
   rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
 
