@@ -78,11 +78,6 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     grep "Unpacking\|Setting"
   }
 
-  Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
-  awk --version | head -1 || true
-  grep --version | head -1 || true
-  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
-
   Say "FOR HTOP on $KEY, [$(get_linux_os_id) $(uname -m)]"
   apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
   apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
@@ -122,6 +117,15 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   fi
+
+  Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
+  awk --version | head -1 || true
+  grep --version | head -1 || true
+  url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS="" bash && echo "Successfully installed .NET Core Dependencies"
+  for package in libunwind8 libuuid1 liblttng-ust0; do
+    echo "TRY $package"
+    apt-get install -y -qq $package | apt-mini-log || true
+  do
 
   rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
 
