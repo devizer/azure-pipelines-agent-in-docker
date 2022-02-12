@@ -135,6 +135,8 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   done
 
+  apt-get purge systemd -y -qq || true
+
   rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
 
   Say "COMPLETE on $KEY, [$(get_linux_os_id) $(uname -m)]"
