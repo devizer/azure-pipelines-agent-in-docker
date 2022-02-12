@@ -116,7 +116,14 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     Say "TOOLS (jq git bash 7z nano) for [$(get_linux_os_id) $(uname -m)]"
     apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+  else
+    Say "Install 7z and jq for [$(get_linux_os_id) $(uname -m)]"
+    apt-get install jq p7zip-full -y -qq
   fi
+  
+  export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; 
+  Say "Install 7z 21.07 as [/usr/local/bin/7z] for [$(get_linux_os_id) $(uname -m)]"
+  script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
   Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
   awk --version | head -1 || true
@@ -125,6 +132,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   for package in libunwind8 libuuid1 liblttng-ust0; do
     echo "TRY install the [$package] package"
     apt-get install -y -qq $package | apt-mini-log || true
+
   done
 
   rm -rf /var/cache/apt/* /var/lib/apt/* /var/tmp/* /var/log/*
