@@ -151,8 +151,8 @@ function Build-Git() {
 
     Say "Build GIT on $KEY"
     export INSTALL_PREFIX=/opt/local-links/git
-    # export CFLAGS="-std=gnu99" CPPFLAGS="-std=gnu99" CXXFLAGS="-std=gnu99"
-    # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7-install-git.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    # TEST 2.35.1 on debian 10
+    export CFLAGS="-std=gnu99" CPPFLAGS="-std=gnu99" CXXFLAGS="-std=gnu99"
     bash -eu install-git.sh
 
     Say "COMPLETE on $KEY"
@@ -168,6 +168,9 @@ EOF
   Grab-Folder "/usr/local"             "7z-16.02-$KEY"
 }
 
-KEY="x86_64"   IMAGE="debian:8"          Build-Git
+
+# MUST be debian:8 for 2.34.1
+# KEY="x86_64"   IMAGE="debian:8"         Build-Git
+KEY="x86_64"   IMAGE="debian:10"          Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:8"  Build-Git
 KEY="arm32v7"  IMAGE="arm32v7/debian:8"  Build-Git

@@ -20,7 +20,7 @@ INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 Say "Building [make] GIT [${GIT_VER}] into ${INSTALL_PREFIX} on [$(uname -m)]"
 time make prefix="$INSTALL_PREFIX" all -j${cpus}
 Say "Building [make install] GIT [${GIT_VER}] into ${INSTALL_PREFIX} on [$(uname -m)]"
-time sudo make prefix="$INSTALL_PREFIX" install -j${cpus}
+time sudo -E make prefix="$INSTALL_PREFIX" install -j${cpus}
 if [[ -d "$INSTALL_PREFIX/bin" ]]; then
   Say "Strip $INSTALL_PREFIX/bin/*"
   pushd "$INSTALL_PREFIX/bin"
