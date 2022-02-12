@@ -93,9 +93,9 @@ function Build-Git() {
     docker cp /usr/local/bin/$cmd "$container":/usr/bin/$cmd
   done
   for cmd in *.sh /tmp/build-gcc-utilities.sh; do
-    file_name_only=$(basename "$cmd")
+    file_name_only="$(basename "$cmd")"
     Say "copying $container:/root/$file_name_only"
-    docker cp $cmd "$container":/root/$file_name_only
+    docker cp "$cmd" "$container":/root/$file_name_only
   done
 
   docker cp /tmp/build-gcc-utilities.sh "$container":/root/build-gcc-utilities.sh
