@@ -135,7 +135,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   done
 
-  if [[ "$os_ver" != "debian:11" ]]; then
+  if [[ "$os_ver" == "debian:11" ]]; then
     apt-get purge gcc g++ -y -q
     apt-get purge cpp-10 git -y -q
     apt-get purge systemd -y -q
