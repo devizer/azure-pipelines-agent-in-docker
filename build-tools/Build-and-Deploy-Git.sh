@@ -119,14 +119,18 @@ function Build-Git() {
     export INSTALL_PREFIX=/opt/local-links/nano
     bash -eu install-nano.sh
 
+    if [[ "$OS_VER" == "debian:7" ]]; then 
+      for tool in install-automake.sh install-m4.sh install-autoconf.sh install-libtool.sh; do
+        export INSTALL_PREFIX=/usr
+        Say "INSTALLING [$tool] into [$INSTALL_PREFIX] for $OS_VER";
+        time bash -e "$tool";
+        Say "Completed: INSTALL [$tool] into [$INSTALL_PREFIX] for $OS_VER";
+      done 
+    fi
+
     Say "BASH 5.1 on $KEY" # ok on Debian:7
     export INSTALL_PREFIX=/opt/local-links/bash
     bash -eu install-bash-5.1.sh
-
-    if false && [[ "$OS_VER" == "debian:7" ]]; then 
-      Say "INSTALL AUTOMAKE"; 
-      bash -e install-automake.sh; 
-    fi
 
     if [[ "$OS_VER" == "debian:7" ]]; then
       Say "Skipping jq 1.6 on $KEY"
@@ -171,6 +175,6 @@ EOF
 
 # MUST be debian:8 for 2.34.1
 # KEY="x86_64"   IMAGE="debian:8"         Build-Git
-KEY="x86_64"   IMAGE="debian:8"          Build-Git
+KEY="x86_64"   IMAGE="debian:7"          Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:8"  Build-Git
-KEY="arm32v7"  IMAGE="arm32v7/debian:8"  Build-Git
+KEY="arm32v7"  IMAGE="arm32v7/debian:7"  Build-Git
