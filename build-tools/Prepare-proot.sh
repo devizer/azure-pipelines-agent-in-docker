@@ -11,6 +11,7 @@ SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
 
 sudo apt-get install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/local/bin bash > /dev/null
+Say --Reset-Stopwatch
 smart-apt-install rsync pv sshpass jq qemu-user-static -y -qq >/dev/null
 
 Say "Registering binary formats for qemu-user-static"
