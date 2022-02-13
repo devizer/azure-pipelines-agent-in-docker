@@ -192,7 +192,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
   local plainSize="$(du --max-depth=0 "$work" | awk '{print $1}')";
   local sizesFile="$SYSTEM_ARTIFACTSDIRECTORY/sizes.txt"
-  printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Integer "$xzSize")" "$(format_Kb "$plainSize")" >> "$sizesFile"
+  printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Integer "$xzSize")" "$(format_Integer "$plainSize")" >> "$sizesFile"
   cat "$sizesFile"
   Say "Size of ${xzFile}: $(printf "%'.0f" ${xzSize}) KBytes"
   popd
