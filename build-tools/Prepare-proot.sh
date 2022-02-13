@@ -201,9 +201,6 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
-KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
-KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
-
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
     KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
@@ -211,6 +208,9 @@ if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     KEY="debian-9-arm64"   IMAGE="arm64v8/debian:9" prepare_proot
     KEY="debian-9-arm32v7" IMAGE="arm64v8/debian:9" prepare_proot
 fi
+
+KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
+KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
