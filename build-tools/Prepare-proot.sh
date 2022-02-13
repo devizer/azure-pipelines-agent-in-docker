@@ -183,7 +183,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
   local xzSize="$(stat --printf="%s" "${xzFile}")"
-  Say "Size of ${xzFile}: ${xzSize}"
+  Say "Size of ${xzFile}: $(printf "%'.0f" ${xzSize}) Bytes"
   popd
 
   Say "Copy artifact"
