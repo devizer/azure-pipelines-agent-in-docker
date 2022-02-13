@@ -23,8 +23,9 @@ jobs:
   steps:
   - script: |
         set -e
+        # export PREPARE_OS_MODE XZ;
         cd build-tools
-        sudo bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-proot.sh"
+        sudo -E bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-proot.sh"
         sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
     displayName: 'Batch of images'
 
