@@ -191,7 +191,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
   Say "Pack $IMAGE as [${szFile}]"
-  time 7z a -mx=9 -t7z -mx=9 -mfb=512 -md=512m -ms=on -mqs=on -mmt=2 "$szFile"
+  time 7z a -mx=9 -mx=9 -mfb=512 -md=512m -ms=on -mqs=on -mmt=2 "$szFile"
   local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
   local szSize="$(stat --printf="%s" "${szFile}")"; szSize=$((xzSize/1024)) 
   Say "7z size: $szSize"
