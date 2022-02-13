@@ -132,16 +132,16 @@ function Build-Git() {
     export INSTALL_PREFIX=/opt/local-links/bash
     bash -eu install-bash-5.1.sh
 
-    if [[ "$OS_VER" == "debian:7" ]]; then
-      Say "Skipping jq 1.6 on $KEY"
-      mkdir -p /opt/jq
-      touch /opt/jq/skipped
-    else
+    # if [[ "$OS_VER" == "debian:7" ]]; then
+    #  Say "Skipping jq 1.6 on $KEY"
+    #  mkdir -p /opt/jq
+    #  touch /opt/jq/skipped
+    # else
       Say "jq 1.6 on $KEY"
       export INSTALL_PREFIX=/opt/local-links/jq
       # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-jq-1.6.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
       bash -eu install-jq-1.6.sh
-    fi
+    # fi
 
     Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
     export INSTALL_PREFIX=/opt/local-links/7z
