@@ -187,7 +187,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   popd
 
   Say "Copy artifact"
-  cp -f $work.tar.xz $SYSTEM_ARTIFACTSDIRECTORY/$(basename $work.tar.xz)
+  cp -f ${xzFile} $SYSTEM_ARTIFACTSDIRECTORY/$(basename ${xzFile})
   Say "Done artifact: $KEY"
 
 }
