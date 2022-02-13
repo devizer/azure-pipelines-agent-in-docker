@@ -187,12 +187,15 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   sudo chown -R $(whoami) "$work"
   # replace_links_to_relative "$work"
   
-  Say "Pack $IMAGE as [${work}${XZ}.tar.xz]"
+  local xzFile="${work}${XZ}.tar.xz"
+  Say "Pack $IMAGE as [${xzFile}]"
   Say " ... in $(pwd)"
   sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
-  time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > ${work}${XZ}.tar.xz)
+  time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
+  local xzSize="$(stat --printf="%s" "${xzFile}")"
+  Say "Size of ${xzFile}: ${xzSize}"
   popd
 
   Say "Copy artifact"
