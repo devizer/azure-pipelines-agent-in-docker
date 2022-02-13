@@ -50,6 +50,12 @@ function replace_links_to_relative() {
   popd > /dev/null
 }
 
+function format_Kb() {
+  local num="$1";
+  local str="$(printf "%'.0f" "${num}")"
+  echo $str;
+}
+
 function prepare_proot() {
 work="$HOME/root-fs/$KEY"
 mkdir -p "$work"
@@ -183,8 +189,12 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   pushd $work
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
-  local xzSize="$(stat --printf="%s" "${xzFile}")"
-  Say "Size of ${xzFile}: $(printf "%'.0f" ${xzSize}) Bytes"
+  local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
+  local plainSize="$(du --max-depth=0 "$work")";
+  local sizesFile="$SYSTEM_ARTIFACTSDIRECTORY/sizes.txt"
+  printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Kb "$xzSize")" "$(format_Kb "plainSize")" >> "$sizesFile"
+  cat "$sizesFile"
+  Say "Size of ${xzFile}: $(printf "%'.0f" ${xzSize}) KBytes"
   popd
 
   Say "Copy artifact"
