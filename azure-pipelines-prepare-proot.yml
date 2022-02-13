@@ -11,7 +11,14 @@ jobs:
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
-
+  strategy:
+    matrix:
+      'FULL':
+        PREPARE_OS_MODE: "BIG"
+        XZ: ""
+      'MICRO':
+        PREPARE_OS_MODE: "MICRO"
+        XZ: "-micro"
 
   steps:
   - script: |

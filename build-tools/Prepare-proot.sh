@@ -67,6 +67,8 @@ docker cp /tmp/build-gcc-utilities.sh "container-$KEY":/tmp/build-gcc-utilities.
 cat <<-'EOF' > /tmp/provisioning-$KEY
   set -e
   Say --Reset-Stopwatch
+
+  Say "PREPARE_OS_MODE: $PREPARE_OS_MODE" # FULL | MICRO
   
   source /tmp/build-gcc-utilities.sh
   prepare_os
@@ -132,7 +134,6 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   for package in libunwind8 libuuid1 liblttng-ust0; do
     echo "TRY install the [$package] package"
     apt-get install -y -qq $package | apt-mini-log || true
-
   done
 
   if [[ "$os_ver" == "debian:11" ]]; then
@@ -148,7 +149,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 EOF
 
 docker cp /tmp/provisioning-$KEY "container-$KEY":/tmp/provisioning-$KEY
-docker exec -t "container-$KEY" bash -e -c "export KEY=$KEY; source /tmp/provisioning-$KEY" | tee $work.build.log
+docker exec -t "container-$KEY" bash -e -c "export PREPARE_OS_MODE=$PREPARE_OS_MODE; KEY=$KEY; source /tmp/provisioning-$KEY" | tee $work.build.log
 
 rm -rf $work/*; rm -rf $work/*; 
 docker cp container-$KEY:/. $work
@@ -186,12 +187,12 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   sudo chown -R $(whoami) "$work"
   # replace_links_to_relative "$work"
   
-  Say "Pack $IMAGE as [$work.tar.xz]"
+  Say "Pack $IMAGE as [${work}${XZ}.tar.xz]"
   Say " ... in $(pwd)"
   sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
-  time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > $work.tar.xz)
+  time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > ${work}${XZ}.tar.xz)
   popd
 
   Say "Copy artifact"
@@ -200,17 +201,20 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
-KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
-KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
-
-KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
-
 KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
 KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
+
+if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
+    KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
+    KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
+
+    KEY="debian-9-arm64"   IMAGE="arm64v8/debian:9" prepare_proot
+    KEY="debian-9-arm32v7" IMAGE="arm64v8/debian:9" prepare_proot
+fi
+
+KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
 KEY="debian-10-arm64"   IMAGE="arm64v8/debian:10" prepare_proot
 KEY="debian-10-arm32v7" IMAGE="arm64v8/debian:10" prepare_proot
 
-KEY="debian-9-arm64"   IMAGE="arm64v8/debian:9" prepare_proot
-KEY="debian-9-arm32v7" IMAGE="arm64v8/debian:9" prepare_proot
 
