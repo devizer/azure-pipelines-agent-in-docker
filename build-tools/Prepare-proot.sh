@@ -183,13 +183,18 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   # replace_links_to_relative "$work"
   
   local xzFile="${work}${XZ}.tar.xz"
+  local szFile="${work}${XZ}.tar.7z"
   Say "Pack $IMAGE as [${xzFile}]"
   Say " ... in $(pwd)"
   sudo chown -R root:root "$work"
   pushd $work
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
+  Say "Pack $IMAGE as [${szFile}]"
+  time 7z a -mx=9 -t7z -mx=9 -mfb=512 -md=512m -ms=on -mqs=on -mmt=2 "$szFile"
   local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
+  local szSize="$(stat --printf="%s" "${szFile}")"; szSize=$((xzSize/1024)) 
+  Say "7z size: $szSize"
   local plainSize="$(du --max-depth=0 "$work" | awk '{print $1}')";
   local sizesFile="$SYSTEM_ARTIFACTSDIRECTORY/sizes.txt"
   printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Integer "$xzSize")" "$(format_Integer "$plainSize")" >> "$sizesFile"
