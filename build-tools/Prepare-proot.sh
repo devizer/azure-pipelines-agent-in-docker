@@ -203,9 +203,10 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   popd
 
   Say "Copy artifact"
-  for archive in "${xzFile}" "${szFile}"
-  cp -f "${archive}" "$SYSTEM_ARTIFACTSDIRECTORY/$(basename "${archive}")"
-  Say "Done artifact: $KEY"
+  for archive in "${xzFile}" "${szFile}"; do
+    cp -f "${archive}" "$SYSTEM_ARTIFACTSDIRECTORY/$(basename "${archive}")"
+    Say "Done artifact: $KEY"
+  done
 
 }
 
