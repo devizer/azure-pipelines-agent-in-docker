@@ -10,7 +10,7 @@ jobs:
 - job: Build
   pool:
     vmImage: 'ubuntu-18.04'
-  timeoutInMinutes: 180
+  timeoutInMinutes: 360
 
   steps:
   - script: |
