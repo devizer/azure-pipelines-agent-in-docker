@@ -6,6 +6,6 @@ cd $work && rm -rf *
 curl -kSL -o _autoconf.tar.gz "$url"
 tar xzf _autoconf.tar.gz
 cd autoconf*
-./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && make install
+./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install
 popd
 rm -rf "$work"

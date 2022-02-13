@@ -6,6 +6,6 @@ cd $work && rm -rf *
 curl -kSL -o _libtool.tar.gz "$url"
 tar xzf _libtool.tar.gz
 cd libtool*
-./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && make install
+./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install
 popd
 rm -rf "$work"

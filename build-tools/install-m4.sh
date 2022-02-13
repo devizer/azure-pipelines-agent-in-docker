@@ -6,6 +6,6 @@ cd $work && rm -rf *
 curl -kSL -o _m4.tar.gz "$url"
 tar xzf _m4.tar.gz
 cd m4*
-./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && make install
+./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install
 popd
 rm -rf "$work"

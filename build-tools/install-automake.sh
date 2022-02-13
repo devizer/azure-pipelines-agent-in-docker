@@ -8,6 +8,6 @@ cd $work && rm -rf *
 curl -kSL -o _automake.tar.gz "$url"
 tar xzf _automake.tar.gz
 cd automake*
-./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && make install
+./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install
 popd
 rm -rf "$work"
