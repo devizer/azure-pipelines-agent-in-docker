@@ -190,7 +190,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
   local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
-  local plainSize="$(du --max-depth=0 "$work")";
+  local plainSize="$(du --max-depth=0 "$work" | awk '{print $1}')";
   local sizesFile="$SYSTEM_ARTIFACTSDIRECTORY/sizes.txt"
   printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Kb "$xzSize")" "$(format_Kb "plainSize")" >> "$sizesFile"
   cat "$sizesFile"
