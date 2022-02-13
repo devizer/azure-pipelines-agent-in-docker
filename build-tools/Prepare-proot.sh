@@ -136,9 +136,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   done
 
   if [[ "$os_ver" == "debian:11" ]]; then
-    apt-get purge gcc g++ -y -q
-    apt-get purge cpp-10 git -y -q
-    apt-get purge systemd -y -q
+    apt-get purge systemd -y -q || true
   else
     apt-get purge systemd -y -qq || true
   fi
@@ -206,7 +204,6 @@ KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
 KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
-
 
 KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
 KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
