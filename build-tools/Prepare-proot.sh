@@ -80,30 +80,18 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     grep "Unpacking\|Setting"
   }
 
-  Say "FOR HTOP on $KEY, [$(get_linux_os_id) $(uname -m)]"
-  apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
-  apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
-
-  Say "FOR GIT on $KEY, [$(get_linux_os_id) $(uname -m)]"
-  apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
-
   source /etc/os-release
   os_ver="${ID:-}:${VERSION_ID:-}"
-  function Install-BZIP2() {
-    if false && [[ "$os_ver" == "debian:7" ]] || [[ "$os_ver" == "debian:8" ]] || [[ "$os_ver" == "debian:9" ]]; then
-      Say "BZIP2 for $KEY, [$(get_linux_os_id) $(uname -m)]"
-      work=/rmp/bzip-src
-      mkdir -p "$work"
-      pushd "$work"
-      git clone git://sourceware.org/git/bzip2.git
-      cd bzip2*
-      time make -j install
-      popd
-      rm -rf "$work"
-    fi
-  }
 
-  # Install-BZIP2
+  if [[ "$PREPARE_OS_MODE" == "BIG" ]]; then
+    Say "FOR HTOP on $KEY, [$(get_linux_os_id) $(uname -m)]"
+    apt-get install -y -qq libncurses5 libncurses5-dev ncurses-bin | apt-mini-log
+    apt-get install -y -qq libncursesw5 libncursesw5-dev | apt-mini-log
+
+    Say "FOR GIT on $KEY, [$(get_linux_os_id) $(uname -m)]"
+    apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
+  fi
+
 
   if [[ "$(getconf LONG_BIT)" == "32" ]]; then
     Say "FAKE UNAME on $KEY, [$(get_linux_os_id) $(uname -m)]"
