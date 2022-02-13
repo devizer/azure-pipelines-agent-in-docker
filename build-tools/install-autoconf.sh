@@ -1,4 +1,4 @@
-﻿url=https://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz
+url=https://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz
 work=$HOME/build/autoconf-src
 mkdir -p "$work"
 pushd .

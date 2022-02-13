@@ -1,4 +1,4 @@
-﻿url=https://ftp.gnu.org.ua/gnu/libtool/libtool-2.4.6.tar.gz
+url=https://ftp.gnu.org.ua/gnu/libtool/libtool-2.4.6.tar.gz
 work=$HOME/build/libtool-src
 mkdir -p "$work"
 pushd .
