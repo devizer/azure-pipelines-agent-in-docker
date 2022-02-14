@@ -8,6 +8,13 @@ work=$TRANSIENT_BUILDS/build/git-src
 mkdir -p $work
 pushd $work >/dev/null
 smart-apt-install build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip 
+
+if [[ "debian:7" ]]; then
+  # apt-get install libcurl4-gnutls-dev libcurl4-nss-dev libcurl4-openssl-dev -y -qq || true
+  # libcurl4-openssl-dev or libcurl3-dev
+  apt-get install libcurl4-openssl-dev -y -qq || true
+fi
+
 url=https://codeload.github.com/git/git/zip/$GIT_VER
 wget -q --no-check-certificate -O _git-src.zip "$url"  || curl -kfSL -o _git-src.zip "$url"
 unzip -q _git-src.zip
@@ -46,4 +53,5 @@ Say "Force git http version to HTTP/1.1"
 git config --global http.version HTTP/1.1
 Say "git configuration"
 git config -l
+
 
