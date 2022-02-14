@@ -153,6 +153,9 @@ function Build-Git() {
       export GCC_INSTALL_VER="$USEGCC" GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     fi
 
+    Say "Install gcc 5.5 for git"
+    export GCC_INSTALL_VER=5 GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+
     Say "Build GIT on $KEY"
     export INSTALL_PREFIX=/opt/local-links/git
     # TEST 2.35.1 on debian 10

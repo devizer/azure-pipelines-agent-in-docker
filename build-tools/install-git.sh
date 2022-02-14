@@ -17,7 +17,7 @@ fi
 
 url=https://codeload.github.com/git/git/zip/$GIT_VER
 wget -q --no-check-certificate -O _git-src.zip "$url"  || curl -kfSL -o _git-src.zip "$url"
-unzip -q _git-src.zip
+unzip -o -q _git-src.zip
 rm -f _git-src.zip
 cd git*
 
