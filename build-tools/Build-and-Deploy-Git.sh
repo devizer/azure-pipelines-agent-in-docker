@@ -120,7 +120,7 @@ function Build-Git() {
     bash -eu install-nano.sh
 
     if [[ "$OS_VER" == "debian:7" ]]; then 
-      for tool in install-automake.sh install-m4.sh install-autoconf.sh install-libtool.sh; do
+      for tool in install-automake.sh install-m4.sh install-autoconf.sh install-libtool.sh install-make.sh; do
         export INSTALL_PREFIX=/usr/local
         Say "INSTALLING [$tool] into [$INSTALL_PREFIX] for $OS_VER";
         time bash -e "$tool";
