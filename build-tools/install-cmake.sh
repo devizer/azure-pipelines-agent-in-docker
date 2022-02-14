@@ -7,10 +7,10 @@ curl -kSL -o _cmake.tar.gz "$url"
 tar xzf _cmake.tar.gz
 cd cmake*
 # minimum: gcc 5.5
-lib=
 export CC=gcc CXX="c++" LD_LIBRARY_PATH="/usr/local/lib/"
 time ./bootstrap --parallel=5 --prefix=/opt/local-links/cmake -- -DCMAKE_BUILD_TYPE:STRING=Release # 22 minutes
 make -j$(nproc)
-sudo make install
+# sudo make install -j
+sudo bash -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH; make install -j"
 popd
 rm -rf "$work"
