@@ -109,8 +109,8 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
   fi
 
-  if [[ "$os_ver" != "debian:7" ]]; then
-    Say "TOOLS (jq git bash 7z nano) for [$(get_linux_os_id) $(uname -m)]"
+  if true || [[ "$os_ver" != "debian:7" ]]; then
+    Say "Always TOOLS (jq git bash 7z nano) for [$(get_linux_os_id) $(uname -m)]"
     apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   else
