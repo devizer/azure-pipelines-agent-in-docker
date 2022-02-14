@@ -121,7 +121,7 @@ function Build-Git() {
 
     if [[ "$OS_VER" == "debian:7" ]]; then 
       for tool in install-automake.sh install-m4.sh install-autoconf.sh install-libtool.sh; do
-        export INSTALL_PREFIX=/usr
+        export INSTALL_PREFIX=/usr/local
         Say "INSTALLING [$tool] into [$INSTALL_PREFIX] for $OS_VER";
         time bash -e "$tool";
         Say "Completed: INSTALL [$tool] into [$INSTALL_PREFIX] for $OS_VER";
