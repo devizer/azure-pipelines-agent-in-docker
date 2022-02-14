@@ -12,7 +12,7 @@ smart-apt-install build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev g
 if [[ "debian:7" ]]; then
   # apt-get install libcurl4-gnutls-dev libcurl4-nss-dev libcurl4-openssl-dev -y -qq || true
   # libcurl4-openssl-dev or libcurl3-dev
-  apt-get install libcurl4-openssl-dev -y -qq || true
+  apt-get libcurl3-dev -y -qq || true
 fi
 
 url=https://codeload.github.com/git/git/zip/$GIT_VER
