@@ -211,6 +211,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 }
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
+    # No micro distro for 8th and 9th
     KEY="debian-8-arm32v7"  IMAGE="arm32v7/debian:8"  prepare_proot
     KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
