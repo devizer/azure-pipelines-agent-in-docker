@@ -20,6 +20,7 @@ function install-a-gnu-tool() {
   Say "Completed: [$key] using [$url]"
 }
 
+install-a-gnu-tool "sed-4.8"         "https://ftp.gnu.org/gnu/sed/sed-4.8.tar.gz"
 install-a-gnu-tool "automake-1.16.5" "https://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.gz"
 install-a-gnu-tool "m4-1.4.19"       "https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz"
 install-a-gnu-tool "autoconf-2.71"   "https://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz"
@@ -29,7 +30,7 @@ install-a-gnu-tool "gawk-5.1.1"      "https://ftp.gnu.org/gnu/gawk/gawk-5.1.1.ta
 install-a-gnu-tool "grep-3.7"        "https://ftp.gnu.org/gnu/grep/grep-3.7.tar.gz"
 
 function try-symlink() {
-  if cmp -s "$1" "$2"; then ln -f -s "$2" "$1"; fi
+  if cmp -s "$1" "$2" && -s "$1" && -s "$2"; then ln -f -s "$2" "$1"; fi
 }
 
 pushd "${INSTALL_PREFIX:-/usr/local}"
