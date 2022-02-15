@@ -30,7 +30,7 @@ install-a-gnu-tool "gawk-5.1.1"      "https://ftp.gnu.org/gnu/gawk/gawk-5.1.1.ta
 install-a-gnu-tool "grep-3.7"        "https://ftp.gnu.org/gnu/grep/grep-3.7.tar.gz"
 
 function try-symlink() {
-  if cmp -s "$1" "$2" && -s "$1" && -s "$2"; then ln -f -s "$2" "$1"; fi
+  if cmp -s "$1" "$2" && test -s "$1" && test -s "$2"; then ln -f -s "$2" "$1"; fi
 }
 
 pushd "${INSTALL_PREFIX:-/usr/local}"
