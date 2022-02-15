@@ -35,7 +35,6 @@ function try-symlink() {
 pushd "${INSTALL_PREFIX:-/usr/local}"
 echo "BEFORE STRIP: $(du . --max-depth=0)"
 pushd .
-du . du . --max-depth=0
 find . -name '*.so*' -type f -exec strip {} \;
 cd bin
 strip *
