@@ -1,4 +1,5 @@
 ﻿set -eu
+INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 function install-a-gnu-tool() {
   local key="$1"
   local url="$2"
@@ -25,3 +26,22 @@ install-a-gnu-tool "libtool-2.4.6"   "https://ftp.gnu.org.ua/gnu/libtool/libtool
 install-a-gnu-tool "make-4.3"        "https://ftp.gnu.org/gnu/make/make-4.3.tar.gz"
 install-a-gnu-tool "gawk-5.1.1"      "https://ftp.gnu.org/gnu/gawk/gawk-5.1.1.tar.gz"
 install-a-gnu-tool "grep-3.7"        "https://ftp.gnu.org/gnu/grep/grep-3.7.tar.gz"
+
+function try-symlink() {
+  if cmp -s "$1" "$2"; then ln -f -s "$2" "$1"; fi
+}
+
+pushd "${INSTALL_PREFIX:-/usr/local}"
+echo "BEFORE STRIP: $(du . --max-depth=0)"
+pushd .
+du . du . --max-depth=0
+find . -name '*.so*' -type f -exec strip {} \;
+cd bin
+strip *
+try-symlink gawk gawk-5.1.1
+try-symlink automake automake-1.16
+try-symlink aclocal aclocal-1.16
+popd
+echo "AFTER STRIP: $(du . --max-depth=0)"
+popd
+
