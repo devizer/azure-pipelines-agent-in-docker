@@ -38,7 +38,7 @@ echo "BEFORE STRIP: $(du . --max-depth=0)"
 pushd .
 find . -name '*.so*' -type f -exec strip {} \;
 cd bin
-strip *
+strip * || true
 try-symlink gawk gawk-5.1.1
 try-symlink automake automake-1.16
 try-symlink aclocal aclocal-1.16
