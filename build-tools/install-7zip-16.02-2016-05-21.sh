@@ -11,12 +11,16 @@ function install_7z() {
   wget -O _$file --no-check-certificate $url
   tar xjf _$file
   cd p7zip*
-  sed -i 's/OPTFLAGS=-O /OPTFLAGS=-O3 /g' makefile.machine
-  cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
   INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
+  sed -i 's/OPTFLAGS=-O /OPTFLAGS=-O3 /g' makefile.machine
+  sed -i 's/DEST_HOME=\/usr\/local//g' makefile.common
+  (echo "DEST_HOME=$INSTALL_PREFIX" && cat makefile.common) > _makefile.common && mv _makefile.common makefile.common
+
+  # ./makefile.common:DEST_HOME=/usr/local
+  cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
   time make prefix="$INSTALL_PREFIX" test_7z -j${cpus} 
   sudo make prefix="$INSTALL_PREFIX" install DESTDIR="${INSTALL_PREFIX}"
-  /usr/local/bin/7z || echo "7Z not found"
+  "$INSTALL_PREFIX/bin/7z" || echo "7Z not found"
   popd
 
   rm -rf $work

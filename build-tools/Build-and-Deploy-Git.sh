@@ -134,7 +134,7 @@ function Build-Git() {
     bash -eu install-jq-1.6.sh
 
     Say "7-ZIP ver 16.02 2016-05-21 on $KEY"
-    export INSTALL_PREFIX=/opt/local-links/7z
+    export INSTALL_PREFIX=/opt/7z-16.02
     # script=https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/cross-platform/on-build/7z-install-7zip-16.02-2016-05-21.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
     bash -eu install-7zip-16.02-2016-05-21.sh
 
@@ -168,12 +168,14 @@ EOF
   Grab-Folder "/opt/local-links/bash"  "bash-5.1-$KEY"
   Grab-Folder "/opt/local-links/jq"    "jq-1.6-$KEY"
   Grab-Folder "/opt/local-links/git"   "git-${GIT_VER}-$KEY"
-  Grab-Folder "/usr/local"             "7z-16.02-$KEY"
+  Grab-Folder "/opt/7z-16.02"          "7z-16.02-$KEY"
+  Grab-Folder "/usr/local"             "gnu-tools-$KEY"
 }
 
 
 # MUST be debian:8 for 2.34.1
 # KEY="x86_64"   IMAGE="debian:8"         Build-Git
-KEY="arm32v7"  IMAGE="arm32v7/debian:7"  Build-Git
 KEY="x86_64"   IMAGE="debian:7"          Build-Git
+exit;
+KEY="arm32v7"  IMAGE="arm32v7/debian:7"  Build-Git
 KEY="arm64v8"  IMAGE="arm64v8/debian:8"  Build-Git
