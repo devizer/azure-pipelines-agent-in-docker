@@ -1,4 +1,5 @@
-﻿set -eu
+#!/usr/bin/env bash
+set -eu
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 function install-a-gnu-tool() {
   local key="$1"
