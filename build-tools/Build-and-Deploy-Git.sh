@@ -119,13 +119,9 @@ function Build-Git() {
     export INSTALL_PREFIX=/opt/local-links/nano
     bash -eu install-nano.sh
 
-    if [[ "$OS_VER" == "debian:7" ]]; then 
-      for tool in install-automake.sh install-m4.sh install-autoconf.sh install-libtool.sh install-make.sh; do
-        export INSTALL_PREFIX=/usr/local
-        Say "INSTALLING [$tool] into [$INSTALL_PREFIX] for $OS_VER";
-        time bash -e "$tool";
-        Say "Completed: INSTALL [$tool] into [$INSTALL_PREFIX] for $OS_VER";
-      done 
+    if [[ "$OS_VER" == "debian:7" ]]; then
+      export INSTALL_PREFIX=/usr/local
+      time bash -e install-the-gnu-tools.sh
     fi
 
     Say "BASH 5.1 on $KEY" # ok on Debian:7
