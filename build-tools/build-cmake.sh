@@ -97,6 +97,7 @@ for file in libgcc_s.so.1 libstdc++.so.6 libcrypto.so.1.1 libssl.so.1.1; do
   test -s "$lib/$file" && cp -f "$lib/$file" .
 done
 done
+strip * || true # deps
 cd "$INSTALL_DIR"
 Say "pack [$(pwd)] release as gz"
 archname="../cmake-3.22.2-$machine"

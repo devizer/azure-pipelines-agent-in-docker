@@ -24,3 +24,44 @@ jobs:
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: 'Deploy-it-by-$(Agent.JobName)'
+
+- job: cmake
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      'x86-64':
+        IMAGE: "debian:7"
+      'arm32v7':
+        IMAGE: "arm32v7/debian:7"
+      'arm64v8':
+        IMAGE: "arm64v8/debian:8"
+
+  steps:
+  - script: |
+      cd build-tools
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash 
+      Say --Reset-Stopwatch
+      Say "Register qemu static"
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null
+      for f in build-gcc-utilities.sh build-gcc-task.sh; do
+        try-and-retry curl -kSL -o /tmp/$f https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/$f
+      done
+      CONTAINER="builder"
+      docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
+      for f in $(pwd)/build-cmake.sh /tmp/build-gcc-utilities.sh /usr/local/bin/Say /usr/local/bin/try-and-retry; do
+        docker cp $f "$CONTAINER":/root/.
+      done
+
+      docker exec -t $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
+
+    displayName: 'cmake'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
