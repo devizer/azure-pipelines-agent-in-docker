@@ -15,12 +15,12 @@ jobs:
   strategy:
     matrix:
       # default is the latest GCC 11.2 
-      'x86-64':
-        IMAGE: "debian:7"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm32v7':
-        IMAGE: "arm32v7/debian:7"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'x86-64':
+      #   IMAGE: "debian:7"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm32v7':
+      #   IMAGE: "arm32v7/debian:7"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-5':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "5"
