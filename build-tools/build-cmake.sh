@@ -3,12 +3,11 @@ machine=$(uname -m);
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
-gccver=11; # [[ $machine == arm32v7 ]] && gccver=5
-Say "Processors: $cpus, GCC $gccver"
-export GCC_INSTALL_VER=$gccver GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+GCCVER=${GCCVER:11}; # [[ $machine == arm32v7 ]] && GCCVER=5
+Say "Processors: $cpus, GCC $GCCVER"
+export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
 # export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
-
 
 OPENSSL_HOME=/usr/local
 

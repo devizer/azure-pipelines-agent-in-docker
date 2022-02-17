@@ -31,15 +31,30 @@ jobs:
   timeoutInMinutes: 360
   strategy:
     matrix:
+      # default is the latest GCC 11.2 
       'x86-64':
         IMAGE: "debian:7"
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
-      'arm64v8':
+      'arm64v8 GCC-5':
         IMAGE: "arm64v8/debian:8"
+        GCCVER: "5"
+      'arm64v8 GCC-8':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "8"
+      'arm64v8 GCC-9':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "9"
+      'arm64v8 GCC-10':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "10"
+      'arm64v8 GCC-11':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "11"
 
   steps:
   - script: |
+      set -eu; set -o pipefail
       cd build-tools
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
@@ -60,7 +75,7 @@ jobs:
         docker cp $f "$CONTAINER":/root/.
       done
 
-      docker exec -t $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker exec -t -e GCCVER="${GCCVER:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
       docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
       rm -rf "$SYSTEM_ARTIFACTSDIRECTORY/cmake" || true # WTH?
 
