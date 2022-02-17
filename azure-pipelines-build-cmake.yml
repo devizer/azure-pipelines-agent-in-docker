@@ -102,7 +102,7 @@ jobs:
       cd ~/container-home
       tar cJf "$SYSTEM_ARTIFACTSDIRECTORY/cmake-working-sources.tar.xz" .
     condition: succeededOrFailed()
-    displayName: 'cmake'
+    displayName: 'grab artifacts'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
