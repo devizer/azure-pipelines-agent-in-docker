@@ -10,7 +10,7 @@ EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
 lib_dir=/usr/local/lib; test -d /usr/local/lib64 && lib_dir="/usr/local/lib64"
 # works on x86_64 and arm32v7 + GCC 11.2
 options="-DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=$lib_dir/libcrypto.so -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH=$lib_dir/libssl.so"
-if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" == True ]]; then
+if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
   # works on arm64?
   options=""
 fi
