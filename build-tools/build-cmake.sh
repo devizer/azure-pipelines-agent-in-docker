@@ -65,6 +65,13 @@ function install_openssl_111() {
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev; pushd .; time install_openssl_111; popd
 
+ldconfig || true
+Say "/etc/ld.so.conf"
+cat /etc/ld.so.conf
+Say "ldconfig -p"
+ldconfig -p
+
+
 INSTALL_DIR="${INSTALL_DIR:-/opt/local-links/cmake}"
 
 mkdir -p "$INSTALL_DIR"; rm -rf "$INSTALL_DIR"/* || rm -rf "$INSTALL_DIR"/* || rm -rf "$INSTALL_DIR"/*
