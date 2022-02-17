@@ -1,5 +1,6 @@
 set -eu;
 machine=$(uname -m); 
+
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
@@ -26,20 +27,20 @@ function install_openssl_111() {
 
   url=https://www.openssl.org/source/openssl-1.1.1m.tar.gz
   file=$(basename $url)
-  TRANSIENT_BUILDS="${TRANSIENT_BUILDS:-$HOME/build}"
-  local work=$TRANSIENT_BUILDS/build/open-ssl-1.1
+  local work=$HOME/build/open-ssl-1.1
   mkdir -p $work
+  rm -rf $work/* || true
   pushd $work
   curl -kSL -o _$file $url || curl -kSL -o _$file $url
   tar xzf _$file
   cd open*
 
-  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME
-  time make -j${cpus}
+  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$work/log-openssl-config.txt"
+  time make -j${cpus} |& tee "$work/log-openssl-make.log"
   # make test
-  make install
+  make install |& tee "$work/log-openssl-install.log"
   popd
-  rm -rf $work
+  # rm -rf $work
 }
 
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
@@ -63,13 +64,14 @@ lib_dir=/usr/local/lib; test -d /usr/local/lib64 && lib_dir="/usr/local/lib64"
 export CC=gcc CXX="c++" LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
-  -DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH="$lib_dir"/libcrypto.so -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH="$lib_dir"/libssl.so
+  -DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH="$lib_dir"/libcrypto.so -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH="$lib_dir"/libssl.so \
+  |& tee "$work/log-cmake-bootstrap.log"
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
 # 22 minutes, lib for 
-make -j$(nproc)
+make -j$(nproc) |& tee "$work/log-cmake-make.log"
 # sudo make install -j
-time sudo -E bash -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH; make install -j"
+time sudo -E bash -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH; make install -j" |& tee "$work/log-cmake-install.log"
 popd
 # rm -rf "$work" || rm -rf "$work" || rm -rf "$work" || true
 
