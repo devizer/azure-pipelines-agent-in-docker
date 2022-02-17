@@ -50,7 +50,10 @@ jobs:
       done
       CONTAINER="builder"
       docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
-      for f in $(pwd)/build-cmake.sh /tmp/build-gcc-utilities.sh /usr/local/bin/Say /usr/local/bin/try-and-retry; do
+      for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
+        docker cp $f "$CONTAINER":/usr/bin/.
+      done
+      for f in $(pwd)/build-cmake.sh /tmp/build-gcc-utilities.sh; do
         docker cp $f "$CONTAINER":/root/.
       done
 
