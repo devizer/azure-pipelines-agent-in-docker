@@ -46,7 +46,7 @@ jobs:
       Say "qemu user static"
       sudo apt-get install qemu-user-static -y -qq >/dev/null
       Say "Register qemu static"
-      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
       for f in build-gcc-utilities.sh build-gcc-task.sh; do
         try-and-retry curl -kSL -o /tmp/$f https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/$f
       done
@@ -62,6 +62,7 @@ jobs:
 
       docker exec -t $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
       docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
+      rm -rf "$SYSTEM_ARTIFACTSDIRECTORY/cmake" || true # WTH?
 
     displayName: 'cmake'
 
