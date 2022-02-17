@@ -72,7 +72,7 @@ jobs:
       mkdir -p ~/container-home
       docker cp $CONTAINER:/root/. ~/container-home
       cd ~/container-home
-      tar xJf "$SYSTEM_ARTIFACTSDIRECTORY/cmake-working-sources.tar.xz" .
+      tar cJf "$SYSTEM_ARTIFACTSDIRECTORY/cmake-working-sources.tar.xz" .
     condition: succeededOrFailed()
     displayName: 'cmake'
 
