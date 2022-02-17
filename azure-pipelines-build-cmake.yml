@@ -17,23 +17,51 @@ jobs:
       # default is the latest GCC 11.2 
       'x86-64':
         IMAGE: "debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-5':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "5"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-8':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "8"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-9':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "9"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-10':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "10"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       'arm64v8 GCC-11':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "11"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+
+      'arm64v8 GCC-5':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "5"
+        EXPLICIT_OPENSSL_OPTIONS: "False"
+      'arm64v8 GCC-8':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "8"
+        EXPLICIT_OPENSSL_OPTIONS: "False"
+      'arm64v8 GCC-9':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "9"
+        EXPLICIT_OPENSSL_OPTIONS: "False"
+      'arm64v8 GCC-10':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "10"
+        EXPLICIT_OPENSSL_OPTIONS: "False"
+      'arm64v8 GCC-11':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "11"
+        EXPLICIT_OPENSSL_OPTIONS: "False"
 
   steps:
   - script: |
@@ -58,7 +86,7 @@ jobs:
         docker cp $f "$CONTAINER":/root/.
       done
 
-      docker exec -t -e GCCVER="${GCCVER:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker exec -t -e GCCVER="${GCCVER:-}" -e EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
     displayName: 'cmake'
 
   - script: |

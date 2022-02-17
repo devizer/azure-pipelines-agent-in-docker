@@ -1,11 +1,20 @@
 set -eu;
 machine=$(uname -m); 
-
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 GCCVER=${GCCVER:-11}; # [[ $machine == arm32v7 ]] && GCCVER=5
-Say "Processors: $cpus, GCC $GCCVER"
+Say "Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS}"
+
+EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
+# works on x86_64 and arm32v7 + GCC 11.2
+options="-DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=$lib_dir/libcrypto.so -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH=$lib_dir/libssl.so"
+if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" == True ]]; then
+  # works on arm64?
+  options=""
+fi
+Say "CMAKE BOOTSTRAP OPTIONS: [$options]"
+
 export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
 # export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
@@ -64,7 +73,7 @@ lib_dir=/usr/local/lib; test -d /usr/local/lib64 && lib_dir="/usr/local/lib64"
 export CC=gcc CXX="c++" LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
-  -DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH="$lib_dir"/libcrypto.so -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH="$lib_dir"/libssl.so \
+  $options \
   |& tee "$work/log-cmake-bootstrap.log"
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
