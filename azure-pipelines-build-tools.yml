@@ -43,6 +43,8 @@ jobs:
       cd build-tools
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash 
       Say --Reset-Stopwatch
+      Say "qemu user static"
+      sudo apt-get install qemu-user-static -y -qq >/dev/null
       Say "Register qemu static"
       docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null
       for f in build-gcc-utilities.sh build-gcc-task.sh; do
