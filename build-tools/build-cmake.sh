@@ -6,6 +6,8 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 GCCVER=${GCCVER:-11}; # [[ $machine == arm32v7 ]] && GCCVER=5
 Say "Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS}"
 
+export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+
 EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
 lib_dir=/usr/local/lib; test -d /usr/local/lib64 && lib_dir="/usr/local/lib64"
 # works on x86_64 and arm32v7 + GCC 11.2
@@ -16,7 +18,6 @@ if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
 fi
 Say "CMAKE BOOTSTRAP OPTIONS: [$options]"
 
-export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
 # export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
