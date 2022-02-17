@@ -59,8 +59,9 @@ jobs:
       done
 
       docker exec -t -e GCCVER="${GCCVER:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
-
     displayName: 'cmake'
+
+  - script: |
       set -eu; set -o pipefail
       Say "grab cmake artifacts"
       CONTAINER="builder"
@@ -72,8 +73,6 @@ jobs:
       docker cp $CONTAINER:/root/. ~/container-home
       cd ~/container-home
       tar xJf "$SYSTEM_ARTIFACTSDIRECTORY/cmake-working-sources.tar.xz" .
-  - script: |
-
     condition: succeededOrFailed()
     displayName: 'cmake'
 
