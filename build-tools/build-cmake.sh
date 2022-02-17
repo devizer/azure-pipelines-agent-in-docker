@@ -18,6 +18,9 @@ if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
 fi
 Say "CMAKE BOOTSTRAP OPTIONS: [$options]"
 
+echo "$lib_dir" && cat /etc/ld.so.conf > /etc/ld.so.conf.tmp
+try-and-retry mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf || true
+ldconfig || true
 
 # export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
