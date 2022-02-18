@@ -176,16 +176,16 @@ endforeach()
 ' > CMakeLists.txt
 echo '
 #include <stdio.h>
-void main() { printf("Hello, World!\n"); } 
+int main() { printf("Hello, World!\n"); return 0; } 
 ' > say42-source.c
 mkdir -p build
 cd build
 time ($INSTALL_DIR/bin/cmake .. && make all || true)
-./say42
-
-
+./say42 || err42=$?
+echo "42 error status: [${err42:-}]"
 
 exit 0;
+
 echo '
 pushd /opt/local-links/cmake/bin
 export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib; 
