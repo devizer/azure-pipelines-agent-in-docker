@@ -104,6 +104,7 @@ cd cmake*
 export CC=gcc CXX="c++" # LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 Say "Bootstrapping cmake, $OPTIONS" # -DOPENSSL_USE_STATIC_LIBS=TRUE
+export LD_LIBRARY_PATH="/usr/local/lib64:/usr/local/lib"
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
   $OPTIONS \
   \
@@ -118,7 +119,7 @@ make -j$(nproc) |& tee "$work/log-cmake-make.log"
 kill $pid || true
 # sudo make install -j
 Say "Installing cmake"
-time sudo -E bash -c "make install -j" |& tee "$work/log-cmake-install.log"
+make install -j |& tee "$work/log-cmake-install.log"
 Say "Complete cmake"
 popd
 # rm -rf "$work" || rm -rf "$work" || rm -rf "$work" || true
