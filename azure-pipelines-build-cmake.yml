@@ -25,43 +25,43 @@ jobs:
         IMAGE: "arm64v8/debian:8"
         GCCVER: "5"
         EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-8':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "8"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-9':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "9"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-10':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "10"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-11':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "11"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-8':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "8"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-9':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "9"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-10':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "10"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-11':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "11"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
 
-      'arm64v8 GCC-5 No Ops':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "5"
-        EXPLICIT_OPENSSL_OPTIONS: "False"
-      'arm64v8 GCC-8 No Ops':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "8"
-        EXPLICIT_OPENSSL_OPTIONS: "False"
-      'arm64v8 GCC-9 No Ops':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "9"
-        EXPLICIT_OPENSSL_OPTIONS: "False"
-      'arm64v8 GCC-10 No Ops':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "10"
-        EXPLICIT_OPENSSL_OPTIONS: "False"
-      'arm64v8 GCC-11 No Ops':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "11"
-        EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-5 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "5"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-8 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "8"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-9 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "9"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-10 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "10"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-11 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "11"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
 
   steps:
   - script: |
