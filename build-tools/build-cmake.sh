@@ -63,12 +63,12 @@ function install_openssl_111() {
   cd open*
 
   Say "Configuring OpenSSL"
-  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$work/log-openssl-config.txt"
+  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$HOME/log-openssl-config.txt"
   Say "Compiling OpenSSL"
-  time make -j${cpus} |& tee "$work/log-openssl-make.log"
+  time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
   Say "Installing OpenSSL"
-  make install |& tee "$work/log-openssl-install.log"
+  make install |& tee "$HOME/log-openssl-install.log"
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
