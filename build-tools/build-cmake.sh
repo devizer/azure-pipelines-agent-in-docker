@@ -27,6 +27,8 @@ function Find-OpenSSL() {
 
 export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
+Find-OpenSSL |& tee "$HOME/Find-OpenSSL-1st.log"
+
 (echo "$lib_dir" && cat /etc/ld.so.conf) > /etc/ld.so.conf.tmp
 try-and-retry mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf || true
 ldconfig || true
