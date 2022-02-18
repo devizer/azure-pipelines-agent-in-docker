@@ -93,10 +93,10 @@ cd cmake*
 # minimum: gcc 5.5 for armv7, gcc 9.4 for x86_64
 export CC=gcc CXX="c++" LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
-Say "Bootstrapping cmake"
+Say "Bootstrapping cmake" # -DOPENSSL_USE_STATIC_LIBS=TRUE
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
   $options \
-  -DOPENSSL_USE_STATIC_LIBS=TRUE \
+  \
   |& tee "$work/log-cmake-bootstrap.log"
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
