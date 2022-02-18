@@ -12,7 +12,7 @@ export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://maste
 
 
 mkdir -p /usr/local/lib64
-(printf "/usr/local/lib64\n/usr/local/lib" && cat /etc/ld.so.conf) > /etc/ld.so.conf.tmp
+(printf "/usr/local/lib64\n/usr/local/lib\n" && cat /etc/ld.so.conf) > /etc/ld.so.conf.tmp
 try-and-retry mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf || true
 ldconfig || true
 Say "/etc/ld.so.conf"
