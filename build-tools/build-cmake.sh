@@ -1,4 +1,4 @@
-set -eu;
+set -eu; set -o pipefail
 machine=$(uname -m); 
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
@@ -101,7 +101,7 @@ Say "Bootstrapping cmake"
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
 # 22 minutes, lib for 
-bash -c "while true; do sleep 5; echo .; done" &
+bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
 pid=$!
 Say "Compiling cmake"
 make -j$(nproc) |& tee "$work/log-cmake-make.log"
