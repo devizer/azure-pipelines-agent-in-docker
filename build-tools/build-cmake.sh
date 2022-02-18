@@ -67,7 +67,7 @@ OPENSSL_SSL_LIBRARY=""
 OPENSSL_CRYPTO_LIBRARY=""
 for lib in /usr/local/lib /usr/local/lib64; do
   if [[ -e "$lib/libcrypto.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libcrypto.so"; fi
-  if [[ -e "$lib/libssl.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libssl.so"; fi
+  if [[ -e "$lib/libssl.so" ]]; then OPENSSL_SSL_LIBRARY="$lib/libssl.so"; fi
 done
 
 EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
