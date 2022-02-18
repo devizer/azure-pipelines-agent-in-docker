@@ -95,7 +95,7 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
 # 22 minutes, lib for 
-bash -c "while true; do sleep 2; echo .; done" & 
+bash -c "while true; do sleep 2; echo .; done" &
 pid=$!
 make -j$(nproc) |& tee "$work/log-cmake-make.log"
 kill $pid || true
