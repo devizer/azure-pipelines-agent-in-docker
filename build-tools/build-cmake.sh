@@ -4,7 +4,7 @@ machine=$(uname -m);
 [[ $machine == armv* ]] && machine=arm32v7
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 GCCVER=${GCCVER:-11}; # [[ $machine == arm32v7 ]] && GCCVER=5
-Say "Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS}"
+Say "Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS:-}"
 
 
 
