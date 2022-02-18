@@ -100,7 +100,8 @@ jobs:
       mkdir -p ~/container-home
       docker cp $CONTAINER:/root/. ~/container-home
       cd ~/container-home
-      tar cJf "$SYSTEM_ARTIFACTSDIRECTORY/cmake-working-sources.tar.xz" .
+      tar cf - . | xz -z -1 > "$SYSTEM_ARTIFACTSDIRECTORY/cmake-builder-drop.tar.xz"
+      Say "Bye"
     condition: succeededOrFailed()
     displayName: 'grab artifacts'
 
