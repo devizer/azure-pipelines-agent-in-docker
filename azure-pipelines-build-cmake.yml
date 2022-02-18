@@ -14,13 +14,17 @@ jobs:
   timeoutInMinutes: 360
   strategy:
     matrix:
-      # default is the latest GCC 11.2 
-      # 'x86-64':
-      #   IMAGE: "debian:7"
-      #   EXPLICIT_OPENSSL_OPTIONS: "True"
-      # 'arm32v7':
-      #   IMAGE: "arm32v7/debian:7"
-      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      default is the latest GCC 11.2 
+      'x86-64':
+        IMAGE: "debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+      'arm32v7':
+        IMAGE: "arm32v7/debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+      'arm64v8 GCC-11':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "11"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
       # 'arm64v8 GCC-5':
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "5"
@@ -37,10 +41,6 @@ jobs:
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "10"
       #   EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-11':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "11"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
 
       # 'arm64v8 GCC-5 No Ops':
       #   IMAGE: "arm64v8/debian:8"
