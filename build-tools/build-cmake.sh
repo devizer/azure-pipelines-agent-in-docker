@@ -54,15 +54,17 @@ function install_openssl_111() {
   tar xzf _$file
   cd open*
 
+  Say "Configuring OpenSSL"
   ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$work/log-openssl-config.txt"
+  Say "Compiling OpenSSL"
   time make -j${cpus} |& tee "$work/log-openssl-make.log"
   # make test
+  Say "Installing OpenSSL"
   make install |& tee "$work/log-openssl-install.log"
+  Say "Complete OpenSSL"
   popd
   # rm -rf $work
 }
-
-Say "Building OpenSSL 1.1.1m"
 
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev; pushd .; time install_openssl_111; popd
@@ -91,6 +93,7 @@ cd cmake*
 # minimum: gcc 5.5 for armv7, gcc 9.4 for x86_64
 export CC=gcc CXX="c++" LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
+Say "Bootstrapping cmake"
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
   $options \
   -DOPENSSL_USE_STATIC_LIBS=TRUE \
@@ -98,12 +101,15 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
 # 22 minutes, lib for 
-bash -c "while true; do sleep 2; echo .; done" &
+bash -c "while true; do sleep 5; echo .; done" &
 pid=$!
+Say "Compiling cmake"
 make -j$(nproc) |& tee "$work/log-cmake-make.log"
 kill $pid || true
 # sudo make install -j
+Say "Installing cmake"
 time sudo -E bash -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH; make install -j" |& tee "$work/log-cmake-install.log"
+Say "Complete cmake"
 popd
 # rm -rf "$work" || rm -rf "$work" || rm -rf "$work" || true
 
@@ -166,6 +172,12 @@ echo '
 # cmake_minimum_required(VERSION 2.9)  LANGUAGES C
 project(AcceptanceTestProject)
 add_executable(say42 say42-source.c)
+
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
 ' > CMakeLists.txt
 echo '
 #include <stdio.h>
