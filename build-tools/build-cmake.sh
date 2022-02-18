@@ -118,7 +118,7 @@ make -j$(nproc) |& tee "$work/log-cmake-make.log"
 kill $pid || true
 # sudo make install -j
 Say "Installing cmake"
-time sudo -E bash -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH; make install -j" |& tee "$work/log-cmake-install.log"
+time sudo -E bash -c "make install -j" |& tee "$work/log-cmake-install.log"
 Say "Complete cmake"
 popd
 # rm -rf "$work" || rm -rf "$work" || rm -rf "$work" || true
@@ -157,6 +157,33 @@ build_all_known_hash_sums ${archname}.tar.xz
 build_all_known_hash_sums ${archname}.tar.gz
 popd
 
+Say "cmake hello-world"
+export PATH="$INSTALL_DIR/bin:$PATH"
+# example
+mkdir -p $HOME/my-cmake-app1
+cd $HOME/my-cmake-app1 && rm -rf *
+echo '
+# cmake_minimum_required(VERSION 2.9)  LANGUAGES C
+project(AcceptanceTestProject)
+add_executable(say42 say42-source.c)
+
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+' > CMakeLists.txt
+echo '
+#include <stdio.h>
+void main() { printf("Hello, World!\n"); } 
+' > say42-source.c
+mkdir -p build
+cd build
+time ($INSTALL_DIR/bin/cmake .. && make all || true)
+./say42
+
+
+
 exit 0;
 echo '
 pushd /opt/local-links/cmake/bin
@@ -175,27 +202,5 @@ popd >/dev/null
 /usr/local/lib/libstdc++.so.6
 
 
-# example
-mkdir -p $HOME/my-cmake-app1
-cd $HOME/my-cmake-app1 && rm -rf *
-echo '
-# cmake_minimum_required(VERSION 2.9)  LANGUAGES C
-project(AcceptanceTestProject)
-add_executable(say42 say42-source.c)
-
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-' > CMakeLists.txt
-echo '
-#include <stdio.h>
-void main() { printf("42"); } 
-' > say42-source.c
-mkdir -p build
-cd build
-time (cmake .. && make all || true)
-./say42
 
 
