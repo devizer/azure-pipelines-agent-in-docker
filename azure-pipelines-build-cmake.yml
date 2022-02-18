@@ -86,7 +86,7 @@ jobs:
         docker cp $f "$CONTAINER":/root/.
       done
 
-      docker exec -t -e GCCVER="${GCCVER:-}" -e EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker exec -t -e GCCVER="${GCCVER:-}" -e EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; say_cpu_name; prepare_os; Say Ready; bash -e build-cmake.sh"
     displayName: 'cmake'
 
   - script: |
