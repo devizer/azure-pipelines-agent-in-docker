@@ -77,7 +77,7 @@ function install_openssl_111() {
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev; pushd .; time install_openssl_111; popd
 
-Find-OpenSSL
+Find-OpenSSL |& tee "$work/Find-OpenSSL.log"
 
 ldconfig || true
 Say "/etc/ld.so.conf"
