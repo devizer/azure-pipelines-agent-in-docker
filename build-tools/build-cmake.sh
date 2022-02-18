@@ -77,13 +77,13 @@ function install_openssl_111() {
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev; pushd .; time install_openssl_111; popd
 
-Find-OpenSSL |& tee "$work/Find-OpenSSL.log"
+Find-OpenSSL |& tee "$HOME/Find-OpenSSL-2nd.log"
 
 ldconfig || true
 Say "/etc/ld.so.conf"
 cat /etc/ld.so.conf
 Say "ldconfig -p"
-ldconfig -p
+ldconfig -p | sort |& tee "$HOME/ldconfig-2nd.log"
 
 
 Say "Building cmake 3.22.2"
