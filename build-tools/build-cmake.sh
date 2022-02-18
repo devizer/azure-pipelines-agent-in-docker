@@ -7,30 +7,9 @@ GCCVER=${GCCVER:-11}; # [[ $machine == arm32v7 ]] && GCCVER=5
 Say "Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS}"
 
 
-OPENSSL_SSL_LIBRARY=""
-OPENSSL_CRYPTO_LIBRARY=""
-OPTIONS=""
-function Find-OpenSSL() {
-  OPENSSL_SSL_LIBRARY=""
-  OPENSSL_CRYPTO_LIBRARY=""
-  for lib in /usr/local/lib /usr/local/lib64; do
-    if [[ -e "$lib/libcrypto.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libcrypto.so"; fi
-    if [[ -e "$lib/libssl.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libssl.so"; fi
-  done
-
-  EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
-  # works on x86_64 and arm32v7 + GCC 11.2
-  OPTIONS="-DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=$OPENSSL_CRYPTO_LIBRARY -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH=$OPENSSL_SSL_LIBRARY"
-  if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
-    # works on arm64?
-    OPTIONS=""
-  fi
-  Say "CMAKE BOOTSTRAP OPTIONS: [$OPTIONS]"
-}
 
 export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
-Find-OpenSSL |& tee "$HOME/Find-OpenSSL-1st.log"
 
 mkdir -p /usr/local/lib64
 (printf "/usr/local/lib64\n/usr/local/lib" && cat /etc/ld.so.conf) > /etc/ld.so.conf.tmp
@@ -83,14 +62,29 @@ function install_openssl_111() {
 # sudo apt-get install libssl-dev libncursesw5-dev libncurses5-dev -y -q
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev; pushd .; time install_openssl_111; popd
 
-Find-OpenSSL |& tee "$HOME/Find-OpenSSL-2nd.log"
+# Find OpenSSL
+OPENSSL_SSL_LIBRARY=""
+OPENSSL_CRYPTO_LIBRARY=""
+for lib in /usr/local/lib /usr/local/lib64; do
+  if [[ -e "$lib/libcrypto.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libcrypto.so"; fi
+  if [[ -e "$lib/libssl.so" ]]; then OPENSSL_CRYPTO_LIBRARY="$lib/libssl.so"; fi
+done
 
+EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}"
+# works on x86_64 and arm32v7 + GCC 11.2
+OPTIONS="-DOPENSSL_ROOT_DIR=/usr/local -DCMAKE_USE_OPENSSL:BOOL=ON -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=$OPENSSL_CRYPTO_LIBRARY -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/include -DOPENSSL_SSL_LIBRARY:FILEPATH=$OPENSSL_SSL_LIBRARY"
+if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
+  # works on arm64?
+  OPTIONS=""
+fi
+Say "CMAKE BOOTSTRAP OPTIONS: [$OPTIONS]"
+
+# apply openssl lib for cache
 ldconfig || true
 Say "/etc/ld.so.conf"
 cat /etc/ld.so.conf
 Say "ldconfig -p"
 ldconfig -p | sort |& tee "$HOME/ldconfig-2nd.log"
-
 
 Say "Building cmake 3.22.2"
 INSTALL_DIR="${INSTALL_DIR:-/opt/local-links/cmake}"
