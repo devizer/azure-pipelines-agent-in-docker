@@ -18,7 +18,7 @@ if [[ "${EXPLICIT_OPENSSL_OPTIONS:-True}" != True ]]; then
 fi
 Say "CMAKE BOOTSTRAP OPTIONS: [$options]"
 
-echo "$lib_dir" && cat /etc/ld.so.conf > /etc/ld.so.conf.tmp
+(echo "$lib_dir" && cat /etc/ld.so.conf) > /etc/ld.so.conf.tmp
 try-and-retry mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf || true
 ldconfig || true
 Say "/etc/ld.so.conf"
@@ -90,6 +90,7 @@ export CC=gcc CXX="c++" LD_LIBRARY_PATH="$lib_dir"
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 ./bootstrap --parallel=${cpus} --prefix="${INSTALL_DIR}" -- -DCMAKE_BUILD_TYPE:STRING=Release \
   $options \
+  -DOPENSSL_USE_STATIC_LIBS=TRUE \
   |& tee "$work/log-cmake-bootstrap.log"
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
