@@ -71,7 +71,7 @@ function install_openssl_111() {
   time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
   Say "Installing OpenSSL"
-  make install -j$((cpus+3))|& tee "$HOME/log-openssl-install.log"
+  make install -j$((cpus+3)) |& tee "$HOME/log-openssl-install.log"
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
