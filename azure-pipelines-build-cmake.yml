@@ -21,10 +21,10 @@ jobs:
       # 'arm32v7':
       #   IMAGE: "arm32v7/debian:7"
       #   EXPLICIT_OPENSSL_OPTIONS: "True"
-      'arm64v8 GCC-5':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "5"
-        EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-5':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "5"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
       # 'arm64v8 GCC-8':
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "8"
@@ -37,10 +37,10 @@ jobs:
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "10"
       #   EXPLICIT_OPENSSL_OPTIONS: "True"
-      # 'arm64v8 GCC-11':
-      #   IMAGE: "arm64v8/debian:8"
-      #   GCCVER: "11"
-      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      'arm64v8 GCC-11':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "11"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
 
       # 'arm64v8 GCC-5 No Ops':
       #   IMAGE: "arm64v8/debian:8"
