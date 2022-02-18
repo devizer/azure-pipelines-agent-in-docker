@@ -95,7 +95,8 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 
 # -DOPENSSL_ROOT_DIR=/usr/local -DOPENSSL_CRYPTO_LIBRARY=/usr/local/lib64 -DOPENSSL_INCLUDE_DIR=/usr/local/include
 # 22 minutes, lib for 
-bash -c "while true; do sleep 2; echo .; done" &; pid=$!
+bash -c "while true; do sleep 2; echo .; done" & 
+pid=$!
 make -j$(nproc) |& tee "$work/log-cmake-make.log"
 kill $pid || true
 # sudo make install -j
@@ -139,11 +140,12 @@ popd
 
 exit 0;
 echo '
-cd /opt/local-links/cmake/bin
+pushd /opt/local-links/cmake/bin
 export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib; 
 printf "" > /tmp/cmake
 for exe in ccmake  cmake  cpack  ctest; do ldd -v -r $exe >> /tmp/cmake; done
 cat /tmp/cmake | grep "/usr/local" | awk '{print $NF}' | sort -u | while IFS='' read file; do test -e $file && echo $file; done
+popd >/dev/null
 '
 
 # x86_64
