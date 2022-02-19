@@ -135,6 +135,10 @@ function build_all_known_hash_sums() {
   done
 }
 
+cd $src
+export INSTALL_DIR
+bash -e build-ninja.sh
+
 
 pushd "$INSTALL_DIR"
 cd bin
@@ -182,10 +186,6 @@ cd build
 time ($INSTALL_DIR/bin/cmake .. && make all || true)
 ./say42 || err42=$?
 echo "42 error status: [${err42:-}]"
-
-cd $src
-export INSTALL_DIR
-bash -e build-ninja.sh
 
 exit 0;
 
