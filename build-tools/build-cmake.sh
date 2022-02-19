@@ -1,4 +1,5 @@
 set -eu; set -o pipefail
+src=$(pwd)
 machine=$(uname -m); 
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
@@ -182,10 +183,9 @@ time ($INSTALL_DIR/bin/cmake .. && make all || true)
 ./say42 || err42=$?
 echo "42 error status: [${err42:-}]"
 
-#if [[ -e build-ninja.sh ]]; then
-  export INSTALL_DIR
-  bash -e build-ninja.sh
-#fi
+cd $src
+export INSTALL_DIR
+bash -e build-ninja.sh
 
 exit 0;
 
