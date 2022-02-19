@@ -82,7 +82,8 @@ jobs:
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
         docker cp $f "$CONTAINER":/usr/bin/.
       done
-      for f in "$(pwd)/"* /tmp/build-gcc-utilities.sh; do
+      for f in "$(pwd)/"*.sh /tmp/build-gcc-utilities.sh; do
+        Say "copying $f to the container"
         docker cp "$f" "$CONTAINER":/root/.
       done
 
