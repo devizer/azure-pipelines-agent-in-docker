@@ -33,8 +33,12 @@ test $err -ne 0 && echo error $err
 Say "Building ninja using cmake $(cmake --version | head -1)" 
 mkdir build-cmake; cd build-cmake
 time (cmake ..; make -j)
-Say "Testing ninja" 
-./ninja_test
+if [[ "${SKIP_NINJA_TESTS:-}" != True ]]; then
+  Say "Testing ninja" 
+  ./ninja_test
+else
+  Say --Display-As=Error "Warning! ./ninja_test skipped"
+fi
 Say "ninja: $(./ninja --version)" 
 strip ninja || true
 cp -f ninja "$INSTALL_DIR/bin/"
