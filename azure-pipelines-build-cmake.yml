@@ -82,8 +82,8 @@ jobs:
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
         docker cp $f "$CONTAINER":/usr/bin/.
       done
-      for f in $(pwd)/build-cmake.sh /tmp/build-gcc-utilities.sh; do
-        docker cp $f "$CONTAINER":/root/.
+      for f in "$(pwd)/"* /tmp/build-gcc-utilities.sh; do
+        docker cp "$f" "$CONTAINER":/root/.
       done
 
       docker exec -t -e GCCVER="${GCCVER:-}" -e EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; say_cpu_name; prepare_os; Say Ready; bash -e build-cmake.sh"

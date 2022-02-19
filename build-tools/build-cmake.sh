@@ -182,6 +182,11 @@ time ($INSTALL_DIR/bin/cmake .. && make all || true)
 ./say42 || err42=$?
 echo "42 error status: [${err42:-}]"
 
+if [[ -e build-ninja.sh ]]; then
+  export INSTALL_DIR
+  bash build-ninja.sh
+fi
+
 exit 0;
 
 echo '
