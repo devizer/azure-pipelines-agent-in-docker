@@ -135,6 +135,7 @@ function build_all_known_hash_sums() {
   done
 }
 
+export PATH="$INSTALL_DIR/bin:$PATH"
 cd $src
 export INSTALL_DIR
 bash -e build-ninja.sh
