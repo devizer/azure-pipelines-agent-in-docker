@@ -73,6 +73,7 @@ function install_openssl_111() {
 
   Say "Configuring OpenSSL"
   ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
+  perl configdata.pm --dump |& tee -a "$CONFIG_LOG/openssl.txt" || true
   Say "Compiling OpenSSL"
   time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
