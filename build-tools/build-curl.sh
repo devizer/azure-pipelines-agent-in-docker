@@ -5,6 +5,7 @@ machine=$(uname -m);
 [[ $machine == armv* ]] && machine=arm32v7
 Say "Building curl. Suffix: -${machine}"
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
+CONFIG_LOG="$SYSTEM_ARTIFACTSDIRECTORY/config-logs"; mkdir -p "$CONFIG_LOG"
 mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
 
 utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
@@ -71,12 +72,12 @@ function install_openssl_111() {
   cd open*
 
   Say "Configuring OpenSSL"
-  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$HOME/log-openssl-config.txt"
+  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
   Say "Compiling OpenSSL"
   time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
-  Say "Installing OpenSSL"
-  make install -j$((cpus+3)) |& tee "$HOME/log-openssl-install.log"
+  Say "Installing OpenSSL (silent)"
+  time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
@@ -88,6 +89,19 @@ ldconfig
 
 export CFLAGS="-I${OPENSSL_HOME}/include" CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig"
 
+Say "Building libssh2"
+url=https://www.libssh2.org/download/libssh2-1.10.0.tar.gz
+work=$HOME/build/libssh2-src
+mkdir -p $work
+cd $work
+curl -kSL -o _source.tar.gz "$url"
+tar xzf _source.tar.gz
+cd lib*
+mkdir -p builddir; cd builddir
+cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DENABLE_ZLIB_COMPRESSION:BOOL=ON -DCRYPTO_BACKEND:STRING=OpenSSL .. |& tee "$CONFIG_LOG/libssh2.txt"
+make install -j
+
+
 Say "Building brotli"
 # https://github.com/google/brotli
 url=https://github.com/google/brotli/tarball/v1.0.9
@@ -98,7 +112,7 @@ tar xzf _source.tar.gz
 cd google-brotli*
 mkdir -p out; cd out
 # cmake -LH ..
-cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DCMAKE_BUILD_TYPE:STRING=Release ..
+cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DCMAKE_BUILD_TYPE:STRING=Release .. |& tee "$CONFIG_LOG/brotli.txt"
 time make install -j
 ldconfig
 
@@ -113,7 +127,7 @@ tar xzf _source.tar.gz
 cd zstd*
 cd build/cmake
 mkdir -p builddir; cd builddir
-cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DZSTD_PROGRAMS_LINK_SHARED:BOOL=ON ..
+cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DZSTD_PROGRAMS_LINK_SHARED:BOOL=ON .. |& tee "$CONFIG_LOG/zstd.txt"
 make install -j
 ldconfig
 
@@ -128,7 +142,7 @@ try-and-retry curl -kSL -o _nghttp2.tar.gz "$url"
 tar xzf _nghttp2.tar.gz
 cd nghttp*
 mkdir build-cmake; cd build-cmake
-cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME ..
+cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME .. |& tee "$CONFIG_LOG/libssh2.txt"
 make -j install
 ldconfig
 
@@ -147,6 +161,7 @@ try-and-retry curl -kSL -o _$file $url || wget --no-check-certificate -O _$file 
 tar xzf _$file
 cd curl*
 # ./configure --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME
+function _IGNORE_() {
 for lib in lib lib64; do
   if [[ -d $OPENSSL_HOME/$lib/pkgconfig ]]; then 
     pkgssl=$OPENSSL_HOME/$lib/pkgconfig; 
@@ -160,7 +175,9 @@ done
 # CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib" ./configure
 # env CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_LIB}" PKG_CONFIG_PATH=$pkgssl ./configure --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee /opt/curl-config.log
 # env CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig" ./configure --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee /opt/curl-config.log
-./configure --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee /opt/curl-config.log
+}
+
+./configure --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee "$CONFIG_LOG/curl.txt"
 # time make -j > /dev/null
 time make install -j > /dev/null
 ldconfig
@@ -214,3 +231,4 @@ build_all_known_hash_sums ${artifact}.tar.xz
 build_all_known_hash_sums ${artifact}.tar.gz
 
 Say "Done"
+kill $pid || true
