@@ -90,6 +90,21 @@ ldconfig
 
 export CFLAGS="-I${OPENSSL_HOME}/include" CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig"
 
+function _IHNORE_openldap() {
+  Say "Building openldap"
+  apt-get install groff -y -q | grep -E "^Setting"
+  url=https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.1.tgz
+  work=$HOME/build/libldap-src
+  mkdir -p $work
+  cd $work
+  curl -kSL -o _source.tar.gz "$url"
+  tar xzf _source.tar.gz
+  cd open*
+  rm -rf /opt/ldap
+  ./configure --disable-slapd --prefix="$OPENSSL_HOME" |& tee "$CONFIG_LOG/openldap.txt" && make -j depend && make -j && make install -j
+  rm -f "$OPENSSL_HOME/bin/ldap"*
+}
+
 
 Say "Building libpsl (public domain suffix list)"
 url=https://github.com/rockdaboot/libpsl/releases/download/0.21.1/libpsl-0.21.1.tar.gz
@@ -200,7 +215,7 @@ done
 # env CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig" ./configure --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee /opt/curl-config.log
 }
 
-./configure --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee "$CONFIG_LOG/curl.txt"
+./configure --with-ldap-lib=$OPENSSL_HOME --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee "$CONFIG_LOG/curl.txt"
 # time make -j > /dev/null
 time make install -j > /dev/null
 ldconfig
