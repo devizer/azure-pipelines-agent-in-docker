@@ -4,10 +4,11 @@ machine=$(uname -m);
 [[ $machine == armv* ]] && machine=arm32v7
 Say "Building curl. Suffix: -${machine}"
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
+mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
 
-utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
-try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_fixed_url}"
-source /tmp/build-gcc-utilities.sh
+# utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
+# try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_fixed_url}"
+# source /tmp/build-gcc-utilities.sh
 
 function Add-LD-Path() {
   local tmp="$(mktemp)"
