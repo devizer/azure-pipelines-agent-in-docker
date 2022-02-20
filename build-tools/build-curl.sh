@@ -92,7 +92,6 @@ export CFLAGS="-I${OPENSSL_HOME}/include" CPPFLAGS="-I${OPENSSL_HOME}/include" L
 
 
 Say "Building libidn2 (international domanin names)"
-# TODO: international names, https://ftp.gnu.org/gnu/libidn/libidn2-2.3.2.tar.gz
 url=https://ftp.gnu.org/gnu/libidn/libidn2-2.3.2.tar.gz
 work=$HOME/build/libidn2-src
 mkdir -p $work
@@ -100,7 +99,7 @@ cd $work
 curl -kSL -o _source.tar.gz "$url"
 tar xzf _source.tar.gz
 cd lib*
-./configure --prefix="$OPENSSL_HOME" && make -j && sudo make install
+./configure --prefix="$OPENSSL_HOME" |& tee "$CONFIG_LOG/libidn2.txt" && make -j && make install -j
 
 
 Say "Building libssh2"
