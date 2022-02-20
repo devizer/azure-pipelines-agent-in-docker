@@ -46,6 +46,7 @@ Say "System OpenSSL Version: $(get_openssl_system_version)"
 bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
 pid=$!
 
+sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev
 install_openssl_111 # > /dev/null
 ldconfig
 
