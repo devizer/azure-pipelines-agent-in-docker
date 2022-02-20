@@ -90,6 +90,19 @@ ldconfig
 
 export CFLAGS="-I${OPENSSL_HOME}/include" CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig"
 
+
+Say "Building libidn2 (international domanin names)"
+# TODO: international names, https://ftp.gnu.org/gnu/libidn/libidn2-2.3.2.tar.gz
+url=https://ftp.gnu.org/gnu/libidn/libidn2-2.3.2.tar.gz
+work=$HOME/build/libidn2-src
+mkdir -p $work
+cd $work
+curl -kSL -o _source.tar.gz "$url"
+tar xzf _source.tar.gz
+cd lib*
+./configure --prefix="$OPENSSL_HOME" && make -j && sudo make install
+
+
 Say "Building libssh2"
 url=https://www.libssh2.org/download/libssh2-1.10.0.tar.gz
 work=$HOME/build/libssh2-src
