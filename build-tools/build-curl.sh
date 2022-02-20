@@ -1,4 +1,5 @@
 set -eu; set -o pipefail
+cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 machine=$(uname -m); 
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
