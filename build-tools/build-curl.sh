@@ -38,13 +38,48 @@ export CFLAGS="-Wno-error -O3 -Wno-error=implicit-function-declaration"
 
 # rm -rf $OPENSSL_HOME
 Say "Building OpenSSL $OPENSSL_VERSION to [$OPENSSL_HOME]"
-script=https://raw.githubusercontent.com/devizer/w3top-bin/master/tests/openssl-1.1-from-source.sh
-file=/tmp/openssl-1.1.1.sh
-try-and-retry wget --no-check-certificate -O $file $script 2>/dev/null || curl -ksSL -o $file $script
-source $file
+# script=https://raw.githubusercontent.com/devizer/w3top-bin/master/tests/openssl-1.1-from-source.sh
+# file=/tmp/openssl-1.1.1.sh
+# try-and-retry wget --no-check-certificate -O $file $script 2>/dev/null || curl -ksSL -o $file $script
+# source $file
 Say "System OpenSSL Version: $(get_openssl_system_version)"
 bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
 pid=$!
+
+function install_openssl_111() {
+  OPENSSL_HOME=${OPENSSL_HOME:-/opt/openssl}
+  OPENSSL_VERSION="${OPENSSL_VERSION:-1.1.1m}"
+
+  command -v apt-get 1>/dev/null &&
+     (apt-get update -q; apt-get install build-essential make autoconf libtool zlib1g-dev curl wget -y -q)
+  if [[ "$(command -v dnf)" != "" ]]; then
+     (dnf install gcc make autoconf libtool perl zlib-devel curl wget -y -q)
+  fi
+  if [[ "$(command -v zypper)" != "" ]]; then
+     zypper -n in -y gcc make autoconf libtool perl zlib-devel curl tar gzip wget
+  fi
+
+  url=https://www.openssl.org/source/openssl-1.1.1m.tar.gz
+  file=$(basename $url)
+  local work=$HOME/build/open-ssl-1.1
+  mkdir -p $work
+  rm -rf $work/* || true
+  pushd $work
+  curl -kSL -o _$file $url || curl -kSL -o _$file $url
+  tar xzf _$file
+  cd open*
+
+  Say "Configuring OpenSSL"
+  ./config --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$HOME/log-openssl-config.txt"
+  Say "Compiling OpenSSL"
+  time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
+  # make test
+  Say "Installing OpenSSL"
+  make install -j$((cpus+3)) |& tee "$HOME/log-openssl-install.log"
+  Say "Complete OpenSSL"
+  popd
+  # rm -rf $work
+}
 
 sudo apt-get install libncursesw5-dev libncurses5-dev -y -q; apt-get purge libssl-dev
 install_openssl_111 # > /dev/null
