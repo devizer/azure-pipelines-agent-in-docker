@@ -43,6 +43,9 @@ file=/tmp/openssl-1.1.1.sh
 try-and-retry wget --no-check-certificate -O $file $script 2>/dev/null || curl -ksSL -o $file $script
 source $file
 Say "System OpenSSL Version: $(get_openssl_system_version)"
+bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
+pid=$!
+
 install_openssl_111 # > /dev/null
 ldconfig
 
@@ -151,7 +154,9 @@ for f in bin/* lib/*.so* lib/*.so*; do
 done
 mkdir -p deps
 for f in $(cat "$deps" | sort -u); do
-  cp -f "$f" deps/
+  if [[ -e "$f" ]]; then
+    cp -f "$f" deps/
+  fi
 done
 for dir in deps lib lib64; do
   echo "Check is $dir/ empty"
