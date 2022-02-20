@@ -198,6 +198,8 @@ Say "Check https://raw.githubusercontent.com using TLS 1.3"
 curl -I -L --tlsv1.3 https://raw.githubusercontent.com
 '
 
+$OPENSSL_HOME/bin/curl --version |& tee "$CONFIG_LOG/curl.version.txt"
+
 # strip
 Say "Stripping"
 cd $OPENSSL_HOME
