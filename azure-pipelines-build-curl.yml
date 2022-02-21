@@ -8,7 +8,7 @@ trigger:
 
 jobs:
 
-- job: cmake
+- job: curl
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
