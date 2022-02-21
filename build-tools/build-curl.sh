@@ -79,12 +79,6 @@ function install_openssl_111() {
   # make test
   Say "Installing OpenSSL (silent)"
   time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
-  Say "Cleaning $OPENSSL_HOME/share/man/man3/*"
-  ls "$OPENSSL_HOME/share/man/man3/"
-  pushd "$OPENSSL_HOME/share/man/man3/"
-  ls
-  popd
-  rm -rf "$OPENSSL_HOME/share/man/man3"
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
