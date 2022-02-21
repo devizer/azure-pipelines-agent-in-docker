@@ -80,7 +80,11 @@ function install_openssl_111() {
   Say "Installing OpenSSL (silent)"
   time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
   Say "Cleaning $OPENSSL_HOME/share/man/man3/*"
-  rm -rf "$OPENSSL_HOME/share/man/man3/"*
+  ls "$OPENSSL_HOME/share/man/man3/"
+  pushd "$OPENSSL_HOME/share/man/man3/"
+  ls
+  popd
+  rm -rf "$OPENSSL_HOME/share/man/man3"
   # C:\Users\Vlad\AppData\Local\Temp\FAR4DFE.tmp\curl-7.81.0-arm32v7.tar/share/man/man3/*
   Say "Complete OpenSSL"
   popd
@@ -93,7 +97,7 @@ ldconfig
 
 export CFLAGS="-I${OPENSSL_HOME}/include" CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig"
 
-function _IHNORE_openldap() {
+function _IGNORE_openldap() {
   Say "Building openldap"
   apt-get install groff -y -q | grep -E "^Setting"
   url=https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.1.tgz
