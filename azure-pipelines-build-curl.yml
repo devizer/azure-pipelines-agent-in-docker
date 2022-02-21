@@ -14,7 +14,6 @@ jobs:
   timeoutInMinutes: 360
   strategy:
     matrix:
-      # default is the latest GCC 11.2 
       'x86-64':
         IMAGE: "debian:7"
       'arm32v7':
