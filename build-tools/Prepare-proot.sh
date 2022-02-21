@@ -191,11 +191,11 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   pushd $work
   # 8 threads need 8 Gb of RAM
   time (sudo tar cf - . | pv | xz -z -9 -e --threads=2 > "${xzFile}")
-  Say "Pack $IMAGE as [${szFile}]"
-  time 7z a -mx=9 -mx=9 -mfb=512 -md=512m -ms=on -mqs=on -mmt=2 "$szFile"
+  Say "Do Not Pack $IMAGE as [${szFile}]"
+  # time 7z a -mx=9 -mx=9 -mfb=512 -md=512m -ms=on -mqs=on -mmt=2 "$szFile"
   local xzSize="$(stat --printf="%s" "${xzFile}")"; xzSize=$((xzSize/1024)) 
-  local szSize="$(stat --printf="%s" "${szFile}")"; szSize=$((xzSize/1024)) 
-  Say "7z size: $szSize"
+  # local szSize="$(stat --printf="%s" "${szFile}")"; szSize=$((xzSize/1024)) 
+  # Say "7z size: $szSize"
   local plainSize="$(du --max-depth=0 "$work" | awk '{print $1}')";
   local sizesFile="$SYSTEM_ARTIFACTSDIRECTORY/sizes.txt"
   printf "| %-40s | %12s | %12s |\n" "$(basename ${xzFile})" "$(format_Integer "$xzSize")" "$(format_Integer "$plainSize")" >> "$sizesFile"
@@ -204,7 +204,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   popd
 
   Say "Copy artifact"
-  for archive in "${xzFile}" "${szFile}"; do
+  for archive in "${xzFile}"; do
     cp -f "${archive}" "$SYSTEM_ARTIFACTSDIRECTORY/$(basename "${archive}")"
     Say "Done artifact: $KEY"
   done
