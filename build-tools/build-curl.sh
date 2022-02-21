@@ -79,6 +79,9 @@ function install_openssl_111() {
   # make test
   Say "Installing OpenSSL (silent)"
   time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
+  Say "Cleaning $OPENSSL_HOME/share/man/man3/*"
+  rm -rf "$OPENSSL_HOME/share/man/man3/"*
+  # C:\Users\Vlad\AppData\Local\Temp\FAR4DFE.tmp\curl-7.81.0-arm32v7.tar/share/man/man3/*
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
