@@ -29,7 +29,10 @@ jobs:
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
       Say "qemu user static"
-      sudo apt-get install qemu-user-static -y -qq >/dev/null
+      # sudo apt-get install qemu-user-static -y -qq >/dev/null
+      docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1
+      sudo docker cp qemu-user-static:/usr/bin/. /usr/bin
+      /usr/bin/qemu-arm-static --version
       Say "Register qemu static"
       docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
       utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
