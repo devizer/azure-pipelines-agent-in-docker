@@ -85,7 +85,6 @@ function install_openssl_111() {
   ls
   popd
   rm -rf "$OPENSSL_HOME/share/man/man3"
-  # C:\Users\Vlad\AppData\Local\Temp\FAR4DFE.tmp\curl-7.81.0-arm32v7.tar/share/man/man3/*
   Say "Complete OpenSSL"
   popd
   # rm -rf $work
@@ -269,6 +268,7 @@ for dir in deps lib lib64; do
 done 
 
 cd "$OPENSSL_HOME"
+rm -rf share/man/man3
 Say "pack [$(pwd)] release as gz"
 artifact="$SYSTEM_ARTIFACTSDIRECTORY/curl-7.81.0-$machine"
 tar cf - . | gzip -9 > ${artifact}.tar.gz
