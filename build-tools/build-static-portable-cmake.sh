@@ -15,13 +15,13 @@ tar xzf /tmp/_cmake.tar.gz
 cd cmake*
 mkdir -p out; cd out
 
-export CC=clang CXX=clang++ CFLAGS="-Oz" LDFLAGS="-static"
+export CC=clang CXX=clang++ CFLAGS="-O0" LDFLAGS="-static"
 rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/opt/cmake \
   -DBUILD_TESTING:BOOL=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE \
   -DOPENSSL_ROOT_DIR=/usr \
   .. 2>&1 | tee ~/my-cmake.log
 
-time make install -j CFLAGS="-Oz" LDFLAGS="-static -all-static" |& tee my-make.log
+time make install -j CFLAGS="-O0" LDFLAGS="-static -all-static" |& tee my-make.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
 Say "DONE: Static Portable CMake"
