@@ -57,7 +57,7 @@ jobs:
         docker cp "$f" "$CONTAINER":/root/.
       done
 
-      docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;''
+      docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;'
       docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; source build-static-portable-cmake.sh"
     displayName: 'Static CMake'
 
