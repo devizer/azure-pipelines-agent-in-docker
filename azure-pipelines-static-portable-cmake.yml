@@ -114,10 +114,13 @@ jobs:
   dependsOn: build_static_cmake
 
   steps: 
-  - download: current
-    patterns: ["**"]
-    path: $(Agent.TempDirectory)/src-artifacts
-
+  - task: DownloadPipelineArtifact@2
+    condition: succeededOrFailed()
+    displayName: 'Download of all platforms'
+    inputs:
+      patterns: ["**"]
+      path: $(Agent.TempDirectory)/src-artifacts
+    
   - script: |
       set -eu; set -o pipefail
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null      
