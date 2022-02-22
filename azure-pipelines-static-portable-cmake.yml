@@ -13,7 +13,7 @@ jobs:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
   strategy:
-    maxParallel: 4
+    maxParallel: 2
     matrix:
       'amd64':
         PLATFORM: "amd64"
