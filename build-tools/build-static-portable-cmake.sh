@@ -11,7 +11,7 @@ time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev
 
 url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake; mkdir -p "$work"; cd $work
-curl -kSL -o /tmp/_cmake.tar.gz "$url"
+try-and-retry curl -f -kSL -o /tmp/_cmake.tar.gz "$url"
 tar xzf /tmp/_cmake.tar.gz
 cd cmake*
 mkdir -p out; cd out
