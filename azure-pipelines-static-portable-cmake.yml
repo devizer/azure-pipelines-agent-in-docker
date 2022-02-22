@@ -114,20 +114,20 @@ jobs:
   dependsOn: build_static_cmake
 
   steps: 
-    - download: current
-      artifact: WebApp
-      patterns: |
-          **
+  - download: current
+    artifact: WebApp
+    patterns: |
+        **
 
-    - script: |
-        set -eu; set -o pipefail
-        sudo apt-get install tree -y -qq >/dev/null
-        Say "Pipeline.Workspace: $(Pipeline.Workspace)"
-        Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
-        tree -h -du $PIPELINE_WORKSPACE
+  - script: |
+      set -eu; set -o pipefail
+      sudo apt-get install tree -y -qq >/dev/null
+      Say "Pipeline.Workspace: $(Pipeline.Workspace)"
+      Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
+      tree -h -du $PIPELINE_WORKSPACE
 
-        sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
-        echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
-    displayName: 'Deploy GitHub Release $(CMAKE_VER)'
+      sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
+      echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
+  displayName: 'Deploy GitHub Release $(CMAKE_VER)'
 
 
