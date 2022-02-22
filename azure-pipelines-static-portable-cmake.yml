@@ -78,12 +78,12 @@ jobs:
       set -eu; set -o pipefail
       Say "grab cmake artifacts"
       CONTAINER="builder"
-      mkdir -p ~/my-cmake
-      docker cp $CONTAINER:/opt/cmake/. ~/my-cmake
-      cd ~/my-cmake
       sudo chown -R root:root .
       source /tmp/build-gcc-utilities.sh
       for suffix in "" "-stripped"; do
+          mkdir -p ~/my-cmake${suffix}
+          docker cp $CONTAINER:/opt/cmake${suffix}/. ~/my-cmake${suffix}
+          cd ~/my-cmake${suffix}
           tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-3.22.2-${PLATFORM}${suffix}"
           sudo tar cf - . | xz -z -9 -e > "$tar.tar.xz"
           sudo tar cf - . | gzip -9 > "$tar.tar.gz"

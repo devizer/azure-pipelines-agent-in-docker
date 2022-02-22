@@ -25,4 +25,6 @@ rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/o
 time make install -j2 CFLAGS="-Oz" LDFLAGS="-static -all-static" |& tee my-make.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
+cp -r /opt/cmake /opt/cmake-stripped
+strip /opt/cmake-stripped/bin/*
 Say "DONE: Static Portable CMake"
