@@ -74,7 +74,7 @@ jobs:
       done
 
       docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;'
-      docker exec -t -e PLATFORM="$PLATFORM" -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -u -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; Say $(uname -m); source build-static-portable-cmake.sh"
+      docker exec -t -e CMAKE_VER="$CMAKE_VER" -e PLATFORM="$PLATFORM" -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -u -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; Say $(uname -m); source build-static-portable-cmake.sh"
     displayName: 'Static CMake $(CMAKE_VER)'
 
   - script: |
