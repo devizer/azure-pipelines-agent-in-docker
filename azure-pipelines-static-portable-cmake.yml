@@ -16,24 +16,24 @@ jobs:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
   strategy:
-    maxParallel: 10
+    maxParallel: 5
     matrix:
       'amd64':
         PLATFORM: "amd64"
       'i386':
         PLATFORM: "386"
-      # 'armv6':
-      #   PLATFORM: "armv6"
-      # 'armv7':
-      #   PLATFORM: "armv7"
-      # 'arm64':
-      #   PLATFORM: "arm64"
-      # 'ppc64le':
-      #   PLATFORM: "ppc64le"
-      # 'riscv64':
-      #   PLATFORM: "riscv64"
-      # 's390x':
-      #   PLATFORM: "s390x"
+      'armv6':
+        PLATFORM: "armv6"
+      'armv7':
+        PLATFORM: "armv7"
+      'arm64':
+        PLATFORM: "arm64"
+      'ppc64le':
+        PLATFORM: "ppc64le"
+      'riscv64':
+        PLATFORM: "riscv64"
+      's390x':
+        PLATFORM: "s390x"
 
   steps:
   - script: |
@@ -115,23 +115,19 @@ jobs:
   steps: 
   - script: |
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null      
-      sudo apt-get install ruby-dev sshpass rsync tree -y -qq | grep "Setting" || true
+      sudo apt-get install rhash ruby-dev sshpass rsync tree -y -qq | grep "Setting" || true
       sudo gem install dpl dpl-releases
       echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
-      Say "Pipeline.Workspace: $(Pipeline.Workspace)"
-      Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
-      Say "Agent.TempDirectory: $(Agent.TempDirectory)"
-      Say "AGENT_TEMPDIRECTORY: $AGENT_TEMPDIRECTORY"
 
       RAW_ARTIFACTS_DIR="$(Agent.TempDirectory)/raw-cmake-artifacts"
       echo "##vso[task.setvariable variable=RAW_ARTIFACTS_DIR]$RAW_ARTIFACTS_DIR"
+      Say "RAW_ARTIFACTS_DIR: $RAW_ARTIFACTS_DIR"
     displayName: 'Config Deploy $(CMAKE_VER)'
 
   - task: DownloadPipelineArtifact@2
     condition: succeededOrFailed()
     displayName: 'Download of all platforms'
     inputs:
-      # path: $(Agent.TempDirectory)/src-artifacts
       path: $(RAW_ARTIFACTS_DIR)
       patterns: 
         "**"
@@ -140,9 +136,8 @@ jobs:
       set -eu; set -o pipefail
       Say "RAW_ARTIFACTS_DIR: [${RAW_ARTIFACTS_DIR}]"
 
-      find ${RAW_ARTIFACTS_DIR}
       # MAIN WORK
-      for ext in gz xz bz2; do
+      for ext in gz xz bz2 "*"; do
         find ${RAW_ARTIFACTS_DIR} -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
       done
 
@@ -157,5 +152,5 @@ jobs:
     displayName: 'Publish'
     inputs:
       pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
-      artifactName: '$(Agent.JobName)'
+      artifactName: 'Static Portable CMake (8 architectures)'
 
