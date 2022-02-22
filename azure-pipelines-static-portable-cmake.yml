@@ -47,7 +47,7 @@ jobs:
       utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
       try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_master_url}"
       CONTAINER="builder"
-      IMAGE="alpine:edge"
+      IMAGE="alpine:edge@sha256:0119f88f395766eb52f9b817c3d23576bf31935dc8e94abe14bae9a083ce4639"
       docker pull "$IMAGE" >/dev/null
       docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
