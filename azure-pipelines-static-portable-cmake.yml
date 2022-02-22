@@ -115,8 +115,8 @@ jobs:
 
   steps: 
   - download: current
-    path: $(Agent.TempDirectory)/src-artifacts
     patterns: ["**"]
+    path: $(Agent.TempDirectory)/src-artifacts
 
   - script: |
       set -eu; set -o pipefail
