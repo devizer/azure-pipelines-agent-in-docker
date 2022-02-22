@@ -49,7 +49,15 @@ jobs:
       source /tmp/build-gcc-utilities.sh
       say_cpu_name
       CONTAINER="builder"
-      IMAGE="alpine:edge@sha256:0119f88f395766eb52f9b817c3d23576bf31935dc8e94abe14bae9a083ce4639"
+
+      # PLATFORM=armv7
+      json="$(Get-Docker-Image-Manifest "alpine:edge")"
+      Say "Beauty alpine:edge"; 
+      cat "$json" | Docker-Image-Manifest-As-Table
+      digest="$(cat "$json" | Find-Docker-Image-Digest-for-Architecture "$PLATFORM")"
+      Say "Digest of [$PLATFORM] is [$digest]"
+
+      IMAGE="alpine:edge@${digest}"
       docker pull "$IMAGE" >/dev/null
       docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
@@ -61,7 +69,7 @@ jobs:
       done
 
       docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;'
-      docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; source build-static-portable-cmake.sh"
+      docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; Say $(uname -m); source build-static-portable-cmake.sh"
     displayName: 'Static CMake'
 
   - script: |
