@@ -138,6 +138,8 @@ jobs:
         find $AGENT_TEMPDIRECTORY/src-artifacts -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
       done
 
+      rm -rf $AGENT_TEMPDIRECTORY/src-artifacts/* || true
+
       sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
       echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
     displayName: 'Deploy GitHub Release $(CMAKE_VER)'
