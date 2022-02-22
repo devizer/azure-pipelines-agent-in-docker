@@ -118,6 +118,9 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     Say "Install 7z and jq for [$(get_linux_os_id) $(uname -m)]"
     apt-get install jq p7zip-full -y -qq
   fi
+
+  Say "yq"
+  export INSTALL_DIR=/usr/local YQ_VER=v4.20.1; script="https://master.dl.sourceforge.net/project/yq-repack/install-yq.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   
   export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; 
   Say "Install 7z 21.07 as [/usr/local/bin/7z] for [$(get_linux_os_id) $(uname -m)]"
