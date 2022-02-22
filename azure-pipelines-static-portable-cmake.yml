@@ -114,34 +114,43 @@ jobs:
   dependsOn: build_static_cmake
 
   steps: 
+  - script: |
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null      
+      sudo apt-get install tree -y -qq >/dev/null
+      sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
+      echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
+      Say "Pipeline.Workspace: $(Pipeline.Workspace)"
+      Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
+      Say "Agent.TempDirectory: $(Agent.TempDirectory)"
+      Say "AGENT_TEMPDIRECTORY: $AGENT_TEMPDIRECTORY"
+
+      RAW_ARTIFACTS_DIR="$(Agent.TempDirectory)/raw-cmake-artifacts"
+      echo "##vso[task.setvariable variable=RAW_ARTIFACTS_DIR]$RAW_ARTIFACTS_DIR"
+    displayName: 'Config Deploy $(CMAKE_VER)'
+
   - task: DownloadPipelineArtifact@2
     condition: succeededOrFailed()
     displayName: 'Download of all platforms'
     inputs:
-      path: $(Agent.TempDirectory)/src-artifacts
+      # path: $(Agent.TempDirectory)/src-artifacts
+      path: $(RAW_ARTIFACTS_DIR)
       patterns: 
         "**"
     
   - script: |
       set -eu; set -o pipefail
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null      
-      sudo apt-get install tree -y -qq >/dev/null
-      Say "Pipeline.Workspace: $(Pipeline.Workspace)"
-      Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
-      Say "Agent.TempDirectory: $(Agent.TempDirectory)"
-      Say "AGENT_TEMPDIRECTORY: $AGENT_TEMPDIRECTORY"
-      tree -h -du $AGENT_TEMPDIRECTORY/src-artifacts
+      Say "RAW_ARTIFACTS_DIR: [${RAW_ARTIFACTS_DIR}]"
 
-      find $AGENT_TEMPDIRECTORY/src-artifacts
+      find ${RAW_ARTIFACTS_DIR}
       # MAIN WORK
       for ext in gz xz bz2; do
-        find $AGENT_TEMPDIRECTORY/src-artifacts -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
+        find ${RAW_ARTIFACTS_DIR} -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
       done
 
-      rm -rf $AGENT_TEMPDIRECTORY/src-artifacts/* || true
+      # Clean
+      rm -rf ${RAW_ARTIFACTS_DIR}/* || true
 
-      sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
-      echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
+    condition: succeededOrFailed()
     displayName: 'Deploy GitHub Release $(CMAKE_VER)'
 
   - task: PublishBuildArtifacts@1
