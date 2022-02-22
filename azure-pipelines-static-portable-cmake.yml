@@ -87,7 +87,7 @@ jobs:
           mkdir -p ~/my-cmake${suffix}; rm -rf ~/my-cmake${suffix}/* || true
           docker cp $CONTAINER:/opt/cmake${suffix}/. ~/my-cmake${suffix}
           cd ~/my-cmake${suffix}
-          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-$(CMAKE_VER)-linux-${PLATFORM}${suffix}"
+          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-$(CMAKE_VER)-static-portable-linux-${PLATFORM}${suffix}"
           sudo tar cf - * | xz -z -9 -e > "$tar.tar.xz"
           sudo tar cf - * | gzip -9 > "$tar.tar.gz"
           sudo tar cf - * | bzip2 -z -9 > "$tar.tar.bz2"
