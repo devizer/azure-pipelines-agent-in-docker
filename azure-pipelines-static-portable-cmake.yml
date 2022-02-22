@@ -130,4 +130,10 @@ jobs:
       echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
   displayName: 'Deploy GitHub Release $(CMAKE_VER)'
 
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(Pipeline.Workspace)'
+      artifactName: '$(Agent.JobName)'
 
