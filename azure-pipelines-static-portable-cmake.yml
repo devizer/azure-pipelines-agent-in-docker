@@ -115,8 +115,8 @@ jobs:
 
   steps: 
   - download: current
-    patterns: |
-        **
+    path: $(Agent.TempDirectory)/src-artifacts
+    patterns: ["**"]
 
   - script: |
       set -eu; set -o pipefail
@@ -124,7 +124,15 @@ jobs:
       sudo apt-get install tree -y -qq >/dev/null
       Say "Pipeline.Workspace: $(Pipeline.Workspace)"
       Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
-      tree -h -du $PIPELINE_WORKSPACE
+      Say "Agent.TempDirectory: $(Agent.TempDirectory)"
+      Say "AGENT_TEMPDIRECTORY: $AGENT_TEMPDIRECTORY"
+      tree -h -du $AGENT_TEMPDIRECTORY/src-artifacts
+
+      find $AGENT_TEMPDIRECTORY/src-artifacts
+      # MAIN WORK
+      for ext in gz xz bz2; do
+        find $AGENT_TEMPDIRECTORY/src-artifacts -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
+      done
 
       sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
       echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
@@ -134,6 +142,6 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'Publish'
     inputs:
-      pathtoPublish: '$(Pipeline.Workspace)'
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
