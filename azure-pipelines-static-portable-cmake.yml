@@ -118,8 +118,9 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'Download of all platforms'
     inputs:
-      patterns: ["**"]
       path: $(Agent.TempDirectory)/src-artifacts
+      patterns: 
+        "**"
     
   - script: |
       set -eu; set -o pipefail
