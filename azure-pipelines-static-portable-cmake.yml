@@ -22,18 +22,18 @@ jobs:
         PLATFORM: "amd64"
       'i386':
         PLATFORM: "386"
-      'armv6':
-        PLATFORM: "armv6"
-      'armv7':
-        PLATFORM: "armv7"
-      'arm64':
-        PLATFORM: "arm64"
-      'ppc64le':
-        PLATFORM: "ppc64le"
-      'riscv64':
-        PLATFORM: "riscv64"
-      's390x':
-        PLATFORM: "s390x"
+      # 'armv6':
+      #   PLATFORM: "armv6"
+      # 'armv7':
+      #   PLATFORM: "armv7"
+      # 'arm64':
+      #   PLATFORM: "arm64"
+      # 'ppc64le':
+      #   PLATFORM: "ppc64le"
+      # 'riscv64':
+      #   PLATFORM: "riscv64"
+      # 's390x':
+      #   PLATFORM: "s390x"
 
   steps:
   - script: |
@@ -119,6 +119,10 @@ jobs:
       sudo gem install dpl dpl-releases
       echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
 
+      utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
+      try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_master_url}"
+      source /tmp/build-gcc-utilities.sh
+
       RAW_ARTIFACTS_DIR="$(Agent.TempDirectory)/raw-cmake-artifacts"
       echo "##vso[task.setvariable variable=RAW_ARTIFACTS_DIR]$RAW_ARTIFACTS_DIR"
       Say "RAW_ARTIFACTS_DIR: $RAW_ARTIFACTS_DIR"
@@ -137,9 +141,12 @@ jobs:
       Say "RAW_ARTIFACTS_DIR: [${RAW_ARTIFACTS_DIR}]"
 
       # MAIN WORK
-      for ext in gz xz bz2 "*"; do
+      for ext in gz xz bz2; do
         find ${RAW_ARTIFACTS_DIR} -name "*.${ext}" -type f -exec cp -f {} $SYSTEM_ARTIFACTSDIRECTORY/ \;
       done
+
+      source /tmp/build-gcc-utilities.sh
+      find $SYSTEM_ARTIFACTSDIRECTORY/ -type f | build_all_known_hash_sums_for_list_of_files | tee $SYSTEM_ARTIFACTSDIRECTORY/hash.sums
 
       # Clean
       rm -rf ${RAW_ARTIFACTS_DIR}/* || true
