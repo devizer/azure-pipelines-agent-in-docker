@@ -79,22 +79,21 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
-      Say "grab cmake artifacts"
+      Say "Grab CMake $(CMAKE_VER) Artifacts"
       CONTAINER="builder"
       sudo chown -R root:root .
       source /tmp/build-gcc-utilities.sh
       for suffix in "" "-stripped"; do
-          mkdir -p ~/my-cmake${suffix}
+          mkdir -p ~/my-cmake${suffix}; rm -rf ~/my-cmake${suffix}/* || true
           docker cp $CONTAINER:/opt/cmake${suffix}/. ~/my-cmake${suffix}
           cd ~/my-cmake${suffix}
-          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-$(CMAKE_VER)-${PLATFORM}${suffix}"
-          sudo tar cf - . | xz -z -9 -e > "$tar.tar.xz"
-          sudo tar cf - . | gzip -9 > "$tar.tar.gz"
-          sudo tar cf - . | bzip2 -z -9 > "$tar.tar.bz2"
+          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-$(CMAKE_VER)-linux-${PLATFORM}${suffix}"
+          sudo tar cf - * | xz -z -9 -e > "$tar.tar.xz"
+          sudo tar cf - * | gzip -9 > "$tar.tar.gz"
+          sudo tar cf - * | bzip2 -z -9 > "$tar.tar.bz2"
           for ext in xz gz bz2; do
             build_all_known_hash_sums "$tar.tar.$ext"
           done
-          # strip bin/* || true
       done
       Say "Bye"
     condition: succeededOrFailed()
