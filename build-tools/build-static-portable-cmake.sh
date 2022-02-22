@@ -15,7 +15,7 @@ tar xzf /tmp/_cmake.tar.gz
 cd cmake*
 mkdir -p out; cd out
 
-export CC=clang CXX=clang++ CFLAGS="-Oz" LDFLAGS="-static" CFLAGS="-O0"
+export CC=clang CXX=clang++ CFLAGS="-Oz" LDFLAGS="-static"
 rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/opt/cmake \
   -DBUILD_TESTING:BOOL=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE \
   -DOPENSSL_ROOT_DIR=/usr \
