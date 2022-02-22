@@ -1,7 +1,7 @@
 # https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
-Say "PLATFORM: $PLATFORM"
+Say "PLATFORM: $PLATFORM, CMAKE_VER: $CMAKE_VER"
 apk upgrade
 time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev ncurses-static linux-headers mc nano \
   openssl-dev openssl-libs-static \
@@ -9,7 +9,7 @@ time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev
   zlib-dev zlib-static bzip2-dev bzip2-static curl expat-dev expat-static \
   libarchive-dev libarchive-static
 
-url=https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2.tar.gz
+url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake; mkdir -p "$work"; cd $work
 curl -kSL -o /tmp/_cmake.tar.gz "$url"
 tar xzf /tmp/_cmake.tar.gz
@@ -25,6 +25,8 @@ rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/o
 time make install -j2 CFLAGS="-O2" LDFLAGS="-static -all-static" |& tee my-make.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
+/opt/cmake/bin/cmake --version
+Say "Stripped copy: /opt/cmake-stripped"
 cp -r /opt/cmake /opt/cmake-stripped
 strip /opt/cmake-stripped/bin/*
 Say "DONE: Static Portable CMake"

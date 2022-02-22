@@ -1,3 +1,6 @@
+variables:
+  CMAKE_VER: 3.21.5
+
 trigger:
   branches:
     include:
@@ -8,7 +11,7 @@ trigger:
 
 jobs:
 
-- job: 'static_cmake'
+- job: 'build_static_cmake'
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
@@ -17,20 +20,20 @@ jobs:
     matrix:
       'amd64':
         PLATFORM: "amd64"
-      'armv6':
-        PLATFORM: "armv6"
-      'armv7':
-        PLATFORM: "armv7"
-      'arm64':
-        PLATFORM: "arm64"
       'i386':
         PLATFORM: "386"
-      'ppc64le':
-        PLATFORM: "ppc64le"
-      'riscv64':
-        PLATFORM: "riscv64"
-      's390x':
-        PLATFORM: "s390x"
+      # 'armv6':
+      #   PLATFORM: "armv6"
+      # 'armv7':
+      #   PLATFORM: "armv7"
+      # 'arm64':
+      #   PLATFORM: "arm64"
+      # 'ppc64le':
+      #   PLATFORM: "ppc64le"
+      # 'riscv64':
+      #   PLATFORM: "riscv64"
+      # 's390x':
+      #   PLATFORM: "s390x"
 
   steps:
   - script: |
@@ -72,7 +75,7 @@ jobs:
 
       docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;'
       docker exec -t -e PLATFORM="$PLATFORM" -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; Say $(uname -m); source build-static-portable-cmake.sh"
-    displayName: 'Static CMake'
+    displayName: 'Static CMake $(CMAKE_VER)'
 
   - script: |
       set -eu; set -o pipefail
@@ -84,18 +87,18 @@ jobs:
           mkdir -p ~/my-cmake${suffix}
           docker cp $CONTAINER:/opt/cmake${suffix}/. ~/my-cmake${suffix}
           cd ~/my-cmake${suffix}
-          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-3.22.2-${PLATFORM}${suffix}"
+          tar="$SYSTEM_ARTIFACTSDIRECTORY/cmake-$(CMAKE_VER)-${PLATFORM}${suffix}"
           sudo tar cf - . | xz -z -9 -e > "$tar.tar.xz"
           sudo tar cf - . | gzip -9 > "$tar.tar.gz"
           sudo tar cf - . | bzip2 -z -9 > "$tar.tar.bz2"
           for ext in xz gz bz2; do
             build_all_known_hash_sums "$tar.tar.$ext"
           done
-          strip bin/* || true
+          # strip bin/* || true
       done
       Say "Bye"
     condition: succeededOrFailed()
-    displayName: 'grab artifacts'
+    displayName: 'grab artifacts $(CMAKE_VER)'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
@@ -103,3 +106,29 @@ jobs:
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
+
+- job: 'deploy_static_cmake'
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+  dependsOn: build_static_cmake
+
+  steps: 
+    - download: current
+      artifact: WebApp
+      patterns: |
+          **
+
+    - script: |
+          set -eu; set -o pipefail
+          sudo apt-get install tree -y -qq >/dev/null
+          Say "Pipeline.Workspace: $(Pipeline.Workspace)"
+          Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
+          tree -h -du $PIPELINE_WORKSPACE
+
+          sudo apt-get install -y ruby-dev | grep Setting || true; sudo gem install dpl dpl-releases
+          echo "Deploy tool version: $(gem list --local | grep dpl | sort)"
+
+    displayName: 'Deploy GitHub Release $(CMAKE_VER)'
+
+
