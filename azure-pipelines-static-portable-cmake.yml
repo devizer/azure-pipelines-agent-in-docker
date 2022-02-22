@@ -1,0 +1,82 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/*'
+
+jobs:
+
+- job: 'static-cmake'
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      'amd64':
+        PLATFORM: "amd64"
+      'armv6':
+        PLATFORM: "armv6"
+      'armv7':
+        PLATFORM: "armv7"
+      'arm64':
+        PLATFORM: "arm64"
+      'i386':
+        PLATFORM: "386"
+      'ppc64le':
+        PLATFORM: "ppc64le"
+      'riscv64':
+        PLATFORM: "riscv64"
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      cd build-tools
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "qemu user static"
+      # sudo apt-get install qemu-user-static -y -qq >/dev/null
+      docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1 || true
+      sudo docker cp qemu-user-static:/usr/bin/. /usr/bin
+      /usr/bin/qemu-arm-static --version
+      Say "Register qemu static"
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
+      utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
+      utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
+      try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_master_url}"
+      CONTAINER="builder"
+      IMAGE="alpine:edge"
+      docker pull "$IMAGE" >/dev/null
+      docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
+      for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
+        docker cp $f "$CONTAINER":/usr/bin/.
+      done
+      for f in "$(pwd)/"*.sh /tmp/build-gcc-utilities.sh; do
+        Say "copying $f to the container"
+        docker cp "$f" "$CONTAINER":/root/.
+      done
+
+      docker exec -t $CONTAINER bash -e -c "Say --Reset-Stopwatch; tail -f /dev/null"
+      docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "apk upgrade; apk add bash cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; prepare_os; Say Ready; pwd; bash -e build-curl.sh"
+    displayName: 'cmake static'
+
+  - script: |
+      set -eu; set -o pipefail
+      Say "grab cmake artifacts"
+      CONTAINER="builder"
+      mkdir -p ~/my-cmake
+      docker cp $CONTAINER:/opt/cmake/. ~/my-cmake
+      cd ~/my-cmake
+      sudo chown -R root:root .
+      sudo tar cf - . | xz -z -9 -e > "$SYSTEM_ARTIFACTSDIRECTORY/cmake-3.22.2-$PLATFORM.tar.xz"
+      Say "Bye"
+    condition: succeededOrFailed()
+    displayName: 'grab artifacts'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
