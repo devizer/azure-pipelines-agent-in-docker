@@ -1,6 +1,7 @@
 # https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
+Say "PLATFORM: $PLATFORM"
 apk upgrade
 time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev ncurses-static linux-headers mc nano \
   openssl-dev openssl-libs-static \
@@ -21,7 +22,7 @@ rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/o
   -DOPENSSL_ROOT_DIR=/usr \
   .. 2>&1 | tee ~/my-cmake.log
 
-time make install CFLAGS="-Oz" LDFLAGS="-static -all-static" |& tee my-make.log
+time make install -j CFLAGS="-Oz" LDFLAGS="-static -all-static" |& tee my-make.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
 Say "DONE: Static Portable CMake"
