@@ -120,6 +120,7 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null      
       sudo apt-get install tree -y -qq >/dev/null
       Say "Pipeline.Workspace: $(Pipeline.Workspace)"
       Say "PIPELINE_WORKSPACE: $PIPELINE_WORKSPACE"
