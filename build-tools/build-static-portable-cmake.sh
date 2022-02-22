@@ -1,4 +1,4 @@
-﻿# https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
+# https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
 apk upgrade
