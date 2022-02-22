@@ -8,7 +8,7 @@ trigger:
 
 jobs:
 
-- job: 'static-cmake'
+- job: 'static_cmake'
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
@@ -57,9 +57,9 @@ jobs:
         docker cp "$f" "$CONTAINER":/root/.
       done
 
-      docker exec -t $CONTAINER bash -e -c "Say --Reset-Stopwatch; tail -f /dev/null"
-      docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "apk upgrade; apk add bash cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; prepare_os; Say Ready; pwd; bash -e build-curl.sh"
-    displayName: 'cmake static'
+      docker exec -t $CONTAINER sh -c 'apk add bash; Say --Reset-Stopwatch; Say "Builder is Ready"; apk upgrade;''
+      docker exec -t -e SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-}" $CONTAINER bash -e -c "cd /root; source /root/build-gcc-utilities.sh; say_cpu_name; source build-static-portable-cmake.sh"
+    displayName: 'Static CMake'
 
   - script: |
       set -eu; set -o pipefail
