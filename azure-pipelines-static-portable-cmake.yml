@@ -29,6 +29,8 @@ jobs:
         PLATFORM: "ppc64le"
       'riscv64':
         PLATFORM: "riscv64"
+      's390x':
+        PLATFORM: "s390x"
 
   steps:
   - script: |
@@ -59,7 +61,7 @@ jobs:
 
       IMAGE="alpine:edge@${digest}"
       docker pull "$IMAGE" >/dev/null
-      docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
+      docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-s390x-static:/usr/bin/qemu-s390x-static -v /usr/bin/qemu-riscv64-static:/usr/bin/qemu-riscv64-static -v /usr/bin/qemu-ppc64le-static:/usr/bin/qemu-ppc64le-static -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
         docker cp $f "$CONTAINER":/usr/bin/.
       done
