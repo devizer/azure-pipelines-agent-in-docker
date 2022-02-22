@@ -115,7 +115,6 @@ jobs:
 
   steps: 
   - download: current
-    artifact: WebApp
     patterns: |
         **
 
