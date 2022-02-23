@@ -146,7 +146,8 @@ jobs:
       done
 
       source /tmp/build-gcc-utilities.sh
-      find $SYSTEM_ARTIFACTSDIRECTORY/ -type f | build_all_known_hash_sums_for_list_of_files | tee $SYSTEM_ARTIFACTSDIRECTORY/hash.sums
+      find $SYSTEM_ARTIFACTSDIRECTORY/ -type f | build_all_known_hash_sums_for_list_of_files | tee hash.sums
+      cp -f hash.sums $SYSTEM_ARTIFACTSDIRECTORY/hash.sums
 
       # Clean
       rm -rf ${RAW_ARTIFACTS_DIR}/* || true
