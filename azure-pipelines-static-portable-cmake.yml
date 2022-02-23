@@ -22,18 +22,18 @@ jobs:
         PLATFORM: "amd64"
       'i386':
         PLATFORM: "386"
-      # 'armv6':
-      #   PLATFORM: "armv6"
-      # 'armv7':
-      #   PLATFORM: "armv7"
-      # 'arm64':
-      #   PLATFORM: "arm64"
-      # 'ppc64le':
-      #   PLATFORM: "ppc64le"
-      # 'riscv64':
-      #   PLATFORM: "riscv64"
-      # 's390x':
-      #   PLATFORM: "s390x"
+      'armv6':
+        PLATFORM: "armv6"
+      'armv7':
+        PLATFORM: "armv7"
+      'arm64':
+        PLATFORM: "arm64"
+      'ppc64le':
+        PLATFORM: "ppc64le"
+      'riscv64':
+        PLATFORM: "riscv64"
+      's390x':
+        PLATFORM: "s390x"
 
   steps:
   - script: |
