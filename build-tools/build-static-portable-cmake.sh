@@ -17,11 +17,6 @@ cd cmake*
 mkdir -p out; cd out
 
 export CC=clang CXX=clang++ CFLAGS="-O2" CXXFLAGS="-O2" LDFLAGS="-static"
-# Trash for armv5
-if [[ "$PLATFORM" == "armv6" ]]; then
-  export CFLAGS="$CFLAGS -march=armv5t" CXXFLAGS="-O2 -march=armv5t"
-fi
-Say "CFLAGS=[$CFLAGS] CXXFLAGS=[$CXXFLAGS]"
 
 rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/opt/cmake \
   -DBUILD_TESTING:BOOL=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE \
