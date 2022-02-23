@@ -16,13 +16,17 @@ tar xzf /tmp/_cmake.tar.gz
 cd cmake*
 mkdir -p out; cd out
 
-export CC=clang CXX=clang++ CFLAGS="-O2" LDFLAGS="-static"
+export CC=clang CXX=clang++ CFLAGS="-O2" CXXFLAGS="-O2" LDFLAGS="-static"
+if [[ "$PLATFORM" == "armv6" ]]; then
+  export CFLAGS="$CFLAGS -march=armv5t" CXXFLAGS="-O2 -march=armv5t"
+fi
+
 rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/opt/cmake \
   -DBUILD_TESTING:BOOL=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE \
   -DOPENSSL_ROOT_DIR=/usr \
   .. 2>&1 | tee ~/my-cmake.log
 
-time make install -j2 CFLAGS="-O2" LDFLAGS="-static -all-static" |& tee my-make.log
+time make install -j2 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="-static -all-static" |& tee my-make.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
 /opt/cmake/bin/cmake --version
