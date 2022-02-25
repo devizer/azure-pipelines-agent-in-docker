@@ -184,6 +184,10 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   # [[ "$(command -v symlinks)" == "" ]] && apt-get install -y -q symlinks
   # chroot /home/user/system symlinks -cr .
   sudo chown -R $(whoami) "$work"
+  Say "Reset date time"
+  pushd "$work"
+    find . -type -f -exec touch {} \;
+  popd
   # replace_links_to_relative "$work"
   
   local xzFile="${work}${XZ}.tar.xz"
@@ -230,5 +234,3 @@ KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
 KEY="debian-10-arm64"   IMAGE="arm64v8/debian:10" prepare_proot
 KEY="debian-10-arm32v7" IMAGE="arm64v8/debian:10" prepare_proot
-
-
