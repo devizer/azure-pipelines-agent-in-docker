@@ -11,9 +11,9 @@ time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev
   libarchive-dev libarchive-static
 fi
 
-function apt-get-install() { apt-get install -y -qq "$@" | { grep "Get\:\|Unpacking\|Setting" || true; }  }
+function apt-get-install() { apt-get install -y -qq "$@" | { grep "Unpacking\|Setting" || true; }  }
 if [[ "$(command -v apt-get)" != "" ]]; then
-apt-get update; apt-get-install curl;
+apt-get update -qq; apt-get-install curl;
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null; Say --Reset-Stopwatch
 time apt-get-install build-essential git cmake make autoconf automake libtool pkg-config clang \
   sudo xz-utils mc nano sudo xz-utils less \
