@@ -16,24 +16,35 @@ jobs:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
   strategy:
-    maxParallel: 8
+    maxParallel: 5
     matrix:
       'amd64':
         PLATFORM: "amd64"
+        IMAGE: alpine
       'i386':
         PLATFORM: "386"
+        IMAGE: alpine
+      'armv5':
+        PLATFORM: "armv5"
+        IMAGE: 'arm32v5/debian:11'
       's390x':
         PLATFORM: "s390x"
+        IMAGE: alpine
       'arm64':
         PLATFORM: "arm64"
+        IMAGE: alpine
       'armv6':
         PLATFORM: "armv6"
+        IMAGE: alpine
       'armv7':
         PLATFORM: "armv7"
+        IMAGE: alpine
       'ppc64le':
         PLATFORM: "ppc64le"
+        IMAGE: alpine
       'riscv64':
         PLATFORM: "riscv64"
+        IMAGE: alpine
 
   steps:
   - script: |
@@ -62,14 +73,19 @@ jobs:
       digest="$(cat "$json" | Find-Docker-Image-Digest-for-Architecture "$PLATFORM")"
       Say "Digest of [$PLATFORM] is [$digest]"
 
-      IMAGE="alpine:edge@${digest}"
+      if [[ "$PLATFORM" != "armv5" ]]; then
+         IMAGE="alpine:edge@${digest}"
+      else
+         IMAGE="$IMAGE"
+      fi
+      Say "Pull [$IMAGE]"
       docker pull "$IMAGE" >/dev/null
       docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-s390x-static:/usr/bin/qemu-s390x-static -v /usr/bin/qemu-riscv64-static:/usr/bin/qemu-riscv64-static -v /usr/bin/qemu-ppc64le-static:/usr/bin/qemu-ppc64le-static -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
         docker cp $f "$CONTAINER":/usr/bin/.
       done
       for f in "$(pwd)/"*.sh /tmp/build-gcc-utilities.sh; do
-        Say "copying $f to the container"
+        echo "Copying $f to the container"
         docker cp "$f" "$CONTAINER":/root/.
       done
 

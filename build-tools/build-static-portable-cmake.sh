@@ -2,12 +2,25 @@
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
 Say "PLATFORM: $PLATFORM, CMAKE_VER: $CMAKE_VER"
+if [[ "$(command -v apk)" != "" ]]; then
 apk upgrade
 time apk add build-base perl pkgconfig make clang clang-static cmake ncurses-dev ncurses-static linux-headers mc nano \
   openssl-dev openssl-libs-static \
   nghttp2-dev nghttp2-static libssh2-dev libssh2-static \
   zlib-dev zlib-static bzip2-dev bzip2-static curl expat-dev expat-static \
   libarchive-dev libarchive-static
+fi
+
+function apt-get-install() { apt-get install -y -qq "$@" | { grep "Get\:\|Unpacking\|Setting" || true; }  }
+if [[ "$(command -v apt-get)" != "" ]]; then
+apt-get update; apt-get-install curl;
+script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null; Say --Reset-Stopwatch
+time apt-get-install build-essential git cmake make autoconf automake libtool pkg-config clang \
+  sudo xz-utils mc nano sudo xz-utils less \
+  libssl-dev zlib1g-dev libexpat1-dev \
+  libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
+fi
+
 
 url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake; mkdir -p "$work"; cd $work
