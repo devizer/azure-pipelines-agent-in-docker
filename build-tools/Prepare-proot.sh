@@ -186,7 +186,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   sudo chown -R $(whoami) "$work"
   Say "Reset date time"
   pushd "$work"
-    find . -type -f -exec touch {} \;
+    find . -type f -exec touch {} \;
   popd
   # replace_links_to_relative "$work"
   
