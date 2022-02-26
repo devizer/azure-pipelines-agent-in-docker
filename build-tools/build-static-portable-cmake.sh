@@ -1,7 +1,7 @@
 # https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
-set -o pipefial
+set -o pipefail
 Say "PLATFORM: $PLATFORM, CMAKE_VER: $CMAKE_VER"
 if [[ "$(command -v apk)" != "" ]]; then
 apk upgrade
