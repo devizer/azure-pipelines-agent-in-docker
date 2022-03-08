@@ -109,24 +109,29 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
     cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
     eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
+    Say "FAKE UNAME: [$(uname -m)]"
   fi
 
-  if true || [[ "$os_ver" != "debian:7" ]]; then
+  apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
+  apt-get install rsync -y | apt-mini-log || true # FOR GIT 
+
+  if [[ "$(uname -m)" != "armv5"* ]]; then
     Say "Always TOOLS (bash git jq 7z nano gnu-tools cmake curl) for [$(get_linux_os_id) $(uname -m)]"
-    apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
-    apt-get install rsync -y | apt-mini-log || true #  FOR GIT 
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   else
     Say "Install 7z and jq for [$(get_linux_os_id) $(uname -m)]"
     apt-get install jq p7zip-full -y -qq
   fi
 
-  Say "yq"
-  export INSTALL_DIR=/usr/local YQ_VER=v4.20.1; script="https://master.dl.sourceforge.net/project/yq-repack/install-yq.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+  if [[ "$(uname -m)" != "armv5"* ]]; then
+    Say "yq"
+    export INSTALL_DIR=/usr/local YQ_VER=v4.20.1; script="https://master.dl.sourceforge.net/project/yq-repack/install-yq.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+
+    export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; 
+    Say "Install 7z 21.07 as [/usr/local/bin/7z] for [$(get_linux_os_id) $(uname -m)]"
+    script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+  fi
   
-  export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; 
-  Say "Install 7z 21.07 as [/usr/local/bin/7z] for [$(get_linux_os_id) $(uname -m)]"
-  script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
   Say "FOR .Net Core on [$(get_linux_os_id) $(uname -m)]"
   awk --version | head -1 || true
