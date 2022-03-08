@@ -23,12 +23,21 @@ jobs:
   steps:
   - script: |
         sudo apt-get update -qq || true
+        sudo apt-get install sshpass rsync -y -qq | { grep Setting || true; }
         set -e
-        # export PREPARE_OS_MODE XZ;
+        mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
+
         cd build-tools
         sudo -E bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-proot.sh"
         sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
+
+        cd $SYSTEM_ARTIFACTSDIRECTORY
+        echo "DEPLOY IMAGES: [$(ls)]"
+        sshpass -p "$PASSWORD" rsync -r . "${LOGIN}@frs.sourceforge.net:/home/frs/p/debian-vm/termux-images"
     displayName: 'Batch of images'
+    env:
+        PASSWORD: $(SECRET_PASSWORD)
+        LOGIN: $(SECRET_LOGIN)
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
