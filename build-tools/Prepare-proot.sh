@@ -224,7 +224,7 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   done
 }
 
-UNAME_M=armv5t KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
+UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     # No micro distro for 8th and 9th
