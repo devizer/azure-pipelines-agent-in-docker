@@ -224,6 +224,10 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   done
 }
 
+UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:11" prepare_proot
+UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:10" prepare_proot
+UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:9" prepare_proot
+UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:8" prepare_proot
 UNAME_M=armv5l KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
