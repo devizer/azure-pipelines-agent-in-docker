@@ -22,6 +22,7 @@ jobs:
 
   steps:
   - script: |
+        sudo apt-get update -qq || true
         set -e
         # export PREPARE_OS_MODE XZ;
         cd build-tools
