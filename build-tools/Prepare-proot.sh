@@ -102,6 +102,8 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   if [[ "$(getconf LONG_BIT)" == "32" ]]; then
     Say "FAKE UNAME on $KEY, [$(get_linux_os_id) $(uname -m)]"
+    Say "Target machine, [${UNAME_M}]"
+    [[ -n "${UNAME_M}" ]] && echo ${UNAME_M} > /etc/system-uname-m
     uname="$(command -v uname)"
     sudo cp "${uname}" /usr/bin/uname-bak;
     script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
@@ -148,7 +150,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 EOF
 
 docker cp /tmp/provisioning-$KEY "container-$KEY":/tmp/provisioning-$KEY
-docker exec -t "container-$KEY" bash -e -c "export PREPARE_OS_MODE=$PREPARE_OS_MODE; KEY=$KEY; source /tmp/provisioning-$KEY" | tee $work.build.log
+docker exec -t "container-$KEY" bash -e -c "export PREPARE_OS_MODE=$PREPARE_OS_MODE; KEY=$KEY; UNAME_M=${UNAME_M:-}; source /tmp/provisioning-$KEY" | tee $work.build.log
 
 rm -rf $work/*; rm -rf $work/*; 
 docker cp container-$KEY:/. $work
@@ -215,13 +217,9 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
     cp -f "${archive}" "$SYSTEM_ARTIFACTSDIRECTORY/$(basename "${archive}")"
     Say "Done artifact: $KEY"
   done
-
 }
 
-# if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
-#   KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
-# fi
-# exit;
+UNAME_M=armv5t KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     # No micro distro for 8th and 9th
@@ -229,13 +227,13 @@ if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     KEY="debian-8-arm64"    IMAGE="arm64v8/debian:8"  prepare_proot
 
     KEY="debian-9-arm64"   IMAGE="arm64v8/debian:9" prepare_proot
-    KEY="debian-9-arm32v7" IMAGE="arm64v8/debian:9" prepare_proot
+    KEY="debian-9-arm32v7" IMAGE="arm32v7/debian:9" prepare_proot
 fi
 
 KEY="debian-11-arm64"   IMAGE="arm64v8/debian:11" prepare_proot
-KEY="debian-11-arm32v7" IMAGE="arm64v8/debian:11" prepare_proot
+KEY="debian-11-arm32v7" IMAGE="arm32v7/debian:11" prepare_proot
 
 KEY="debian-7-arm32v7"  IMAGE="arm32v7/debian:7"  prepare_proot
 
 KEY="debian-10-arm64"   IMAGE="arm64v8/debian:10" prepare_proot
-KEY="debian-10-arm32v7" IMAGE="arm64v8/debian:10" prepare_proot
+KEY="debian-10-arm32v7" IMAGE="arm32v7/debian:10" prepare_proot
