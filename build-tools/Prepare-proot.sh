@@ -84,7 +84,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
   function apt-mini-log {
-    grep "Unpacking\|Setting"
+    grep "Unpacking\|Setting" || true
   }
 
   source /etc/os-release
@@ -218,10 +218,10 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
 
 }
 
-if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
-  KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
-fi
-exit;
+# if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
+#   KEY="debian-7-arm32v5"   IMAGE="arm32v5/debian:7" prepare_proot
+# fi
+# exit;
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     # No micro distro for 8th and 9th
