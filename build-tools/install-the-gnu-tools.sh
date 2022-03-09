@@ -14,13 +14,21 @@ function install-a-gnu-tool() {
   tar xzf "$file"
   rm -f "$file"
   cd *
-  ./configure --prefix="${INSTALL_PREFIX:-/usr/local}" --disable-shared && make -j && sudo make install
+  if [[ -x ./configure ]]; then
+    ./configure --prefix="${INSTALL_PREFIX:-/usr/local}" --disable-shared && make -j && sudo make install
+  else
+    # bzip2
+    sudo make install PREFIX="${INSTALL_PREFIX:-/usr/local}"
+  fi
   popd
   rm -rf "$work"
   Say "Completed: [$key] using [$url]"
 }
 
+install-a-gnu-tool "bzip2-1.0.8"     "https://sourceware.org/pub/bzip2/bzip2-latest.tar.gz"
+install-a-gnu-tool "gzip-1.11"       "https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.gz"
 install-a-gnu-tool "xz-5.2.5"        "https://raw.githubusercontent.com/devizer/glist/master/bin/lzma-5.2.5.tar.gz"
+install-a-gnu-tool "tar-1.34"        "https://ftp.gnu.org/gnu/tar/tar-1.34.tar.gz"
 
 install-a-gnu-tool "sed-4.8"         "https://ftp.gnu.org/gnu/sed/sed-4.8.tar.gz"
 install-a-gnu-tool "automake-1.16.5" "https://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.gz"
