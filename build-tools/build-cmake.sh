@@ -138,6 +138,8 @@ function build_all_known_hash_sums() {
 export PATH="$INSTALL_DIR/bin:$PATH"
 cd $src
 export INSTALL_DIR
+Say "Build ./build-ninja.sh in [$(pwd)]"
+ls -la
 bash -e build-ninja.sh
 
 
