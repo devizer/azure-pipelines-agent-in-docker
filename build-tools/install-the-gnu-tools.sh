@@ -14,7 +14,7 @@ function install-a-gnu-tool() {
   tar xzf "$file"
   rm -f "$file"
   cd *
-  ./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install
+  ./configure --prefix="${INSTALL_PREFIX:-/usr/local}" --disable-shared && make -j && sudo make install
   popd
   rm -rf "$work"
   Say "Completed: [$key] using [$url]"
