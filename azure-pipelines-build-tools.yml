@@ -72,7 +72,7 @@ jobs:
       for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
         docker cp $f "$CONTAINER":/usr/bin/.
       done
-      for f in $(pwd)/build-cmake.sh /tmp/build-gcc-utilities.sh; do
+      for f in $(pwd)/build-cmake.sh $(pwd)/build-ninja.sh /tmp/build-gcc-utilities.sh; do
         docker cp $f "$CONTAINER":/root/.
       done
 
