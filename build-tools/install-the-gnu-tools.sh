@@ -20,6 +20,8 @@ function install-a-gnu-tool() {
   Say "Completed: [$key] using [$url]"
 }
 
+install-a-gnu-tool "xz-5.2.5"        "https://raw.githubusercontent.com/devizer/glist/master/bin/lzma-5.2.5.tar.gz"
+
 install-a-gnu-tool "sed-4.8"         "https://ftp.gnu.org/gnu/sed/sed-4.8.tar.gz"
 install-a-gnu-tool "automake-1.16.5" "https://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.gz"
 install-a-gnu-tool "m4-1.4.19"       "https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz"
@@ -46,3 +48,4 @@ popd
 echo "AFTER STRIP: $(du . --max-depth=0)"
 popd
 
+# https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz
