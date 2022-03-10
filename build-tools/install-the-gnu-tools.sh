@@ -25,9 +25,11 @@ function install-a-gnu-tool() {
   Say "Completed: [$key] using [$url]"
 }
 
+export FORCE_UNSAFE_CONFIGURE=1 # for TAR
 install-a-gnu-tool "bzip2-1.0.8"     "https://sourceware.org/pub/bzip2/bzip2-latest.tar.gz"
 install-a-gnu-tool "gzip-1.11"       "https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.gz"
 install-a-gnu-tool "xz-5.2.5"        "https://raw.githubusercontent.com/devizer/glist/master/bin/lzma-5.2.5.tar.gz"
+
 install-a-gnu-tool "tar-1.34"        "https://ftp.gnu.org/gnu/tar/tar-1.34.tar.gz"
 
 install-a-gnu-tool "sed-4.8"         "https://ftp.gnu.org/gnu/sed/sed-4.8.tar.gz"
