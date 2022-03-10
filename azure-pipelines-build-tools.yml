@@ -46,15 +46,19 @@ jobs:
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
         SKIP_NINJA_TESTS: 'True'
+        MACHINE: 'arm32v7'
       'arm32v5':
         IMAGE: "arm32v5/debian:7"
         SKIP_NINJA_TESTS: 'True'
+        MACHINE: 'arm32v5'
       'i386':
         IMAGE: "i386/debian:7"
+        MACHINE: 'i386'
       'arm64v8 GCC-11':
         IMAGE: "arm64v8/debian:8"
-        GCCVER: "11"
+        # GCCVER: "11"
         SKIP_NINJA_TESTS: 'True'
+        
       # 'arm64v8 GCC-5':
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "5"
@@ -95,7 +99,7 @@ jobs:
         docker cp $f "$CONTAINER":/root/.
       done
 
-      docker exec -t -e GCCVER="${GCCVER:-}" -e SKIP_NINJA_TESTS="${SKIP_NINJA_TESTS:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker exec -t -e MACHINE="${MACHINE:-}" -e GCCVER="${GCCVER:-}" -e SKIP_NINJA_TESTS="${SKIP_NINJA_TESTS:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
       docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
       rm -rf "$SYSTEM_ARTIFACTSDIRECTORY/cmake" || true # WTH?
 
