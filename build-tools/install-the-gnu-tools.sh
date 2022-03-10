@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -eu
+set -eu;
+set -o pipefail
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 function install-a-gnu-tool() {
   local key="$1"
@@ -31,6 +32,7 @@ install-a-gnu-tool "gzip-1.11"       "https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar
 install-a-gnu-tool "xz-5.2.5"        "https://raw.githubusercontent.com/devizer/glist/master/bin/lzma-5.2.5.tar.gz"
 
 install-a-gnu-tool "tar-1.34"        "https://ftp.gnu.org/gnu/tar/tar-1.34.tar.gz"
+"$INSTALL_PREFIX/bin/tar" --version
 
 install-a-gnu-tool "sed-4.8"         "https://ftp.gnu.org/gnu/sed/sed-4.8.tar.gz"
 install-a-gnu-tool "automake-1.16.5" "https://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.gz"
@@ -50,7 +52,7 @@ echo "BEFORE STRIP: $(du . --max-depth=0)"
 pushd .
 find . -name '*.so*' -type f -exec strip {} \;
 cd bin
-strip * || true
+strip * 2>&1 | grep -v "file format not recognized" || true
 try-symlink gawk gawk-5.1.1
 try-symlink automake automake-1.16
 try-symlink aclocal aclocal-1.16
