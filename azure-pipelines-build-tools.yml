@@ -14,8 +14,16 @@ jobs:
 
   steps:
   - script: |
+      function get_cpu_name() {
+        # only x86_64 and arm
+        local cpu="$(cat /proc/cpuinfo | grep -E '^(model name|Hardware)' | awk -F':' 'NR==1 {print $2}')"
+        cpu="$(echo -e "${cpu:-}" | sed -e 's/^[[:space:]]*//')"
+        echo "${cpu:-}"
+      }
+
+      echo "CPU: $(get_cpu_name)"
       cd build-tools
-      sudo apt-get update -qq;
+      sudo apt-get update | grep Get || true;
       bash -e Build-and-Deploy-Git.sh
     displayName: 'build'
 
@@ -38,26 +46,26 @@ jobs:
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
         SKIP_NINJA_TESTS: 'True'
-      'arm64v8 GCC-5':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "5"
-        SKIP_NINJA_TESTS: 'True'
-      'arm64v8 GCC-8':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "8"
-        SKIP_NINJA_TESTS: 'True'
-      'arm64v8 GCC-9':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "9"
-        SKIP_NINJA_TESTS: 'True'
-      'arm64v8 GCC-10':
-        IMAGE: "arm64v8/debian:8"
-        GCCVER: "10"
-        SKIP_NINJA_TESTS: 'True'
       'arm64v8 GCC-11':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "11"
         SKIP_NINJA_TESTS: 'True'
+      # 'arm64v8 GCC-5':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "5"
+      #   SKIP_NINJA_TESTS: 'True'
+      # 'arm64v8 GCC-8':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "8"
+      #   SKIP_NINJA_TESTS: 'True'
+      # 'arm64v8 GCC-9':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "9"
+      #   SKIP_NINJA_TESTS: 'True'
+      # 'arm64v8 GCC-10':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "10"
+      #   SKIP_NINJA_TESTS: 'True'
 
   steps:
   - script: |
