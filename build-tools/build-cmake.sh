@@ -9,7 +9,7 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 GCCVER=${GCCVER:-11}; # [[ $machine == arm32v7 ]] && GCCVER=5
 Say "Machine: $machine, Processors: $cpus, GCC $GCCVER, EXPLICIT_OPENSSL_OPTIONS=${EXPLICIT_OPENSSL_OPTIONS:-}"
 
-export GCC_INSTALL_ARCH="${MACHINE:-}"
+export GCC_INSTALL_ARCH="${GCC_INSTALL_ARCH:-}"
 export GCC_INSTALL_VER=$GCCVER GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
 

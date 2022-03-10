@@ -46,6 +46,7 @@ jobs:
         SKIP_NINJA_TESTS: 'True'
         MACHINE: 'arm32v5'
         GCCVER: "8.5"
+        GCC_INSTALL_ARCH: 'armv5'
       'x86-64':
         IMAGE: "debian:7"
       'arm32v7':
