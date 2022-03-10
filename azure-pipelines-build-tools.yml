@@ -46,6 +46,11 @@ jobs:
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
         SKIP_NINJA_TESTS: 'True'
+      'arm32v5':
+        IMAGE: "arm32v5/debian:7"
+        SKIP_NINJA_TESTS: 'True'
+      'i386':
+        IMAGE: "i386/debian:7"
       'arm64v8 GCC-11':
         IMAGE: "arm64v8/debian:8"
         GCCVER: "11"
