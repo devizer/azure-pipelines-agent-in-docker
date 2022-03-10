@@ -41,16 +41,17 @@ jobs:
   strategy:
     matrix:
       # default is the latest GCC 11.2 
+      'arm32v5':
+        IMAGE: "arm32v5/debian:7"
+        SKIP_NINJA_TESTS: 'True'
+        MACHINE: 'arm32v5'
+        GCCVER: "8.5"
       'x86-64':
         IMAGE: "debian:7"
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
         SKIP_NINJA_TESTS: 'True'
         MACHINE: 'arm32v7'
-      'arm32v5':
-        IMAGE: "arm32v5/debian:7"
-        SKIP_NINJA_TESTS: 'True'
-        MACHINE: 'arm32v5'
       'i386':
         IMAGE: "i386/debian:7"
         MACHINE: 'i386'
@@ -58,7 +59,7 @@ jobs:
         IMAGE: "arm64v8/debian:8"
         # GCCVER: "11"
         SKIP_NINJA_TESTS: 'True'
-        
+
       # 'arm64v8 GCC-5':
       #   IMAGE: "arm64v8/debian:8"
       #   GCCVER: "5"
