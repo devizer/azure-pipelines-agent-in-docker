@@ -115,7 +115,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
   apt-get install rsync -y | apt-mini-log || true # FOR GIT 
 
-  if [[ "$(uname -m)" != "armv5"* ]]; then
+  if [[ "$(uname -m)" != "ppc"* ]]; then
     Say "Always TOOLS (bash git jq 7z nano gnu-tools cmake curl) for [$(get_linux_os_id) $(uname -m)]"
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   else
@@ -123,7 +123,7 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     apt-get install jq p7zip-full -y -qq
   fi
 
-  if [[ "$(uname -m)" != "armv5"* ]]; then
+  if [[ "$(uname -m)" != "i386" ]]; then
     Say "yq"
     export INSTALL_DIR=/usr/local YQ_VER=v4.20.1; script="https://master.dl.sourceforge.net/project/yq-repack/install-yq.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
@@ -164,19 +164,10 @@ cat $work/etc/os-release
 source $work/etc/os-release
 local os_ver="${ID:-}:${VERSION_ID:-}"
 
-
 echo '
-
-if [ ! -z "$BASH" ]
-then
-  export PS1="\[\033[01;31m\]\u@'$KEY'\[\033[00m\] \[\033[01;34m\]\w \$\[\033[00m\] "
-fi
-
+export PS1="\[\033[01;31m\]\u@'$KEY'\[\033[00m\] \[\033[01;34m\]\w \$\[\033[00m\] "
 export LANGUAGE=en_US.UTF-8 LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
-if [[ ! -d $HOME/bin ]]; then mkdir -p $HOME/bin; fi
-export PATH="$HOME/bin:$PATH"
 export TMPDIR=/tmp
-
 ' | tee -a $work/root/.bashrc
 
 echo "nameserver 8.8.8.8" > $work/etc/resolv.conf
@@ -224,11 +215,11 @@ sudo rm -rf $work/var/log/* $work/var/tmp/*
   done
 }
 
+UNAME_M=armv5l KEY="debian-7-arm32v5"  IMAGE="arm32v5/debian:7" prepare_proot
 UNAME_M=armv5l KEY="debian-11-arm32v5" IMAGE="arm32v5/debian:11" prepare_proot
 UNAME_M=armv5l KEY="debian-10-arm32v5" IMAGE="arm32v5/debian:10" prepare_proot
 UNAME_M=armv5l KEY="debian-9-arm32v5"  IMAGE="arm32v5/debian:9" prepare_proot
 UNAME_M=armv5l KEY="debian-8-arm32v5"  IMAGE="arm32v5/debian:8" prepare_proot
-UNAME_M=armv5l KEY="debian-7-arm32v5"  IMAGE="arm32v5/debian:7" prepare_proot
 
 if [[ "${PREPARE_OS_MODE:-}" == "BIG" ]]; then
     # No micro distro for 8th and 9th

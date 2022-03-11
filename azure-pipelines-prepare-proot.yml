@@ -32,7 +32,8 @@ jobs:
         sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
 
         cd $SYSTEM_ARTIFACTSDIRECTORY
-        echo "DEPLOY IMAGES: [$(ls)]"
+        echo "DEPLOY IMAGES"
+        ls -la
         sshpass -p "$PASSWORD" rsync -r . "${LOGIN}@frs.sourceforge.net:/home/frs/p/debian-vm/termux-images"
     displayName: 'Batch of images'
     env:
