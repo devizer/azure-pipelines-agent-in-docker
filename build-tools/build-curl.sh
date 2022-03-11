@@ -3,7 +3,9 @@ cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 machine=$(uname -m); 
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
-Say "Building curl. Suffix: -${machine}"
+[[ "$(dpkg --print-architecture)" == armel ]] && machine=arm32v5
+
+Say "Building curl. Suffix: [-${machine}]"
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
 CONFIG_LOG="$SYSTEM_ARTIFACTSDIRECTORY/config-logs"; mkdir -p "$CONFIG_LOG"
 mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
