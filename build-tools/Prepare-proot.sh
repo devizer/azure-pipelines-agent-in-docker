@@ -111,13 +111,17 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
   fi
 
-
   apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
   apt-get install rsync -y | apt-mini-log || true # FOR GIT 
 
   if [[ "$(uname -m)" != "ppc"* ]]; then
-    Say "Always TOOLS (bash git jq 7z nano gnu-tools cmake curl) for [$(get_linux_os_id) $(uname -m)]"
-    export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; 
+    if [[ "$(uname -m)" == "armv5"* ]]; then
+      # curl is missed for armv5
+      export TOOLS="bash git jq 7z nano gnu-tools cmake"; 
+    fi
+    Say "Always TOOLS ($TOOLS) for [$(get_linux_os_id) $(uname -m)]"
+    script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   else
     Say "Install 7z and jq for [$(get_linux_os_id) $(uname -m)]"
     apt-get install jq p7zip-full -y -qq
