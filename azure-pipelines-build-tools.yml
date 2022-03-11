@@ -56,7 +56,7 @@ jobs:
       'i386':
         IMAGE: "i386/debian:7"
         MACHINE: 'i386'
-        GCCVER: "8.5"
+        GCCVER: "11.2"
       'arm64v8 GCC-11':
         IMAGE: "arm64v8/debian:8"
         # GCCVER: "11"
