@@ -83,6 +83,18 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
   # adjust_os_repo; configure_os_locale; apt-get install curl get -y -qq
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null
 
+  if [[ "$(getconf LONG_BIT)" == "32" ]]; then
+    Say "FAKE UNAME on $KEY, [$(get_linux_os_id) $(uname -m)]"
+    Say "Target machine, [${UNAME_M}]"
+    [[ -n "${UNAME_M}" ]] && echo ${UNAME_M} > /etc/system-uname-m
+    uname="$(command -v uname)"
+    sudo cp "${uname}" /usr/bin/uname-bak;
+    script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
+    cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
+    eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
+    Say "FAKE UNAME: [$(uname -m)]"
+  fi
+
   function apt-mini-log {
     grep "Unpacking\|Setting" || true
   }
@@ -99,18 +111,6 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     apt-get install git libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -qq | apt-mini-log
   fi
 
-
-  if [[ "$(getconf LONG_BIT)" == "32" ]]; then
-    Say "FAKE UNAME on $KEY, [$(get_linux_os_id) $(uname -m)]"
-    Say "Target machine, [${UNAME_M}]"
-    [[ -n "${UNAME_M}" ]] && echo ${UNAME_M} > /etc/system-uname-m
-    uname="$(command -v uname)"
-    sudo cp "${uname}" /usr/bin/uname-bak;
-    script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
-    cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
-    eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
-    Say "FAKE UNAME: [$(uname -m)]"
-  fi
 
   apt-get install libcurl3-gnutls -y | apt-mini-log || true #  FOR GIT 'error while loading shared libraries: libcurl-gnutls.so.4'
   apt-get install rsync -y | apt-mini-log || true # FOR GIT 
