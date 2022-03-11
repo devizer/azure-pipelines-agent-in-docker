@@ -40,6 +40,7 @@ export OPENSSL_VERSION="1.1.1m"
 
 export CFLAGS="-Wno-error -O3 -Wno-error=implicit-function-declaration"
 
+
 # rm -rf $OPENSSL_HOME
 Say "Building OpenSSL $OPENSSL_VERSION to [$OPENSSL_HOME]"
 # script=https://raw.githubusercontent.com/devizer/w3top-bin/master/tests/openssl-1.1-from-source.sh
@@ -74,6 +75,11 @@ function install_openssl_111() {
   cd open*
 
   Say "Configuring OpenSSL"
+  march=""
+  if [[ "$(dpkg --print-architecture)" == "armel" ]]; then march="-march=armv4t"; fi
+  export CFLAGS="${CFLAGS:-} $march"
+  export CXXFLAGS="$CFLAGS"
+  Say "CFLAGS: [$CFLAGS]"
   ./config enable-rc5 enable-md2 --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
   perl configdata.pm --dump |& tee -a "$CONFIG_LOG/openssl.txt" || true
   Say "Compiling OpenSSL"
