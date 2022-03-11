@@ -83,7 +83,7 @@ function install_openssl_111() {
   ./config enable-rc5 enable-md2 --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
   perl configdata.pm --dump |& tee -a "$CONFIG_LOG/openssl.txt" || true
   Say "Compiling OpenSSL"
-  time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
+  time make CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
   Say "Installing OpenSSL (silent)"
   time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
