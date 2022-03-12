@@ -227,7 +227,7 @@ done
 # env CPPFLAGS="-I${OPENSSL_HOME}/include" LDFLAGS="-L${OPENSSL_HOME}/lib -L${OPENSSL_HOME}/lib64" PKG_CONFIG_PATH="${OPENSSL_HOME}/lib64/pkgconfig:${OPENSSL_HOME}/lib/pkgconfig" ./configure --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee /opt/curl-config.log
 }
 
-./configure --with-ldap-lib=$OPENSSL_HOME --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee "$CONFIG_LOG/curl.txt"
+./configure --with-libssh2=$OPENSSL_HOME --with-ldap-lib=$OPENSSL_HOME --with-brotli=$OPENSSL_HOME --with-zstd=$OPENSSL_HOME --with-nghttp2=$OPENSSL_HOME --with-ssl=$OPENSSL_HOME --with-openssl=$OPENSSL_HOME --prefix=$OPENSSL_HOME --disable-werror |& tee "$CONFIG_LOG/curl.txt"
 # time make -j > /dev/null
 time make install -j > /dev/null
 ldconfig
