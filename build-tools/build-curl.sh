@@ -38,7 +38,6 @@ Add-LD-Path "$OPENSSL_HOME/lib" "$OPENSSL_HOME/lib64"
 
 export OPENSSL_VERSION="1.1.1m"
 
-export CFLAGS="-Wno-error -O3 -Wno-error=implicit-function-declaration"
 
 
 # rm -rf $OPENSSL_HOME
@@ -77,14 +76,14 @@ function install_openssl_111() {
   Say "Configuring OpenSSL"
   march=""
   if [[ "$(dpkg --print-architecture)" == "armel" ]]; then march="-march=armv4t"; fi
-  export CFLAGS="${CFLAGS:-} $march"
-  export CXXFLAGS="$CFLAGS"
-  export CC="gcc $march"
-  Say "CFLAGS: [$CFLAGS]"
+  # export CFLAGS="${CFLAGS:-} $march"
+  # export CXXFLAGS="$CFLAGS"
+  # export CC="gcc $march"
+  # Say "CFLAGS: [$CFLAGS]"
   ./config enable-rc5 enable-md2 --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
   perl configdata.pm --dump |& tee -a "$CONFIG_LOG/openssl.txt" || true
   Say "Compiling OpenSSL"
-  time make CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" -j${cpus} |& tee "$HOME/log-openssl-make.log"
+  time make -j${cpus} |& tee "$HOME/log-openssl-make.log"
   # make test
   Say "Installing OpenSSL (silent)"
   time make install -j$((cpus+3)) >"$HOME/log-openssl-install.log" 2>&1
