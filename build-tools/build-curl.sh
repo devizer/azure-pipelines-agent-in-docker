@@ -6,6 +6,9 @@ machine=$(uname -m);
 [[ $machine == armv* ]] && machine=arm32v7
 [[ "$(dpkg --print-architecture)" == armel ]] && machine=arm32v5
 
+url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+
+
 Say "Building curl. Suffix: [-${machine}]"
 SYSTEM_ARTIFACTSDIRECTORY="${SYSTEM_ARTIFACTSDIRECTORY:-/transient-builds}"
 CONFIG_LOG="$SYSTEM_ARTIFACTSDIRECTORY/config-logs"; mkdir -p "$CONFIG_LOG"
