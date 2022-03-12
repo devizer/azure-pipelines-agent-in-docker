@@ -1,4 +1,3 @@
-set -eu; set -o pipefail
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 machine=$(uname -m); 
 [[ $machine == aarch64 ]] && machine=arm64v8
@@ -48,8 +47,6 @@ Say "Building OpenSSL $OPENSSL_VERSION to [$OPENSSL_HOME]"
 # try-and-retry wget --no-check-certificate -O $file $script 2>/dev/null || curl -ksSL -o $file $script
 # source $file
 Say "System OpenSSL Version: $(get_openssl_system_version)"
-bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
-pid=$!
 
 function install_openssl_111() {
   OPENSSL_HOME=${OPENSSL_HOME:-/opt/openssl}
@@ -79,7 +76,6 @@ function install_openssl_111() {
   if [[ "$(dpkg --print-architecture)" == "armel" ]]; then march="-march=armv4t"; fi
   export CFLAGS="${CFLAGS:-} $march"
   export CXXFLAGS="$CFLAGS"
-  export CC="gcc $march"
   Say "CFLAGS: [$CFLAGS]"
   ./config enable-rc5 enable-md2 --prefix=$OPENSSL_HOME --openssldir=$OPENSSL_HOME |& tee "$CONFIG_LOG/openssl.txt"
   perl configdata.pm --dump |& tee -a "$CONFIG_LOG/openssl.txt" || true
