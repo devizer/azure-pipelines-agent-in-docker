@@ -116,10 +116,10 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
 
   if [[ "$(uname -m)" != "ppc"* ]]; then
     export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; 
-    if [[ "$(uname -m)" == "armv5"* ]]; then
-      # curl is missed for armv5
-      export TOOLS="bash git jq 7z nano gnu-tools cmake"; 
-    fi
+    # if [[ "$(uname -m)" == "armv5"* ]]; then
+    #   curl is missed for armv5
+    #   export TOOLS="bash git jq 7z nano gnu-tools cmake"; 
+    # fi
     Say "Always TOOLS ($TOOLS) for [$(get_linux_os_id) $(uname -m)]"
     script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   else
