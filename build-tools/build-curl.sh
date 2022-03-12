@@ -150,6 +150,8 @@ cd lib*
 mkdir -p builddir; cd builddir
 cmake -DCMAKE_INSTALL_PREFIX=$OPENSSL_HOME -DENABLE_ZLIB_COMPRESSION:BOOL=ON -DCRYPTO_BACKEND:STRING=OpenSSL .. |& tee "$CONFIG_LOG/libssh2.txt"
 make install -j
+ldconfig
+export PKG_CONFIG_PATH=$OPENSSL_HOME/lib/pkgconfig
 
 
 Say "Building brotli"
