@@ -16,6 +16,8 @@ jobs:
     matrix:
       'x86-64':
         IMAGE: "debian:7"
+      'i386':
+        IMAGE: "i386/debian:7"
       'arm32v7':
         IMAGE: "arm32v7/debian:7"
       'arm32v5':

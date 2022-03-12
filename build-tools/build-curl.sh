@@ -1,6 +1,7 @@
 set -eu; set -o pipefail
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 machine=$(uname -m); 
+[[ $machine == x86_64 ]] && [[ "$(getconf LONG_BIT)" == "32" ]] && machine=i386
 [[ $machine == aarch64 ]] && machine=arm64v8
 [[ $machine == armv* ]] && machine=arm32v7
 [[ "$(dpkg --print-architecture)" == armel ]] && machine=arm32v5
