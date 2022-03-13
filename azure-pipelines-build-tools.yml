@@ -11,6 +11,24 @@ jobs:
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
+  strategy:
+    matrix:
+      'arm32v5':
+        IMAGE: "arm32v5/debian:7"
+        KEY: 'arm32v5'
+      'arm32v7':
+        IMAGE: "arm32v7/debian:7"
+        KEY: 'arm32v7'
+      'arm64v8':
+        IMAGE: "arm64v8/debian:8"
+        KEY: 'arm64v8'
+      'x86-64':
+        IMAGE: "debian:7"
+        KEY: 'x86_64'
+      'i386':
+        IMAGE: "i386/debian:7"
+        KEY: 'i386'
+
 
   steps:
   - script: |
@@ -24,7 +42,7 @@ jobs:
       echo "CPU: $(get_cpu_name)"
       cd build-tools
       sudo apt-get update | grep Get || true;
-      bash -e Build-and-Deploy-Git.sh
+      source Build-Tools.sh
     displayName: 'build'
 
   - task: PublishBuildArtifacts@1
