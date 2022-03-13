@@ -87,7 +87,7 @@ function Build-Tools() {
   tmp=/tmp/git-$KEY; mkdir -p $tmp; rm -rf $tmp/*
   docker run -d --privileged --hostname "$container" --name "$container" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
   for cmd in Say try-and-retry; do
-    docker cp /usr/local/bin/$cmd "$container":/usr/bin/$cmd
+    docker cp /usr/bin/$cmd "$container":/usr/bin/$cmd
   done
   for cmd in *.sh /tmp/build-gcc-utilities.sh; do
     file_name_only="$(basename "$cmd")"
