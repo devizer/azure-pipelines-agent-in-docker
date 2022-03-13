@@ -22,7 +22,7 @@ time apt-get-install build-essential git cmake make autoconf automake libtool pk
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
 fi
 
-test -e /etc/debian_version && url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
 
 url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake; mkdir -p "$work"; cd $work
