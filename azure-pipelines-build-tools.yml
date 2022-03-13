@@ -7,7 +7,8 @@ trigger:
     - 'build-tools/*'
 
 jobs:
-- job: Build
+- job: BuildTools
+  displayName: 'Build Tools'
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
@@ -47,7 +48,7 @@ jobs:
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
-    displayName: 'Build Tools'
+    displayName: 'Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
