@@ -108,6 +108,7 @@ function Build-Git() {
     source build-gcc-utilities.sh
     prepare_os
     script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash
+    url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
     test -f /etc/os-release && source /etc/os-release
     OS_VER="${ID:-}:${VERSION_ID:-}"
