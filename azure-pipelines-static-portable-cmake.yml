@@ -1,5 +1,5 @@
 variables:
-  CMAKE_VER: 3.22.2
+  CMAKE_VER: 3.22.3
 
 trigger:
   branches:
