@@ -1,3 +1,6 @@
+variables:
+  CMAKE_VER: 3.22.3
+
 trigger:
   branches:
     include:
@@ -59,7 +62,7 @@ jobs:
         docker cp $f "$CONTAINER":/root/.
       done
 
-      docker exec -t -e GCC_INSTALL_ARCH="${GCC_INSTALL_ARCH:-}" -e MACHINE="${MACHINE:-}" -e GCCVER="${GCCVER:-}" -e SKIP_NINJA_TESTS="${SKIP_NINJA_TESTS:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
+      docker exec -t -e CMAKE_VER="$CMAKE_VER" -e GCC_INSTALL_ARCH="${GCC_INSTALL_ARCH:-}" -e MACHINE="${MACHINE:-}" -e GCCVER="${GCCVER:-}" -e SKIP_NINJA_TESTS="${SKIP_NINJA_TESTS:-}" $CONTAINER bash -e -c "cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; prepare_os; Say Ready; bash -e build-cmake.sh"
       docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
       rm -rf "$SYSTEM_ARTIFACTSDIRECTORY/cmake" || true # WTH?
 

@@ -93,7 +93,7 @@ INSTALL_DIR="${INSTALL_DIR:-/opt/local-links/cmake}"
 
 mkdir -p "$INSTALL_DIR"; rm -rf "$INSTALL_DIR"/* || rm -rf "$INSTALL_DIR"/* || rm -rf "$INSTALL_DIR"/*
 
-url=https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2.tar.gz
+url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake-src
 mkdir -p "$work"
 pushd .
@@ -159,7 +159,7 @@ done
 strip * || true # deps
 cd "$INSTALL_DIR"
 Say "pack [$(pwd)] release as gz"
-archname="../cmake-3.22.2-$machine"
+archname="../cmake-${CMAKE_VER}-$machine"
 tar cf - . | gzip -9 > ${archname}.tar.gz
 Say "pack [$(pwd)] release as xz"
 tar cf - . | xz -z -9 -e > ${archname}.tar.xz
