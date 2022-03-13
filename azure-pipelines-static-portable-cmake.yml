@@ -21,12 +21,21 @@ jobs:
       'amd64':
         PLATFORM: "amd64"
         IMAGE: alpine
+      'amd64 (debian)':
+        PLATFORM: "amd64"
+        IMAGE: debian:11
       'i386':
         PLATFORM: "386"
         IMAGE: alpine
-      'armv5':
+      'i386 (debian)':
+        PLATFORM: "386"
+        IMAGE: i386/debian:11
+      'armv5 (debian 11)':
         PLATFORM: "armv5"
         IMAGE: 'arm32v5/debian:11'
+      'armv5 (debian 10)':
+        PLATFORM: "armv5"
+        IMAGE: 'arm32v5/debian:10'
       's390x':
         PLATFORM: "s390x"
         IMAGE: alpine
