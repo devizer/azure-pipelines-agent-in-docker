@@ -1,0 +1,114 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/*'
+
+jobs:
+
+- job: cmake
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      # default is the latest GCC 11.2 
+      'x86-64':
+        IMAGE: "debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+      'arm32v7':
+        IMAGE: "arm32v7/debian:7"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+      'arm64v8 GCC-11':
+        IMAGE: "arm64v8/debian:8"
+        GCCVER: "11"
+        EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-5':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "5"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-8':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "8"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-9':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "9"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+      # 'arm64v8 GCC-10':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "10"
+      #   EXPLICIT_OPENSSL_OPTIONS: "True"
+
+      # 'arm64v8 GCC-5 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "5"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-8 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "8"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-9 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "9"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-10 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "10"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+      # 'arm64v8 GCC-11 No Ops':
+      #   IMAGE: "arm64v8/debian:8"
+      #   GCCVER: "11"
+      #   EXPLICIT_OPENSSL_OPTIONS: "False"
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      cd build-tools
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "qemu user static"
+      sudo apt-get install qemu-user-static -y -qq >/dev/null
+      Say "Register qemu static"
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
+      utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
+      utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
+      try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_fixed_url}"
+      CONTAINER="builder"
+      docker pull "$IMAGE" >/dev/null
+      docker run -d --sysctl net.ipv6.conf.all.disable_ipv6=1 --privileged --hostname "$CONTAINER" --name "$CONTAINER" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c 'tail -f /dev/null'
+      for f in /usr/local/bin/Say /usr/local/bin/try-and-retry; do
+        docker cp $f "$CONTAINER":/usr/bin/.
+      done
+      for f in "$(pwd)/"*.sh /tmp/build-gcc-utilities.sh; do
+        Say "copying $f to the container"
+        docker cp "$f" "$CONTAINER":/root/.
+      done
+
+      docker exec -t -e GCCVER="${GCCVER:-}" -e EXPLICIT_OPENSSL_OPTIONS="${EXPLICIT_OPENSSL_OPTIONS:-True}" $CONTAINER bash -e -c "export SKIP_NINJA_TESTS=True; cd /root; Say --Reset-Stopwatch; echo GCCVER is \${GCCVER:-}; export DEBIAN_FRONTEND=noninteractive; source /root/build-gcc-utilities.sh; say_cpu_name; prepare_os; Say Ready; pwd; bash -e build-cmake.sh"
+    displayName: 'cmake'
+
+  - script: |
+      set -eu; set -o pipefail
+      Say "grab cmake artifacts"
+      CONTAINER="builder"
+      docker cp $CONTAINER:/opt/local-links/. "$SYSTEM_ARTIFACTSDIRECTORY"
+      rm -rf "$SYSTEM_ARTIFACTSDIRECTORY/cmake" || true # WTH?
+
+      Say "grab cmake working sources"
+      mkdir -p ~/container-home
+      docker cp $CONTAINER:/root/. ~/container-home
+      cd ~/container-home
+      tar cf - . | xz -z -1 > "$SYSTEM_ARTIFACTSDIRECTORY/cmake-builder-drop.tar.xz"
+      Say "Bye"
+    condition: succeededOrFailed()
+    displayName: 'grab artifacts'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
