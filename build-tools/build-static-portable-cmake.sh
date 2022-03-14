@@ -30,6 +30,7 @@ fi
 if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
 
 
+function _IGNORE_libarchive_() {
 Say "Building libarchive"
 url=https://github.com/libarchive/libarchive/releases/download/v3.6.0/libarchive-3.6.0.tar.xz
 work=$HOME/build/libarchive-src
@@ -39,6 +40,7 @@ curl -kSL -o _source.tar.xz "$url"
 tar xJf _source.tar.xz
 cd lib*
 time (./configure --prefix="/usr/local" |& tee "$HOME/libarchive.txt" && make -j$(nproc) && make install -j$(nproc) )
+}
 
 
 Say "BUILDING CMAKE"
