@@ -24,7 +24,7 @@ time apt-get-install build-essential git cmake make autoconf automake libtool pk
   libssl-dev zlib1g-dev libexpat1-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
 
-time (export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
+time (export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | CMAKE_VER=3.22.2 bash)
 fi
 
 if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
