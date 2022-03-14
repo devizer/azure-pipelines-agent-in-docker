@@ -19,8 +19,11 @@ function apt-get-install() { apt-get install -y -qq "$@" | { grep "Unpacking\|Se
 if [[ "$(command -v apt-get)" != "" ]]; then
 
 Say "BUILT-IN DEB Dependencies"
+Say Before
 cat /etc/apt/sources.list
 sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+Say After
+cat /etc/apt/sources.list
 apt-get update -qq
 apt-get build-dep nano cmake openssl -y -q | { grep "Unpacking\|Setting" || true; }
 
