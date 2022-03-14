@@ -42,6 +42,7 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 time apt-get-install build-essential git cmake make autoconf automake libtool pkg-config clang \
   sudo xz-utils mc nano sudo xz-utils less \
   zlib1g libncurses5 \
+  libncursesw5-dev libncurses5-dev \
   libssl-dev zlib1g-dev libexpat1-dev \
   libbz2-dev lzma-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
