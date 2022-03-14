@@ -24,13 +24,26 @@ time apt-get-install build-essential git cmake make autoconf automake libtool pk
   libssl-dev zlib1g-dev libexpat1-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
 
+time apt-get-install \
+       ca-certificates curl aria2 gnupg software-properties-common htop mc lsof unzip \
+       net-tools bsdutils lsb-release wget curl pv sudo less nano ncdu tree \
+       procps dialog \
+       build-essential libc6-dev libtool gettext autoconf automake bison flex help2man m4 \
+       pkg-config g++ gawk \
+       curl aria2 htop mc lsof gawk gnupg openssh-client openssl \
+       bsdutils lsb-release xz-utils pv sudo less nano ncdu tree \
+       procps dialog
+
+       
+
+
 time (export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | CMAKE_VER=3.22.2 bash)
 fi
 
 if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
 
 
-function _IGNORE_libarchive_() {
+# function _IGNORE_libarchive_() {
 Say "Building libarchive"
 url=https://github.com/libarchive/libarchive/releases/download/v3.6.0/libarchive-3.6.0.tar.xz
 work=$HOME/build/libarchive-src
@@ -40,7 +53,7 @@ curl -kSL -o _source.tar.xz "$url"
 tar xJf _source.tar.xz
 cd lib*
 time (./configure --prefix="/usr/local" |& tee "$HOME/libarchive.txt" && make -j$(nproc) && make install -j$(nproc) )
-}
+# }
 
 
 Say "BUILDING CMAKE"
