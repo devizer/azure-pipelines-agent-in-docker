@@ -32,7 +32,10 @@ time apt-get-install \
        pkg-config g++ gawk \
        curl aria2 htop mc lsof gawk gnupg openssh-client openssl \
        bsdutils lsb-release xz-utils pv sudo less nano ncdu tree \
-       procps dialog
+       procps dialog \
+       gettext zlib1g-dev \
+       libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip
+
 
        
 
