@@ -1,7 +1,10 @@
 # https://cmake.org/cmake/help/v3.7/module/FindOpenSSL.html
 # https://github.com/Kitware/CMake/blob/master/Modules/FindOpenSSL.cmake
 # docker run -it --rm alpine:edge sh -c "apk add bash nano mc; export PS1='\w # '; bash"
+set -eu
 set -o pipefail
+CMAKE_VER="${CMAKE_VER:-3.22.3}"
+PLATFORM="${PLATFORM:-temp}"
 Say "PLATFORM: $PLATFORM, CMAKE_VER: $CMAKE_VER"
 if [[ "$(command -v apk)" != "" ]]; then
 apk upgrade
@@ -20,10 +23,25 @@ time apt-get-install build-essential git cmake make autoconf automake libtool pk
   sudo xz-utils mc nano sudo xz-utils less \
   libssl-dev zlib1g-dev libexpat1-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
+
+time (export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 fi
 
 if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
 
+
+Say "Building libarchive"
+url=https://github.com/libarchive/libarchive/releases/download/v3.6.0/libarchive-3.6.0.tar.xz
+work=$HOME/build/libarchive-src
+mkdir -p $work
+cd $work
+curl -kSL -o _source.tar.xz "$url"
+tar xJf _source.tar.xz
+cd lib*
+time (./configure --prefix="/usr/local" |& tee "$HOME/libarchive.txt" && make -j$(nproc) && make install -j$(nproc) )
+
+
+Say "BUILDING CMAKE"
 url=https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
 work=$HOME/build/cmake; mkdir -p "$work"; cd $work
 try-and-retry curl -f -kSL -o /tmp/_cmake.tar.gz "$url"
