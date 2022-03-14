@@ -35,14 +35,14 @@ deb-src http://deb.debian.org/debian bullseye-updates main
 ' | tee /etc/apt/sources.list
 
 apt-get update -qq
-apt-get build-dep nano cmake openssl -y -q | { grep "Unpacking\|Setting" || true; }
+apt-get build-dep nano cmake openssl libarchive -y -q | { grep "Unpacking\|Setting" || true; }
 
 apt-get update -qq; apt-get-install curl;
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null; Say --Reset-Stopwatch
 time apt-get-install build-essential git cmake make autoconf automake libtool pkg-config clang \
   sudo xz-utils mc nano sudo xz-utils less \
   libssl-dev zlib1g-dev libexpat1-dev \
-  libbz2-dev \
+  libbz2-dev lzma-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
 
 time apt-get-install \
