@@ -20,13 +20,13 @@ jobs:
     matrix:
       'amd64':
         PLATFORM: "amd64"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'amd64 (debian)':
         PLATFORM: "amd64"
         IMAGE: debian:11
       'i386':
         PLATFORM: "386"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'i386 (debian)':
         PLATFORM: "386"
         IMAGE: i386/debian:11
@@ -38,22 +38,22 @@ jobs:
         IMAGE: 'arm32v5/debian:10'
       's390x':
         PLATFORM: "s390x"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'arm64':
         PLATFORM: "arm64"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'armv6':
         PLATFORM: "armv6"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'armv7':
         PLATFORM: "armv7"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'ppc64le':
         PLATFORM: "ppc64le"
-        IMAGE: alpine
+        IMAGE: alpine:edge
       'riscv64':
         PLATFORM: "riscv64"
-        IMAGE: alpine
+        IMAGE: alpine:edge
 
   steps:
   - script: |
@@ -82,7 +82,7 @@ jobs:
       digest="$(cat "$json" | Find-Docker-Image-Digest-for-Architecture "$PLATFORM")"
       Say "Digest of [$PLATFORM] is [$digest]"
 
-      if [[ "$PLATFORM" != "armv5" ]]; then
+      if [[ "$IMAGE" == alpine* ]]; then
          IMAGE="alpine:edge@${digest}"
       else
          IMAGE="$IMAGE"
