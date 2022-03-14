@@ -17,11 +17,18 @@ fi
 
 function apt-get-install() { apt-get install -y -qq "$@" | { grep "Unpacking\|Setting" || true; }  }
 if [[ "$(command -v apt-get)" != "" ]]; then
+
+Say "BUILT-IN DEB Dependencies"
+sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+sudo apt-get update      
+apt-get build-dep nano cmake openssl -y -q | { grep "Unpacking\|Setting" || true; }
+
 apt-get update -qq; apt-get-install curl;
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | TARGET_DIR=/usr/bin bash >/dev/null; Say --Reset-Stopwatch
 time apt-get-install build-essential git cmake make autoconf automake libtool pkg-config clang \
   sudo xz-utils mc nano sudo xz-utils less \
   libssl-dev zlib1g-dev libexpat1-dev \
+  libbz2-dev \
   libexpat1-dev libarchive-dev libnghttp2-dev libssl-dev libssh-dev libcrypto++-dev
 
 time apt-get-install \
@@ -35,9 +42,6 @@ time apt-get-install \
        procps dialog \
        gettext zlib1g-dev \
        libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip
-
-
-       
 
 
 time (export INSTALL_DIR=/usr/local TOOLS="bash git jq 7z nano gnu-tools cmake curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | CMAKE_VER=3.22.2 bash)
