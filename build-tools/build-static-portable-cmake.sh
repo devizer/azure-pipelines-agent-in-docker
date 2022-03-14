@@ -22,8 +22,18 @@ Say "BUILT-IN DEB Dependencies"
 Say Before
 cat /etc/apt/sources.list
 sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-Say After
+Say "After #1"
 cat /etc/apt/sources.list
+Say "After #2"
+echo '
+deb http://deb.debian.org/debian bullseye main
+deb http://security.debian.org/debian-security bullseye-security main
+deb http://deb.debian.org/debian bullseye-updates main
+deb-src http://deb.debian.org/debian bullseye main
+deb-src http://security.debian.org/debian-security bullseye-security main
+deb-src http://deb.debian.org/debian bullseye-updates main
+' | tee /etc/apt/sources.list
+
 apt-get update -qq
 apt-get build-dep nano cmake openssl -y -q | { grep "Unpacking\|Setting" || true; }
 
