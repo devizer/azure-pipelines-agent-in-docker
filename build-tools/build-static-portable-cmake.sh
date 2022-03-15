@@ -25,13 +25,14 @@ sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
 Say "After #1"
 cat /etc/apt/sources.list
 Say "After #2"
+source /etc/os-release
 echo '
-deb http://deb.debian.org/debian bullseye main
-deb http://security.debian.org/debian-security bullseye-security main
-deb http://deb.debian.org/debian bullseye-updates main
-deb-src http://deb.debian.org/debian bullseye main
-deb-src http://security.debian.org/debian-security bullseye-security main
-deb-src http://deb.debian.org/debian bullseye-updates main
+deb http://deb.debian.org/debian '$VERSION_CODENAME' main main contrib non-free
+deb http://security.debian.org/debian-security '$VERSION_CODENAME'-security main contrib non-free
+deb http://deb.debian.org/debian '$VERSION_CODENAME'-updates main contrib non-free
+deb-src http://deb.debian.org/debian '$VERSION_CODENAME' main contrib non-free
+deb-src http://security.debian.org/debian-security '$VERSION_CODENAME'-security main contrib non-free
+deb-src http://deb.debian.org/debian '$VERSION_CODENAME'-updates main contrib non-free
 ' | tee /etc/apt/sources.list
 
 apt-get update -qq
