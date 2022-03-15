@@ -96,8 +96,8 @@ rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/o
   .. 2>&1 | tee ~/my-cmake.log
 
 Say "Building"
-time make install -j2 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="-static -all-static" |& tee my-make.log \
-  || make install -j2 VERBOSE=1 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="-static -all-static" |& tee my-make-error.log
+time make install -j2 VERBOSE=1 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="-static -all-static" |& tee my-make.log 
+#  || make install -j2 VERBOSE=1 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="-static -all-static" |& tee my-make-error.log
 ldd /opt/cmake/bin/cmake && (Say --Display-As=Error "/opt/cmake/bin/cmake is not static"; exit 13) || true
 ls -la /opt/cmake/bin/
 /opt/cmake/bin/cmake --version
