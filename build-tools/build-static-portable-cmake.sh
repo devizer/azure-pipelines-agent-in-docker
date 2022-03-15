@@ -33,7 +33,18 @@ deb http://deb.debian.org/debian '$VERSION_CODENAME'-updates main contrib non-fr
 deb-src http://deb.debian.org/debian '$VERSION_CODENAME' main contrib non-free
 deb-src http://security.debian.org/debian-security '$VERSION_CODENAME'-security main contrib non-free
 deb-src http://deb.debian.org/debian '$VERSION_CODENAME'-updates main contrib non-free
-' | tee /etc/apt/sources.list
+' > /etc/apt/sources.list
+if [[ "${ID}:${VERSION_ID}" == "debian:10" ]]; then
+echo '
+deb http://deb.debian.org/debian buster main contrib non-free
+deb http://security.debian.org/debian-security buster/updates main contrib non-free
+deb http://deb.debian.org/debian buster-updates main contrib non-free
+deb-src http://deb.debian.org/debian buster main contrib non-free
+deb-src http://security.debian.org/debian-security buster/updates main contrib non-free
+deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+' > /etc/apt/sources.list
+fi
+cat /etc/apt/sources.list
 
 apt-get update -qq
 Say "APT Build dependencies"
