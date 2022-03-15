@@ -36,7 +36,7 @@ deb-src http://deb.debian.org/debian bullseye-updates main
 
 apt-get update -qq
 Say "APT Build dependencies"
-apt-get build-dep ncdu bash nano cmake openssl libarchive -y -q | { grep "Unpacking\|Setting" || true; }
+apt-get build-dep mc ncdu bash nano cmake openssl libarchive -y -q | { grep "Unpacking\|Setting" || true; }
 
 Say "APT Install rest build tools"
 apt-get-install curl;
