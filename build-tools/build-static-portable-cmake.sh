@@ -80,7 +80,7 @@ fi
 if [[ -e /etc/debian_version ]]; then url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash; fi
 
 
-# function _IGNORE_libarchive_() {
+function _IGNORE_libarchive_() {
 Say "Building libarchive"
 url=https://github.com/libarchive/libarchive/releases/download/v3.6.0/libarchive-3.6.0.tar.xz
 work=$HOME/build/libarchive-src
@@ -90,7 +90,7 @@ curl -kSL -o _source.tar.xz "$url"
 tar xJf _source.tar.xz
 cd lib*
 time (./configure --prefix="/usr/local" |& tee "$HOME/libarchive.txt" && make -j$(nproc) && make install -j$(nproc) )
-# }
+}
 
 
 Say "BUILDING CMAKE"
@@ -103,10 +103,11 @@ mkdir -p out; cd out
 
 export CC=clang CXX=clang++ CFLAGS="-O2" CXXFLAGS="-O2" LDFLAGS="-static"
 
-Say "CMaking"
+sslpath=/usr; if [[ -d /opt/networking ]]; then sslpath=/opt/networking; fi
+Say "CMaking (ssl root is [$sslpath])"
 rm -rf *; time cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/opt/cmake \
   -DBUILD_TESTING:BOOL=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE \
-  -DOPENSSL_ROOT_DIR=/usr \
+  -DOPENSSL_ROOT_DIR="$sslpath" \
   .. 2>&1 | tee ~/my-cmake.log
 
 Say "Building"
