@@ -27,16 +27,16 @@ function Add-LD-Path() {
 # Say "Install gcc 11.2"
 # export GCC_INSTALL_VER=11 GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 Say "Install cmake and gnu build tools"
-script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr/local TOOLS="gnu-tools cmake" bash
+script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr/local TOOLS="gnu-tools cmake git" bash
 
 # Add-LD-Path /usr/local/lib /usr/local/lib64
 
 export DEBIAN_FRONTEND=noninteractive
 export TRANSIENT_BUILDS=/transient-builds
-export MONO_HOME=/opt/mono-6.12.0.122
+MONO_VER="${MONO_VER:-6.12.0.122}"
+export MONO_HOME=/opt/mono-${MONO_VER}
 
-
-apt-get -y install lsof binutils \
+apt-get -y install lsof binutils git \
    build-essential autoconf pkg-config \
    zlib1g zlib1g-dev pv libncurses5-dev libncurses5 libncursesw5-dev libncursesw5 gettext \
    pv libncurses5 procps binutils tmux python3
@@ -45,17 +45,16 @@ export PKG_CONFIG_PATH=/opt/networking/lib/pkgconfig:/usr/lib/pkgconfig
 
 ##### MONO
 work=/transient-builds/mono-src
-url=https://download.mono-project.com/sources/mono/mono-6.12.0.122.tar.xz
+url=https://download.mono-project.com/sources/mono/mono-${MONO_VER}.tar.xz
 file=$(basename $url)
 mkdir -p $work 
 cd $work
-rm -f $file || true
+rm -f _$file || true
 curl -kSL -o _$file "$url"
-
 time (pv _$file | tar xJf -)
 rm -f _$file
 cd mono*
-export CFLAGS="-O0"
+export CFLAGS="-O2"
 export CXXFLAGS="$CFLAGS"
 sed -i 's/git:\/\//https:\/\//g' mono/utils/jemalloc/SUBMODULES.json
 cat mono/utils/jemalloc/SUBMODULES.json
