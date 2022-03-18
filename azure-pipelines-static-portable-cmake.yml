@@ -134,6 +134,7 @@ jobs:
       artifactName: '$(Agent.JobName)'
 
 - job: 'deploy_static_cmake'
+  condition: succeededOrFailed()
   pool:
     vmImage: 'ubuntu-20.04'
   timeoutInMinutes: 360
