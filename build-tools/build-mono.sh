@@ -24,8 +24,8 @@ function Add-LD-Path() {
   ldconfig || true
 }
 
-# Say "Install gcc 11.2"
-# export GCC_INSTALL_VER=11 GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+Say "Install gcc 11.2"
+export GCC_INSTALL_VER=11 GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 Say "Install cmake and gnu build tools"
 script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr/local TOOLS="gnu-tools cmake git" bash
 
@@ -60,6 +60,9 @@ export CXXFLAGS="$CFLAGS"
 sed -i 's/git:\/\//https:\/\//g' mono/utils/jemalloc/SUBMODULES.json
 cat mono/utils/jemalloc/SUBMODULES.json
 
+bash -c "while true; do sleep 5; printf '\u2026\n'; done" &
+pid=$!
+
 # --disable-boehm --with-gc=none --with-sgen=yes
 # doesn't work: --with-libgc=included
 time ./autogen.sh --prefix="$MONO_HOME" --with-jemalloc=no --disable-werror --enable-dtrace=no \
@@ -87,3 +90,4 @@ build_all_known_hash_sums ${artifact}.tar.xz
 build_all_known_hash_sums ${artifact}.tar.gz
 
 Say "Done"
+kill $pid || true
