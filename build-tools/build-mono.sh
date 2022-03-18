@@ -43,7 +43,8 @@ export MONO_HOME=/usr/local
 apt-get -y install lsof binutils git \
    build-essential autoconf pkg-config \
    zlib1g zlib1g-dev pv libncurses5-dev libncurses5 libncursesw5-dev libncursesw5 gettext \
-   pv libncurses5 procps binutils tmux python3
+   pv libncurses5 procps binutils tmux python3 \
+   | { grep "Setting\|Unpacking" || true; }
 
 export PKG_CONFIG_PATH=/opt/networking/lib/pkgconfig:/usr/lib/pkgconfig
 
