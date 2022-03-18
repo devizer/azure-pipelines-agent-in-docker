@@ -61,12 +61,13 @@ sed -i 's/git:\/\//https:\/\//g' mono/utils/jemalloc/SUBMODULES.json
 cat mono/utils/jemalloc/SUBMODULES.json
 
 # --disable-boehm --with-gc=none --with-sgen=yes
+# doesn't work: --with-libgc=included
 time ./autogen.sh --prefix="$MONO_HOME" --with-jemalloc=no --disable-werror --enable-dtrace=no \
   --with-profile2=no --disable-maintainer-mode --disable-dependency-tracking \
-  --with-libgc=included --with-sgen=no --disable-llvm --disable-dtrace \
+  --enable-boehm --with-sgen=no --disable-llvm --disable-dtrace \
   --with-mcs-docs=no \
   --with-static_mono=yes --with-shared_mono=no \
-  --disable-gtk-doc --with-mcs-docs=no --enable-nls=no --disable-boehm \
+  --disable-gtk-doc --with-mcs-docs=no --enable-nls=no  \
   --with-ikvm-native=no --enable-minimal=profiler,attach,com \
   |& tee autogen.log
 
