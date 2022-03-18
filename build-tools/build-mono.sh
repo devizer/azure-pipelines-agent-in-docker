@@ -57,6 +57,9 @@ rm -f _$file
 cd mono*
 export CFLAGS="-O0"
 export CXXFLAGS="$CFLAGS"
+sed -i 's/git:\/\//https:\/\//g' mono/utils/jemalloc/SUBMODULES.json
+cat mono/utils/jemalloc/SUBMODULES.json
+
 time ./autogen.sh --prefix=/opt/mono --with-jemalloc=yes --disable-werror --enable-dtrace=no \
   --with-profile2=no --disable-boehm --disable-maintainer-mode --disable-dependency-tracking \
   --with-gc=none --with-sgen=yes --with-mcs-docs=no \
