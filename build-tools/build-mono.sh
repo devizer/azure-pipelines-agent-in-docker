@@ -59,7 +59,7 @@ export CXXFLAGS="$CFLAGS"
 sed -i 's/git:\/\//https:\/\//g' mono/utils/jemalloc/SUBMODULES.json
 cat mono/utils/jemalloc/SUBMODULES.json
 
-time ./autogen.sh --prefix="$MONO_HOME" --with-jemalloc=yes --disable-werror --enable-dtrace=no \
+time ./autogen.sh --prefix="$MONO_HOME" --with-jemalloc=no --disable-werror --enable-dtrace=no \
   --with-profile2=no --disable-boehm --disable-maintainer-mode --disable-dependency-tracking \
   --with-gc=none --with-sgen=yes --with-mcs-docs=no \
   --with-static_mono=no --with-shared_mono=yes \
