@@ -27,7 +27,7 @@ function Add-LD-Path() {
 # Say "Install gcc 11.2"
 # export GCC_INSTALL_VER=11 GCC_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/install-gcc.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 Say "Install cmake and gnu build tools"
-script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr TOOLS="gnu-tools cmake git" bash
+script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr/local TOOLS="gnu-tools cmake git" bash
 
 # Add-LD-Path /usr/local/lib /usr/local/lib64
 
