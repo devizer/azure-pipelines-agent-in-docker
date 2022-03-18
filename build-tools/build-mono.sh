@@ -64,8 +64,9 @@ cat mono/utils/jemalloc/SUBMODULES.json
 # doesn't work: --with-libgc=included
 time ./autogen.sh --prefix="$MONO_HOME" --with-jemalloc=no --disable-werror --enable-dtrace=no \
   --with-profile2=no --disable-maintainer-mode --disable-dependency-tracking \
-  --enable-boehm --with-sgen=no --disable-llvm --disable-dtrace \
-  --with-mcs-docs=no \
+  --enable-boehm --with-sgen=yes \
+  --disable-llvm --disable-dtrace \
+  --with-mcs-docs=no --with-compiler-server=no \
   --with-static_mono=yes --with-shared_mono=no \
   --disable-gtk-doc --with-mcs-docs=no --enable-nls=no  \
   --with-ikvm-native=no --enable-minimal=profiler,attach,com \
