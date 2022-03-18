@@ -81,4 +81,4 @@ build_all_known_hash_sums ${artifact}.tar.xz
 build_all_known_hash_sums ${artifact}.tar.gz
 
 Say "Done"
-kill $pid || true
+# kill $pid || true
