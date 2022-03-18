@@ -83,6 +83,10 @@ time (make -j$(nproc) && make install)
 echo "make install complete"
 $MONO_HOME/bin/mono --version
 
+if [[ -x /usr/local/uninstall-this-gcc.sh ]]; then
+  Say "Uninstalling /usr/local/uninstall-this-gcc.sh"
+  /usr/local/uninstall-this-gcc.sh
+fi
 
 cd "$MONO_HOME"
 Say "pack [$(pwd)] release as gz"
