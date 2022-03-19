@@ -31,6 +31,9 @@ jobs:
       cd build-tools
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
+      Say "/proc/sys/kernel/randomize_va_space"
+      sudo cat /proc/sys/kernel/randomize_va_space
+      echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
       Say "qemu user static"
       # sudo apt-get install qemu-user-static -y -qq >/dev/null
       docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1 || true
