@@ -37,8 +37,8 @@ script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/In
 export DEBIAN_FRONTEND=noninteractive
 export TRANSIENT_BUILDS=/transient-builds
 export MONO_VER="${MONO_VER:-6.12.0.122}"
-# export MONO_HOME=/opt/mono-${MONO_VER}
-export MONO_HOME=/usr/local
+export MONO_HOME=/opt/mono-${MONO_VER}
+# export MONO_HOME=/usr/local
 
 apt-get -y install lsof binutils git \
    build-essential autoconf pkg-config \
