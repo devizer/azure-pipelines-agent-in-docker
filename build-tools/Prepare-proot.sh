@@ -122,6 +122,9 @@ cat <<-'EOF' > /tmp/provisioning-$KEY
     # fi
     Say "Always TOOLS ($TOOLS) for [$(get_linux_os_id) $(uname -m)]"
     script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    Say "Update ca-certificates for [$(get_linux_os_id) $(uname -m)]"
+    script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+    rm -f /usr/local/bin/grep
   else
     Say "Install 7z and jq for [$(get_linux_os_id) $(uname -m)]"
     apt-get install jq p7zip-full -y -qq

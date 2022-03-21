@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -eu;
+set -o pipefail
+INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
+function install-a-gnu-tool() {
+  local key="$1"
+  local url="$2"
+  Say "Installing [$key] using [$url]"
+  local work=$HOME/build/${key}-src
+  mkdir -p "$work"
+  pushd .
+  cd $work && rm -rf *
+  local file="${TMPDIR:-/tmp}/_${key}.archive"
+  try-and-retry curl -kSL -o "$file" "$url"
+  tar xzf "$file"
+  rm -f "$file"
+  cd *
+  if [[ -x ./configure ]]; then
+    ./configure --prefix="${INSTALL_PREFIX:-/usr/local}" --disable-shared && make -j && sudo make install
+  else
+    # bzip2
+    sudo make install PREFIX="${INSTALL_PREFIX:-/usr/local}"
+  fi
+  popd
+  Say "Completed: [$key] using [$url]"
+}
+
+export FORCE_UNSAFE_CONFIGURE=1 # for TAR
+install-a-gnu-tool "grep-3.7"        "https://ftp.gnu.org/gnu/grep/grep-3.7.tar.gz"
+
+function try-symlink() {
+  if cmp -s "$1" "$2" && test -s "$1" && test -s "$2"; then ln -f -s "$2" "$1"; fi
+}
+
+pushd "${INSTALL_PREFIX:-/usr/local}"
+echo "BEFORE STRIP: $(du . --max-depth=0)"
+pushd .
+find . -name '*.so*' -type f -exec strip {} \;
+cd bin
+strip * 2>&1 | grep -v "file format not recognized" || true
+try-symlink gawk gawk-5.1.1
+popd
+echo "AFTER STRIP: $(du . --max-depth=0)"
+popd
+
+# https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz
