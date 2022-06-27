@@ -30,13 +30,14 @@ mkdir -p /usr/local/lib /usr/local/lib64
 Add-LD-Path /usr/local/lib /usr/local/lib64
 Say "GCC: [$(gcc --version | head -1)]"
 
-Say "Install cmake and gnu build tools"
+Say "Install cmake and gnu build tools for [${machine}]"
 script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | INSTALL_DIR=/usr/local TOOLS="gnu-tools cmake git" bash
 
 
 export DEBIAN_FRONTEND=noninteractive
 export TRANSIENT_BUILDS=/transient-builds
-export MONO_VER="${MONO_VER:-6.12.0.122}"
+# export MONO_VER="${MONO_VER:-6.12.0.122}"
+export MONO_VER="${MONO_VER:-6.12.0.182}"
 export MONO_HOME=/opt/mono-${MONO_VER}
 # export MONO_HOME=/usr/local
 
@@ -89,10 +90,10 @@ if [[ -x /usr/local/uninstall-this-gcc.sh ]]; then
 fi
 
 cd "$MONO_HOME"
-Say "pack [$(pwd)] release as gz"
+Say "pack [$(pwd)] release as gz for [${machine}]"
 artifact="$SYSTEM_ARTIFACTSDIRECTORY/mono-${MONO_VER}-$machine"
 tar cf - . | gzip -9 > ${artifact}.tar.gz
-Say "pack [$(pwd)] release as xz"
+Say "pack [$(pwd)] release as xz for [${machine}]"
 tar cf - . | xz -z -9 -e > ${artifact}.tar.xz
 build_all_known_hash_sums ${artifact}.tar.xz
 build_all_known_hash_sums ${artifact}.tar.gz
