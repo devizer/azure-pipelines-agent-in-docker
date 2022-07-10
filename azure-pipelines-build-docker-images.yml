@@ -1,0 +1,73 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/Prepare-proot.sh'
+
+jobs:
+- job: Prepare
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      'ARMv6-wheezy':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2015-05-07/2015-05-05-raspbian-wheezy.zip"
+        TAGS: "-t devizervlad/armv6:raspberry-wheezy"
+        IMAGE: ""
+
+      'ARMv6-jessie':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2016-09-28/2016-09-23-raspbian-jessie.zip"
+        TAGS: "-t devizervlad/armv6:raspberry-jessie"
+
+      'ARMv6-stretch':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2019-04-09/2019-04-08-raspbian-stretch.zip"
+        TAGS: "-t devizervlad/armv6:raspberry-jessie"
+
+      'ARMv6-buster':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip"
+        TAGS: "-t devizervlad/armv6:raspberry-buster"
+
+      'ARMv6-buster-lite':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2020-05-28/2020-05-27-raspios-buster-lite-armhf.zip"
+        TAGS: "-t devizervlad/armv6:raspberry-buster-lite"
+
+      'ARMv6-bullseye-lite':
+        PREPARE_OS_MODE: "BIG"
+        IMAGE_URL: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-04-07/2022-04-04-raspios-bullseye-armhf-lite.img.xz"
+        TAGS: "-t devizervlad/armv6:raspberry-buster-lite"
+
+        
+  steps:
+  - script: |
+        sudo apt-get update -qq || true
+        sudo apt-get install sshpass rsync -y -qq | { grep Setting || true; }
+        set -e
+        mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
+
+        cd build-tools
+        sudo -E bash -c "export SYSTEM_ARTIFACTSDIRECTORY=$SYSTEM_ARTIFACTSDIRECTORY; bash -e Prepare-Docker-Images.sh"
+        sudo chown -R $(whoami) $SYSTEM_ARTIFACTSDIRECTORY
+
+        cd $SYSTEM_ARTIFACTSDIRECTORY
+        echo "DEPLOY IMAGES"
+        ls -la
+        # sshpass -p "$PASSWORD" rsync -r . "${LOGIN}@frs.sourceforge.net:/home/frs/p/debian-vm/termux-images"
+    displayName: 'Batch of images'
+    env:
+        PASSWORD: $(SECRET_PASSWORD)
+        LOGIN: $(SECRET_LOGIN)
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
