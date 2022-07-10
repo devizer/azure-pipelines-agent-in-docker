@@ -76,7 +76,7 @@ Acquire::AllowDowngradeToInsecureRepositories "1";
 
 Say "Tuning 4: store existing apt sources"
 pushd files/etc/apt >/dev/null
-tar xzf $SYSTEM_ARTIFACTSDIRECTORY/apt-sources.tgz .
+tar czf $SYSTEM_ARTIFACTSDIRECTORY/apt-sources.tgz .
 for f in $(find . -name '*.list'); do
   echo "# $f"
   cat $f
