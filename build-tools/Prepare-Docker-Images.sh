@@ -59,6 +59,13 @@ du -h --max-depth 2
 Say "Tuning 1: add qemu-arm-static"
 cp /usr/bin/qemu-arm-static ./files/usr/bin/qemu-arm-static
 
+Say "Tuning 2: add build tools bundle"
+export TARGET_DIR=./files/usr/bin
+script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+
+Say "Tuning 2: apt sources"
+cat files/etc/os-release
+
 Say "Building docker image"
 cmd="docker build $TAGS ."
 echo "$cmd"
