@@ -77,7 +77,7 @@ jobs:
         Say "Image: [$tag]"
         try-and-retry docker pull $tag
         Say "Test"
-        docker run --it -rm $tag uname -a
+        docker run -it --rm $tag uname -a
     displayName: 'TEST docker image'
 
   - task: PublishBuildArtifacts@1
