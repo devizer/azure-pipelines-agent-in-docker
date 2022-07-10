@@ -16,34 +16,33 @@ jobs:
       'ARMv6-wheezy':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2015-05-07/2015-05-05-raspbian-wheezy.zip"
-        TAGS: "-t devizervlad/armv6:raspberry-wheezy"
+        TAGS: "-t devizervlad/raspbian:raspberry-wheezy"
         IMAGE: ""
 
       'ARMv6-jessie':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2016-09-28/2016-09-23-raspbian-jessie.zip"
-        TAGS: "-t devizervlad/armv6:raspberry-jessie"
+        TAGS: "-t devizervlad/raspbian:raspberry-jessie"
 
       'ARMv6-stretch':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2019-04-09/2019-04-08-raspbian-stretch.zip"
-        TAGS: "-t devizervlad/armv6:raspberry-jessie"
+        TAGS: "-t devizervlad/raspbian:raspberry-jessie"
 
       'ARMv6-buster':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip"
-        TAGS: "-t devizervlad/armv6:raspberry-buster"
+        TAGS: "-t devizervlad/raspbian:raspberry-buster"
 
       'ARMv6-buster-lite':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2020-05-28/2020-05-27-raspios-buster-lite-armhf.zip"
-        TAGS: "-t devizervlad/armv6:raspberry-buster-lite"
+        TAGS: "-t devizervlad/raspbian:raspberry-buster-lite"
 
       'ARMv6-bullseye-lite':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-04-07/2022-04-04-raspios-bullseye-armhf-lite.img.xz"
-        TAGS: "-t devizervlad/armv6:raspberry-bullseye-lite"
-
+        TAGS: "-t devizervlad/raspbian:raspberry-bullseye-lite"
         
   steps:
   - script: |
@@ -61,9 +60,14 @@ jobs:
         ls -la
         # sshpass -p "$PASSWORD" rsync -r . "${LOGIN}@frs.sourceforge.net:/home/frs/p/debian-vm/termux-images"
     displayName: 'Build Docker Images'
+
+  - script: |
+        set -eu
+        docker login -u devizervlad -p "$PASSWORD"
+        docker push -a devizervlad/raspbian
+    displayName: 'Build Docker Images'
     env:
         PASSWORD: $(SECRET_PASSWORD)
-        LOGIN: $(SECRET_LOGIN)
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
