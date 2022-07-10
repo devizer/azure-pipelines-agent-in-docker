@@ -56,3 +56,9 @@ umount /mnt/arm-image
 rm -f "$imgfile"
 du -h --max-depth 2
 
+Say "Building docker image"
+cmd="docker build $TAGS ."
+echo "$cmd"
+eval "$cmd"
+
+Say "Done"
