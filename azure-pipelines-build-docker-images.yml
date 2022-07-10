@@ -60,7 +60,7 @@ jobs:
         echo "DEPLOY IMAGES"
         ls -la
         # sshpass -p "$PASSWORD" rsync -r . "${LOGIN}@frs.sourceforge.net:/home/frs/p/debian-vm/termux-images"
-    displayName: 'Batch of images'
+    displayName: 'Build Docker Images'
     env:
         PASSWORD: $(SECRET_PASSWORD)
         LOGIN: $(SECRET_LOGIN)
