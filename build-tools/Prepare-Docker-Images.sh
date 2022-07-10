@@ -56,6 +56,9 @@ umount /mnt/arm-image
 rm -f "$imgfile"
 du -h --max-depth 2
 
+Say "Tuning 1: add qemu-arm-static"
+cp /usr/bin/qemu-arm-static ./files/usr/bin/qemu-arm-static
+
 Say "Building docker image"
 cmd="docker build $TAGS ."
 echo "$cmd"
