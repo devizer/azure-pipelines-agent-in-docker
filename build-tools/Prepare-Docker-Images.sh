@@ -62,6 +62,6 @@ cp /usr/bin/qemu-arm-static ./files/usr/bin/qemu-arm-static
 Say "Building docker image"
 cmd="docker build $TAGS ."
 echo "$cmd"
-eval "$cmd"
+time eval "$cmd"
 
 Say "Done"
