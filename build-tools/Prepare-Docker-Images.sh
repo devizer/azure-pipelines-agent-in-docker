@@ -39,6 +39,8 @@ ls -lah
 rm -f "$file"
 imgfile="$(ls -1 *.img)"
 Say "Image file: [$imgfile]"
-fdisk -l "$imgfile"
+fdisk -l "$imgfile" | tee /tmp/partitions
+offset=$(cat /tmp/partitions | awk 'END{print $2}')
+Say "Offset: [$offset]"
 
 Say "Extracting [$imgfile]"
