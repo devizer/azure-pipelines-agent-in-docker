@@ -49,7 +49,7 @@ mount -o loop,offset=$((offset*512)) "$imgfile" /mnt/arm-image
 ls -la /mnt/arm-image
 Say "Extracting [$imgfile]"
 mkdir -p files
-cp -av /mnt/arm-image/. ./files/. | tee $SYSTEM_ARTIFACTSDIRECTORY/copy-files.log
+time cp -av /mnt/arm-image/. ./files/. > $SYSTEM_ARTIFACTSDIRECTORY/copy-files.log
 
 Say "Unmounting ..."
 umount /mnt/arm-image
@@ -80,3 +80,4 @@ echo "$cmd"
 time eval "$cmd"
 
 Say "Done"
+docker image ls | grep devizervlad
