@@ -35,7 +35,10 @@ file="$(basename "$IMAGE_URL")"
 try-and-retry curl -kSL -o "$file" "$IMAGE_URL"
 Say "Extracting [$file]"
 7z x -y "$file"
-# rm -f "$file"
-ls -la
-ls -la *.img
+ls -lah
+rm -f "$file"
+imgfile="$(ls -1 *.img)"
+Say "Image file: [$imgfile]"
+fdisk -l "$imgfile"
 
+Say "Extracting [$imgfile]"
