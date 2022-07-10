@@ -72,7 +72,7 @@ APT::Get::Assume-Yes "true";
 APT::Get::AllowUnauthenticated "true";
 Acquire::AllowInsecureRepositories "1";
 Acquire::AllowDowngradeToInsecureRepositories "1";
-' | tee ./files/etc/apt/apt.conf.d/99Z_Custom
+' | tee ./files/etc/apt/apt.conf.d/98_Z_Custom
 
 Say "Tuning 4: store existing apt sources"
 pushd files/etc/apt >/dev/null
