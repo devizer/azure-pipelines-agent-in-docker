@@ -74,6 +74,17 @@ Acquire::AllowInsecureRepositories "1";
 Acquire::AllowDowngradeToInsecureRepositories "1";
 ' | tee ./files/etc/apt/apt.conf.d/99Z_Custom
 
+Say "Tuning 4: store existing apt sources"
+pushd files/etc/apt >/dev/null
+tar xzf $SYSTEM_ARTIFACTSDIRECTORY/apt-sources.tgz .
+for f in $(find . -name '*.list'); do
+  echo "# $f"
+  cat $f
+  echo ""
+done | tee $SYSTEM_ARTIFACTSDIRECTORY/apt-sources.txt
+popd >/dev/null
+
+
 Say "Building docker image"
 cmd="docker build $TAGS ."
 echo "$cmd"
