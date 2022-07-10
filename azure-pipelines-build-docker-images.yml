@@ -65,9 +65,20 @@ jobs:
         set -eu
         docker login -u devizervlad -p "$PASSWORD"
         docker push -a devizervlad/raspbian
-    displayName: 'Build Docker Images'
+    displayName: 'PUSH docker image'
     env:
         PASSWORD: $(SECRET_PASSWORD)
+
+  - script: |
+        set -eu
+        images="$(docker image ls | grep devizervlad | grep raspbian | awk 'END{print $3}')"
+        docker rmi -f $images
+        tag=$(echo $TAGS | awk '{print $2}')
+        Say "Image: [$tag]"
+        try-and-retry docker pull $tag
+        Say "Test"
+        docker run --it -rm $tag uname -a
+    displayName: 'TEST docker image'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
