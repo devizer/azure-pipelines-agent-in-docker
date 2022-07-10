@@ -63,8 +63,16 @@ Say "Tuning 2: add build tools bundle"
 export TARGET_DIR=./files/usr/bin
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
 
-Say "Tuning 2: apt sources"
+Say "Tuning 3: apt sources validation"
 cat files/etc/os-release
+echo '
+Acquire::AllowReleaseInfoChange::Suite "true";
+Acquire::Check-Valid-Until "0";
+APT::Get::Assume-Yes "true";
+APT::Get::AllowUnauthenticated "true";
+Acquire::AllowInsecureRepositories "1";
+Acquire::AllowDowngradeToInsecureRepositories "1";
+' | tee ./files/etc/apt/apt.conf.d/99Z_Custom
 
 Say "Building docker image"
 cmd="docker build $TAGS ."
