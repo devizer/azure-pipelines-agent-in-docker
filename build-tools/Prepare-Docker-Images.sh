@@ -53,6 +53,6 @@ cp -av /mnt/arm-image/. ./files/. | tee $SYSTEM_ARTIFACTSDIRECTORY/copy-files.lo
 
 Say "Unmounting ..."
 umount /mnt/arm-image
-rm "$imgfile"
+rm -f "$imgfile"
 du -h --max-depth 2
 
