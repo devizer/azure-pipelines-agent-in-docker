@@ -43,4 +43,16 @@ fdisk -l "$imgfile" | tee /tmp/partitions
 offset=$(cat /tmp/partitions | awk 'END{print $2}')
 Say "Offset: [$offset]"
 
+Say "Mounting [$imgfile]"
+mkdir -p /mnt/arm-image
+mount -o loop,offset=$((offset*512)) "$imgfile" /mnt/arm-image
+ls -la /mnt/arm-image
 Say "Extracting [$imgfile]"
+mkdir -p files
+cp -av /mnt/arm-image ./files/.
+du -h --max-depth 2
+
+Say "Unmounting ..."
+umount /mnt/arm-image
+rm "$imgfile"
+
