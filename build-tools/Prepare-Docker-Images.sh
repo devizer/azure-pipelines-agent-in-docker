@@ -23,7 +23,6 @@ for f in build-gcc-utilities.sh; do
 done
 
 
-
 src=$(pwd)
 work=/transient-builds/temp-armv6
 mkdir -p $work
@@ -62,6 +61,7 @@ cp /usr/bin/qemu-arm-static ./files/usr/bin/qemu-arm-static
 Say "Tuning 2: add build tools bundle"
 export TARGET_DIR=./files/usr/bin
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+cp -v /tmp/build-gcc-utilities.sh files/tmp/.
 
 Say "Tuning 3: apt sources validation"
 cat files/etc/os-release

@@ -42,7 +42,7 @@ jobs:
       'ARMv6-bullseye-lite':
         PREPARE_OS_MODE: "BIG"
         IMAGE_URL: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-04-07/2022-04-04-raspios-bullseye-armhf-lite.img.xz"
-        TAGS: "-t devizervlad/armv6:raspberry-buster-lite"
+        TAGS: "-t devizervlad/armv6:raspberry-bullseye-lite"
 
         
   steps:
