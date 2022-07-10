@@ -49,7 +49,7 @@ mount -o loop,offset=$((offset*512)) "$imgfile" /mnt/arm-image
 ls -la /mnt/arm-image
 Say "Extracting [$imgfile]"
 mkdir -p files
-cp -av /mnt/arm-image ./files/.
+cp -av /mnt/arm-image/. ./files/.
 du -h --max-depth 2
 
 Say "Unmounting ..."
