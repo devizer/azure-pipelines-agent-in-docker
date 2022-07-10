@@ -50,9 +50,9 @@ ls -la /mnt/arm-image
 Say "Extracting [$imgfile]"
 mkdir -p files
 cp -av /mnt/arm-image/. ./files/.
-du -h --max-depth 2
 
 Say "Unmounting ..."
 umount /mnt/arm-image
 rm "$imgfile"
+du -h --max-depth 2
 
