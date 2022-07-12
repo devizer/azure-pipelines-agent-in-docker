@@ -111,7 +111,7 @@ function Build-Tools() {
     OS_VER="${ID:-}:${VERSION_ID:-}"
 
     Say "FOR grep (Lib PCRE) on $KEY"
-    apt-get install libpcre3-dev -y -qq
+    apt-get install libpcre3-dev -y
 
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
