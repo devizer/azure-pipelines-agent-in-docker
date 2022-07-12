@@ -14,6 +14,9 @@ jobs:
   timeoutInMinutes: 360
   strategy:
     matrix:
+      'arm32v6':
+        IMAGE: "devizervlad/raspbian:raspberry-wheezy"
+        KEY: 'arm32v6'
       'arm32v5':
         IMAGE: "arm32v5/debian:7"
         KEY: 'arm32v5'
