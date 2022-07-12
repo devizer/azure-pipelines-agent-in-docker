@@ -1,5 +1,6 @@
 set -eu
-sudo apt-get install make autoconf build-essential libtool sudo wget curl htop mc cmake pv jq p7zip xz-utils -y -q
+# jq? missong on raspbian:7
+sudo apt-get install make autoconf build-essential libtool sudo wget curl htop mc cmake pv p7zip xz-utils -y -q
 
 INSTALL_PREFIX="${INSTALL_PREFIX:-/usr/local}"
 
