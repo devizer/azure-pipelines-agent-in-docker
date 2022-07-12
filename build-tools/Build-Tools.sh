@@ -110,8 +110,12 @@ function Build-Tools() {
     test -f /etc/os-release && source /etc/os-release
     OS_VER="${ID:-}:${VERSION_ID:-}"
 
-    Say "FOR grep (Lib PCRE) on $KEY"
-    apt-get install libpcre3-dev -y
+    if [[ "$KEY" != arm32v6 ]]; then
+      Say "FOR grep (Lib PCRE) on $KEY"
+      apt-get install libpcre3-dev -y
+    else
+      Say "Skip regex for grep on $KEY"
+    fi
 
     Say "FOR GIT on $KEY"
     apt-get install libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext zlib1g-dev unzip -y -q
