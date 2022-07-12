@@ -18,6 +18,12 @@ jobs:
   strategy:
     matrix:
       # default is the latest GCC 11.2 
+      'arm32v6':
+        IMAGE: "devizervlad/raspbian:raspberry-wheezy"
+        SKIP_NINJA_TESTS: 'True'
+        MACHINE: 'arm32v6'
+        GCCVER: "11.2"
+        GCC_INSTALL_ARCH: 'armv6'
       'arm32v5':
         IMAGE: "arm32v5/debian:7"
         SKIP_NINJA_TESTS: 'True'
