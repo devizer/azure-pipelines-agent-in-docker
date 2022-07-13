@@ -212,6 +212,7 @@ url=https://github.com/curl/curl/releases/download/curl-7_43_0/curl-7.43.0.tar.g
 url=https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.69.1.tar.gz
 url=https://github.com/curl/curl/releases/download/curl-7_81_0/curl-7.81.0.tar.gz
 url=https://github.com/curl/curl/releases/download/curl-7_82_0/curl-7.82.0.tar.gz
+url=https://github.com/curl/curl/releases/download/curl-7_84_0/curl-7.84.0.tar.gz
 
 file=$(basename $url)
 try-and-retry curl -kSL -o _$file $url || wget --no-check-certificate -O _$file $url 2>/dev/null
@@ -285,7 +286,7 @@ done
 cd "$OPENSSL_HOME"
 rm -rf share/man/man3
 Say "pack [$(pwd)] release as gz"
-artifact="$SYSTEM_ARTIFACTSDIRECTORY/curl-7.82.0-$machine"
+artifact="$SYSTEM_ARTIFACTSDIRECTORY/curl-7.84.0-$machine"
 tar cf - . | gzip -9 > ${artifact}.tar.gz
 Say "pack [$(pwd)] release as xz"
 tar cf - . | xz -z -9 -e > ${artifact}.tar.xz
