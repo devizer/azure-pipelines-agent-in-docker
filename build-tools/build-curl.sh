@@ -1,9 +1,12 @@
 set -eu; set -o pipefail
+url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+
 cpus=$(cat /proc/cpuinfo | grep -E '^(P|p)rocessor' | wc -l)
 machine=$(uname -m); 
 [[ $machine == x86_64 ]] && [[ "$(getconf LONG_BIT)" == "32" ]] && machine=i386
 [[ $machine == aarch64 ]] && machine=arm64v8
-[[ $machine == armv* ]] && machine=arm32v7
+[[ $machine == armv7* ]] && machine=arm32v7
+[[ $machine == armv6* ]] && machine=arm32v6
 [[ "$(dpkg --print-architecture)" == armel ]] && machine=arm32v5
 
 url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
