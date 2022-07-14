@@ -8,6 +8,7 @@ trigger:
 
 jobs:
 
+# 7.84 needs updated build tools
 - job: curl
   pool:
     vmImage: 'ubuntu-20.04'
