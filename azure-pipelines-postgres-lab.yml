@@ -81,6 +81,13 @@ jobs:
         echo "2]: %%v"
         if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
           echo "3] Exists: C:\Program Files\PostgreSQL\%%v\bin\psql.exe"
+
+          echo Adding C:\Program Files\PostgreSQL\%%v\bin to Path
+          SET "PATH=%PATH%;C:\Program Files\PostgreSQL\%%v\bin"
+          echo PATH is [%PATH%]
+          echo "##vso[task.setvariable variable=PATH]%PATH%"
+
+          rem psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
         )
       )
       echo "fin"
