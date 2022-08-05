@@ -1,0 +1,102 @@
+variables:
+  QA: 42
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'postgres-lab/*'
+
+jobs:
+
+- job: PG
+  pool:
+    vmImage: '$(VM)'
+  timeoutInMinutes: 30
+  strategy:
+    matrix:
+      'V9-W2022': 
+        VM: windows-2022
+        PKG: postgresql9
+      'V10-W2022': 
+        VM: windows-2022
+        PKG: postgresql10
+      'V11-W2022': 
+        VM: windows-2022
+        PKG: postgresql11
+      'V12-W2022': 
+        VM: windows-2022
+        PKG: postgresql12
+      'V13-W2022': 
+        VM: windows-2022
+        PKG: postgresql13
+      'V14-W2022': 
+        VM: windows-2022
+        PKG: postgresql14
+      'Latest-W2022': 
+        VM: windows-2022
+        PKG: postgresql
+
+      'V9-W2019': 
+        VM: windows-2019
+        PKG: postgresql9
+      'V10-W2019': 
+        VM: windows-2019
+        PKG: postgresql10
+      'V11-W2019': 
+        VM: windows-2019
+        PKG: postgresql11
+      'V12-W2019': 
+        VM: windows-2019
+        PKG: postgresql12
+      'V13-W2019': 
+        VM: windows-2019
+        PKG: postgresql13
+      'V14-W2019': 
+        VM: windows-2019
+        PKG: postgresql14
+      'Latest-W2019': 
+        VM: windows-2019
+        PKG: postgresql
+
+
+  steps:
+  - powershell: |
+      Write-Host "OS: $((Get-WmiObject -class Win32_OperatingSystem).Caption)"
+      Get-ChildItem -Path Env: | ft -autosize
+    displayName: 'INFO'
+
+  - script: |
+      @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+      choco install --no-progress --params '/Password:test' %PKG% -my
+      rem dir /b /s "C:\Program Files"       >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
+      rem dir /b /s "C:\Program Files (x86)" >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
+      for %%v in (9.3 9.6 10 11 12 13 14) DO (
+        if not exist c:\windows\psql.exe (
+          if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
+            echo Creating symlink c:\windows\psql.exe for [C:\Program Files\PostgreSQL\%%v\bin\psql.exe]
+            mklink /H c:\windows\psql.exe "C:\Program Files\PostgreSQL\%%v\bin\psql.exe"
+            psql -V
+          )
+        )
+      )
+    condition: succeededOrFailed()
+    displayName: 'Install Postgres'
+
+  - powershell: |
+      $ErrorActionPreference="Continue"
+      $Env:PGPASSWORD='test'; 
+      psql -Upostgres -c "SHOW server_version;"
+      psql -Upostgres -c "Select Version();"
+      echo "Bye Bye"
+    condition: succeededOrFailed()
+    displayName: 'Connection Info (powershell)'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
