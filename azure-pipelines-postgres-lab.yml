@@ -79,6 +79,9 @@ jobs:
       echo PATH is [%PATH%]
       for %%v in (9.3 9.6 10 11 12 13 14) DO (
         echo "2]: %%v"
+        if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
+          echo "3] Exists: C:\Program Files\PostgreSQL\%%v\bin\psql.exe"
+        )
       )
       echo "fin"
     condition: succeededOrFailed()
