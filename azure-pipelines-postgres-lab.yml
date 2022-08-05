@@ -71,6 +71,10 @@ jobs:
   - script: |
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
       choco install --no-progress --params '/Password:test' %PKG% -my
+    condition: succeededOrFailed()
+    displayName: 'Install Postgres'
+
+  - script: |
       rem dir /b /s "C:\Program Files"       >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
       rem dir /b /s "C:\Program Files (x86)" >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
       for %%v in (9.3 9.6 10 11 12 13 14) DO (
@@ -78,13 +82,13 @@ jobs:
           if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
             echo Creating symlink c:\windows\psql.exe for [C:\Program Files\PostgreSQL\%%v\bin\psql.exe]
             mklink /H c:\windows\psql.exe "C:\Program Files\PostgreSQL\%%v\bin\psql.exe"
-            psql -V
+            psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
           )
         )
       )
       echo off
     condition: succeededOrFailed()
-    displayName: 'Install Postgres'
+    displayName: 'Symlink Postgres'
 
   - powershell: |
       $ErrorActionPreference="Continue"
