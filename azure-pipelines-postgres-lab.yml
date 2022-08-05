@@ -79,18 +79,6 @@ jobs:
       echo PATH is [%PATH%]
       for %%v in (9.3 9.6 10 11 12 13 14) DO (
         echo "2]: %%v"
-        if not exist c:\windows\psql.exe (
-          echo "3]"
-          if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
-            echo "4)"
-            echo Adding C:\Program Files\PostgreSQL\%%v\bin to Path
-            SET "PATH=%PATH%;C:\Program Files\PostgreSQL\%%v\bin"
-            echo PATH is [%PATH%]
-            echo "##vso[task.setvariable variable=PATH]%PATH%"
-
-            rem psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
-          )
-        )
       )
       echo "fin"
     condition: succeededOrFailed()
