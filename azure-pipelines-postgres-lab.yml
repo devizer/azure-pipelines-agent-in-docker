@@ -78,6 +78,7 @@ jobs:
       rem dir /b /s "C:\Program Files"       >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
       rem dir /b /s "C:\Program Files (x86)" >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
       echo "1)"
+      echo PATH is [%PATH%]
       for %%v in (9.3 9.6 10 11 12 13 14) DO (
         echo "2): %%v"
         if not exist c:\windows\psql.exe (
@@ -90,7 +91,7 @@ jobs:
             echo Adding C:\Program Files\PostgreSQL\%%v\bin to Path
             SET "PATH=%PATH%;C:\Program Files\PostgreSQL\%%v\bin"
             echo PATH is [%PATH%]
-            echo "##vso[task.setvariable variable=PATH]$PATH"
+            echo "##vso[task.setvariable variable=PATH]%PATH%"
 
             psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
           )
