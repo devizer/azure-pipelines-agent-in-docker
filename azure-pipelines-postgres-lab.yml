@@ -77,6 +77,7 @@ jobs:
   - script: |
       rem dir /b /s "C:\Program Files"       >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
       rem dir /b /s "C:\Program Files (x86)" >> "%SYSTEM_ARTIFACTSDIRECTORY%\dir.txt"
+      echo "1)"
       for %%v in (9.3 9.6 10 11 12 13 14) DO (
         if not exist c:\windows\psql.exe (
           if exist "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" (
