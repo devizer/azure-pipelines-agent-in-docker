@@ -85,8 +85,8 @@ jobs:
 
             echo Adding C:\Program Files\PostgreSQL\%%v\bin to Path
             SET PATH="C:\Program Files\PostgreSQL\%%v\bin;%PATH%"
-            echo "##vso[task.setvariable variable=PATH]$PATH"
             echo PATH is [%PATH%]
+            echo "##vso[task.setvariable variable=PATH]$PATH"
 
             psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
           )
