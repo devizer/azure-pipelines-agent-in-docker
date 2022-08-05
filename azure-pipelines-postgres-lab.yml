@@ -82,6 +82,7 @@ jobs:
           )
         )
       )
+      echo off
     condition: succeededOrFailed()
     displayName: 'Install Postgres'
 
