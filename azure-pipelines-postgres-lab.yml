@@ -87,7 +87,7 @@ jobs:
           rem echo PATH is [%PATH%]
           rem echo "##vso[task.setvariable variable=PATH]%PATH%"
 
-          rem psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
+          psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
         )
       )
       echo "fin"
