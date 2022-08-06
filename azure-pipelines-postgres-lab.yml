@@ -130,7 +130,6 @@ jobs:
           "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" -c "Select Version();"
         )
       )
-      echo "fin"
     condition: succeededOrFailed()
     displayName: 'Symlink Postgres'
 
@@ -153,9 +152,9 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'SQL Services'
 
-  - powershell: |
-      get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
-    displayName: 'MSI INFO'
+#  - powershell: |
+#      get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
+#    displayName: 'MSI INFO'
 
 
   - task: PublishBuildArtifacts@1
