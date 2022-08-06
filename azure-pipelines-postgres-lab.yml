@@ -100,16 +100,15 @@ jobs:
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
       choco list --local-only
       If Defined TOREMOVE (
-        echo "Removing %TOREMOVE%"
         pushd "C:\Program Files\PostgreSQL\14"
+        echo "RUNNING uninstall-postgresql.exe"
         uninstall-postgresql.exe --mode unattended --unattendedmodeui none
         popd
         ping -n 100 127.0.0.1 >nul
-        echo "Cleaning C:\Program Files\PostgreSQL\14"
+        echo "CLEANING C:\Program Files\PostgreSQL\14"
         rd /q /s "C:\Program Files\PostgreSQL\14"
         choco uninstall -my postgresql14
         choco uninstall -my postgresql
-        --unattendedmodeui 
       )
       choco install --no-progress --params '/Password:test' %PKG% -my
     condition: succeededOrFailed()
