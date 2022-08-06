@@ -65,6 +65,8 @@ jobs:
   steps:
   - powershell: |
       Write-Host "OS: $((Get-WmiObject -class Win32_OperatingSystem).Caption)"
+      get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+      echo ""
       Get-ChildItem -Path Env: | ft -autosize
     displayName: 'INFO'
 
