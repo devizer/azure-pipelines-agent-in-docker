@@ -20,46 +20,60 @@ jobs:
       'V9-W2022': 
         VM: windows-2022
         PKG: postgresql9
+        SVC: postgresql-x64-9.6
       'V10-W2022': 
         VM: windows-2022
         PKG: postgresql10
+        SVC: postgresql-x64-10
       'V11-W2022': 
         VM: windows-2022
         PKG: postgresql11
+        SVC: postgresql-x64-11
       'V12-W2022': 
         VM: windows-2022
         PKG: postgresql12
+        SVC: postgresql-x64-12
       'V13-W2022': 
         VM: windows-2022
         PKG: postgresql13
+        SVC: postgresql-x64-13
       'V14-W2022': 
         VM: windows-2022
         PKG: postgresql14
+        SVC: postgresql-x64-14
       'Latest-W2022': 
         VM: windows-2022
         PKG: postgresql
+        SVC: postgresql-x64-14
 
       'V9-W2019': 
         VM: windows-2019
         PKG: postgresql9
+        SVC: postgresql-x64-9.6
       'V10-W2019': 
         VM: windows-2019
         PKG: postgresql10
+        SVC: postgresql-x64-10
       'V11-W2019': 
         VM: windows-2019
         PKG: postgresql11
+        SVC: postgresql-x64-11
       'V12-W2019': 
         VM: windows-2019
         PKG: postgresql12
+        SVC: postgresql-x64-12
       'V13-W2019': 
         VM: windows-2019
         PKG: postgresql13
+        SVC: postgresql-x64-13
       'V14-W2019': 
         VM: windows-2019
         PKG: postgresql14
+        SVC: postgresql-x64-14
       'Latest-W2019': 
         VM: windows-2019
         PKG: postgresql
+        SVC: postgresql-x64-14
 
 
   steps:
@@ -75,6 +89,7 @@ jobs:
 
   - script: |
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+      choco list --local-only
       choco install --no-progress --params '/Password:test' %PKG% -my
     condition: succeededOrFailed()
     displayName: 'Install Postgres'
