@@ -87,6 +87,10 @@ jobs:
     displayName: 'INFO'
 
   - powershell: |
+      get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
+    displayName: 'MSI INFO'
+
+  - powershell: |
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
     condition: succeededOrFailed()
     displayName: 'SQL Services'
