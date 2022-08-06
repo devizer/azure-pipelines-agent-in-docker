@@ -87,7 +87,11 @@ jobs:
           rem echo PATH is [%PATH%]
           rem echo "##vso[task.setvariable variable=PATH]%PATH%"
 
-          psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
+          set PGPASSWORD=test
+          rem psql -V >> "%SYSTEM_ARTIFACTSDIRECTORY%\psql-version.txt"
+          "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" -V
+          "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" -Upostgres -c "SHOW server_version;"
+          "C:\Program Files\PostgreSQL\%%v\bin\psql.exe" -c "Select Version();"
         )
       )
       echo "fin"
