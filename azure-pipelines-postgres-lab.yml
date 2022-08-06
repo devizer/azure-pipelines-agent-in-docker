@@ -100,13 +100,13 @@ jobs:
         echo "RUNNING uninstall-postgresql.exe"
         uninstall-postgresql.exe --mode unattended --unattendedmodeui none
         popd
-        ping -n 100 127.0.0.1 >nul
+        ping -n 130 127.0.0.1 >nul
         echo "CLEANING C:\Program Files\PostgreSQL\14"
         rd /q /s "C:\Program Files\PostgreSQL\14"
         choco uninstall -my postgresql14
         choco uninstall -my postgresql
       )
-      choco install --no-progress --params '/Password:test' %PKG% -my
+      choco install --force --no-progress --params '/Password:test' %PKG% -my
     condition: succeededOrFailed()
     displayName: 'Install Postgres'
 
