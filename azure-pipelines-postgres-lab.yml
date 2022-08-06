@@ -86,6 +86,12 @@ jobs:
       Get-ChildItem -Path Env: | ft -autosize
     displayName: 'INFO'
 
+  - script: |
+      docker search postgres
+      echo " "
+      docker run -it --rm postgres:14
+    displayName: 'DOCKER'
+
   - powershell: |
       get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
     displayName: 'MSI INFO'

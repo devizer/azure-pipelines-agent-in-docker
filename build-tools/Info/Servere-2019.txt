@@ -1,0 +1,802 @@
+##[section]Starting: MSI INFO
+==============================================================================
+Task         : PowerShell
+Description  : Run a PowerShell script on Linux, macOS, or Windows
+Version      : 2.200.0
+Author       : Microsoft Corporation
+Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+==============================================================================
+Generating script.
+========================== Starting Command Output ===========================
+##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'D:\a\_temp\faaf35bd-c112-483d-9143-85f70289e53a.ps1'"
+
+IdentifyingNumber                      Name                                                                            
+-----------------                      ----                                                                            
+{1690CE56-2231-4E59-9006-A0876D949EA8}  Tools for .Net 3.5                                                             
+{6BF11ECE-3CE8-4FBA-991A-1F55AA6BE5BF} Active Directory Authentication Library for SQL Server                          
+{D9908CED-5ABB-FEE9-FC84-743F4D38637C} Application Verifier x64 External Package                                       
+{8A4CD158-E6B3-6D91-D7DE-10098BC980E2} Application Verifier x64 External Package                                       
+{10CA1677-8F02-3131-F25C-780BAB52E468} Application Verifier x64 External Package                                       
+{62CB44B2-8007-DBB2-1CBA-5CB7309EB3C3} Application Verifier x64 External Package                                       
+{2CBA883F-51A6-3D7D-DBB9-0527D39433CB} Application Verifier x64 External Package                                       
+{AC5F4E9F-E468-6519-3980-C1EC3F801018} Application Verifier x64 External Package                                       
+{B27BC1FC-8474-9E32-73C2-6F7CD58AD1E3} Application Verifier x64 External Package                                       
+{000C554D-C73A-4946-BB6C-BFCD1BD1AC50} AWS Command Line Interface v2                                                   
+{CB59F9B1-52C0-481C-9B1D-26274ACC9C2D} AWS SAM Command Line Interface                                                  
+{00E2415B-C8F1-4368-ABA6-FB65EF588CB4} Azure Cosmos DB Emulator                                                        
+{32DD9048-2E5F-45F9-BD31-7D51CE5C2F6C} BizTalk Server Project Build Component                                          
+{5A260D5A-95D3-4956-8E0A-E182CC4144ED} ClickOnce Bootstrapper Package for Microsoft .NET Framework                     
+{A89F4446-3B75-433B-91B3-C88868CA8544} ClickOnce Bootstrapper Package for Microsoft .NET Framework 4.8 on Visual Stu...
+{4D892116-289C-4E8D-B227-58F83C23DB1D} CMake                                                                           
+{1F3C3AAC-9F7A-47DA-A082-0ACE770041BE} DiagnosticsHub_CollectionService                                                
+{0C64C58B-3315-4FCD-98D3-F467783A8914} Eclipse Temurin JDK with Hotspot 8u302-b08 (x64)                                
+{F878746A-C5F7-420A-A672-4DFEF74ADC3A} Entity Framework 6.2.0 Tools  for Visual Studio 2019                            
+{FAC47927-1A6A-4C6E-AD7D-E9756794A4BC} Epic Games Launcher                                                             
+{758842D2-1538-4008-A8E3-66F65A061C52} Epic Online Services                                                            
+{5787E29A-8403-4428-8333-D5BD2B155C20} GitHub CLI                                                                      
+{0152F64C-E739-31DA-86D9-97024E801D06} Google Chrome                                                                   
+{1036893D-9917-4E70-B96C-8D72A2B224BC} icecap_collection_neutral                                                       
+{289873DF-80D0-4D7D-8068-D25D342A26FA} icecap_collection_x64                                                           
+{D2B4539C-173B-4B8D-A021-E22E9566BC24} icecap_collectionresources                                                      
+{38CE202D-7880-4101-9739-83619300EC58} icecap_collectionresourcesx64                                                   
+{56070933-B0D1-493F-8C12-4F7E83CA3071} IIS 10.0 Express                                                                
+{FE250127-0DBB-47AA-8439-7A2FA145030F} Intellisense Lang Pack Mobile Extension SDK 10.0.14393.0                        
+{1C92D642-AD8C-4319-8E7B-5D6AA55F430B} IntelliTraceProfilerProxy                                                       
+{7D94CF67-6666-4111-B027-D7AB7F189F70} IntelliTraceProfilerProxy                                                       
+{436F3AC2-F61D-E8E3-DD1A-17CF34F544D4} Kits Configuration Installer                                                    
+{9B540681-AB54-47A6-A311-8A00E31FFBF7} Microsoft .NET Core 3.1 Templates 5.0.410 (x64)                                 
+{8E42C409-CDAD-48C1-9C81-B7F2502F223D} Microsoft .NET Core AppHost Pack - 3.1.27 (x64)                                 
+{C41148FD-5630-4CB6-89AD-FE2C9E2ACBFB} Microsoft .NET Core AppHost Pack - 3.1.27 (x64_arm)                             
+{6B53E2D3-5B97-4F47-9502-B463BEFB8C99} Microsoft .NET Core AppHost Pack - 3.1.27 (x64_arm64)                           
+{AD91BF81-1D6B-4FD6-81E5-A8A132D5CD1C} Microsoft .NET Core AppHost Pack - 3.1.27 (x64_x86)                             
+{FF9D1913-291F-4A48-BDBB-5BEE8BF394B4} Microsoft .NET Core Runtime - 3.1.27 (x64)                                      
+{98D69177-C461-41EA-8C1A-672A96593FE2} Microsoft .NET Core Runtime - 3.1.27 (x86)                                      
+{31EDE1E7-C855-4633-9D73-56F566136567} Microsoft .NET Core Targeting Pack - 3.1.0 (x64)                                
+{48A8F171-52F2-372B-8414-EA50617708BE} Microsoft .NET CoreRuntime For CoreCon                                          
+{12702494-9E6A-3F5E-9441-2B7D258A639B} Microsoft .NET CoreRuntime SDK                                                  
+{2D423B5F-2A1C-4681-BD86-A67A07C07461} Microsoft .NET Framework 3.5 Targeting Pack (enu)                               
+{CFEF48A8-BFB8-3EAC-8BA5-DE4F8AA267CE} Microsoft .NET Framework 4 Multi-Targeting Pack                                 
+{56E962F0-4FB0-3C67-88DB-9EAA6EEFC493} Microsoft .NET Framework 4.5 Multi-Targeting Pack                               
+{6A0C6700-EA93-372C-8871-DCCF13D160A4} Microsoft .NET Framework 4.5.1 Multi-Targeting Pack                             
+{B941AFB4-8851-33A1-9E72-0C33D463C41C} Microsoft .NET Framework 4.5.2 Multi-Targeting Pack                             
+{2CC6A4A7-AAC2-46C9-9DBB-3727B5954F65} Microsoft .NET Framework 4.6 Targeting Pack                                     
+{8BC3EEC9-090F-4C53-A8DA-1BEC913040F9} Microsoft .NET Framework 4.6.1 Targeting Pack                                   
+{A18D4C2A-07A8-40E4-9797-DD324E6EA4FC} Microsoft .NET Framework 4.6.2 Targeting Pack                                   
+{C80951BD-6904-474F-BBC5-03A6C777F37C} Microsoft .NET Framework 4.6.2 Targeting Pack (ENU)                             
+{EC073C7E-990D-4BB1-BFA9-45C6704E3571} Microsoft .NET Framework 4.7 Targeting Pack                                     
+{829CB0F4-AB51-4DB7-8CA2-1C93CCC36D5E} Microsoft .NET Framework 4.7 Targeting Pack (ENU)                               
+{8F5A2690-2EBD-4017-B995-C522C9204312} Microsoft .NET Framework 4.7.1 Doc Redirected Targeting Pack (ENU)              
+{5686C5E9-A3B3-451E-A2EA-4C246CDE5CC9} Microsoft .NET Framework 4.7.1 Targeting Pack                                   
+{58AF62C8-1D15-46D7-9B7F-243B93C5589E} Microsoft .NET Framework 4.7.2 SDK                                              
+{1784A8CD-F7FE-47E2-A87D-1F31E7242D0D} Microsoft .NET Framework 4.7.2 Targeting Pack                                   
+{B517DBD3-B542-4FC8-9957-FFB2C3E65D1D} Microsoft .NET Framework 4.7.2 Targeting Pack (ENU)                             
+{949C0535-171C-480F-9CF4-D25C9E60FE88} Microsoft .NET Framework 4.8 SDK                                                
+{BAAF5851-0759-422D-A1E9-90061B597188} Microsoft .NET Framework 4.8 Targeting Pack                                     
+{A4EA9EE5-7CFF-4C5F-B159-B9B4E5D2BDE2} Microsoft .NET Framework 4.8 Targeting Pack (ENU)                               
+{C33E412F-4981-4953-825C-9DEA45ABEC01} Microsoft .NET Framework Cumulative Intellisense Pack for Visual Studio (ENU)   
+{8F51A211-71F1-4858-8198-8A5A66818D16} Microsoft .NET Host - 6.0.7 (x64)                                               
+{E18A98D1-DF73-4E11-AC20-FD0190628270} Microsoft .NET Host FX Resolver - 6.0.7 (x64)                                   
+{AA3A47D4-1290-457F-B87C-C6102B5B5ED2} Microsoft .NET Host FX Resolver - 6.0.7 (x86)                                   
+{EF0C772D-F5E3-36D0-BDAB-FD378533CD40} Microsoft .NET Native SDK                                                       
+{882F32A5-8330-4366-844A-2F3B73C3F021} Microsoft .NET Runtime - 6.0.7 (x64)                                            
+{6F052A7A-81B2-4EB2-AF89-A69A356CC191} Microsoft .NET Runtime - 6.0.7 (x86)                                            
+{AA1F4C19-1B4D-427C-B033-8C6E1692C9D2} Microsoft .NET SDK 5.0.410 (x64) from Visual Studio                             
+{A7036CFB-B403-4598-85FF-D397ABB88173} Microsoft .NET Standard Targeting Pack - 2.1.0 (x64)                            
+{060AE0D9-0719-441C-9123-BBC1BEF97AE8} Microsoft .NET Toolset 5.0.410 (x64)                                            
+{C49E181B-C19F-4A1F-BE76-D463E7E3B2B5} Microsoft AS OLE DB Provider for SQL Server 2016                                
+{FEA48357-CE2F-3ED0-B2A0-8548BEC6F111} Microsoft ASP.NET Core 3.1.10 Targeting Pack (x64)                              
+{7F4800FC-1AE4-3D99-8914-AC8E3EE8B20B} Microsoft ASP.NET Core 3.1.27 Shared Framework (x64)                            
+{7C8EAC6D-988C-3D2D-B4FF-5E9E39DFEA52} Microsoft ASP.NET Core 3.1.27 Shared Framework (x86)                            
+{C79B0E7E-D45B-310E-9CA4-C6477F88EB5F} Microsoft ASP.NET Core 6.0.7 Shared Framework (x64)                             
+{EFFD5FDB-54E2-3E46-9526-26B31E0EB67B} Microsoft ASP.NET Core 6.0.7 Shared Framework (x86)                             
+{FAFEE5E3-E00A-4CE8-B495-8F66A5FAB236} Microsoft ASP.NET Core Module for IIS Express                                   
+{5586FE05-A6CA-4216-A8AB-89CEF8DB610F} Microsoft ASP.NET Core Module V2 for IIS Express                                
+{49ACEE67-BFCC-3D68-809B-2C99725DD5E1} Microsoft ASP.NET Diagnostic Pack for Visual Studio                             
+{499DD72E-4176-377B-B358-28DCAB3832AE} Microsoft ASP.NET Web Tools Packages 16.0 - ENU                                 
+{90462BD2-DF5B-449C-A401-FCC1DC264E4E} Microsoft Azure Authoring Tools - v2.9.7                                        
+{229AC774-AB39-4D59-9BD1-87E5BD6DB346} Microsoft Azure CLI                                                             
+{04CA054C-2F40-44B0-8610-8D51EC9444FE} Microsoft Azure Compute Emulator - v2.9.7                                       
+{C5C91AA6-3E83-430E-8B7A-6B790083F28D} Microsoft Azure Libraries for .NET – v2.9                                       
+{46F5FAD1-0222-4F92-86C1-ECF9BD109782} Microsoft Azure Service Fabric SDK                                              
+{41AC2282-F083-4495-8306-2D6ABC7D5CA2} Microsoft Azure Storage Emulator - v5.10                                        
+{892953E3-13C3-4F61-8F8D-B0464C1A4B82} Microsoft Azure Storage Tools - v6.2.0                                          
+{8945B203-D883-4D45-8FD6-241D8934C102} Microsoft BizTalk Server Setup Support Files                                    
+{41C0DB18-1790-465E-B0DD-D9CAA35CACBE} Microsoft Command Line Utilities 15 for SQL Server                              
+{29827253-7623-33E8-AB2E-B45E3ECCB077} Microsoft Edge                                                                  
+{24CA683D-8174-4EBF-AD4D-3F2DD7814716} Microsoft Exchange Web Services Managed API 2.1                                 
+{49F425DD-2A94-4C75-94BE-4EFF866E608B} Microsoft HTML Help Workshop Package                                            
+{737FDDA7-B944-4CB5-92D9-3D56373BD301} Microsoft NetStandard SDK                                                       
+{8D98AC2C-FC5C-440D-A2D3-6C9655F957D8} Microsoft ODBC Driver 17 for SQL Server                                         
+{4D454BAB-A1F7-492D-9300-5BF05DB30BEB} Microsoft OLE DB Driver for SQL Server                                          
+{B772198D-90AC-3150-9691-F840205A8CDE} Microsoft Portable Library Multi-Targeting Pack                                 
+{784047C5-BB07-355E-BEAB-E7044E6F32A8} Microsoft Portable Library Multi-Targeting Pack Language Pack - enu             
+{53086A62-13F3-4FC5-AA41-211FD74340B3} Microsoft SQL Server 2012 Analysis Management Objects                           
+{76CBDC35-0752-4B5A-83E8-49A741BD42BC} Microsoft SQL Server 2014 Analysis Management Objects                           
+{97A881AD-5134-4CD2-A6A8-371C83E5622B} Microsoft SQL Server 2016 Analysis Management Objects                           
+{9097BF1A-13A0-4A4A-A1F8-473E2A669863} Microsoft SQL Server 2016 LocalDB                                               
+{E3806E56-5AF2-4467-A6B8-F78331A9F194} Microsoft SQL Server 2016 Management Objects  (x64)                             
+{A50CBB23-538A-409B-9814-22C73189DC33} Microsoft SQL Server Data-Tier Application Framework                            
+{A5B947FD-875D-448C-AB7C-A737CA9FEA4C} Microsoft System CLR Types for SQL Server 2016                                  
+{725CC962-98BD-42C7-87D8-51C680FB1779} Microsoft System CLR Types for SQL Server 2019 CTP2.2                           
+{8D7CE3B0-5379-46FE-9F4B-A65D9F4CC1F1} Microsoft System CLR Types for SQL Server 2019 CTP2.2                           
+{71DA9320-08C2-4EC4-90AD-2DB68E37ED90} Microsoft TestPlatform SDK Local Feed                                           
+{C02D98B7-7FE1-4B22-A40F-17327B52EF9E} Microsoft UniversalWindowsPlatform SDK                                          
+{1D8E6291-B0D5-35EC-8441-6616F567A0F7} Microsoft Visual C++ 2010  x64 Redistributable - 10.0.40219                     
+{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5} Microsoft Visual C++ 2010  x86 Redistributable - 10.0.40219                     
+{37B8F9C7-03FB-3253-8781-2517C99D7C00} Microsoft Visual C++ 2012 x64 Additional Runtime - 11.0.61030                   
+{CF2BEA3C-26EA-32F8-AA9B-331F7E34BA97} Microsoft Visual C++ 2012 x64 Minimum Runtime - 11.0.61030                      
+{5740BD44-B58D-321A-AFC0-6D3D4556DD6C} Microsoft Visual C++ 2013 x64 Additional Runtime - 12.0.40660                   
+{CB0836EC-B072-368D-82B2-D3470BF95707} Microsoft Visual C++ 2013 x64 Minimum Runtime - 12.0.40660                      
+{F8CFEB22-A2E7-3971-9EDA-4B11EDEFC185} Microsoft Visual C++ 2013 x86 Additional Runtime - 12.0.21005                   
+{13A4EE12-23EA-3371-91EE-EFB36DDFFF3E} Microsoft Visual C++ 2013 x86 Minimum Runtime - 12.0.21005                      
+{A6BCA173-4218-4099-B36C-E12B3EE27B5D} Microsoft Visual C++ 2019 X64 Debug Runtime - 14.29.30139                       
+{3521C75E-6E25-47A6-9831-17EE6AAF01E2} Microsoft Visual C++ 2019 X86 Debug Runtime - 14.29.30139                       
+{F4499EE3-A166-496C-81BB-51D1BCDC70A9} Microsoft Visual C++ 2022 X64 Additional Runtime - 14.32.31332                  
+{3407B900-37F5-4CC2-B612-5CD5D580A163} Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.32.31332                     
+{8972AC25-452E-4FFE-945A-EB9E28C20322} Microsoft Visual C++ 2022 X86 Additional Runtime - 14.32.31332                  
+{AEAA18F7-9C96-4A43-BC07-8B88A4913EEB} Microsoft Visual C++ 2022 X86 Minimum Runtime - 14.32.31332                     
+{9495AEB4-AB97-39DE-8C42-806EEF75ECA7} Microsoft Visual Studio 2010 Tools for Office Runtime (x64)                     
+{CAE479A9-78FF-496C-AC32-42BE7D834C7F} Microsoft Visual Studio 2019 Tools for Unity                                    
+{F1CFD19B-3ED9-4ABC-8BCE-B08B63BA9E12} Microsoft Visual Studio Setup Configuration                                     
+{07B8F241-1C3A-46D4-942F-01EA7E66CF68} Microsoft Visual Studio Setup WMI Provider                                      
+{8E7A3713-551D-333A-9271-10EF4D77A80F} Microsoft Visual Studio Tools for Applications 2019 x64 Hosting Support         
+{E7A0CD34-1F9B-3496-ADB3-2F180D302F6A} Microsoft Visual Studio Tools for Applications 2019 x86 Hosting Support         
+{0C85743B-48E7-4948-96D6-C3BB90246418} Microsoft Web Deploy 4.0                                                        
+{4D38C3A3-B685-4AB5-BD6D-FD88BCED5805} Microsoft Web Platform Installer 5.1                                            
+{FE825C68-D0CC-3FC8-9C03-64DAC75D90A7} Microsoft Windows Communication Foundation Diagnostic Pack for x86              
+{0116DF03-EA5F-41AE-90DF-7B8D82A880A4} Microsoft Windows Desktop Runtime - 3.1.27 (x64)                                
+{7F7FE992-AD35-4CB2-9C9D-968E40038B92} Microsoft Windows Desktop Runtime - 3.1.27 (x86)                                
+{30702F00-F514-4094-BA4A-A05B42FD1CAC} Microsoft Windows Desktop Runtime - 6.0.7 (x64)                                 
+{89B2CC85-AAD4-42EE-8E44-76CFB94C0A32} Microsoft Windows Desktop Runtime - 6.0.7 (x86)                                 
+{7519423C-A977-4160-83A2-48633600A216} Microsoft Windows Desktop Targeting Pack - 3.1.0 (x64)                          
+{812EB3F5-AE64-39EA-AD89-E8A0804240C1} Microsoft Workflow Debugger v1.0 for amd64                                      
+{AF5EF9FC-9456-3BA8-A1E7-486AFED798C6} Microsoft Workflow Debugger v1.0 for x86                                        
+{517F40B3-0DF1-3CEA-8E38-E3E515DACE4F} Microsoft Workflow Diagnostic Pack for x64                                      
+{6AB5931B-D035-6BF2-ADC5-06D2CF5D8B92} Minimal WLPC Content                                                            
+{47F4FEEF-AA63-4B86-8600-7AD95B0D0E04} MongoDB 5.0.10 2008R2Plus SSL (64 bit)                                          
+{DB4DB790-64DD-1902-4BF2-833B3B6DBCA1} MSI Development Tools                                                           
+{9B9350F7-EC4D-979B-0F15-F5F4B309518D} MSI Development Tools                                                           
+{6C961B30-A670-8A05-3BFE-3947E84DD4E4} MSI Development Tools                                                           
+{1E406B46-65F4-91CE-65DA-DB66D5443B68} MSI Development Tools                                                           
+{95A498A9-5E6E-5779-1523-876224F41F94} MSI Development Tools                                                           
+{973CACA2-E018-065B-0580-F2784802E299} MSI Development Tools                                                           
+{7AAC93B0-F3D7-6B24-6B37-9E74980C1C81} MSI Development Tools                                                           
+{FC8E0A42-D5A9-4AF2-A961-4EAC6C9605A0} Node.js                                                                         
+{D6233250-AACB-51A0-3DA2-D18A3F81C731} OA3Tool                                                                         
+{88A0625A-0CA4-E66F-22C0-8F7D8507580C} OEM Test Certificates (OnecoreUAP)                                              
+{FFC2443B-9B10-9D49-D3AD-D06BE2F3F222} OneCoreUap_WDTF_Headers_and_Libs_Kit_Content                                    
+{3EA16E23-14D2-466A-8268-D7CD40DC46B6} Open XML SDK 2.5 for Microsoft Office                                           
+{AAD8BFCE-9D62-498B-9606-030031DBE970} PowerShell 7-x64                                                                
+{D113B5D0-D291-4FCD-8609-17265878F921} PowerShell Extensions for SQL Server 2016                                       
+{A5F504DF-2ED9-4A2D-A2F3-9D2750DD42D5} Python 2.7.18                                                                   
+{A5F504DF-2ED9-4A2D-A2F3-9D2750DD42D6} Python 2.7.18 (64-bit)                                                          
+{4F1A50FE-6133-4008-92F3-FF05AF9819A4} Python 3.10.5 Core Interpreter (32-bit)                                         
+{496B2CAE-CF79-440A-82F1-7587559ABA00} Python 3.10.5 Core Interpreter (64-bit)                                         
+{3BC2C587-CC31-4CA6-94D6-5B21610669A8} Python 3.10.5 Development Libraries (32-bit)                                    
+{7B0F6EAD-C8A1-4496-8492-801EDE1A6323} Python 3.10.5 Development Libraries (64-bit)                                    
+{0A12BB2E-35B3-4768-8568-29D9162372D2} Python 3.10.5 Documentation (32-bit)                                            
+{3BC23B98-3D25-4A74-98FD-A1BE957A1340} Python 3.10.5 Documentation (64-bit)                                            
+{D71310DD-7D18-44C9-875E-B5CB416CE4BB} Python 3.10.5 Executables (32-bit)                                              
+{0FE1250F-6DD6-4948-B211-741B7CDBB335} Python 3.10.5 Executables (64-bit)                                              
+{F05FB5DB-54BA-4EAB-ADFB-6371F249E1EC} Python 3.10.5 pip Bootstrap (32-bit)                                            
+{C3B084B6-D193-4633-BBB4-E890AAB946A2} Python 3.10.5 pip Bootstrap (64-bit)                                            
+{C862ED05-D859-43F7-9887-D71E2EBEFCD8} Python 3.10.5 Standard Library (32-bit)                                         
+{67F90672-C696-4DBB-8F33-95CCCFA21DCE} Python 3.10.5 Standard Library (64-bit)                                         
+{0F33D909-E6E0-47D7-8856-A28602D2DA82} Python 3.10.5 Tcl/Tk Support (32-bit)                                           
+{7F7E3C5D-2A37-4F1D-8E8C-3BB073D36BFE} Python 3.10.5 Tcl/Tk Support (64-bit)                                           
+{8486A6DB-02E3-4D09-ABAD-459733935084} Python 3.10.5 Test Suite (32-bit)                                               
+{269FCA5D-D0CF-43B2-B656-24DF6DAA0D4E} Python 3.10.5 Test Suite (64-bit)                                               
+{63DB56C5-1625-420A-B79E-C77AD18D7627} Python 3.10.5 Utility Scripts (32-bit)                                          
+{BBD9CCC0-981B-4976-91EC-4C1E637BCF85} Python 3.10.5 Utility Scripts (64-bit)                                          
+{6DBCDF5D-DEB5-4CFA-85B8-67D9D58673A1} Python 3.6.8 Core Interpreter (32-bit)                                          
+{290348F2-D9D3-470E-9858-22F0F74E3623} Python 3.6.8 Core Interpreter (64-bit)                                          
+{5DBA5E56-654C-4608-A6C2-CCD52B01EACC} Python 3.6.8 Development Libraries (32-bit)                                     
+{A43B98B0-5A92-4EBA-929D-FE0A840CD97A} Python 3.6.8 Development Libraries (64-bit)                                     
+{2A9D4BC2-910F-492F-928C-4DCFC364FF41} Python 3.6.8 Documentation (32-bit)                                             
+{73EE519A-D901-4844-8E8F-C635705A2414} Python 3.6.8 Documentation (64-bit)                                             
+{B56829C6-1C25-469E-B351-1467C6295566} Python 3.6.8 Executables (32-bit)                                               
+{E1155302-B578-4D8C-8431-FAE677FBC58C} Python 3.6.8 Executables (64-bit)                                               
+{E5C0286F-B26B-4B97-8968-EB0543060635} Python 3.6.8 pip Bootstrap (32-bit)                                             
+{C48DD541-2669-499A-B7AB-EC0504307601} Python 3.6.8 pip Bootstrap (64-bit)                                             
+{42E8F541-E6A9-42D4-9797-E45F709D56E9} Python 3.6.8 Standard Library (32-bit)                                          
+{4BFF1147-97F2-432E-AD26-2224B609957C} Python 3.6.8 Standard Library (64-bit)                                          
+{D5085A39-DD67-400C-952C-9B72602243FF} Python 3.6.8 Tcl/Tk Support (32-bit)                                            
+{EBD78311-1837-4432-94EE-5A5E5E206888} Python 3.6.8 Tcl/Tk Support (64-bit)                                            
+{73407F01-D22B-429D-A7A4-C14966E2CE36} Python 3.6.8 Test Suite (32-bit)                                                
+{315736CC-5A10-4E28-AE50-78BD74EF0346} Python 3.6.8 Test Suite (64-bit)                                                
+{C324D8B5-8824-4AA5-A574-2DF4FF4897DC} Python 3.6.8 Utility Scripts (32-bit)                                           
+{1F5F06E6-A6C0-482E-8FEB-681DE2059228} Python 3.6.8 Utility Scripts (64-bit)                                           
+{ED363C5B-9B07-4A34-805A-A793AD69B0D6} Python 3.7.9 Core Interpreter (32-bit)                                          
+{EECA983B-8C90-4D13-8C80-F6B2E10585F3} Python 3.7.9 Core Interpreter (64-bit)                                          
+{5C626A3F-02BB-4F6C-AC36-723494F7169A} Python 3.7.9 Development Libraries (32-bit)                                     
+{BCFB5D0C-01D4-479D-B83B-836EFB81B560} Python 3.7.9 Development Libraries (64-bit)                                     
+{029C9E85-3B63-4772-92F1-398B903C02C3} Python 3.7.9 Documentation (32-bit)                                             
+{D035D3BD-C873-4615-8731-F447647419CD} Python 3.7.9 Documentation (64-bit)                                             
+{9FA66FEC-55E8-4977-9F34-167E360A5343} Python 3.7.9 Executables (32-bit)                                               
+{CD14E774-992D-4A34-B3D8-6BBEC890D918} Python 3.7.9 Executables (64-bit)                                               
+{ABC6D10D-03E8-4F06-8594-36615235E766} Python 3.7.9 pip Bootstrap (32-bit)                                             
+{6AE46807-153C-4604-A9D3-A31E6578176D} Python 3.7.9 pip Bootstrap (64-bit)                                             
+{65048DA1-5996-4FF9-B20A-66EB2E68D0A4} Python 3.7.9 Standard Library (32-bit)                                          
+{FF740026-2FC0-4F8A-A046-8B316AF4ECA6} Python 3.7.9 Standard Library (64-bit)                                          
+{3450A69B-8527-4329-9472-3A7D1A161F0B} Python 3.7.9 Tcl/Tk Support (32-bit)                                            
+{E608BB24-F6E3-4465-9DE1-F7CE3EC7C366} Python 3.7.9 Tcl/Tk Support (64-bit)                                            
+{6A599256-6194-4264-AD58-1AB62CD63FFC} Python 3.7.9 Test Suite (32-bit)                                                
+{E13CDE01-4800-4E01-8EAC-D35E00552730} Python 3.7.9 Test Suite (64-bit)                                                
+{3017F151-5750-4609-B025-2C16FBFDF874} Python 3.7.9 Utility Scripts (32-bit)                                           
+{23505416-9A4E-4DC3-86A6-AF433F85F853} Python 3.7.9 Utility Scripts (64-bit)                                           
+{21F60B75-2A5E-4064-A38A-D59A347B4433} Python 3.8.10 Core Interpreter (32-bit)                                         
+{D971F398-7F11-4956-AB73-1FB70E59A11F} Python 3.8.10 Core Interpreter (64-bit)                                         
+{D9D74D16-6E0C-417B-AA63-557EEED5AED1} Python 3.8.10 Development Libraries (32-bit)                                    
+{75320A88-439F-497A-B856-FF397ED71203} Python 3.8.10 Development Libraries (64-bit)                                    
+{CD1C027B-BC87-4C8E-993D-1779A12BF141} Python 3.8.10 Documentation (32-bit)                                            
+{47769D6A-1947-4B6F-9B2F-E881F204CA5A} Python 3.8.10 Documentation (64-bit)                                            
+{0627E042-BBD1-4FE2-AAEF-C54BA4A69326} Python 3.8.10 Executables (32-bit)                                              
+{A0FBEF5B-B925-4F86-9B50-A7315736C481} Python 3.8.10 Executables (64-bit)                                              
+{DF5D4A27-B019-41FB-ACA8-62EE9947F452} Python 3.8.10 pip Bootstrap (32-bit)                                            
+{E542AFFC-389C-4330-A0F5-D0B162297729} Python 3.8.10 pip Bootstrap (64-bit)                                            
+{4196628C-AE5C-4304-B166-B7C1E93CDC25} Python 3.8.10 Standard Library (32-bit)                                         
+{080E0048-853C-49FB-96ED-30DEF7AB6E34} Python 3.8.10 Standard Library (64-bit)                                         
+{F51469FB-F088-479B-BD5A-70A9C557FE6F} Python 3.8.10 Tcl/Tk Support (32-bit)                                           
+{92B27283-38B6-4C6B-B23B-3DE902F4FEA7} Python 3.8.10 Tcl/Tk Support (64-bit)                                           
+{4AF94EBC-F592-4502-B0EA-07764E7F820B} Python 3.8.10 Test Suite (32-bit)                                               
+{B91DB0E4-637F-469E-8309-0D69FD18A1E5} Python 3.8.10 Test Suite (64-bit)                                               
+{EFDAD3B5-AE93-48A4-BE3E-40EEFC4F100A} Python 3.8.10 Utility Scripts (32-bit)                                          
+{CD36D248-F36C-4535-97A9-9CB7B4E0C186} Python 3.8.10 Utility Scripts (64-bit)                                          
+{8CA53ED7-C1D9-4BAE-816C-A490EACB6F2A} Python 3.9.13 Core Interpreter (32-bit)                                         
+{D7536B55-7339-436F-A2B3-8B8C0240DF32} Python 3.9.13 Core Interpreter (64-bit)                                         
+{0B55C358-AB1E-4A5D-9B5E-4F600EC74A89} Python 3.9.13 Development Libraries (32-bit)                                    
+{A621340A-3F22-40D3-9CCD-50B048EBB48E} Python 3.9.13 Development Libraries (64-bit)                                    
+{C4886BB2-A73C-4D0F-89AE-CA2780B3F85C} Python 3.9.13 Documentation (32-bit)                                            
+{1FB094A5-7604-4C0F-A1FB-EAB7ED730DE2} Python 3.9.13 Documentation (64-bit)                                            
+{03A92513-79ED-4608-9026-9AE960F57F4F} Python 3.9.13 Executables (32-bit)                                              
+{D497CDAE-43AC-4397-A1C6-B66A7A8F8010} Python 3.9.13 Executables (64-bit)                                              
+{33394E64-8A4E-4B65-B237-2F5D2AE68553} Python 3.9.13 pip Bootstrap (32-bit)                                            
+{72964D30-1BFE-459F-B218-D267EBE0D5B2} Python 3.9.13 pip Bootstrap (64-bit)                                            
+{E23C472D-F346-4D47-A909-9D48E5D7252F} Python 3.9.13 Standard Library (32-bit)                                         
+{90A30DAB-6FD8-4CF8-BB8B-C0DB21C69F20} Python 3.9.13 Standard Library (64-bit)                                         
+{418B45A6-6495-4185-AF4A-36F84578ECF3} Python 3.9.13 Tcl/Tk Support (32-bit)                                           
+{E7233E87-1712-40E0-8207-17C8D0157FCC} Python 3.9.13 Tcl/Tk Support (64-bit)                                           
+{699A6FAE-82F5-4285-B787-08A853AFAC95} Python 3.9.13 Test Suite (32-bit)                                               
+{7491B488-F171-4A97-935A-9098E7CE2A26} Python 3.9.13 Test Suite (64-bit)                                               
+{1E244011-82F7-4146-8910-FCB41E9069D2} Python 3.9.13 Utility Scripts (32-bit)                                          
+{618E9DD0-9212-486C-AB4A-023ACAB7CD36} Python 3.9.13 Utility Scripts (64-bit)                                          
+{25196DA8-29BD-4383-B7B5-B36C3BAF43F3} Python Launcher                                                                 
+{CE07BE71-510D-414A-92D4-DFF47631848A} sbt 1.7.1                                                                       
+{BD786819-AA80-7B18-125D-AA03AAF2759B} SDK ARM Additions                                                               
+{1E0AFF5A-4685-F953-F7BE-194170CAA950} SDK ARM Additions EULA                                                          
+{4349F57C-0C9C-C16B-9A40-E7B406C451E2} SDK ARM Redistributables                                                        
+{25855283-3066-D3E5-1AEA-2991183A30E0} SDK Debuggers                                                                   
+{AA63BECB-D446-D4C2-ECBD-C12E4C8AE945} SDK Debuggers ARM                                                               
+{13DD0F7B-C2A8-4F22-BF55-CD0D719DBA46} Session Manager Plugin                                                          
+{26778A28-6410-4CCA-B7D4-63A23C58526F} sptools_Microsoft.VisualStudio.OfficeDeveloperTools.Msi                         
+{F8AA44A5-5B1F-4802-9B7B-3B6373AC51FB} sptools_Microsoft.VisualStudio.Vsto.Msi                                         
+{3CF6EEAF-072E-47EB-8065-B628379449D3} sptools_Microsoft.VisualStudio.Vsto.Msi.Resources                               
+{D629D35F-A26E-4CF7-A512-3C890257A790} sptools_Microsoft.VisualStudio.Vsto.Msi.x64                                     
+{DB97C76B-9116-42C5-8814-0041856EB9E6} SQL Server Integration Services 2012                                            
+{07001141-C74D-47ED-B03D-892C7EF00E3D} SQL Server Integration Services 2014                                            
+{1F86F7A6-BCC6-49C4-8033-785993FA6331} SQL Server Integration Services 2016                                            
+{88BD5834-1ABD-4C75-8525-A7ABC178D905} SQL Server Integration Services Singleton                                       
+{5D8AC80F-A86C-40D6-89D2-90D0E56747FB} SQL Server Integration Services Singleton                                       
+{610377C2-9AD7-4C55-9585-CE5B75C63066} SQL Server Integration Services Singleton                                       
+{2DC518D0-750A-1014-A07D-5301D6FAD9F8} Strawberry Perl (64-bit)                                                        
+{3FFC09EB-278E-4DFF-8414-E5812E6E3033} TortoiseSVN 1.14.3.29387 (64 bit)                                               
+{6D0FC687-BA41-4DFD-80B4-3469E567AA0F} TypeScript SDK                                                                  
+{A3790FC6-37CC-833C-16D8-F9833BC8A7CB} Universal CRT Extension SDK                                                     
+{A5FA2886-1925-133F-0D41-B9A8ECEA0A2D} Universal CRT Extension SDK                                                     
+{13952D7A-B7B3-F4F8-5F29-5CD18E8168B7} Universal CRT Extension SDK                                                     
+{4D69FB64-4443-F2DD-DE1C-F14FD98AAC59} Universal CRT Extension SDK                                                     
+{18ABFDF6-23D9-87E6-015E-FFE3C7F153D5} Universal CRT Extension SDK                                                     
+{1FBCBC17-4527-2340-0832-B1D49C41FF67} Universal CRT Extension SDK                                                     
+{4E8F20FD-6BC7-B65C-D4F2-5D7CEDE3352E} Universal CRT Extension SDK                                                     
+{7D225043-6CC5-7B56-11DD-AFF90E4C1C0C} Universal CRT Extension SDK                                                     
+{90AAE845-42CE-EC12-4041-8ADF7BE765E7} Universal CRT Extension SDK                                                     
+{6B56745A-F6A4-C51C-933A-AD96C00683EA} Universal CRT Headers Libraries and Sources                                     
+{74CBC330-ED16-31B9-E8BE-0C6A8E67DE32} Universal CRT Headers Libraries and Sources                                     
+{8BFBEC30-33CC-13B4-849F-3B036F27466A} Universal CRT Headers Libraries and Sources                                     
+{0D6B41AF-D117-8944-A059-3F9346A896C5} Universal CRT Headers Libraries and Sources                                     
+{B739B4C5-EEEC-8E70-0276-38C4779AF398} Universal CRT Headers Libraries and Sources                                     
+{CB19DBA2-C210-5646-9522-695A1317CD34} Universal CRT Headers Libraries and Sources                                     
+{233B73D9-650E-9CEC-1002-767C916C1B61} Universal CRT Headers Libraries and Sources                                     
+{98D5C5AA-993C-1371-C7AF-8F8A0E8CAF86} Universal CRT Headers Libraries and Sources                                     
+{121FBA67-8B82-21AA-ED67-4485D251D451} Universal CRT Headers Libraries and Sources                                     
+{5F577A45-3C65-352B-061D-D6A57F05402C} Universal CRT Redistributable                                                   
+{8CFB9E44-A517-6023-7675-013679CD16B9} Universal CRT Redistributable                                                   
+{8EC1DC78-0A65-B6AC-664D-DFB3AC8E9736} Universal CRT Redistributable                                                   
+{847D4DAF-0182-265B-324F-406462E8A90D} Universal CRT Redistributable                                                   
+{A57CD0A6-4297-FD30-34A4-34758B6F5F69} Universal CRT Redistributable                                                   
+{B6273353-8B54-1F89-1A16-5940925104CE} Universal CRT Redistributable                                                   
+{82F9F289-6088-8F39-1918-A45315FEF99A} Universal CRT Tools x64                                                         
+{A829BD53-4BE5-23F2-C4A8-026CB5D47ECF} Universal CRT Tools x86                                                         
+{A7E95C47-B5F4-110C-D27A-DECB03412B96} Universal General MIDI DLS Extension SDK                                        
+{775886B8-DEE1-CB20-8A94-FC09FA54ECF6} Universal General MIDI DLS Extension SDK                                        
+{F2EB74A7-148A-8DC9-82A5-B5A88093EEC4} Universal General MIDI DLS Extension SDK                                        
+{6F54BF87-2EE6-FA6D-431D-33A665992D49} Universal General MIDI DLS Extension SDK                                        
+{D62BC488-4C4A-BF17-A0CE-21B4BF8F9B30} Universal General MIDI DLS Extension SDK                                        
+{D261CEA1-AB8D-9CFA-4407-BCEFC78661AC} Universal General MIDI DLS Extension SDK                                        
+{9359EF6D-A93B-F8F0-1361-2BB668F92702} Universal General MIDI DLS Extension SDK                                        
+{CE83D0BD-418A-F3D1-D6CE-687E96D1EBD0} Universal General MIDI DLS Extension SDK                                        
+{09184AC0-ACEE-44D5-95F2-05EE6D27A5E8} vcpp_crt.redist.clickonce                                                       
+{56266E70-B324-3330-98D2-BFA664841046} Visual C++ Compiler/Tools Premium ARM Base Package                              
+{2EB9CF2F-04C3-3911-A192-24300BC7F093} Visual C++ Compiler/Tools Premium ARM Base Resource Package                     
+{1F7B90D5-2941-3F29-89AE-BFB1EFD4D1A6} Visual C++ Compiler/Tools Premium X64 ARM Cross Package                         
+{09DBF58C-F222-3791-930C-713AAACFC93E} Visual C++ Compiler/Tools Premium X64 ARM Cross Resource Package                
+{8EB03048-C530-3894-8DC3-083735BBE6E3} Visual C++ Compiler/Tools Premium X64 Base Package                              
+{60901D1D-0196-3E03-8198-C10670ED9B07} Visual C++ Compiler/Tools Premium X64 Base Resource Package                     
+{569AFF57-41DC-392C-9A57-8EE778805666} Visual C++ Compiler/Tools Premium X64 Native Package                            
+{E6D19410-9287-30D1-AB8A-0964DAADCC52} Visual C++ Compiler/Tools Premium X64 Native Resource Package                   
+{1DAE1717-361C-3B47-B105-1F738A4A0855} Visual C++ Compiler/Tools Premium X64 X86 Cross Package                         
+{5AA8A49F-8480-38F4-88B7-BD7A754EF01B} Visual C++ Compiler/Tools Premium X64 X86 Cross Resource Package                
+{F121EC1D-E58F-3E19-A05A-3B9097CF87BC} Visual C++ Compiler/Tools Premium X86 ARM Cross Package                         
+{45FFF0CC-C5B6-36B9-8DC7-57570310A9E0} Visual C++ Compiler/Tools Premium X86 ARM Cross Resource Package                
+{4A3D7B49-9BBB-3FEE-B336-F8DB40E08D99} Visual C++ Compiler/Tools Premium X86 Base Package                              
+{CB53C63A-2CAF-3EA1-A116-8492226B0192} Visual C++ Compiler/Tools Premium X86 Base Resource Package                     
+{2A929B62-2CDC-3A40-9BF4-1B4BD8F79C37} Visual C++ Compiler/Tools Premium X86 Native Package                            
+{8C96C34E-EB38-3BFA-8502-3644B3506AAE} Visual C++ Compiler/Tools Premium X86 Native Resource Package                   
+{9F3B1FB1-C936-3CDE-8E79-9826B4479AFC} Visual C++ Compiler/Tools Premium X86 X64 Cross Package                         
+{5A924147-6373-3D79-8D65-4466C27D93C8} Visual C++ Compiler/Tools Premium X86 X64 Cross Resource Package                
+{B5BA067F-8C5F-3FEF-9F65-9EDBED343D59} Visual C++ Compiler/Tools X64 ARM Cross Package                                 
+{98FE39AF-6D10-3B2E-802D-7106EBD6E3EE} Visual C++ Compiler/Tools X64 ARM Cross Resource Package                        
+{C516F8C2-2CB5-34A1-A2B9-FA1618159B80} Visual C++ Compiler/Tools X64 Base Package                                      
+{19168B50-FF3A-3AAE-A8D9-DA6938F11A08} Visual C++ Compiler/Tools X64 Base Resource Package                             
+{6281F14E-4C87-34C9-BE06-ADE566335494} Visual C++ Compiler/Tools X64 Native Package                                    
+{48BDFD97-580C-3778-BBFB-09B15B905D15} Visual C++ Compiler/Tools X64 Native Resource Package                           
+{A3DE9461-8843-3FEC-A87E-1705F95DA24C} Visual C++ Compiler/Tools X64 X86 Cross Package                                 
+{5B984979-3030-303F-80F5-15047FE9C5A6} Visual C++ Compiler/Tools X64 X86 Cross Resource Package                        
+{6CC3CF78-C94F-3DDA-8E7E-903F423667C8} Visual C++ Compiler/Tools X86 ARM Cross Package                                 
+{02956FDE-ED10-3FB8-B5A6-3949304E2EB3} Visual C++ Compiler/Tools X86 ARM Cross Resource Package                        
+{AB215C12-F83D-3B7C-BDB6-1F4997E9CBEC} Visual C++ Compiler/Tools X86 Base Package                                      
+{BB2C27F3-F2F6-359E-BDAC-89CC7BB0E0C6} Visual C++ Compiler/Tools X86 Base Package                                      
+{85A1F39A-BAA6-3515-AEE0-875EB7AB85C4} Visual C++ Compiler/Tools X86 Base Resource Package                             
+{B9088875-FB69-3610-9BE9-FD561D0ED12F} Visual C++ Compiler/Tools X86 Native Package                                    
+{AF26C214-4B42-3F00-BAA5-14C223F83774} Visual C++ Compiler/Tools X86 Native Resource Package                           
+{090773DF-C292-3469-95D0-786EED617975} Visual C++ Compiler/Tools X86 X64 Cross Package                                 
+{3C5C6955-8A79-3470-97B9-0BB085B4B583} Visual C++ Compiler/Tools X86 X64 Cross Resource Package                        
+{F485D86A-9520-3127-B879-861A9315C734} Visual C++ CRT Headers Package                                                  
+{5A621212-0030-3D59-A6B4-C6073FC34D35} Visual C++ Extra Files                                                          
+{5CC5CD07-7B5A-36C7-861A-F6DCAA765058} Visual C++ Extra Resource Files                                                 
+{4CE1A0F6-C9A4-3091-B32C-7537C771E7BA} Visual C++ Library ATL ARM Package                                              
+{73B520F1-30B7-36AB-82B3-17921AD14BC1} Visual C++ Library ATL Headers Package                                          
+{EBAED43D-9668-37E0-85D1-554BDAD904FF} Visual C++ Library ATL Source Package                                           
+{079A84BA-C39E-3B22-AF8A-03428EC8E548} Visual C++ Library ATL X64 Package                                              
+{C4149D70-315C-3FAF-A52F-C14CED3B08C3} Visual C++ Library ATL X86 Package                                              
+{8A7639DF-5A62-440A-A10F-27B2C9D555AB} Visual C++ Library CRT Appx Package                                             
+{1B013A23-3564-4B56-94A1-A3FD058F07DC} Visual C++ Library CRT Appx Package                                             
+{ED5B7615-5F90-4FDB-B66A-B8E45A27E99D} Visual C++ Library CRT Appx Resource Package                                    
+{34301E21-55C2-3869-B2BD-7774AAD961D4} Visual C++ Library CRT ARM Desktop Package                                      
+{58A57B55-3D26-3CE8-B93C-C05A3121B37C} Visual C++ Library CRT ARM OneCore For Desktop Package                          
+{6280D208-32DD-343C-AA5D-96948BBFD192} Visual C++ Library CRT ARM Redist Package                                       
+{5C4FA353-903F-3E4D-9889-AF51BDDBA04F} Visual C++ Library CRT ARM Store Package                                        
+{B4CC6269-A2AF-4D10-8BEE-DC69171FBE8C} Visual C++ Library CRT ARM64 Appx Package                                       
+{B0B4929B-EFFA-4802-B07F-F5E95768BAA0} Visual C++ Library CRT ARM64 Appx Package                                       
+{143D3406-87B0-4137-8C60-023AE1E82728} Visual C++ Library CRT Desktop Appx Package                                     
+{7AC21103-2E31-46B8-A973-7F8CB87A19F1} Visual C++ Library CRT Desktop Appx Package                                     
+{C49E3AC8-BDDF-428A-B7B1-7D1481BFDE6B} Visual C++ Library CRT Desktop Appx Package                                     
+{2A8C3E6E-1886-395B-B8CB-6C284C4FD98F} Visual C++ Library CRT Redist Resource Package                                  
+{50F6A46D-5057-3B9F-830E-6D65992C9476} Visual C++ Library CRT Source Package                                           
+{8FF1352C-8065-33FF-ACEC-5DC63CC61C50} Visual C++ Library CRT X64 Desktop Package                                      
+{C64C3369-079C-3593-ADB2-29ACE37190F5} Visual C++ Library CRT X64 OneCore For Desktop Package                          
+{A08953DC-4AF5-3226-A5C2-01D71D93B779} Visual C++ Library CRT X64 Redist Package                                       
+{DBFF25CD-445F-3DD4-AB01-8E4EAA29CD55} Visual C++ Library CRT X64 Store Package                                        
+{73E8B68A-EC28-3E4B-9261-4297CF8260A1} Visual C++ Library CRT X86 Desktop Package                                      
+{3D47596B-B021-3BEB-8FC9-51E57D2263CD} Visual C++ Library CRT X86 OneCore For Desktop Package                          
+{5238308D-5A6E-36D9-8BE7-F6F34063C56C} Visual C++ Library CRT X86 Redist Package                                       
+{B5C5882E-0060-34F4-B19F-4ACD1B037195} Visual C++ Library CRT X86 Store Package                                        
+{DF9C4935-9E42-3336-9EBB-E1570A9621FD} Visual C++ Library MFC Headers Package                                          
+{79CF692D-D00D-3808-9F6E-67D810922FD2} Visual C++ Library MFC MBCS Package                                             
+{CBDEEF39-F4DA-3138-9CEC-F03DA8D151F5} Visual C++ Library MFC Source Package                                           
+{037F4772-E2AA-3E67-86D0-EC9C307005D8} Visual C++ Library MFC X64 Package                                              
+{6D0D8C04-B552-33A9-9285-80E8C7E5A4B1} Visual C++ Library MFC X86 Package                                              
+{5BD557D7-7248-3765-9751-0FDE8874F4AC} Visual C++ Library PGO ARM Package                                              
+{108DBF15-C367-3B7A-8CE3-92538E81D931} Visual C++ Library PGO Headers Package                                          
+{690FC6D8-CC59-30ED-A18C-96B18F0197C2} Visual C++ Library PGO X64 Package                                              
+{A4994564-5078-3AFD-B328-3CA4D6911F93} Visual C++ Library PGO X86 Package                                              
+{9D208B75-0B38-36E8-89DB-75865C303816} Visual C++ Library PGO X86 Package                                              
+{3CA38164-88D4-3917-8CE9-EDCF29BB1304} Visual C++ MSBuild ARM Package                                                  
+{538C3C38-D36F-3E07-8818-37EFB1DA5F89} Visual C++ MSBuild Base Package                                                 
+{1B14572B-F1D8-31BE-88A5-FAE2E1E01AC0} Visual C++ MSBuild Base Resource Package                                        
+{1EA3ED05-795A-37C8-9B00-D341A43E93D1} Visual C++ MSBuild X64 Package                                                  
+{3A791F21-A9DE-3806-B187-A228CA09F744} Visual C++ MSBuild X86 Package                                                  
+{A71406B5-E487-4B01-8E59-D466841350F5} VS Immersive Activate Helper                                                    
+{C7E8A4F2-EF09-42A8-B892-69D5ED99D965} VS JIT Debugger                                                                 
+{A4272808-82F5-410F-A5F9-1BF6F63F6B9A} VS Script Debugging Common                                                      
+{E90279BA-36B4-4477-A1B7-C81B571172F2} VS WCF Debugging                                                                
+{B5E3A3E1-1529-4D5A-9E95-34971FA07825} vs_BlendMsi                                                                     
+{6F7948F9-8EED-4FA5-A1D9-7DD512A2CA26} vs_clickoncebootstrappermsi                                                     
+{271F1F42-B547-4498-825F-590DBB1774F7} vs_clickoncebootstrappermsires                                                  
+{30D97A69-3C0F-4552-9A72-60E591B210C7} vs_clickoncesigntoolmsi                                                         
+{57A1322F-3C5B-4066-8625-301FD9535304} vs_codecoveragemsi                                                              
+{92F1055E-06E7-4928-A29D-2D868EB12D26} vs_codeduitestframeworkmsi                                                      
+{5C127D2C-BC0B-44B8-A1A5-34E9E7A116FC} vs_communitymsi                                                                 
+{3751D1CF-9A44-43D2-B4BB-80FA6E7925A8} vs_communitymsires                                                              
+{DCCEE148-43B4-4F45-9E79-DB061E21D50F} vs_cuitcommoncoremsi16                                                          
+{2AFC666C-935C-4B16-BB41-37A7CDF0B1DB} vs_cuitextensionmsi16                                                           
+{ED5909A0-996B-472D-B501-11D1AAFE9FE4} vs_cuitextensionmsi16_x64                                                       
+{AD0C92A4-1514-4BC1-A723-A272A8343924} vs_devenvmsi                                                                    
+{102E83BD-B6A0-4C74-AD22-7D594A3435D3} vs_filehandler_amd64                                                            
+{6CBDE7BE-E956-4E0E-81FB-2CB79190C924} vs_filehandler_x86                                                              
+{05CA3463-0B45-425D-9AF2-E1964AB85CBB} vs_FileTracker_Singleton                                                        
+{76133D32-1325-48F3-929A-27EC7A323FBA} vs_Graphics_Singletonx64                                                        
+{E42F1CFF-80C7-4865-B378-1EFCF312C1BF} vs_Graphics_Singletonx86                                                        
+{CD7E2770-C337-4AA1-991A-4D3CF6C70BFF} vs_loadtestexceladdinmsi                                                        
+{883D29E5-9A41-4C45-A192-C10B8078BF0C} vs_minshellinteropmsi                                                           
+{53D1C36A-E35A-45B3-801B-F49BDD425293} vs_minshellmsi                                                                  
+{0916C6E1-6A0A-4887-9E00-D96FD44AFACE} vs_minshellmsires                                                               
+{4A7C360D-F268-4712-8D92-EBE9936DBEC8} vs_networkemulationmsi_x64                                                      
+{9A9E968E-1C75-4B85-BCBF-D1E26D6F7A6B} vs_SQLClickOnceBootstrappermsi                                                  
+{E208E682-50EE-4F2F-9860-C91B906B8A03} vs_tipsmsi                                                                      
+{2B60C53E-DFCA-484F-A0B3-C2246B580E30} vs_webtestrecordermsi                                                           
+{6A177F95-5931-44C7-8636-D337E562150C} vs_webtestrecordermsi_x64                                                       
+{5AD4A604-B476-1578-2A20-6B02FC6258BE} WinAppDeploy                                                                    
+{2FE507C2-60A1-4BE8-270D-1EBA48C4C1A6} WinAppDeploy                                                                    
+{C9966D24-DB2F-8514-EAA3-BEED85F3E166} WinAppDeploy                                                                    
+{8E3AB865-9E38-1E5F-7B49-C8E3A70C6303} WinAppDeploy                                                                    
+{9690D51C-4435-1C20-7819-66CCAB0F03F9} WinAppDeploy                                                                    
+{716AE8F2-1BE3-7657-DF6B-F23DEEC75AF9} WinAppDeploy                                                                    
+{2ADF1977-BF31-E127-B651-AC28A8658317} WinAppDeploy                                                                    
+{8E3AE0EF-D067-700C-BDB4-10D5552155DC} WinAppDeploy                                                                    
+{CE49EE03-B8B5-DFBD-2EAF-E060B14F6A50} Windows 7 WDK Headers and Libs                                                  
+{F166548D-08C8-485F-74B2-601EA298DA4C} Windows 8 WDK Headers and Libs                                                  
+{B4AD68E8-A783-577E-4B5A-87DCDF371EBB} Windows 8.1 WDK Headers and Libs                                                
+{69331A50-908A-0745-CFCF-8413360C5B96} Windows App Certification Kit Native Components                                 
+{81D4E442-F6C5-DF4B-DEF8-76E51ACC56F8} Windows App Certification Kit SupportedApiList x86                              
+{FD68622A-634F-FB49-6E94-E21A451A3B5A} Windows App Certification Kit x64                                               
+{087BBF93-D9E3-4D27-BDBE-9C702E0066FC} Windows Application Driver                                                      
+{AE3D592E-12AC-C756-4331-73BEE44D0D4D} Windows Debugging WDK Integration                                               
+{17EC9ED8-C6BF-DA01-FED7-42242539F210} Windows Deployment Image Servicing and Management Tools (OnecoreUAP)            
+{8358B2F8-FEE0-7FBA-14E5-AC84A7E61552} Windows Desktop Extension SDK                                                   
+{EC74C9E5-A88F-D4DF-1DD0-FA42FFBB298D} Windows Desktop Extension SDK                                                   
+{F51BFEE9-660E-A5AF-EA46-E90C4C605A89} Windows Desktop Extension SDK                                                   
+{137DE25F-7C3C-DEFE-C45B-990088714B67} Windows Desktop Extension SDK                                                   
+{66CEB5CD-2D62-66EA-8969-BDC63E71D7B6} Windows Desktop Extension SDK                                                   
+{B4A7994D-DBA1-8B4D-621A-03EE52CF838A} Windows Desktop Extension SDK                                                   
+{3F737DA8-C5B7-8740-6B07-BA73B5E62CDF} Windows Desktop Extension SDK                                                   
+{D3B54AAA-2B64-5DE2-EA64-9900152E5282} Windows Desktop Extension SDK                                                   
+{44B8DFA4-495D-9972-F663-557B1BC0CB71} Windows Desktop Extension SDK Contracts                                         
+{39EDCC7D-7B63-5D99-C053-C8CDF02DC5ED} Windows Desktop Extension SDK Contracts                                         
+{BEC174BC-5C00-37EF-1561-A28834FE774F} Windows Desktop Extension SDK Contracts                                         
+{942262C5-DA88-830D-7140-C5BCC896DD60} Windows Desktop Extension SDK Contracts                                         
+{A34A6580-86EF-A26A-33A5-80E1919B7F75} Windows Desktop Extension SDK Contracts                                         
+{53C2E000-3774-D333-D543-A0BFE8B83636} Windows Desktop Extension SDK Contracts                                         
+{C12887C1-91E2-4C05-5D06-7DC02AE4A627} Windows Desktop Extension SDK Contracts                                         
+{D54B24F7-43DE-C7BF-3A5C-83F9E8E0700D} Windows Desktop Extension SDK Contracts                                         
+{8A946E81-0B16-E622-3779-73E7CE4BC705} Windows Driver Framework ARM Headers and Libs                                   
+{0047CF17-511A-77FF-AD47-7769FBDC7379} Windows Driver Framework Headers and Libs                                       
+{20A7FC07-295C-96BF-2EE6-58772B78CFD8} Windows Driver Kit                                                              
+{1A67D44B-15E2-C12A-5723-D24CF5EDC7A2} Windows Driver Kit ARM Additions                                                
+{2472C1E5-2590-415F-0474-A7792DB81FFA} Windows Driver Kit ARM Binaries                                                 
+{C1D46025-1391-11FC-3F2D-8B7BB3EA959E} Windows Driver Kit ARM Headers and Libs                                         
+{9234B59A-06FE-16C9-FC5F-DE0F38BF9F08} Windows Driver Kit Binaries                                                     
+{0F465D51-08F1-922B-FBE4-BF074BB7A281} Windows Driver Kit Downlevel Dev14 Content                                      
+{2EBDCBEE-A64F-4652-7FF8-2A84A9426797} Windows Driver Kit Headers and Libs                                             
+{41465FA0-D75B-5C24-5410-9439B9FB4696} Windows Driver Kit Root Dev16 Content                                           
+{832FB361-F50A-4399-EE76-8B0D17B854F1} Windows Driver Kit SxS Content                                                  
+{A3C1E440-E4F4-A0A2-FB4C-A0E723F6C2D6} Windows Driver Kit Visual Studio Dev16 Content                                  
+{EC3E674C-14B1-3B19-9C16-2FD337A2D827} Windows Espc Package                                                            
+{5E505498-1876-3C63-807F-EA1DE9259CBC} Windows Espc Package                                                            
+{9DA29C3D-9E36-AC22-59C8-FFCF413DC068} Windows IoT Extension SDK                                                       
+{5899CA05-6772-95EC-4261-A09E5EE0FBF2} Windows IoT Extension SDK                                                       
+{F51E47D3-D663-A741-BEF7-B0E01F0F4EF1} Windows IoT Extension SDK                                                       
+{5B64C01B-2798-A2F6-89C3-AC03906F8788} Windows IoT Extension SDK                                                       
+{110B5402-97D4-DDA2-7B42-665D8325A44F} Windows IoT Extension SDK                                                       
+{084094EF-6AC9-480A-7CC1-04199047BBDD} Windows IoT Extension SDK                                                       
+{59399776-575D-9C54-E861-0D5EAB7E707D} Windows IoT Extension SDK                                                       
+{046D36A5-1ADC-E573-1078-5C8602994B1F} Windows IoT Extension SDK                                                       
+{D49DF187-7968-A39D-CF62-EBE13CAE9068} Windows IoT Extension SDK Contracts                                             
+{1FF69612-5A91-3565-7EE3-0539A04E3B8D} Windows IoT Extension SDK Contracts                                             
+{497B2D49-F5C2-CA3B-05FF-22ABF39F2873} Windows IoT Extension SDK Contracts                                             
+{8C572A40-31F4-E963-4D0D-EE59ADFA8589} Windows IoT Extension SDK Contracts                                             
+{3CEE8EB6-538E-DDA2-51A5-842ECE6CE1E8} Windows IoT Extension SDK Contracts                                             
+{58BC56B7-DCB8-EE66-AA40-2EAE7E2EB0F2} Windows IoT Extension SDK Contracts                                             
+{8C718D01-65E0-DE21-7EFF-040B2CE83638} Windows IoT Extension SDK Contracts                                             
+{AC8F20B3-36BB-DE22-CA37-43BC967B3F47} Windows IoT Extension SDK Contracts                                             
+{CC6FDBCC-88D4-BD90-E8DE-4E85E6112F78} Windows IP Over USB                                                             
+{851E4FB5-A65A-4364-BBAD-9418D8F2904B} Windows Mobile Connectivity Tools 10.0.14393.0 - Desktop x86                    
+{833F02C5-2C39-49F6-BD64-91D351081274} Windows Mobile Connectivity Tools 10.0.15254.0 - Desktop x86                    
+{93BEE599-02CB-18E1-744E-D95724E81157} Windows Mobile Extension SDK                                                    
+{4980F20A-1872-E9D9-F2DA-730F678DE7B2} Windows Mobile Extension SDK                                                    
+{718C25EB-084C-6341-1C3E-589DA641C28F} Windows Mobile Extension SDK                                                    
+{DF2A6855-DB81-9047-3033-8D6AC6055AEF} Windows Mobile Extension SDK                                                    
+{50C05B8C-47A8-FD93-B84E-6AAA99732700} Windows Mobile Extension SDK                                                    
+{30AD20A4-1FFF-2632-4555-EFAF9D8A32CD} Windows Mobile Extension SDK                                                    
+{B38CF8FF-C0D9-B11D-6484-B95A81C72DDC} Windows Mobile Extension SDK                                                    
+{4A8894B4-AF29-4E12-9EC8-13980DCBA066} Windows Mobile Extension SDK 10.0.14393.0 - ARM                                 
+{30EFBC6D-6325-4F66-BFBF-103DBBE15506} Windows Mobile Extension SDK 10.0.14393.0 - x86                                 
+{D7A6AB64-9E5C-E5E2-5438-655F7D36475D} Windows Mobile Extension SDK Contracts                                          
+{6FF4EDB8-56EA-640C-47CA-54C845F7D273} Windows Mobile Extension SDK Contracts                                          
+{10DBDB8A-C88F-81E7-D98D-025ACA673BAC} Windows Mobile Extension SDK Contracts                                          
+{9AC65F8A-4F7F-A9FC-222F-CC43ED464041} Windows Mobile Extension SDK Contracts                                          
+{7A9E937D-9757-80CB-A6E3-F4AB6081AEA6} Windows Mobile Extension SDK Contracts                                          
+{154EEEB2-18D9-4FD5-EDE1-6D0B318FAC53} Windows Mobile Extension SDK Contracts                                          
+{8EDE105B-885A-D173-50F8-F50F39C51CF9} Windows Mobile Extension SDK Contracts                                          
+{6C5885C8-FB4C-3AA0-A393-03D29A89D8BC} Windows Phone SDK 8.0 Assemblies for Visual Studio 2019                         
+{2D2EBB11-484D-8F73-FA25-3FFABCE371F0} Windows SDK                                                                     
+{E18618EC-D9DB-4BCE-B382-85ADA2CBB340} Windows SDK AddOn                                                               
+{CBACB843-4AEF-D40C-B9BE-CCA402D2B980} Windows SDK ARM Desktop Tools                                                   
+{445D4B64-9E1D-C610-50B5-BAF5B11D7E70} Windows SDK ARM Desktop Tools                                                   
+{A99B19D4-7F87-03E5-B4A8-80420ECD7F53} Windows SDK ARM Desktop Tools                                                   
+{505932AA-D734-1BAA-D38C-B89F10AFF0A2} Windows SDK ARM Desktop Tools                                                   
+{940042ED-CB90-8E03-BE68-DF8A76E661FD} Windows SDK ARM Desktop Tools                                                   
+{20C00582-BD18-B599-CF98-61011567D747} Windows SDK ARM Desktop Tools                                                   
+{EA15DC17-4379-6850-16FA-D6527641A8DD} Windows SDK ARM Desktop Tools                                                   
+{23CA9AF7-BCC2-9A49-80BD-93565D248B4A} Windows SDK ARM Headers Libs Metadata                                           
+{3DC4086C-B365-3DE4-878B-659DEB72904E} Windows SDK Desktop Headers arm                                                 
+{83707B3E-47D2-4839-D1CF-FEC213D3C8E7} Windows SDK Desktop Headers arm                                                 
+{F800DC43-F8E7-2922-CB24-4C7A083F25AF} Windows SDK Desktop Headers arm                                                 
+{4BD2B107-B0D3-850C-7135-ACA153D30C78} Windows SDK Desktop Headers arm                                                 
+{BFC2CA21-326B-90D1-B0E5-F1327411D4A5} Windows SDK Desktop Headers arm                                                 
+{CD480276-2E5A-3FE0-D40C-D7C55617F98B} Windows SDK Desktop Headers arm                                                 
+{C7C68DA0-8501-16DD-1E6A-6C34AAA28F21} Windows SDK Desktop Headers arm                                                 
+{441FA049-A2AB-7E8D-375D-5C9720CD3325} Windows SDK Desktop Headers arm64                                               
+{452ABC9E-731E-71B2-8824-C5B2595370AF} Windows SDK Desktop Headers arm64                                               
+{30092A0E-1D50-8D66-E5EB-01F6AA8C1FFE} Windows SDK Desktop Headers arm64                                               
+{366FE23C-D417-99CF-9606-130F37CC6C3F} Windows SDK Desktop Headers arm64                                               
+{C88797F9-0AD8-E022-5BBB-596BC78D4C76} Windows SDK Desktop Headers arm64                                               
+{97AA8169-0E70-3B19-46C5-D4453608D589} Windows SDK Desktop Headers arm64                                               
+{9A3454B0-4013-E929-6B6C-392BB773AE96} Windows SDK Desktop Headers arm64                                               
+{ADF8753A-915E-A57E-6DF8-2FD7961507FA} Windows SDK Desktop Headers Libs Metadata                                       
+{492AAE4A-619E-64BF-6173-DB4E25D67533} Windows SDK Desktop Headers x64                                                 
+{C81D239D-863A-D4B4-3562-BC8D3D7C271E} Windows SDK Desktop Headers x64                                                 
+{6A96DEED-D0D8-6DD0-21BD-7D8F60714854} Windows SDK Desktop Headers x64                                                 
+{27E851A2-2754-03B2-950A-24EE2ECC25ED} Windows SDK Desktop Headers x64                                                 
+{20630AC0-B423-2229-3399-A0B5285CB325} Windows SDK Desktop Headers x64                                                 
+{22DC8AC8-D9DC-8989-C12D-C74C3676BDB1} Windows SDK Desktop Headers x64                                                 
+{C47F0820-6424-AE53-6BAF-2D41E829C855} Windows SDK Desktop Headers x64                                                 
+{6730F3AB-D022-B4A6-29C0-C95A7836EED4} Windows SDK Desktop Headers x86                                                 
+{4616D3B4-B5F0-ECBF-4617-0345C9550649} Windows SDK Desktop Headers x86                                                 
+{C971A14A-F045-BD6A-C670-05C7B74A37FE} Windows SDK Desktop Headers x86                                                 
+{24C3B7F2-DC89-47D0-5AD7-902D8151E40D} Windows SDK Desktop Headers x86                                                 
+{3D5981B5-ABF0-1495-7FC3-102D1C75B9C8} Windows SDK Desktop Headers x86                                                 
+{86ADBBAE-77AE-FA26-7C17-802AE28AC316} Windows SDK Desktop Headers x86                                                 
+{6F1B1243-7C12-5398-F575-5102906569A6} Windows SDK Desktop Headers x86                                                 
+{6221E085-FE37-1068-E6D7-9D08ABD32AE2} Windows SDK Desktop Libs arm                                                    
+{323350A8-D3DC-2F8C-2976-E59E2C132B74} Windows SDK Desktop Libs arm                                                    
+{995DDD4F-928C-4EBA-9702-E7CD3F6A7A9D} Windows SDK Desktop Libs arm                                                    
+{2AC29D7B-F29F-34FA-4434-C5DF1F086264} Windows SDK Desktop Libs arm                                                    
+{611AA03D-D625-35AD-0036-C5C11CF1DD9F} Windows SDK Desktop Libs arm                                                    
+{1FEC7E98-2A0A-11F9-1321-5F27304A3E4E} Windows SDK Desktop Libs arm                                                    
+{586380AB-3003-92AB-EB8E-3C33020ED8C3} Windows SDK Desktop Libs arm                                                    
+{008E7522-C30C-1954-BBED-1F8E65094A5B} Windows SDK Desktop Libs arm64                                                  
+{82931C8D-83CC-CF2E-F4FA-9AF0829BCA22} Windows SDK Desktop Libs arm64                                                  
+{A6B742A8-13BA-4A15-0056-E9F2354FADA4} Windows SDK Desktop Libs arm64                                                  
+{166BCCDD-48C1-8103-A7E7-0F3DE471223D} Windows SDK Desktop Libs arm64                                                  
+{956F8752-98CA-E2CF-F802-C9CA56688DDC} Windows SDK Desktop Libs arm64                                                  
+{9555AB64-6A00-776F-CA44-568E0E7B9632} Windows SDK Desktop Libs arm64                                                  
+{51ACC3C5-D131-0916-3F0C-59455F32E6B0} Windows SDK Desktop Libs arm64                                                  
+{A0B6B6D7-5ECA-4A37-182A-05D4F5A4E530} Windows SDK Desktop Libs x64                                                    
+{54140689-B7DB-B9CF-537D-8FEB279410F9} Windows SDK Desktop Libs x64                                                    
+{170B023D-7C1B-2EF4-D3E9-B974A26752AC} Windows SDK Desktop Libs x64                                                    
+{AE5CE40F-6C6D-C95F-FD37-D9EF7093CA99} Windows SDK Desktop Libs x64                                                    
+{DAE5B0BB-F2BC-98F5-6147-A83B6DF4B2AA} Windows SDK Desktop Libs x64                                                    
+{18ABFE7C-8380-B6B6-B40E-8F3C98FFEBB9} Windows SDK Desktop Libs x64                                                    
+{1A457607-6262-3949-63D4-E1F85A3D95FD} Windows SDK Desktop Libs x64                                                    
+{82BEC2F8-2758-E0A4-F14B-CAAF3234FE00} Windows SDK Desktop Libs x86                                                    
+{02078319-BC7B-218A-7690-53692709C041} Windows SDK Desktop Libs x86                                                    
+{323DB856-66EB-48DB-5DB1-642207AC63C9} Windows SDK Desktop Libs x86                                                    
+{7CAF3DA2-79F6-C0DB-6C56-2462C8C4914C} Windows SDK Desktop Libs x86                                                    
+{238F56B7-7D14-F8EB-3F4D-8CFF18C19E2B} Windows SDK Desktop Libs x86                                                    
+{7DD1F495-F1BF-6A30-620F-AC064DD302D8} Windows SDK Desktop Libs x86                                                    
+{D5B8B2F7-680B-B6D4-6353-377C73C0F8A8} Windows SDK Desktop Libs x86                                                    
+{09672816-7915-EE76-B099-988C6364B44D} Windows SDK Desktop Tools                                                       
+{399E1622-1DD3-2284-510C-3ABEBEB4B4FA} Windows SDK Desktop Tools arm64                                                 
+{54E5E684-132E-23D3-CBF6-962122E2C568} Windows SDK Desktop Tools arm64                                                 
+{28FE86CA-745A-6C3B-3279-2879991FCF24} Windows SDK Desktop Tools arm64                                                 
+{2E6C6299-BF5F-379D-55F2-8FD3367F5918} Windows SDK Desktop Tools arm64                                                 
+{0E870AEC-76C8-1CA0-D453-961D9D8B4715} Windows SDK Desktop Tools arm64                                                 
+{9D5486B4-7458-1A53-E92F-8CFD4AF85D4B} Windows SDK Desktop Tools arm64                                                 
+{06E580FA-F3B2-08E9-4DC0-0AB55D985CBB} Windows SDK Desktop Tools arm64                                                 
+{E5715C32-34B0-6F8E-81B8-13FB19B1B682} Windows SDK Desktop Tools x64                                                   
+{8308EFA9-D647-6BF4-6525-349091FBD528} Windows SDK Desktop Tools x64                                                   
+{795E8F11-37DE-611E-921E-7D70BE09BF7B} Windows SDK Desktop Tools x64                                                   
+{8105E4C5-379E-F713-8A4D-14A2317A7ABE} Windows SDK Desktop Tools x64                                                   
+{F9BDEC71-9E56-CFBF-0AE8-E7AF032D07C7} Windows SDK Desktop Tools x64                                                   
+{ED461E24-8FE2-759C-F157-824F0EA52E36} Windows SDK Desktop Tools x64                                                   
+{A84B4CAC-C89B-FAD4-87CC-B2B547E4AFDF} Windows SDK Desktop Tools x64                                                   
+{5169186A-B6CA-38E6-BC29-54ABFAFD3721} Windows SDK Desktop Tools x86                                                   
+{F770E8F3-139B-0373-8692-BF619445B8C2} Windows SDK Desktop Tools x86                                                   
+{241CF4B0-1FCB-C443-433B-B663D59408A7} Windows SDK Desktop Tools x86                                                   
+{02594FB6-9905-CBB9-10E8-EFCFB7122D7C} Windows SDK Desktop Tools x86                                                   
+{540ADDB0-7A37-9B99-3568-FD1EA33D3B38} Windows SDK Desktop Tools x86                                                   
+{E27A3A74-C7DB-9F2F-3543-683F4FC24793} Windows SDK Desktop Tools x86                                                   
+{1C966E96-8553-EF1E-A06F-A8174B3CAA60} Windows SDK Desktop Tools x86                                                   
+{0B12F7E3-EDAA-AF92-20BB-88540FEF54BA} Windows SDK DirectX x64 Remote                                                  
+{B9A2EE66-E1B9-ED85-E75B-041A348EB46D} Windows SDK DirectX x86 Remote                                                  
+{18380907-0DDE-C70B-74D1-46F0144502CD} Windows SDK EULA                                                                
+{93441341-38A9-4EA1-72D4-9F2A1833498F} Windows SDK EULA                                                                
+{2DD06060-C61D-7C3A-AA55-6E3FD9493D61} Windows SDK EULA                                                                
+{A2528C8D-B98A-D28F-C650-722503516A93} Windows SDK EULA                                                                
+{5F56BF12-0818-B58A-5862-939784E12F8B} Windows SDK EULA                                                                
+{93F9D7FA-F2FD-837D-E53F-D79767071E44} Windows SDK EULA                                                                
+{A50A075D-973C-1867-4228-738205D555C8} Windows SDK EULA                                                                
+{11E8DC72-9F72-1959-C4E4-F53F0AFF3FEF} Windows SDK EULA                                                                
+{F76495AC-2A86-BD70-3F0A-20D33E6A3300} Windows SDK Facade Windows WinMD Versioned                                      
+{2D296649-CFBE-CF23-EA8E-E24554187B3F} Windows SDK Facade Windows WinMD Versioned                                      
+{31B6D021-BC97-82C5-9C42-16AB86C37215} Windows SDK Facade Windows WinMD Versioned                                      
+{3A971391-8100-F9CB-06EB-6510C6B68937} Windows SDK Facade Windows WinMD Versioned                                      
+{A5EF45C5-FA27-7E8F-1AE8-E3D39BAC779E} Windows SDK Facade Windows WinMD Versioned                                      
+{CA7A8A65-AB2E-43AA-4110-10C50115E211} Windows SDK Facade Windows WinMD Versioned                                      
+{A6D8755E-99E6-3C3F-1E68-6567743D4A81} Windows SDK Facade Windows WinMD Versioned                                      
+{CFC51C75-8F08-1968-BC86-70A396D353D9} Windows SDK for Windows Store Apps                                              
+{36AA7E63-76E9-E591-C985-272415268810} Windows SDK for Windows Store Apps Contracts                                    
+{2A8533B3-8D16-67E4-E729-5BB04EDD2FE4} Windows SDK for Windows Store Apps Contracts                                    
+{8988EE05-1C3C-3C62-9C00-C07D71F20146} Windows SDK for Windows Store Apps Contracts                                    
+{C13D21F1-E9A3-FB93-18C4-B905FB47F122} Windows SDK for Windows Store Apps Contracts                                    
+{AD3B32A0-5F71-DE89-B55A-9E85964186D8} Windows SDK for Windows Store Apps Contracts                                    
+{21603239-9380-AE0E-DCDF-FF910036043C} Windows SDK for Windows Store Apps Contracts                                    
+{7736BDAD-A5B6-8BE7-E34B-F53280448C29} Windows SDK for Windows Store Apps Contracts                                    
+{D7F9E8AA-DF85-7816-A805-EA2C686A8EF8} Windows SDK for Windows Store Apps Contracts                                    
+{45D32E0E-27C5-82DE-B739-6A9608A2411A} Windows SDK for Windows Store Apps DirectX x64 Remote                           
+{1136A3C1-6ABF-12ED-EC50-76CED941DC95} Windows SDK for Windows Store Apps DirectX x64 Remote                           
+{45885E89-108E-2590-C1D5-D3532C2435F7} Windows SDK for Windows Store Apps DirectX x64 Remote                           
+{0E2FEA3B-C853-DE2A-8A04-BB7D5BF010E0} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{929C5E30-584A-9E44-2C03-08AA27927317} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{8F21D4CD-9CB4-2648-EECC-60147DE7B32D} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{319F3FF3-A01A-2657-8CFE-1AD55A53C587} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{31A3EB09-E226-B0E5-FA70-FF4B3CAD2ECF} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{3F8C0DF2-07F3-DA78-898C-8BE81EEA0E42} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{1D42A0CE-494E-EDB0-9613-553487B5953D} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{C8FE2B4D-9C81-DD3B-D414-0E0B3BFE51D1} Windows SDK for Windows Store Apps DirectX x86 Remote                           
+{8E9DD3FE-3338-8012-81C5-F3AA9B617BAE} Windows SDK for Windows Store Apps Headers                                      
+{65E9398F-77A0-8681-026C-8CF092A71F11} Windows SDK for Windows Store Apps Headers                                      
+{A1DA436A-2FA4-FDC2-9B0A-FBB40CF0499D} Windows SDK for Windows Store Apps Headers                                      
+{40A1FE86-43BB-FE81-2A71-B71E13F8167A} Windows SDK for Windows Store Apps Headers                                      
+{E0B063A4-9268-CC1E-C8EE-9593D2A46592} Windows SDK for Windows Store Apps Headers                                      
+{07C90F9B-3020-AD74-53A2-404D0A77E6A8} Windows SDK for Windows Store Apps Headers                                      
+{785711EA-DD49-D232-BB29-D48350CC458F} Windows SDK for Windows Store Apps Headers                                      
+{970B61DE-43FE-4D47-4E1B-9BD0BA86825E} Windows SDK for Windows Store Apps Headers Libs                                 
+{57186CA6-5B4D-1D1E-0AF0-A6F5244BBA36} Windows SDK for Windows Store Apps Libs                                         
+{DAED8629-A799-B67F-9751-F3A1C60EE335} Windows SDK for Windows Store Apps Libs                                         
+{C8977C7D-F685-8282-3C78-6276E03E3B32} Windows SDK for Windows Store Apps Libs                                         
+{217E19C8-ACC0-C7ED-AB69-A30F3F96C625} Windows SDK for Windows Store Apps Libs                                         
+{F4FEC5E6-2DFE-257D-9EBD-C4330DBA85DB} Windows SDK for Windows Store Apps Libs                                         
+{104CBBE4-1D61-05DD-38D2-C3BBA1C212E5} Windows SDK for Windows Store Apps Libs                                         
+{1FBBD022-F751-FE7B-54DF-9FED23892B2F} Windows SDK for Windows Store Apps Libs                                         
+{996DB964-0D9D-5557-BBCB-9854FB000D2C} Windows SDK for Windows Store Apps Metadata                                     
+{6EFCFA87-BB5E-7BE5-3936-BCADCFBFADEB} Windows SDK for Windows Store Apps Metadata                                     
+{A128C4CE-88C8-8BDF-FBE9-A517979E0BDD} Windows SDK for Windows Store Apps Metadata                                     
+{5FAF2ED2-CA24-0313-8CAF-C28DEE421200} Windows SDK for Windows Store Apps Metadata                                     
+{7907F380-3CFD-247C-9DFC-A23CED2012F8} Windows SDK for Windows Store Apps Metadata                                     
+{2CFB2180-7C20-5470-4B8A-747512A6AB70} Windows SDK for Windows Store Apps Metadata                                     
+{ECA49B9D-E452-169B-F8E2-E9E415F0190D} Windows SDK for Windows Store Apps Metadata                                     
+{A5174AE6-3704-EE0A-BEFF-21BC5275BA02} Windows SDK for Windows Store Apps Tools                                        
+{68F11757-8C35-BEB6-2AED-6F7C6CC5B8C0} Windows SDK for Windows Store Apps Tools                                        
+{47E40398-1A56-3617-F5C1-94AEF05528F7} Windows SDK for Windows Store Apps Tools                                        
+{4AC6C7FB-D848-9D68-DCB0-1376083FEA3A} Windows SDK for Windows Store Apps Tools                                        
+{BA610F2C-C1FA-0A65-2B4D-8272223AC061} Windows SDK for Windows Store Apps Tools                                        
+{FACD94AC-D254-726D-F9ED-7F683F92983D} Windows SDK for Windows Store Apps Tools                                        
+{3A5BBDEC-5254-43DA-F809-443771DBCB85} Windows SDK for Windows Store Apps Tools                                        
+{CB17BD4C-C6D7-E5D7-5031-F37645D22579} Windows SDK for Windows Store Apps Tools                                        
+{B0CB401F-F1EF-E63C-8191-9A447FC24C58} Windows SDK for Windows Store Managed Apps Libs                                 
+{FF7D4409-CF59-34AE-BDC7-8A6146A9BA36} Windows SDK for Windows Store Managed Apps Libs                                 
+{9A0DC6A1-E91D-EB94-FB4D-41DDDE8A225D} Windows SDK for Windows Store Managed Apps Libs                                 
+{458C3A87-069F-E8E2-AF52-43152BA91548} Windows SDK for Windows Store Managed Apps Libs                                 
+{E977B8A2-A012-B54C-A2B9-DDB08002031F} Windows SDK for Windows Store Managed Apps Libs                                 
+{E3B98FCC-416A-A89A-E672-333BF429632F} Windows SDK for Windows Store Managed Apps Libs                                 
+{CEDD7BE6-97B5-9AE8-57C0-B390E0C4328F} Windows SDK for Windows Store Managed Apps Libs                                 
+{FA582B75-7D9C-2717-5E64-1A8CC5E46ABD} Windows SDK Modern Non-Versioned Developer Tools                                
+{21514D7D-4124-E52E-8483-727380B855D7} Windows SDK Modern Versioned Developer Tools                                    
+{79513535-6F89-55F0-E50F-5D563C4DEAF7} Windows SDK Modern Versioned Developer Tools                                    
+{EA338ECA-C63F-4BD6-B66F-274433C75A49} Windows SDK Modern Versioned Developer Tools                                    
+{3CEBA631-440C-385D-F3E0-A8B23E9973D6} Windows SDK Modern Versioned Developer Tools                                    
+{FC5A59F8-6BEE-FBB4-C720-47C565A92798} Windows SDK Modern Versioned Developer Tools                                    
+{C1C8121A-6BDE-478E-3685-C09F9287D6F0} Windows SDK Modern Versioned Developer Tools                                    
+{0FF2E034-BB20-D7E2-1E74-C8774A2267D6} Windows SDK Modern Versioned Developer Tools                                    
+{5073B1D2-656B-F677-AC77-5F8DAA8888B2} Windows SDK Modern Versioned Developer Tools                                    
+{7DBE357D-2AA2-7B68-267E-F8DAEB182D6F} Windows SDK Redistributables                                                    
+{4CA7ABF1-DB68-0F9E-5AD9-58550198D0AC} Windows SDK Signing Tools                                                       
+{1DF5CACD-208A-01A0-4DBA-C51FDBE99FB4} Windows SDK Signing Tools                                                       
+{3ED687AC-3F6D-819B-3948-F0CB24111524} Windows SDK Signing Tools                                                       
+{8C4160A1-6C94-FC27-A086-D0FC3A297153} Windows SDK Signing Tools                                                       
+{0F5E7D7D-8969-DC1B-205D-024FB54A0417} Windows SDK Signing Tools                                                       
+{B62A26BB-90A0-82FB-2DDC-3157ADF07833} Windows SDK Signing Tools                                                       
+{58770E7F-37C0-70F9-6CBF-2B18503B0EE0} Windows SDK Signing Tools                                                       
+{E957D37E-05B8-4A46-965E-A27D1F666554} Windows Simulator                                                               
+{0D5009C8-F5AF-4A81-B4F8-F334A6358CCA} Windows Simulator - ENU                                                         
+{CE580CA9-68CE-F743-C36E-1ED94C7CA2C7} Windows Team Extension SDK                                                      
+{CE7E4A6A-45A2-2968-4B34-D0D4CFCC0E1D} Windows Team Extension SDK                                                      
+{01351434-DA4A-8EAB-2CCA-71EC6D62592B} Windows Team Extension SDK                                                      
+{A8B548F5-D495-BB71-F673-2D48FD7E764C} Windows Team Extension SDK                                                      
+{3BFC920A-C3C0-2DFB-7509-03F5EFC95654} Windows Team Extension SDK                                                      
+{14705B25-5AC2-82AC-DB79-A35219016ABB} Windows Team Extension SDK                                                      
+{6EEDDD9D-BF7B-8229-92B4-89DFCF7481ED} Windows Team Extension SDK                                                      
+{4B16F2E6-8A76-5A63-2890-329FB7C98C70} Windows Team Extension SDK                                                      
+{5D60A4EF-6EDF-AAF4-F0F0-49FDD40176B8} Windows Team Extension SDK Contracts                                            
+{FDE0B5F7-76C1-8FB6-E901-1454FE4BEDB4} Windows Team Extension SDK Contracts                                            
+{5F1D4DE5-BFF3-503B-D05F-40ED6927DE17} Windows Team Extension SDK Contracts                                            
+{C5D77B76-409E-D349-93F6-7B157EB80B67} Windows Team Extension SDK Contracts                                            
+{FA57EACC-E7E8-406A-83FA-168A812BD079} Windows Team Extension SDK Contracts                                            
+{5F616EBF-DF09-A2DA-AB66-3A5341FA611C} Windows Team Extension SDK Contracts                                            
+{F57D8118-1428-ECB8-0729-A577A9A1DEA8} Windows Team Extension SDK Contracts                                            
+{B155C75C-1567-ECA5-D71B-86F5CF1DE1ED} Windows Team Extension SDK Contracts                                            
+{993F6DDC-63F8-4BCD-9B28-D941971A9CAC} Windows XP Targeting with C++                                                   
+{F361FE04-789E-42F3-BBAB-E7B380AA5E06} Windows XP Targeting with C++                                                   
+{8F72D2FA-3184-438E-B5AE-677DAC504038} windows_toolscorepkg                                                            
+{389D182F-0ADA-5C7E-FF32-2573A821592C} WinRT Intellisense Desktop - en-us                                              
+{385A1387-A488-9E90-3635-086129610034} WinRT Intellisense Desktop - en-us                                              
+{00B12DF9-5428-9406-DE2C-8E8A1A062B05} WinRT Intellisense Desktop - en-us                                              
+{C6014D12-9572-B9F4-8ABB-EA044E101BB6} WinRT Intellisense Desktop - en-us                                              
+{BCF7CA0F-E53C-2A4F-B128-A751EC9A1016} WinRT Intellisense Desktop - en-us                                              
+{A249F631-CEBC-EDCB-4C49-700E551E66CA} WinRT Intellisense Desktop - en-us                                              
+{E67F1F03-FB4A-3D61-8999-E6A4C4B26F34} WinRT Intellisense Desktop - en-us                                              
+{FBF034E1-563E-1F9D-DC45-491BB88E9B9E} WinRT Intellisense Desktop - en-us                                              
+{C3776B36-B34E-00E2-3009-95A6F1870B58} WinRT Intellisense Desktop - Other Languages                                    
+{7EF010FF-7800-28BA-FF49-2D219EC7BA82} WinRT Intellisense Desktop - Other Languages                                    
+{B42BF427-AFDB-C00F-DB60-6F51395D74A1} WinRT Intellisense Desktop - Other Languages                                    
+{D7DD3171-DA58-52A1-95B2-4769640855AF} WinRT Intellisense Desktop - Other Languages                                    
+{E71CB7F1-3E88-4450-1764-B3CC1E205C4A} WinRT Intellisense Desktop - Other Languages                                    
+{A2CFB1CE-09E6-E078-2EEC-6D94C98BB064} WinRT Intellisense Desktop - Other Languages                                    
+{E82A4A6C-C21C-35FE-B805-3E44318F6D63} WinRT Intellisense Desktop - Other Languages                                    
+{837DD890-14CE-9EB3-E8E1-F96A7EE5CFE5} WinRT Intellisense Desktop - Other Languages                                    
+{36AE12FB-4349-6EAA-B6E4-5F4E06FA8AE8} WinRT Intellisense IoT - en-us                                                  
+{3335615C-ABEB-960E-2226-4274CD28E046} WinRT Intellisense IoT - en-us                                                  
+{7336279F-8F8F-5530-A543-3BE963846C0A} WinRT Intellisense IoT - en-us                                                  
+{7E898893-9C42-A572-7F57-FDE55CE812F7} WinRT Intellisense IoT - en-us                                                  
+{823E92A6-7572-174D-0671-95A55785F991} WinRT Intellisense IoT - en-us                                                  
+{965D1746-D94A-49B9-2A48-A14914CA3B57} WinRT Intellisense IoT - en-us                                                  
+{C3032A91-00D7-DCA3-F748-517EA6E62BF8} WinRT Intellisense IoT - en-us                                                  
+{C49E6FDA-8196-0CAF-2CDD-CF1B0F4EA5AD} WinRT Intellisense IoT - en-us                                                  
+{E8B1CB29-5C24-D882-3CEF-F8A7263BC63D} WinRT Intellisense IoT - Other Languages                                        
+{84C6B91B-67DA-DDE3-86F1-87A3E307E8C1} WinRT Intellisense IoT - Other Languages                                        
+{216D5F47-257D-6284-5849-B51037875EFA} WinRT Intellisense IoT - Other Languages                                        
+{3A8F388C-D0F7-0A66-0EDE-D477B1B1B2F4} WinRT Intellisense IoT - Other Languages                                        
+{33D11371-82A5-852B-CDE2-5528CE406151} WinRT Intellisense IoT - Other Languages                                        
+{E414A474-0A87-4F66-C409-A4D9857CFD34} WinRT Intellisense IoT - Other Languages                                        
+{6B03A6A4-643C-57CE-CA6F-4E19BF47497A} WinRT Intellisense IoT - Other Languages                                        
+{3A544905-4CA6-98FB-4012-E4E18B84411A} WinRT Intellisense IoT - Other Languages                                        
+{3755CD99-C62E-3312-DDD3-29A4F259270D} WinRT Intellisense Mobile - en-us                                               
+{918A448F-59E8-FBF5-B087-D3F07160C7E0} WinRT Intellisense Mobile - en-us                                               
+{F6F11150-93DE-0507-FCA0-F746E0207017} WinRT Intellisense Mobile - en-us                                               
+{443FF51E-16C3-F23B-18FC-0D1D66024B0B} WinRT Intellisense Mobile - en-us                                               
+{0F2D2736-F436-3F10-FB30-9D279F58305B} WinRT Intellisense Mobile - en-us                                               
+{C5A6350B-B034-F359-E3AA-773F4F4A5B96} WinRT Intellisense Mobile - en-us                                               
+{CE760B86-975B-F514-5673-0ED4332B801B} WinRT Intellisense Mobile - en-us                                               
+{15E29AFF-CB19-A20B-9A81-B0765A63115F} WinRT Intellisense PPI - en-us                                                  
+{729DA966-8590-2C1F-2178-16C1D32FD7FD} WinRT Intellisense PPI - en-us                                                  
+{FB431EE2-C835-6DE9-8DC3-C8FCDE028FE0} WinRT Intellisense PPI - en-us                                                  
+{66483041-F590-EC46-4AF0-EE39C62FB680} WinRT Intellisense PPI - en-us                                                  
+{58A35EB1-1702-F9D4-B490-68AD5DD5662D} WinRT Intellisense PPI - en-us                                                  
+{5E67F8BE-D8D2-257F-CE19-419A2D5125C7} WinRT Intellisense PPI - en-us                                                  
+{8329C3A0-8582-D1C2-67FF-800654BFDF45} WinRT Intellisense PPI - en-us                                                  
+{FEAF2203-A2AC-080C-9D55-9F09623F38C3} WinRT Intellisense PPI - en-us                                                  
+{A2AA063E-AF50-A1F5-8925-A06EB1556644} WinRT Intellisense PPI - Other Languages                                        
+{F1C18506-3168-A9D9-E2D9-D23A512A326E} WinRT Intellisense PPI - Other Languages                                        
+{9C61E6D2-C43E-6746-B519-6185558C4A24} WinRT Intellisense PPI - Other Languages                                        
+{FB82399D-9C48-9AF5-DCA1-CFE61BCA70A6} WinRT Intellisense PPI - Other Languages                                        
+{771C9DEF-7C0B-85DA-6426-7A20F06BEC94} WinRT Intellisense PPI - Other Languages                                        
+{FF2B49B7-0254-3D6A-4BE0-EF4C59DBCC2B} WinRT Intellisense PPI - Other Languages                                        
+{54A8C797-B1C6-4120-3083-102DF35312CA} WinRT Intellisense PPI - Other Languages                                        
+{A06212FE-3C20-31C7-F88A-46673EF72E83} WinRT Intellisense PPI - Other Languages                                        
+{8911DE91-F86B-023D-7443-3EADF27A9DC8} WinRT Intellisense UAP - en-us                                                  
+{4095D263-6A13-78D3-DEDA-AA3452011F6E} WinRT Intellisense UAP - en-us                                                  
+{B047C746-63E8-41C7-A5C0-7ABD390CF3E6} WinRT Intellisense UAP - en-us                                                  
+{23909757-D6F0-7F7C-BD34-7E72BA9BD59C} WinRT Intellisense UAP - en-us                                                  
+{4308116D-A763-144D-DC81-6243BE6B2ADF} WinRT Intellisense UAP - en-us                                                  
+{6B37CC5B-78DF-5050-2215-68479716A587} WinRT Intellisense UAP - en-us                                                  
+{0AF3B821-474B-1885-473A-6E3FB4F1CF71} WinRT Intellisense UAP - en-us                                                  
+{7D4C7F4A-02A9-E434-6451-C8787DF28C1F} WinRT Intellisense UAP - en-us                                                  
+{C3243E23-2EB6-4419-2692-40944923B112} WinRT Intellisense UAP - Other Languages                                        
+{8832F8ED-1035-9ABE-FD73-4E5ABAA84A5C} WinRT Intellisense UAP - Other Languages                                        
+{25EE5034-1719-E781-2A16-74E73AFA1FB1} WinRT Intellisense UAP - Other Languages                                        
+{D3A337CD-EA32-F4BA-03FA-825903190C92} WinRT Intellisense UAP - Other Languages                                        
+{D307C8A5-7335-056E-6E64-E28544674EFD} WinRT Intellisense UAP - Other Languages                                        
+{BC467065-9374-5345-DA3F-FCF073304A25} WinRT Intellisense UAP - Other Languages                                        
+{250D5341-0879-4016-399C-BBCD87B80E95} WinRT Intellisense UAP - Other Languages                                        
+{0063AF94-397B-9C64-1C71-D404B27C5D96} WinRT Intellisense UAP - Other Languages                                        
+{418A9CFC-FC20-4FAD-8A81-20193809DE01} WiX Toolset v3.11 Core                                                          
+{8A2ED944-1AFA-4EB8-9400-C93518DAE038} WiX Toolset v3.11 Managed SDK                                                   
+{D6264476-1A5B-4903-A967-1F4713E7EA03} WiX Toolset v3.11 Native 2010 SDK                                               
+{CFA68822-D720-40A0-8C14-CDE3B6306FC6} WiX Toolset v3.11 Native 2012 SDK                                               
+{1DC272BA-D5AD-4A8B-9ADF-6539E8ECE6F1} WiX Toolset v3.11 Native 2013 SDK                                               
+{07188017-A460-4C0D-A386-6B3CEB8E20CD} WiX Toolset v3.11 Native 2015 SDK                                               
+{D51ED8E8-A461-4B80-A190-7AC2DC02E41F} WiX Toolset v3.11 Native 2017 SDK                                               
+{03368010-193D-4AE2-B275-DD2EB32CD427} WiX Toolset v3.11 X64                                                           
+{69CD1F2D-DF68-4E23-9108-1B70783F2855} Workflow Manager Client 1.0                                                     
+{1991EF35-D0B4-49AA-A239-6A25096525D2} Workflow Manager Tools 1.0 for Visual Studio                                    
+{CC8438E4-A373-8FEA-83DB-F5CCC03BF21A} WPT Redistributables                                                            
+{3A1BA1D4-066A-707B-CAE6-AE9359D1DF5D} WPTx64 (DesktopEditions)                                                        
+{13F38FC4-53C7-2E5E-3949-194C469ED06E} WPTx64 (OnecoreUAP)                                                             
+{3FD115BA-CD0E-4770-AD07-AF0EB6BA15C8} Xamarin Offline Packages                                                        
+{5E6844AB-A867-419C-A376-B12B574AA5F7} Xamarin PCL Profiles v1.0.9                                                     
+{F5F627A2-A330-4823-839D-BC3B68F5CC71} Xamarin Remoted iOS Simulator                                                   
+
+
+##[section]Finishing: MSI INFO
