@@ -86,19 +86,15 @@ jobs:
       Get-ChildItem -Path Env: | ft -autosize
     displayName: 'INFO'
 
-  - script: |
-      docker search postgres
-      echo " "
-      docker run -t --rm -e POSTGRES_PASSWORD=test -e POSTGRES_HOST_AUTH_METHOD=trust postgres
-    displayName: 'DOCKER'
-
-  - powershell: |
-      get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
-    displayName: 'MSI INFO'
+#  - script: |
+#      docker search postgres
+#      echo " "
+#      docker run -t --rm -e POSTGRES_PASSWORD=test -e POSTGRES_HOST_AUTH_METHOD=trust postgres
+#    displayName: 'DOCKER'
 
   - script: |
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-      choco list --local-only
+      rem choco list --local-only
       If Defined TOREMOVE (
         pushd "C:\Program Files\PostgreSQL\14"
         echo "RUNNING uninstall-postgresql.exe"
@@ -156,6 +152,10 @@ jobs:
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
     condition: succeededOrFailed()
     displayName: 'SQL Services'
+
+  - powershell: |
+      get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
+    displayName: 'MSI INFO'
 
 
   - task: PublishBuildArtifacts@1
