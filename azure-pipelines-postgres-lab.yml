@@ -104,7 +104,7 @@ jobs:
         pushd "C:\Program Files\PostgreSQL\14"
         uninstall-postgresql.exe --mode unattended --unattendedmodeui none
         popd
-        ping -n 60 127.0.0.1 >nul
+        ping -n 100 127.0.0.1 >nul
         echo "Cleaning C:\Program Files\PostgreSQL\14"
         rd /q /s "C:\Program Files\PostgreSQL\14"
         choco uninstall -my postgresql14
