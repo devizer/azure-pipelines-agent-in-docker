@@ -41,10 +41,12 @@ jobs:
         VM: windows-2022
         PKG: postgresql14
         SVC: postgresql-x64-14
+        TOREMOVE: postgresql14
       'Latest-W2022': 
         VM: windows-2022
         PKG: postgresql
         SVC: postgresql-x64-14
+        TOREMOVE: postgresql14
 
       'V9-W2019': 
         VM: windows-2019
@@ -70,10 +72,12 @@ jobs:
         VM: windows-2019
         PKG: postgresql14
         SVC: postgresql-x64-14
+        TOREMOVE: postgresql14
       'Latest-W2019': 
         VM: windows-2019
         PKG: postgresql
         SVC: postgresql-x64-14
+        TOREMOVE: postgresql14
 
 
   steps:
@@ -90,6 +94,10 @@ jobs:
   - script: |
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
       choco list --local-only
+      if defained TOREMOVE (
+        echo "Removing %TOREMOVE%"
+        choco uninstall -my postgresql14
+      )
       choco install --no-progress --params '/Password:test' %PKG% -my
     condition: succeededOrFailed()
     displayName: 'Install Postgres'
