@@ -97,6 +97,8 @@ jobs:
       If Defined TOREMOVE (
         echo "Removing %TOREMOVE%"
         choco uninstall -my postgresql14
+        echo " "
+        choco uninstall -my postgresql
       )
       choco install --no-progress --params '/Password:test' %PKG% -my
     condition: succeededOrFailed()
