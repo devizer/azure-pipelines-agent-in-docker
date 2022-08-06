@@ -96,11 +96,6 @@ jobs:
       get-wmiobject Win32_Product | sort Name|Format-Table IdentifyingNumber, Name, LocalPackage -AutoSize
     displayName: 'MSI INFO'
 
-  - powershell: |
-      get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
-    condition: succeededOrFailed()
-    displayName: 'SQL Services'
-
   - script: |
       @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
       choco list --local-only
@@ -157,6 +152,12 @@ jobs:
       echo "Bye Bye"
     condition: succeededOrFailed()
     displayName: 'Connection Info (powershell)'
+
+  - powershell: |
+      get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+    condition: succeededOrFailed()
+    displayName: 'SQL Services'
+
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
