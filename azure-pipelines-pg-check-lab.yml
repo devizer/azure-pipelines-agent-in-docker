@@ -59,6 +59,7 @@ jobs:
 
   - bash: |
       set -eu
+      Say --Reset-Stopwatch
       PGVERSION="${PGVERSION:-11}"
       Say "Install plpgsql_check for Version $PGVERSION"
       sudo rm -rf /etc/postgresql /var/lib/postgresql
@@ -73,6 +74,7 @@ jobs:
       sudo make install >/dev/null 2>&1
       make installcheck
       if test -s regression.diffs; then cat regression.diffs; fi
+      Say "Success"
     condition: succeededOrFailed()
     displayName: 'plpgsql_check: install'
 
