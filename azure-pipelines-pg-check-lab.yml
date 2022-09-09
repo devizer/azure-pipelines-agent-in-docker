@@ -33,10 +33,15 @@ jobs:
       sudo apt-get install libecpg-dev -y -qq |& grep Setting
       sudo pip install pgsanity
       pgsanity -h
-      echo 'create table TEMP1(ID1 int); select * from TEMP1;' >> Normal.sql
-      Say "Check up Normal.sql"
+      set -eu
+      echo 'Select Version();' >> Normal.sql
+      echo 'Select AnError;' >> Error.sql
+      Say "Check up Normal.sql [Select Version();]"
       pgsanity Normal.sql
-      echo "Exit Code is $?"
+      Say "Check up Error.sql [Select AnError;]"
+      err=0;
+      pgsanity Error.sql || err=$?
+      echo "EXIT CODE IS [$err]"
     displayName: 'pgsanity: install'
 
 
