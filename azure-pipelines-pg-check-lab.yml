@@ -84,6 +84,7 @@ jobs:
       sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v $PGVERSION -i |& ( grep Setting || true; )
       sudo apt-get install -y bison flex libicu-dev libssl-dev |& ( grep Setting || true; )
       sudo -u postgres createuser --superuser $USER
+      psql -c "Select Version()";
 
       git clone https://github.com/okbob/plpgsql_check
       cd plpgsql_check
