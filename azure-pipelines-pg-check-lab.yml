@@ -81,10 +81,10 @@ jobs:
       Say "Install plpgsql_check for Version $PGVERSION"
       sudo rm -rf /etc/postgresql /var/lib/postgresql
       sudo apt-get install -y -qq postgresql-common |& ( grep Setting || true; )
-      sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v $PGVERSION -i |& ( grep Setting || true; )
+      sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v $PGVERSION -i |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-0-installing.txt
       sudo apt-get install -y bison flex libicu-dev libssl-dev |& ( grep Setting || true; )
       sudo -u postgres createuser --superuser $USER
-      psql -d postgres -c "Select Version()";
+      psql -d postgres -c "Select Version(); SHOW VARIABLES;" |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-1-before.txt
 
       git clone https://github.com/okbob/plpgsql_check
       cd plpgsql_check
@@ -94,6 +94,7 @@ jobs:
       make installcheck
       if test -s regression.diffs; then cat regression.diffs; fi
       Say "Success"
+      psql -d postgres -c "Select Version(); SHOW VARIABLES;" |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-2-after.txt
     condition: succeededOrFailed()
     displayName: 'plpgsql_check: install'
 
