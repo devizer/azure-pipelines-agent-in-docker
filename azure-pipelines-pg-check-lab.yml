@@ -84,7 +84,7 @@ jobs:
       sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v $PGVERSION -i |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-0-installing.txt
       sudo apt-get install -y bison flex libicu-dev libssl-dev |& ( grep Setting || true; )
       sudo -u postgres createuser --superuser $USER
-      psql -d postgres -c "SHOW VARIABLES;" |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-1-before.txt
+      psql -d postgres -c "SHOW VARIABLES LIKE '*';" |& tee $SYSTEM_ARTIFACTSDIRECTORY/postgres-1-before.txt
 
       git clone https://github.com/okbob/plpgsql_check
       cd plpgsql_check
