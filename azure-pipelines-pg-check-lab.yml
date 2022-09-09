@@ -38,7 +38,7 @@ jobs:
         Say "pgsanity: '$(cat code.sql)'"
         err=none;
         pgsanity code.sql || err=$?
-        echo "EXIT CODE IS [$err]"
+        echo "ERROR CODE IS [$err]"
       }
       check_sql "Select Version();"
       check_sql "Select AnError;"
