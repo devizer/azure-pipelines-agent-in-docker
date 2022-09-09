@@ -26,9 +26,15 @@ jobs:
 
   steps:
   - bash: |
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "Install"
+      sudo apt-get update -qq
+      sudo apt-get install libecpg-dev -y -qq
       sudo pip install pgsanity
       pgsanity -h
-      echo 'create table TEMP1(ID1 int); select * from TEMP1;' >> sql1.sql
+      echo 'create table TEMP1(ID1 int); select * from TEMP1;' >> Normal.sql
+      Say "Check up Normal.sql"
       pgsanity sql1.sql
       echo "Exit Code is $?"
     displayName: 'INFO'
