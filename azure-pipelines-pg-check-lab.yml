@@ -18,20 +18,37 @@ jobs:
   timeoutInMinutes: 30
   strategy:
     matrix:
-      'Ubuntu 22.04':
-        VM: ubuntu-22.04
-      'Ubuntu 20.04 V14':
+      'V16 (Devel)':
+        VM: ubuntu-20.04
+        PGVERSION: 16
+      
+      'V15 (Beta)':
+        VM: ubuntu-20.04
+        PGVERSION: 15
+      
+      'V14':
         VM: ubuntu-20.04
         PGVERSION: 14
-      'Ubuntu 20.04 V13':
+      
+      'V13':
         VM: ubuntu-20.04
         PGVERSION: 13
-      'Ubuntu 20.04 V12':
+      
+      'V12':
         VM: ubuntu-20.04
         PGVERSION: 12
-      'Ubuntu 20.04 V11':
+      
+      'V11':
         VM: ubuntu-20.04
         PGVERSION: 11
+      
+      'V10':
+        VM: ubuntu-20.04
+        PGVERSION: 10
+      
+      'Ubuntu 22.04':
+        VM: ubuntu-22.04
+      
       'Ubuntu 18.04':
         VM: ubuntu-18.04
 
