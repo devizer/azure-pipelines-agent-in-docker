@@ -42,6 +42,7 @@ jobs:
       }
       check_sql "Select Version();"
       check_sql "Select AnError;"
+      check_sql 'Select column1 From table1;'
       check_sql "Syntax Error;"
     displayName: 'pgsanity: install'
 
