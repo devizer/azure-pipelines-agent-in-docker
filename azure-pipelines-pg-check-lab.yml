@@ -46,6 +46,24 @@ jobs:
       check_sql "Syntax Error;"
     displayName: 'pgsanity: install'
 
+  - bash: |
+      set -eu
+      sudo rm -rf /etc/postgresql /var/lib/postgresql
+      sudo apt-get install -y -qq postgresql-common
+      sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v 11 -i
+      sudo apt-get install -y bison flex libicu-dev libssl-dev
+      sudo -u postgres createuser --superuser $USER
+
+      git clone https://github.com/okbob/plpgsql_check
+      cd plpgsql_check
+      make
+      sudo make install
+      make installcheck
+      if test -s regression.diffs; then cat regression.diffs; fi
+    condition: succeededOrFailed()
+    displayName: 'plpgsql_check: install'
+
+
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
