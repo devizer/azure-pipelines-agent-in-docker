@@ -30,14 +30,14 @@ jobs:
       Say --Reset-Stopwatch
       Say "Install"
       sudo apt-get update -qq
-      sudo apt-get install libecpg-dev -y -qq
+      sudo apt-get install libecpg-dev -y -qq |& grep Setting
       sudo pip install pgsanity
       pgsanity -h
       echo 'create table TEMP1(ID1 int); select * from TEMP1;' >> Normal.sql
       Say "Check up Normal.sql"
-      pgsanity sql1.sql
+      pgsanity Normal.sql
       echo "Exit Code is $?"
-    displayName: 'INFO'
+    displayName: 'pgsanity: install'
 
 
   - task: PublishBuildArtifacts@1
