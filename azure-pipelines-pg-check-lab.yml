@@ -89,6 +89,7 @@ jobs:
       cd plpgsql_check
       make -j >/dev/null 2>&1
       sudo make install >/dev/null 2>&1
+      Say "plpgsql_check: make installcheck"
       make installcheck
       if test -s regression.diffs; then cat regression.diffs; fi
       Say "Success"
