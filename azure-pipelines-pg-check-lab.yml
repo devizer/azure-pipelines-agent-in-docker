@@ -63,16 +63,15 @@ jobs:
       Say "Install plpgsql_check for Version $PGVERSION"
       sudo rm -rf /etc/postgresql /var/lib/postgresql
       sudo apt-get install -y -qq postgresql-common |& ( grep Setting || true; )
-      sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v 11 -i
+      sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v 11 -i |& ( grep Setting || true; )
       sudo apt-get install -y bison flex libicu-dev libssl-dev |& ( grep Setting || true; )
       sudo -u postgres createuser --superuser $USER
 
       git clone https://github.com/okbob/plpgsql_check
       cd plpgsql_check
-      make -j
-      sudo make install
+      make -j >/dev/null 2>&1
+      sudo make install >/dev/null 2>&1
       make installcheck
-      ls -la regression.diffs || true
       if test -s regression.diffs; then cat regression.diffs; fi
     condition: succeededOrFailed()
     displayName: 'plpgsql_check: install'
