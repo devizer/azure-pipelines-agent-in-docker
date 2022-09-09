@@ -27,7 +27,10 @@ jobs:
   steps:
   - bash: |
       sudo pip install pgsanity
-      pgsanity --version
+      pgsanity -h
+      echo 'create table TEMP1(ID1 int); select * from TEMP1;' >> sql1.sql
+      pgsanity sql1.sql
+      echo "Exit Code is $?"
     displayName: 'INFO'
 
 
