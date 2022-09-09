@@ -1,0 +1,39 @@
+variables:
+  QA: 42
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'postgres-lab/*'
+
+jobs:
+
+- job: PG
+  pool:
+    vmImage: '$(VM)'
+  timeoutInMinutes: 30
+  strategy:
+    matrix:
+      'Ubuntu 22.04': 
+        VM: ubuntu-22.04
+      'Ubuntu 20.04': 
+        VM: ubuntu-20.04
+      'Ubuntu 18.04': 
+        VM: ubuntu-18.04
+
+  steps:
+  - bash: |
+      sudo pip install pgsanity
+      pgsanity --version
+    displayName: 'INFO'
+
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
