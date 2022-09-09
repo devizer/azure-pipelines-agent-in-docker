@@ -32,16 +32,17 @@ jobs:
       sudo apt-get update -qq
       sudo apt-get install libecpg-dev -y -qq |& grep Setting
       sudo pip install pgsanity
-      pgsanity -h
       set -eu
-      echo 'Select Version();' >> Normal.sql
-      echo 'Syntax Error;' >> Error.sql
-      Say "Check up Normal.sql [Select Version();]"
-      pgsanity Normal.sql
-      Say "Check up Error.sql [Syntax Error;]"
-      err=none;
-      pgsanity Error.sql || err=$?
-      echo "EXIT CODE IS [$err]"
+      function check_sql() {
+        echo "$1" > code.sql
+        Say "pgsanity: '$(cat code.sql)'"
+        err=none;
+        pgsanity code.sql || err=$?
+        echo "EXIT CODE IS [$err]"
+      }
+      check_sql "Select Version();"
+      check_sql "Select AnError;"
+      check_sql "Syntax Error;"
     displayName: 'pgsanity: install'
 
 
