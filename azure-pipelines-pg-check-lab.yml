@@ -35,11 +35,11 @@ jobs:
       pgsanity -h
       set -eu
       echo 'Select Version();' >> Normal.sql
-      echo 'Select AnError;' >> Error.sql
+      echo 'Syntax Error;' >> Error.sql
       Say "Check up Normal.sql [Select Version();]"
       pgsanity Normal.sql
-      Say "Check up Error.sql [Select AnError;]"
-      err=0;
+      Say "Check up Error.sql [Syntax Error;]"
+      err=none;
       pgsanity Error.sql || err=$?
       echo "EXIT CODE IS [$err]"
     displayName: 'pgsanity: install'
