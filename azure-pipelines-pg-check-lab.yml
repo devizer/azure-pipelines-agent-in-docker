@@ -12,7 +12,7 @@ trigger:
 jobs:
 
 - job: PG
-  displayName: 'pgsanity & plpgsql_check'
+  displayName: 'PG'
   pool:
     vmImage: '$(VM)'
   timeoutInMinutes: 30
