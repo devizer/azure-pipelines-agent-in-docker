@@ -12,6 +12,7 @@ trigger:
 jobs:
 
 - job: PG
+  displayName: 'pgsanity & plpgsql_check'
   pool:
     vmImage: '$(VM)'
   timeoutInMinutes: 30
@@ -19,8 +20,18 @@ jobs:
     matrix:
       'Ubuntu 22.04':
         VM: ubuntu-22.04
-      'Ubuntu 20.04':
+      'Ubuntu 20.04 V14':
         VM: ubuntu-20.04
+        PGVERSION: 14
+      'Ubuntu 20.04 V13':
+        VM: ubuntu-20.04
+        PGVERSION: 13
+      'Ubuntu 20.04 V12':
+        VM: ubuntu-20.04
+        PGVERSION: 12
+      'Ubuntu 20.04 V11':
+        VM: ubuntu-20.04
+        PGVERSION: 11
       'Ubuntu 18.04':
         VM: ubuntu-18.04
 
@@ -48,6 +59,8 @@ jobs:
 
   - bash: |
       set -eu
+      PGVERSION="${PGVERSION:-11}"
+      Say "Install plpgsql_check for Version $PGVERSION"
       sudo rm -rf /etc/postgresql /var/lib/postgresql
       sudo apt-get install -y -qq postgresql-common |& grep Setting
       sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v 11 -i
@@ -63,8 +76,6 @@ jobs:
       if test -s regression.diffs; then cat regression.diffs; fi
     condition: succeededOrFailed()
     displayName: 'plpgsql_check: install'
-
-
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
