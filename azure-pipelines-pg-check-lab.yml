@@ -62,9 +62,9 @@ jobs:
       PGVERSION="${PGVERSION:-11}"
       Say "Install plpgsql_check for Version $PGVERSION"
       sudo rm -rf /etc/postgresql /var/lib/postgresql
-      sudo apt-get install -y -qq postgresql-common |& {grep Setting || true; }
+      sudo apt-get install -y -qq postgresql-common |& ( grep Setting || true; )
       sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -p -v 11 -i
-      sudo apt-get install -y bison flex libicu-dev libssl-dev |& {grep Setting || true; }
+      sudo apt-get install -y bison flex libicu-dev libssl-dev |& ( grep Setting || true; )
       sudo -u postgres createuser --superuser $USER
 
       git clone https://github.com/okbob/plpgsql_check
