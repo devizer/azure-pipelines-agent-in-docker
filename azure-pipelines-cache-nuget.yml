@@ -1,0 +1,55 @@
+variables:
+  NUGET_VERSION: 0.1
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'azure-pipelines-cache-nuget.yml'
+    exclude:
+    - '**'
+
+jobs:
+
+- job: BuildCache
+  pool:
+    vmImage: '$(IMAGE)'
+  timeoutInMinutes: 22
+  strategy:
+    maxParallel: 6
+    matrix:
+      'On Mac OS':
+        IMAGE: 'macos-12'
+      'On Windows 2022':
+        IMAGE: 'windows-2022'
+      'On Ubuntu 20.04':
+        IMAGE: 'ubuntu-20.04'
+
+  steps:
+  - bash: |
+      echo "uname -s: [$(uname -s)]"
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+
+      Say "Installing DotNet"
+      export DOTNET_VERSIONS="3.1 5.0 6.0 7.0"
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; 
+      for d in /usr/share /usr/local/share; do
+        test -s ${d}/dotnet/dotnet && sudo ln -f -s ${d}/dotnet/dotnet /usr/local/bin/dotnet
+      done;
+
+      echo "DOT INFO"
+      dotnet --info
+
+    condition: succeededOrFailed()
+    displayName: 'Build'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
+
