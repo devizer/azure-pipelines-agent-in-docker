@@ -37,6 +37,7 @@ jobs:
 
       Say "Installing DotNet"
       for ver in $VERSIONS; do
+        export DOTNET_TARGET_DIR="$HOME/DOTNET-$ver"
         rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
         export DOTNET_VERSIONS="$ver"
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; 
@@ -45,18 +46,19 @@ jobs:
         done;
 
         echo "DOT INFO"
-        dotnet --info
+        $DOTNET_TARGET_DIR/dotnet --info
 
-        dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver}.txt"
+        $DOTNET_TARGET_DIR/dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver}.txt"
         rm -rf ~/.nuget/packages
         types="nunit xunit webapi console webapp web"
         for type in $types; do
           echo "TYPE: '$ver' [$type]"
-          dotnet new $type -o $type
+          rm -rf $type
+          $DOTNET_TARGET_DIR/dotnet new $type -o $type
           cd $type
-          dotnet restore || dotnet restore --disable-parallel
-          dotnet build
-          dotnet publish
+          $DOTNET_TARGET_DIR/dotnet restore || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel
+          $DOTNET_TARGET_DIR/dotnet build
+          $DOTNET_TARGET_DIR/dotnet publish
           cd ..
         done
         time 7z a -mx=9 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver.7z" ~/.nuget/packages
