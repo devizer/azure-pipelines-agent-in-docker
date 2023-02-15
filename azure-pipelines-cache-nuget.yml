@@ -72,9 +72,9 @@ jobs:
           fi
 
           Say "Building [$type]"
-          $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
-          $DOTNET_TARGET_DIR/dotnet build -v:q
-          $DOTNET_TARGET_DIR/dotnet publish -v:q
+          $DOTNET_TARGET_DIR/dotnet restore -v:q --nologo || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q --nologo
+          $DOTNET_TARGET_DIR/dotnet build -v:q --nologo
+          $DOTNET_TARGET_DIR/dotnet publish -v:q --nologo
           cd ..
         done
         # Smart-Sudo rm -rf "$DOTNET_TARGET_DIR" || rm -rf "$DOTNET_TARGET_DIR"
