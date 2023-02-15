@@ -67,7 +67,7 @@ jobs:
           if [[ "$type" == webapi ]]; then
           for p in $MORE_PACKAGES; do
             Say "Adding package $p"
-            $DOTNET_TARGET_DIR/dotnet add package $p -v:q
+            $DOTNET_TARGET_DIR/dotnet add package $p
           done
           fi
 
