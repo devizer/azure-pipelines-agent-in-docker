@@ -59,7 +59,7 @@ jobs:
         rm -rf ~/.nuget/packages
         types="webapi nunit xunit console webapp web mvc react"
         for type in $types; do
-          echo "TYPE: '$ver' [$type]"
+          Say "Caching dependecies for [$type]"
           rm -rf project${type}
           $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
           cd project${type}
@@ -71,7 +71,7 @@ jobs:
           done
           fi
 
-          Say "Caching dependecies for [$type]"
+          Say "Building [$type]"
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
           $DOTNET_TARGET_DIR/dotnet publish -v:q
