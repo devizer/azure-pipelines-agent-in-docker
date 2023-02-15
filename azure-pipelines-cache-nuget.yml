@@ -40,7 +40,7 @@ jobs:
       Say --Reset-Stopwatch
 
       Say "Wipe out existing dotnet sdk"
-      sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
+      Smart-Sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
 
       Say "Installing DotNet. Versions are $VERSIONS"
       for ver in $VERSIONS; do
@@ -76,7 +76,7 @@ jobs:
           $DOTNET_TARGET_DIR/dotnet publish -v:q
           cd ..
         done
-        # sudo rm -rf "$DOTNET_TARGET_DIR" || rm -rf "$DOTNET_TARGET_DIR"
+        # Smart-Sudo rm -rf "$DOTNET_TARGET_DIR" || rm -rf "$DOTNET_TARGET_DIR"
         Say "Pack ~/.nuget/packages"
         f="$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver-$SUFFIX.7z"
         Say "Pack $f"
