@@ -56,6 +56,10 @@ jobs:
           rm -rf project${type}
           $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
           cd project${type}
+          for a in Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies; do
+            $DOTNET_TARGET_DIR/dotnet add package $a
+          done 
+
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
           $DOTNET_TARGET_DIR/dotnet publish -v:q
