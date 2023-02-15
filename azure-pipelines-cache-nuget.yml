@@ -61,6 +61,7 @@ jobs:
           $DOTNET_TARGET_DIR/dotnet publish -v:q
           cd ..
         done
+        rm -rf "$DOTNET_TARGET_DIR"
         time 7z a -mx=9 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver.7z" ~/.nuget/packages
 
       done
