@@ -57,7 +57,7 @@ jobs:
         $DOTNET_TARGET_DIR/dotnet new list > "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver} (new).txt" 2>&1
         $DOTNET_TARGET_DIR/dotnet new --list > "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver} (legacy).txt" 2>&1
         rm -rf ~/.nuget/packages
-        types="webapi nunit xunit console webapp web"
+        types="webapi nunit xunit console webapp web mvc react"
         for type in $types; do
           echo "TYPE: '$ver' [$type]"
           rm -rf project${type}
@@ -67,10 +67,11 @@ jobs:
           if [[ "$type" == webapi ]]; then
           for p in $MORE_PACKAGES; do
             Say "Adding package $p"
-            $DOTNET_TARGET_DIR/dotnet add package $p
+            $DOTNET_TARGET_DIR/dotnet add package $p >/dev/null
           done
           fi
 
+          Say "Caching dependecies for [$type]"
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
           $DOTNET_TARGET_DIR/dotnet publish -v:q
