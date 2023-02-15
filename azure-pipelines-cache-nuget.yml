@@ -40,7 +40,7 @@ jobs:
       Say --Reset-Stopwatch
 
       Say "Wipe out existing dotnet sdk"
-      Smart-Sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
+      sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
 
       Say "Installing DotNet. Versions are $VERSIONS"
       for ver in $VERSIONS; do
