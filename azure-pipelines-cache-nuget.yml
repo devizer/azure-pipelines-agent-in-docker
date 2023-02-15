@@ -54,7 +54,7 @@ jobs:
         for type in $types; do
           echo "TYPE: '$ver' [$type]"
           rm -rf $type
-          $DOTNET_TARGET_DIR/dotnet new $type -o $type
+          $DOTNET_TARGET_DIR/dotnet new $type -o $type | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
           cd $type
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
