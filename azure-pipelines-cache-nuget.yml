@@ -50,15 +50,18 @@ jobs:
 
         $DOTNET_TARGET_DIR/dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver}.txt"
         rm -rf ~/.nuget/packages
-        types="nunit xunit webapi console webapp web"
+        types="webapi nunit xunit console webapp web"
         for type in $types; do
           echo "TYPE: '$ver' [$type]"
           rm -rf project${type}
           $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
           cd project${type}
+
+          if [[ "$type" == webapi ]]; then
           for a in Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies; do
             $DOTNET_TARGET_DIR/dotnet add package $a
           done 
+          fi
 
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
