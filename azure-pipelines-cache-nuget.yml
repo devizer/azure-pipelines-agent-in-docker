@@ -53,9 +53,9 @@ jobs:
         types="nunit xunit webapi console webapp web"
         for type in $types; do
           echo "TYPE: '$ver' [$type]"
-          rm -rf $type
-          $DOTNET_TARGET_DIR/dotnet new $type -o $type | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
-          cd $type
+          rm -rf project${type}
+          $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
+          cd project${type}
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
           $DOTNET_TARGET_DIR/dotnet build -v:q
           $DOTNET_TARGET_DIR/dotnet publish -v:q
