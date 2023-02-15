@@ -56,9 +56,9 @@ jobs:
           rm -rf $type
           $DOTNET_TARGET_DIR/dotnet new $type -o $type
           cd $type
-          $DOTNET_TARGET_DIR/dotnet restore || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel
-          $DOTNET_TARGET_DIR/dotnet build
-          $DOTNET_TARGET_DIR/dotnet publish
+          $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
+          $DOTNET_TARGET_DIR/dotnet build -v:q
+          $DOTNET_TARGET_DIR/dotnet publish -v:q
           cd ..
         done
         time 7z a -mx=9 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver.7z" ~/.nuget/packages
