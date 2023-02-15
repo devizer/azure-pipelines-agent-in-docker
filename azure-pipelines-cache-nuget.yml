@@ -38,7 +38,7 @@ jobs:
       Say "Installing DotNet"
       for ver in $VERSIONS; do
         export DOTNET_TARGET_DIR="$HOME/DOTNET-$ver"
-        rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
+        sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
         export DOTNET_VERSIONS="$ver"
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; 
         for d in /usr/share /usr/local/share; do
