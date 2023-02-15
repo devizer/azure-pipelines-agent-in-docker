@@ -1,6 +1,7 @@
 variables:
   NUGET_VERSION: 0.1
   VERSIONS: "3.1 5.0 6.0 7.0"
+  MORE_PACKAGES: 'Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies'
 
 trigger:
   branches:
@@ -23,10 +24,13 @@ jobs:
     matrix:
       'On Mac OS':
         IMAGE: 'macos-12'
+        SUFFIX: Darwin
       'On Windows 2022':
         IMAGE: 'windows-2022'
-      'On Ubuntu 20.04':
-        IMAGE: 'ubuntu-20.04'
+        SUFFIX: Windows
+      'On Ubuntu 22.04':
+        IMAGE: 'ubuntu-22.04'
+        SUFFIX: Linux
 
   steps:
   - bash: |
@@ -59,9 +63,10 @@ jobs:
           cd project${type}
 
           if [[ "$type" == webapi ]]; then
-          for a in Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies; do
-            $DOTNET_TARGET_DIR/dotnet add package $a
-          done 
+          for p in $MORE_PACKAGES; do
+            Say "Adding package $p"
+            $DOTNET_TARGET_DIR/dotnet add package $p -v:q
+          done
           fi
 
           $DOTNET_TARGET_DIR/dotnet restore -v:q || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q
@@ -70,7 +75,10 @@ jobs:
           cd ..
         done
         # sudo rm -rf "$DOTNET_TARGET_DIR" || rm -rf "$DOTNET_TARGET_DIR"
-        time 7z a -mx=9 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver.7z" ~/.nuget/packages
+        Say "Pack ~/.nuget/packages"
+        f="$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver-$SUFFIX.7z"
+        Say "Pack $f"
+        time 7z a -mx=9 -ms=on -mqs=on "$f" ~/.nuget/packages || Say --Display-As=Error "Pack Artifact Error"
 
       done
 
