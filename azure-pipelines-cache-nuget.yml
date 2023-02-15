@@ -53,6 +53,7 @@ jobs:
         cd $type
         dotnet restore || dotnet restore --disable-parallel
         dotnet publish
+        cd ..
       done
       7z a -mx=1 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages.7z" ~/.nuget/packages
 
