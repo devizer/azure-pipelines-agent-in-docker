@@ -47,7 +47,7 @@ jobs:
         echo "DOT INFO"
         dotnet --info
 
-        dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES.txt"
+        dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES v${ver}.txt"
         rm -rf ~/.nuget/packages
         types="nunit xunit webapi console webapp web"
         for type in $types; do
