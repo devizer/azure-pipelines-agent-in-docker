@@ -33,9 +33,10 @@ jobs:
       echo "uname -s: [$(uname -s)]"
       dotnet --info
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      curl -ksSL $script | cat
       Say --Reset-Stopwatch
 
-      Say "Installing DotNet"
+      Say "Installing DotNet. Versions are $VERSIONS"
       for ver in $VERSIONS; do
         export DOTNET_TARGET_DIR="$HOME/DOTNET-$ver"
         sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
