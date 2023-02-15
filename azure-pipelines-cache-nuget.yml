@@ -44,6 +44,18 @@ jobs:
       echo "DOT INFO"
       dotnet --info
 
+      dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES.txt"
+      rm -rf ~/.nuget/packages
+      types="nunit xunit webapi console web"
+      for type in $types; do
+        echo "TYPE: [$type]"
+        dotnet new $type -o $type
+        cd $type
+        dotnet restore || dotnet restore --disable-parallel
+        dotnet publish
+      done
+      7z a -mx=1 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages.7z" ~/.nuget/packages
+
     condition: succeededOrFailed()
     displayName: 'Build'
 
