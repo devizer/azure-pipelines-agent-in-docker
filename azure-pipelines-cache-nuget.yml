@@ -1,5 +1,6 @@
 variables:
   NUGET_VERSION: 0.1
+  VERSIONS: "3.1 5.0 6.0 7.0"
 
 trigger:
   branches:
@@ -35,27 +36,32 @@ jobs:
       Say --Reset-Stopwatch
 
       Say "Installing DotNet"
-      export DOTNET_VERSIONS="3.1 5.0 6.0 7.0"
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; 
-      for d in /usr/share /usr/local/share; do
-        test -s ${d}/dotnet/dotnet && sudo ln -f -s ${d}/dotnet/dotnet /usr/local/bin/dotnet
-      done;
+      for ver in $VERSIONS; do
+        rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
+        export DOTNET_VERSIONS="$ver"
+        script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; 
+        for d in /usr/share /usr/local/share; do
+          test -s ${d}/dotnet/dotnet && sudo ln -f -s ${d}/dotnet/dotnet /usr/local/bin/dotnet
+        done;
 
-      echo "DOT INFO"
-      dotnet --info
+        echo "DOT INFO"
+        dotnet --info
 
-      dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES.txt"
-      rm -rf ~/.nuget/packages
-      types="nunit xunit webapi console web"
-      for type in $types; do
-        echo "TYPE: [$type]"
-        dotnet new $type -o $type
-        cd $type
-        dotnet restore || dotnet restore --disable-parallel
-        dotnet publish
-        cd ..
+        dotnet new list | tee "$SYSTEM_ARTIFACTSDIRECTORY/PROJECT TYPES.txt"
+        rm -rf ~/.nuget/packages
+        types="nunit xunit webapi console webapp web"
+        for type in $types; do
+          echo "TYPE: '$ver' [$type]"
+          dotnet new $type -o $type
+          cd $type
+          dotnet restore || dotnet restore --disable-parallel
+          dotnet build
+          dotnet publish
+          cd ..
+        done
+        time 7z a -mx=9 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver.7z" ~/.nuget/packages
+
       done
-      7z a -mx=1 -ms=on -mqs=on "$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages.7z" ~/.nuget/packages
 
     condition: succeededOrFailed()
     displayName: 'Build'
