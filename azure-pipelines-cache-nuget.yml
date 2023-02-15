@@ -72,8 +72,8 @@ jobs:
           fi
 
           Say "Building [$type]"
-          $DOTNET_TARGET_DIR/dotnet restore -v:q --nologo || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q --nologo
-          $DOTNET_TARGET_DIR/dotnet build -v:q --nologo
+          # $DOTNET_TARGET_DIR/dotnet restore -v:q --nologo || $DOTNET_TARGET_DIR/dotnet restore --disable-parallel -v:q --nologo
+          # $DOTNET_TARGET_DIR/dotnet build -v:q --nologo
           $DOTNET_TARGET_DIR/dotnet publish -v:q --nologo
           cd ..
         done
