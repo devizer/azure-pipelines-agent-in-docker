@@ -97,3 +97,48 @@ jobs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
+
+
+- job: 'Combine'
+  condition: succeededOrFailed()
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 20
+  dependsOn: BuildCache
+
+  steps: 
+  - script: |
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch; Say "CPU: $(Get-CpuName)"
+
+      RAW_ARTIFACTS_DIR="$(Agent.TempDirectory)/artifacts"
+      echo "##vso[task.setvariable variable=RAW_ARTIFACTS_DIR]$RAW_ARTIFACTS_DIR"
+      Say "RAW_ARTIFACTS_DIR: $RAW_ARTIFACTS_DIR"
+    displayName: 'Config Deploy'
+
+  - task: DownloadPipelineArtifact@2
+    condition: succeededOrFailed()
+    displayName: 'Download of all platforms'
+    inputs:
+      path: $($SYSTEM_ARTIFACTSDIRECTORY)
+      patterns: 
+        "**"
+    
+  - script: |
+      set -eu; set -o pipefail
+      Say "RAW_ARTIFACTS_DIR: [${RAW_ARTIFACTS_DIR}]"
+
+      echo Nothing to do
+
+      # Clean
+      rm -rf ${RAW_ARTIFACTS_DIR}/* || true
+
+    condition: succeededOrFailed()
+    displayName: 'Deploy GitHub Release $(CMAKE_VER)'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      artifactName: 'Nuget Cache (combined)'
