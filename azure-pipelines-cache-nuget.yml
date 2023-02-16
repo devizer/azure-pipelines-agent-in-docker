@@ -1,5 +1,5 @@
 variables:
-  COMPRESSION_LEVEL: 9
+  COMPRESSION_LEVEL: 1
   NUGET_VERSION: 0.1
   VERSIONS: "3.1 5.0 6.0 7.0"
   MORE_PACKAGES: 'Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies'
@@ -129,7 +129,13 @@ jobs:
       set -eu; set -o pipefail
       Say "RAW_ARTIFACTS_DIR: [${RAW_ARTIFACTS_DIR}]"
 
-      echo Nothing to do
+      mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/public
+      find $SYSTEM_ARTIFACTSDIRECTORY -name *.7z > /tmp/7z.files
+      for f in $(cat /tmp/7z.files); do
+        sf="$(basename "$f")"
+        Say "Move '$f' to '$SYSTEM_ARTIFACTSDIRECTORY/public/$sf'"
+        mv -f "$f" "$SYSTEM_ARTIFACTSDIRECTORY/public/$sf"
+      done
 
       # Clean
       rm -rf ${RAW_ARTIFACTS_DIR}/* || true
