@@ -1,4 +1,5 @@
 variables:
+  COMPRESSION_LEVEL: 9
   NUGET_VERSION: 0.1
   VERSIONS: "3.1 5.0 6.0 7.0"
   MORE_PACKAGES: 'Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies'
@@ -83,7 +84,7 @@ jobs:
         # Smart-Sudo rm -rf "$DOTNET_TARGET_DIR" || rm -rf "$DOTNET_TARGET_DIR"
         f="$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver-$SUFFIX.7z"
         Say "Pack ~/.nuget/packages into $f"
-        time 7z a -mx=9 -ms=on -mqs=on "$f" ~/.nuget/packages || Say --Display-As=Error "Pack Artifact Error $ver $SUFFIX"
+        time 7z a -mx=$COMPRESSION_LEVEL -ms=on -mqs=on "$f" ~/.nuget/packages || Say --Display-As=Error "Pack Artifact Error $ver $SUFFIX"
 
       done
 
