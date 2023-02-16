@@ -38,6 +38,7 @@ jobs:
       dotnet --info
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
 
       Say "Wipe out existing dotnet sdk"
       sudo rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet || rm -rf 'C:\Program Files\dotnet' /usr/share/dotnet /usr/local/share/dotnet
