@@ -1,5 +1,5 @@
 variables:
-  COMPRESSION_LEVEL: 1
+  COMPRESSION_LEVEL: 9
   NUGET_VERSION: 0.1
   VERSIONS: "3.1 5.0 6.0 7.0"
   MORE_PACKAGES: 'Hangfire.Core Hangfire.AspNetCore Hangfire.InMemory Hangfire.Console Microsoft.NETFramework.ReferenceAssemblies'
