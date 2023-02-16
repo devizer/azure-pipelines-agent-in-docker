@@ -121,7 +121,7 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'Download of all platforms'
     inputs:
-      path: $($SYSTEM_ARTIFACTSDIRECTORY)
+      path: $(SYSTEM.ARTIFACTSDIRECTORY)
       patterns: 
         "**"
     
