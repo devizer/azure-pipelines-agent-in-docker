@@ -64,7 +64,7 @@ jobs:
           rm -rf project${type}
           
           set -o pipefail
-          $DOTNET_TARGET_DIR/dotnet new --no-restore $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log" || $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
+          $DOTNET_TARGET_DIR/dotnet new $type --no-restore -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log" || $DOTNET_TARGET_DIR/dotnet new $type -o project${type} | tee "$SYSTEM_ARTIFACTSDIRECTORY/$ver-$type-new.log"
           cd project${type}
 
           if [[ "$type" == webapi ]]; then
