@@ -60,7 +60,7 @@ jobs:
         rm -rf ~/.nuget/packages
         types="webapi nunit xunit console webapp web mvc react"
         for type in $types; do
-          Say "Caching dependecies for [$type]"
+          Say "Caching dependecies for [$type] v$ver"
           rm -rf project${type}
           
           set -o pipefail
