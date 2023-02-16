@@ -84,7 +84,7 @@ jobs:
         Say "Pack ~/.nuget/packages"
         f="$SYSTEM_ARTIFACTSDIRECTORY/nuget-packages-$ver-$SUFFIX.7z"
         Say "Pack $f"
-        time 7z a -mx=9 -ms=on -mqs=on "$f" ~/.nuget/packages || Say --Display-As=Error "Pack Artifact Error"
+        time 7z a -mx=9 -ms=on -mqs=on "$f" ~/.nuget/packages || Say --Display-As=Error "Pack Artifact Error $ver $SUFFIX"
 
       done
 
