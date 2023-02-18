@@ -1,0 +1,36 @@
+variables:
+  CMAKE_VER: 3.23.2 #3.22.3
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'azure-pipelines-fetch-mono-fonts.yml'
+    exclude: 
+    - '**'
+
+jobs:
+
+- job: Fonts
+  pool:
+    vmImage: 'ubuntu-22.04'
+  timeoutInMinutes: 100
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
+      docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:22.10
+      docker exec -e fonts bash /scrips/build-fonts-in-container.sh
+    displayName: 'Fetch'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
