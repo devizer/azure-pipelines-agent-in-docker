@@ -25,6 +25,7 @@ jobs:
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
+      Say "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
       docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:22.10
       docker exec fonts bash -c "mkdir -p $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec -e SYSTEM_ARTIFACTSDIRECTORY:"$SYSTEM_ARTIFACTSDIRECTORY" fonts bash -e /scrips/build-fonts-in-container.sh
