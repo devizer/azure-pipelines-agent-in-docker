@@ -1,3 +1,4 @@
+export DEBIAN_FRONTEND=noninteractive
 echo "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
 time apt-get update
 time apt-get install less fontconfig mc htop ncdu p7zip -y
