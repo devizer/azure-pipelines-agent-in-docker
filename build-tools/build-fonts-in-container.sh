@@ -1,7 +1,8 @@
+set -eu; set -o pipefail
 export DEBIAN_FRONTEND=noninteractive
 echo "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
 time apt-get update
-time apt-get install sudo less fontconfig mc htop ncdu p7zip software-properties-common sudo aria2 curl -y | grep "Setting"
+time apt-get install sudo less fontconfig mc htop ncdu p7zip-full software-properties-common sudo aria2 curl -y | grep "Setting"
 
 add-apt-repository ppa:apt-fast/stable
 apt-get update
