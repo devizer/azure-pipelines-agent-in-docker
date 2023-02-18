@@ -1,0 +1,48 @@
+variables:
+  COMPRESSION_LEVEL: 1
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'azure-pipelines-test-raid.yml'
+    exclude:
+    - '**'
+
+jobs:
+
+- job: TestRaid
+  pool:
+    vmImage: '$(IMAGE)'
+  timeoutInMinutes: 66
+  strategy:
+    maxParallel: 6
+    matrix:
+      'On Ubuntu 18.04':
+        IMAGE: 'ubuntu-18.04'
+      'On Ubuntu 20.04':
+        IMAGE: 'ubuntu-20.04'
+      'On Ubuntu 22.04':
+        IMAGE: 'ubuntu-22.04'
+
+  steps:
+  - bash: |
+      echo "uname -s: [$(uname -s)]"
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
+
+      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+
+    condition: succeededOrFailed()
+    displayName: 'Install Raid-0'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
+
