@@ -52,6 +52,7 @@ jobs:
       Say "Size of /var/lib/docker"
       sudo du /var/lib/docker -d 0 -h
 
+      docker pull ubuntu:22.04
       Say "Size of /raid-0/docker"
       sudo du /raid-0/docker -d 0 -h
 
