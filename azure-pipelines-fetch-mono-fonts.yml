@@ -30,6 +30,8 @@ jobs:
       docker exec fonts bash -c "mkdir -p $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" fonts bash -e /scrips/build-fonts-in-container.sh
       docker cp fonts:/$SYSTEM_ARTIFACTSDIRECTORY/. $SYSTEM_ARTIFACTSDIRECTORY
+
+
     displayName: 'Fetch'
 
   - task: PublishBuildArtifacts@1
