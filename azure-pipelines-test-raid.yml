@@ -34,6 +34,8 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
 
+      Say "jq: [$(command -v jq)]"
+      Say "yq: [$(command -v yq)]"
       Say "cat /etc/docker/daemon.json"
       cat /etc/docker/daemon.json
 
