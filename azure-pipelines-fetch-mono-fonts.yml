@@ -26,7 +26,7 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:22.10
-      docker exec fonts bash -c mkdir $SYSTEM_ARTIFACTSDIRECTORY
+      docker exec fonts bash -c "mkdir $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec fonts -e SYSTEM_ARTIFACTSDIRECTORY:"$SYSTEM_ARTIFACTSDIRECTORY" bash -e /scrips/build-fonts-in-container.sh
       docker cp fonts:/$SYSTEM_ARTIFACTSDIRECTORY/. $SYSTEM_ARTIFACTSDIRECTORY
     displayName: 'Fetch'
