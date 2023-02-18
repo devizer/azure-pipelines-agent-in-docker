@@ -36,6 +36,9 @@ jobs:
 
       # LOOP | BLOCK
       export SECOND_DISK_MODE=BLOCK
+
+      # on|off
+      export LOOP_DIRECT_IO=off
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
     condition: succeededOrFailed()
