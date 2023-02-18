@@ -8,6 +8,7 @@ trigger:
   paths:
     include:
     - 'azure-pipelines-fetch-mono-fonts.yml'
+    - 'build-tools/build-fonts-in-container.sh'
     exclude: 
     - '**'
 
