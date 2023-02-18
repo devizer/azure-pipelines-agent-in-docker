@@ -34,6 +34,9 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
 
+      Say "cat /etc/docker/daemon.json"
+      cat /etc/docker/daemon.json
+
       # LOOP | BLOCK
       export SECOND_DISK_MODE=LOOP
 
