@@ -7,7 +7,7 @@ add-apt-repository ppa:apt-fast/stable
 apt-get update
 apt-get -y install apt-fast | grep "Setting"
 
-Say "APT FAST"
+echo "APT FAST"
 time apt-fast install -y $(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex")
 
 fc-list :spacing=100 | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
