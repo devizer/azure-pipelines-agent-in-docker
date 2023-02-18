@@ -10,4 +10,12 @@ apt-get -y install apt-fast | grep "Setting"
 echo "APT FAST"
 time apt-fast install -y $(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex")
 
-fc-list :spacing=100 | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
+fc-list :spacing=100 | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
+
+mkdir /tmp/fonts
+fc-list :spacing=100 | sort | awk -F':' '{print $1}' | while IFS='' read -r file; do
+  name="$(basename "$file")"
+  cp -f "$file" "/tmp/fonts/$name"
+done
+
+7z a "$SYSTEM_ARTIFACTSDIRECTORY"/mono-fonts.7z /tmp/fonts $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
