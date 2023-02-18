@@ -35,7 +35,7 @@ jobs:
       Say "CPU: $(Get-CpuName)"
 
       # LOOP | BLOCK
-      export SECOND_DISK_MODE=BLOCK
+      export SECOND_DISK_MODE=LOOP
 
       # on|off
       export LOOP_DIRECT_IO=off
