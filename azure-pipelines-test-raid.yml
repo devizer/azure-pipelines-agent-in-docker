@@ -44,7 +44,7 @@ jobs:
       # LOOP | BLOCK
       export SECOND_DISK_MODE=LOOP
 
-      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/transient-builds"
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;"
 
       # on|off
       export LOOP_DIRECT_IO=off
