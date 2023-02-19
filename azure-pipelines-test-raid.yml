@@ -61,6 +61,8 @@ jobs:
       Say "free -m"
       free -m
 
+      sudo df -h -T
+
 
     condition: succeededOrFailed()
     displayName: 'Install Raid-0'
