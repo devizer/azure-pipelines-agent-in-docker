@@ -19,6 +19,7 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 100
   strategy:
+    maxParallel: 1
     matrix:
       'On EXT4 Out Of the Box':
          EXT4_OUT_OF_THE_BOX: 'True'
