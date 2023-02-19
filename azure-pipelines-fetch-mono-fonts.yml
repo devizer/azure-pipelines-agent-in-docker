@@ -55,3 +55,7 @@ jobs:
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
+
+  - bash: Show-System-Stat
+    condition: eq(variables['Agent.OS'], 'Linux')
+    displayName: 'Linux System Statistic'
