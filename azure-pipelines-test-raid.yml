@@ -62,6 +62,7 @@ jobs:
       free -m
 
       sudo df -h -T
+      sudo mount | grep "/dev/md0" || true
 
 
     condition: succeededOrFailed()
