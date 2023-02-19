@@ -18,7 +18,7 @@ jobs:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 13
   strategy:
-    maxParallel: 9
+    maxParallel: 12
     matrix:
       'BTRFS-C On 18.04':
         IMAGE: 'ubuntu-18.04'
