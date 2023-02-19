@@ -18,8 +18,25 @@ jobs:
   pool:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 100
+  strategy:
+    matrix:
+      # default is the latest GCC 11.2 
+      'On EXT4':
+         REGULAR_EXT4: 'True'
+      'On BTRFS Compressed Cached':
+         ON_RAID0: 'True'
+        
 
   steps:
+
+  - script: |
+      set -eu; set -o pipefail
+      export LOOP_DIRECT_IO=off
+      export MOVE_DOCKER_TO_RAID=True
+      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+    condition: eq(variables['ON_RAID0'], 'True')
+    displayName: 'Fetch'
+
   - script: |
       set -eu; set -o pipefail
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
@@ -30,8 +47,6 @@ jobs:
       docker exec fonts bash -c "mkdir -p $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" fonts bash -e /scrips/build-fonts-in-container.sh
       docker cp fonts:/$SYSTEM_ARTIFACTSDIRECTORY/. $SYSTEM_ARTIFACTSDIRECTORY
-
-
     displayName: 'Fetch'
 
   - task: PublishBuildArtifacts@1
