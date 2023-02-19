@@ -21,14 +21,14 @@ jobs:
   strategy:
     maxParallel: 1
     matrix:
-      'On EXT4 Out Of the Box':
-         EXT4_OUT_OF_THE_BOX: 'True'
-      'On EXT2 Cached':
-         FS: 'EXT2'
       'On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
+      'On EXT2 Cached':
+         FS: 'EXT2'
       'On BTRFS Plain Cached':
          FS: 'BTRFS'
+      'On EXT4 Out Of the Box':
+         EXT4_OUT_OF_THE_BOX: 'True'
         
 
   steps:
