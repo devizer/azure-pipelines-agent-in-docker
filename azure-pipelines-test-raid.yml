@@ -55,8 +55,8 @@ jobs:
       sudo du /var/lib/docker -d 0 -h
 
       docker pull ubuntu:22.04
-      Say "Size of /raid-0/docker"
-      sudo du /raid-0/docker -d 0 -h
+      Say "Size of /raid-0/docker-file-system"
+      sudo du /raid-0/docker-file-system -d 0 -h
 
       Say "free -m"
       free -m
