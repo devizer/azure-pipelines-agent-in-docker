@@ -13,7 +13,7 @@ trigger:
 
 jobs:
 
-- job: TestRaid
+- job: Raid
   pool:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 13
