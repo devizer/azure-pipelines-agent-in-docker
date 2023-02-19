@@ -20,15 +20,25 @@ jobs:
   strategy:
     maxParallel: 9
     matrix:
-      'BTRFS On 18.04':
+      'BTRFS-C On 18.04':
         IMAGE: 'ubuntu-18.04'
         FS: BTRFS-Compressed
-      'BTRFS On 20.04':
+      'BTRFS-C On 20.04':
         IMAGE: 'ubuntu-20.04'
         FS: BTRFS-Compressed
-      'BTRFS On 22.04':
+      'BTRFS-C On 22.04':
         IMAGE: 'ubuntu-22.04'
         FS: BTRFS-Compressed
+
+      'BTRFS On 18.04':
+        IMAGE: 'ubuntu-18.04'
+        FS: BTRFS
+      'BTRFS On 20.04':
+        IMAGE: 'ubuntu-20.04'
+        FS: BTRFS
+      'BTRFS On 22.04':
+        IMAGE: 'ubuntu-22.04'
+        FS: BTRFS
 
       'EXT2 On 18.04':
         IMAGE: 'ubuntu-18.04'
