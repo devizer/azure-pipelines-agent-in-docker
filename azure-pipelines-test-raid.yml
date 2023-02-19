@@ -34,6 +34,7 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       swapon
+      sudo mount | sort > $SYSTEM_ARTIFACTSDIRECTORY/mount.txt
 
       Say "jq: [$(command -v jq)]"
       Say "yq: [$(command -v yq)]"
