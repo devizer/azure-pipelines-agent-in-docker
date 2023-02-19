@@ -20,19 +20,20 @@ jobs:
   timeoutInMinutes: 100
   strategy:
     matrix:
-      # default is the latest GCC 11.2 
-      'On EXT4':
+      'On EXT4 Out Of the Box':
          REGULAR_EXT4: 'True'
+      'On EXT2 Cached':
+         FS: 'EXT2'
       'On BTRFS Compressed Cached':
-         ON_RAID0: 'True'
+         FS: 'BTRFS-Compressed'
         
 
   steps:
-
   - script: |
       set -eu; set -o pipefail
       export LOOP_DIRECT_IO=off
       export MOVE_DOCKER_TO_RAID=True
+      export FS
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
     condition: eq(variables['ON_RAID0'], 'True')
     displayName: 'Reset Docker to BTRFS Compressed and Cached'
