@@ -20,12 +20,35 @@ jobs:
   strategy:
     maxParallel: 6
     matrix:
-      'On Ubuntu 18.04':
+      'BTRFS On Ubuntu 18.04':
         IMAGE: 'ubuntu-18.04'
-      'On Ubuntu 20.04':
+        FS: BTRFS-Compressed
+      'BTRFS On Ubuntu 20.04':
         IMAGE: 'ubuntu-20.04'
-      'On Ubuntu 22.04':
+        FS: BTRFS-Compressed
+      'BTRFS On Ubuntu 22.04':
         IMAGE: 'ubuntu-22.04'
+        FS: BTRFS-Compressed
+
+      'EXT2 On Ubuntu 18.04':
+        IMAGE: 'ubuntu-18.04'
+        FS: EXT2
+      'EXT2 On Ubuntu 20.04':
+        IMAGE: 'ubuntu-20.04'
+        FS: EXT2
+      'EXT2 On Ubuntu 22.04':
+        IMAGE: 'ubuntu-22.04'
+        FS: EXT2
+
+      'EXT4 On Ubuntu 18.04':
+        IMAGE: 'ubuntu-18.04'
+        FS: EXT4
+      'EXT4 On Ubuntu 20.04':
+        IMAGE: 'ubuntu-20.04'
+        FS: EXT4
+      'EXT4 On Ubuntu 22.04':
+        IMAGE: 'ubuntu-22.04'
+        FS: EXT4
 
   steps:
   - bash: |
@@ -49,6 +72,7 @@ jobs:
       # on|off
       export LOOP_DIRECT_IO=off
       export MOVE_DOCKER_TO_RAID=True
+      export FS
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
       Say "Size of /var/lib/docker"
