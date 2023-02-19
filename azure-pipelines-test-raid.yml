@@ -61,8 +61,9 @@ jobs:
       Say "free -m"
       free -m
 
-      sudo df -h -T
-      sudo mount | grep "/dev/md0" || true
+      Say "About raid /dev/md0"
+      sudo df -h -T | grep "/dev/md0" | sort || true
+      sudo mount | grep "/dev/md0" | sort || true
 
 
     condition: succeededOrFailed()
