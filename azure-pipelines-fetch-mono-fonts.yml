@@ -21,11 +21,13 @@ jobs:
   strategy:
     matrix:
       'On EXT4 Out Of the Box':
-         REGULAR_EXT4: 'True'
+         EXT4_OUT_OF_THE_BOX: 'True'
       'On EXT2 Cached':
          FS: 'EXT2'
       'On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
+      'On BTRFS Plain Cached':
+         FS: 'BTRFS'
         
 
   steps:
