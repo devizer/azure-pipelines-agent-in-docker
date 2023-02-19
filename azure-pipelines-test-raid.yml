@@ -16,7 +16,7 @@ jobs:
 - job: TestRaid
   pool:
     vmImage: '$(IMAGE)'
-  timeoutInMinutes: 66
+  timeoutInMinutes: 13
   strategy:
     maxParallel: 9
     matrix:
