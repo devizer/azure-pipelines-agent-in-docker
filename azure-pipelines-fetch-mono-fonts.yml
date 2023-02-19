@@ -39,6 +39,8 @@ jobs:
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
       docker image ls
+      Say "lzop: [$(lzop --version | tr '\n' ' ')]"
+      Say "lz4: [$(lz4 --version | tr '\n' ' ')]"
     condition: ne(variables['FS'], '')
     displayName: 'Reset Docker to BTRFS Compressed and Cached'
 
