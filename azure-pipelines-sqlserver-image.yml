@@ -24,7 +24,9 @@ jobs:
 
   steps:
   - bash: |
-       echo Try
+       echo Pulling... 
+       time docker pull mcr.microsoft.com/windows/servercore:1607
+       echo Try....
        time docker run -t --rm --isolation hyperv mcr.microsoft.com/windows/servercore:1607 cmd /c echo Hello from container
     displayName: 'Hyper-V? on Docker'
   
