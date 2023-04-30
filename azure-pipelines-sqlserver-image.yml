@@ -16,7 +16,6 @@ jobs:
     matrix:
         "SQL Server 2008 R2":
           SQL: 'SqlServer 2008R2 Express: MSSQLSERVER'
-          MSI_DUMP: true
         "SQL Server 2008":
           SQL: 'SqlServer 2008 Express: MSSQLSERVER'
         "SQL Server 2005":
@@ -63,6 +62,13 @@ jobs:
        powershell -f scripts/Publish-SQL-Server-Setup-Logs.ps1 || true
     condition: succeededOrFailed()
     displayName: 'Universal SQL Setup Logs'
+
+  - bash: |
+       cd scripts
+       pwsh -f Build-Windows-Docker-Image.ps1 || true
+    # condition: succeededOrFailed()
+    displayName: 'Build image'
+
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
