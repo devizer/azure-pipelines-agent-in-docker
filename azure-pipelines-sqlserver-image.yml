@@ -24,12 +24,12 @@ jobs:
 
   steps:
   - bash: |
-       echo Installing Hyper-V...
-       time powershell -c Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+       # echo Installing Hyper-V...
+       # time powershell -c Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
        echo Pulling server core... 
-       time docker pull mcr.microsoft.com/windows/servercore:1607
+       time docker pull mcr.microsoft.com/windows/servercore:ltsc2019
        echo Try servercore with Hyper-V....
-       time docker run -t --rm --isolation hyperv mcr.microsoft.com/windows/servercore:1607 cmd /c echo Hello from container
+       time docker run -t --rm --isolation process mcr.microsoft.com/windows/servercore:ltsc2019 cmd /c echo Hello from container
     displayName: 'Hyper-V? on Docker'
   
   - powershell: |
