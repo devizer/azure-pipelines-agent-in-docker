@@ -8,7 +8,7 @@ trigger:
 
 jobs:
 - job: Build
-  displayName: 'Build SQL Server Image'
+  displayName: 'Build'
   pool:
     vmImage: 'windows-2019'
   timeoutInMinutes: 360
