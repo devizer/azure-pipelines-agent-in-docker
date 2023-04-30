@@ -29,7 +29,7 @@ jobs:
        echo Pulling server core... 
        time docker pull mcr.microsoft.com/windows/servercore:ltsc2019
        echo Try servercore....
-       time docker run --rm --isolation process mcr.microsoft.com/windows/servercore:ltsc2019 cmd /c echo Hello from container
+       time docker run --rm --isolation process mcr.microsoft.com/windows/servercore:ltsc2019 cmd /c dir /b /s
     displayName: 'Hyper-V? on Docker'
   
   - powershell: |
