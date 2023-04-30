@@ -24,7 +24,8 @@ jobs:
 
   steps:
   - bash: |
-       time docker run -t --rm --isolation hyperv mcr.microsoft.com/windows/servercore:1607 cmd /c dir
+       echo Try
+       time docker run -t --rm --isolation hyperv mcr.microsoft.com/windows/servercore:1607 cmd /c echo Hello from container
     displayName: 'Hyper-V? on Docker'
   
   - powershell: |
