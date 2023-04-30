@@ -1,0 +1,67 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'build-tools/Prepare-proot.sh'
+
+jobs:
+- job: Build
+  displayName: 'Build SQL Server Image'
+  pool:
+    vmImage: 'windows-2019'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+        "SQL Server 2008 R2":
+          SQL: 'SqlServer 2008R2 Express: MSSQLSERVER'
+          MSI_DUMP: true
+        "SQL Server 2008":
+          SQL: 'SqlServer 2008 Express: MSSQLSERVER'
+        "SQL Server 2005":
+          SQL: 'SqlServer 2005 Express: MSSQLSERVER'
+
+  steps:
+  - bash: |
+       time docker run -t --rm --isolation hyperv mcr.microsoft.com/windows/servercore:1607 cmd /c dir
+    displayName: 'Hyper-V? on Docker'
+  
+  - powershell: |
+       $Work="$($Env:LocalAppData)"; if ($Work -eq "") { $Work="$($Env:UserProfile)"; }; $Work="$Work\Temp\Sql-Installers"
+       if (-not (Test-Path $Work)) { New-Item -ItemType Directory -Path $Work -EA SilentlyContinue | out-null }
+       Write-Host "Downloading Bootstrap.ps1 to: $Work" -ForegroundColor Cyan
+       (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/Sql-Setup-Bootstrap.ps1', "$Work\Sql-Setup-Bootstrap.ps1")
+       pushd $Work; . .\Sql-Setup-Bootstrap.ps1; popd
+
+       Say "Target Sql Server Version <$(SQL)>"
+       Show-SqlServers
+
+       # $ErrorActionPreference = 'SilentlyContinue'
+       # $Env:SQL_SETUP_LOG_FOLDER = "$(System.DefaultWorkingDirectory)/Setup.Logs"
+       $Env:SQL_SETUP_LOG_FOLDER = "$($Env:SYSTEM_ARTIFACTSDIRECTORY)\SQL-Setup.Logs"
+       Say "Creating log directory: '$($Env:SQL_SETUP_LOG_FOLDER)'"
+       New-Item "$($Env:SQL_SETUP_LOG_FOLDER)" -type directory -force -EA SilentlyContinue 
+       New-Item -ItemType Directory -Force -Path "$($Env:SQL_SETUP_LOG_FOLDER)" -ErrorAction Continue 
+
+       $todo = Parse-SqlServers "$(SQL)"
+       $todo | % { Install-SqlServer $_ }
+
+       Show-SqlServers
+       Say "ALL THE SQL SERVICES"
+       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.DisplayName.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+
+    displayName: 'Prepare SQL Server'
+
+  - bash: |
+       export SQL_SETUP_LOGS_FOLDER="$SYSTEM_ARTIFACTSDIRECTORY"
+       powershell -f scripts/Publish-SQL-Server-Setup-Logs.ps1 || true
+    condition: succeededOrFailed()
+    displayName: 'Universal SQL Setup Logs'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
