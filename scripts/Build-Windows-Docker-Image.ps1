@@ -34,7 +34,7 @@ echo "cd $sqlpath"            >> BootstrapSqlServer.cmd
 echo "del $errlog"            >> BootstrapSqlServer.cmd
 # NO SPACES: https://learn.microsoft.com/en-us/sql/tools/sqlservr-application?view=sql-server-ver16
 echo "$sqlexe -c -n -d$mdf -l$ldf -e$errlog" >> BootstrapSqlServer.cmd
-echo "type $errlog"
+echo "type $errlog" >> BootstrapSqlServer.cmd
 # echo "dir /b /s"              >> BootstrapSqlServer.cmd
 
 echo "BootstrapSqlServer.cmd CONTENT IS"
