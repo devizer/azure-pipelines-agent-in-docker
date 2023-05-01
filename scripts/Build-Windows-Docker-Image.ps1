@@ -13,8 +13,8 @@ pushd SqlDockerContext
 Copy-Item -Path "C:\SQL\*" -Destination . -Recurse
 
 $sqlfull=(Get-ChildItem -Path C:\SQL -Filter sqlservr.exe -Recurse -ErrorAction SilentlyContinue -Force)[0].FullName
-$mdf=(Get-ChildItem -Path C:\SQL -Filter master.mdf -Recurse -ErrorAction SilentlyContinue -Force)[0].FullName
-$ldf=(Get-ChildItem -Path C:\SQL -Filter mastlog.ldf -Recurse -ErrorAction SilentlyContinue -Force)[0].FullName
+$mdf=(Get-ChildItem -Path C:\SQL -Filter master.mdf -Recurse -ErrorAction SilentlyContinue -Force | Where { -not ($_.FullName -like "*Template*") } )[0].FullName
+$ldf=(Get-ChildItem -Path C:\SQL -Filter mastlog.ldf -Recurse -ErrorAction SilentlyContinue -Force | Where { -not ($_.FullName -like "*Template*") } )[0].FullName
 $sqlpath=[System.IO.Path]::GetDirectoryName($sqlfull)
 $sqlexe=[System.IO.Path]::GetFileName($sqlfull)
 echo "FULL: [$sqlfull]"
