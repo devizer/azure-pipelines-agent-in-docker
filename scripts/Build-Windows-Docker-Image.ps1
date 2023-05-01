@@ -1,3 +1,4 @@
+echo "PATH: [$($ENV:PATH)]"
 & net stop mssqlserver
 
 $tag="ltsc2019"
