@@ -32,7 +32,8 @@ echo "regedit /i /s C:\SQL\SqlServer-32.reg" >> BootstrapSqlServer.cmd
 echo "regedit /i /s C:\SQL\SqlServer-64.reg" >> BootstrapSqlServer.cmd
 echo "cd $sqlpath"            >> BootstrapSqlServer.cmd
 echo "del $errlog"            >> BootstrapSqlServer.cmd
-echo "$sqlexe -c -n -d $mdf -l $ldf -e$errlog" >> BootstrapSqlServer.cmd
+# NO SPACES: https://learn.microsoft.com/en-us/sql/tools/sqlservr-application?view=sql-server-ver16
+echo "$sqlexe -c -n -d$mdf -l$ldf -e$errlog" >> BootstrapSqlServer.cmd
 echo "type $errlog"
 # echo "dir /b /s"              >> BootstrapSqlServer.cmd
 
