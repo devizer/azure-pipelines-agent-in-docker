@@ -1,3 +1,5 @@
+& net stop mssqlserver
+
 $tag="ltsc2019"
 $image="devizervlad/sqlserver-archive"
 pushd SqlDockerContext 
