@@ -24,7 +24,9 @@ echo "master mdf: [$mdf]"
 echo "master ldf: [$ldf]"
 
 
-echo "Starting SQL Server..." >> BootstrapSqlServer.cmd
+echo "Echo Starting SQL Server..." >> BootstrapSqlServer.cmd
+echo "regedit /i /s C:\SQL\SqlServer-32.reg"
+echo "regedit /i /s C:\SQL\SqlServer-64.reg"
 echo "cd $sqlpath"            >> BootstrapSqlServer.cmd
 echo "$sqlexe -c -n -d $mdf -l $ldf -e C:\SQL\ERRORLOG" >> BootstrapSqlServer.cmd
 # echo "dir /b /s"              >> BootstrapSqlServer.cmd
