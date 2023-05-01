@@ -21,7 +21,7 @@ echo "master ldf: [$ldf]"
 
 echo "Starting SQL Server..." >> BootstrapSqlServer.cmd
 echo "cd $sqlpath"            >> BootstrapSqlServer.cmd
-echo "$sqlexe -d $mdf -l $ldf -e C:\SQL\ERRORLOG" >> BootstrapSqlServer.cmd
+echo "$sqlexe -c -d $mdf -l $ldf -e C:\SQL\ERRORLOG" >> BootstrapSqlServer.cmd
 echo "dir /b /s"              >> BootstrapSqlServer.cmd
 
 echo "BootstrapSqlServer.cmd CONTENT IS"
