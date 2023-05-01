@@ -5,7 +5,7 @@ $imageTag=$tag
 $image="devizervlad/sqlserver-archive"
 pushd SqlDockerContext 
 
-Copy-Item -Path C:\SQL\ -Destination . -Recurse
+Copy-Item -Path C:\SQL -Destination . -Recurse
 
 echo "Starting SQL Server..." >> BootstrapSqlServer.cmd
 echo "dir /b /s"              >> BootstrapSqlServer.cmd
