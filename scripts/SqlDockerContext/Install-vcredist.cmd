@@ -3,8 +3,9 @@ echo Installing choco ...
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 @echo off
 for %%v in (vcredist2008 vcredist2005 vcredist2010) DO (
+  echo.
   echo Installing %%v
-  choco install -my %%v
+  choco install -my --no-progress %%v
 )
 
 
