@@ -33,6 +33,7 @@ echo "regedit /i /s C:\SQL\SqlServer-64.reg" >> BootstrapSqlServer.cmd
 echo "cd $sqlpath"            >> BootstrapSqlServer.cmd
 echo "del $errlog"            >> BootstrapSqlServer.cmd
 echo "$sqlexe -c -n -d $mdf -l $ldf -e$errlog" >> BootstrapSqlServer.cmd
+echo "type $errlog"
 # echo "dir /b /s"              >> BootstrapSqlServer.cmd
 
 echo "BootstrapSqlServer.cmd CONTENT IS"
