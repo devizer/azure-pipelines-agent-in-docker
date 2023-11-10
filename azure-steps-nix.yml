@@ -6,6 +6,19 @@ steps:
     displayName: 'Disable ipv6'
     
   - bash: |
+      set -eu; set -o pipefail;
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
+      export SECOND_DISK_MODE=LOOP
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
+      export LOOP_DIRECT_IO=off
+      export MOVE_DOCKER_TO_RAID=True
+      export FS=BTRFS-Compressed
+      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+      Say "Size of /var/lib/docker"
+      sudo du /var/lib/docker -d 0 -h
+    displayName: 'Compress Docker'
+
+  - bash: |
       BUILD_URL="${ENDPOINT_URL_SYSTEMVSSCONNECTION}${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID}"
       JOB_URL="${BUILD_URL}&view=logs&j=${SYSTEM_JOBID}"
       echo "##vso[task.setvariable variable=BUILD_URL]$BUILD_URL"
