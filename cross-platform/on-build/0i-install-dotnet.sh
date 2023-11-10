@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 Say "Installing dotnet"; 
 export DOTNET_TARGET_DIR=/usr/share/dotnet 
-export DOTNET_VERSIONS="2.1 2.2 3.0 3.1 5.0 6.0"
-if [[ "$SLIM_IMAGE" == "true" ]]; then export DOTNET_VERSIONS="6.0"; fi
+export DOTNET_VERSIONS="2.1 2.2 3.0 3.1 5.0 6.0 7.0"
+if [[ "$SLIM_IMAGE" == "true" ]]; then export DOTNET_VERSIONS="7.0"; fi
 curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; 
 set +e
 Say "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER is '${DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER}'"
