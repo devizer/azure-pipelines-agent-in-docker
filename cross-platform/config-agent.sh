@@ -7,7 +7,13 @@ fi
 cd /pre-configure
 printenv | grep VSTS_ > /tmp/args; 
 chown user /tmp/args; 
-su -c "source /tmp/args; source env.sh; bash install-apa.sh" user; 
+DEFAULT_AGENT_VERSION="$(Get-GitHub-Latest-Release microsoft azure-pipelines-agent)"
+if [[ "${DEFAULT_AGENT_VERSION:-}" == v* ]]; then DEFAULT_AGENT_VERSION="${DEFAULT_AGENT_VERSION:1}"; fi
+echo "Latest stable Azure Pipelines Agent Version: [${DEFAULT_AGENT_VERSION:-}]";
+export DEFAULT_AGENT_VERSION;
+if [[ "${AGENT_VERSION:-}" == Stable ]] || [[ "${AGENT_VERSION:-}" == "" ]]; then AGENT_VERSION="${DEFAULT_AGENT_VERSION:-}"
+export AGENT_VERSION
+su -c "source /tmp/args; source env.sh; AGENT_VERSION=${AGENT_VERSION:-DEFAULT_AGENT_VERSION}; export AGENT_VERSION; bash install-apa.sh" user; 
 rm -f /tmp/args;
 touch "/home/user/azure-pipelines-agent/.welldone"
 

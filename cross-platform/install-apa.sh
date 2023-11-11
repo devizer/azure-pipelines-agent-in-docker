@@ -8,6 +8,7 @@ suffix=linux-arm
 system="$(uname -m)"
 if [[ "$system" == "x86_64" ]]; then suffix=linux-x64; fi
 if [[ "$system" == "aarch64" ]]; then suffix=linux-arm64; fi
+AGENT_VERSION="${AGENT_VERSION:-3.227.2}"
 # url=https://vstsagentpackage.azureedge.net/agent/2.165.2/vsts-agent-${suffix}-2.165.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.168.2/vsts-agent-${suffix}-2.168.2.tar.gz
 url=https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-${suffix}-2.173.0.tar.gz
@@ -33,6 +34,7 @@ filename=$(basename $url)
 # https://vstsagentpackage.azureedge.net/agent/2.168.1/vsts-agent-linux-arm-2.168.1.tar.gz
 # https://vstsagentpackage.azureedge.net/agent/2.173.0/vsts-agent-linux-arm64-2.173.0.tar.gz
 
+echo "Downloading '$url'"
 try-and-retry wget --no-check-certificate --progress=bar:force:noscroll -O "$filename" $url
 Say "Extracting $filename"
 if [[ "$(command -v pv)" != "" ]]; then
