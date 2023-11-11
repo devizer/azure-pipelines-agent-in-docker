@@ -65,7 +65,12 @@ steps:
         {
           "experimental": true
         }
-        ' | sudo tee /etc/docker/daemon.json
+        ' | sudo tee /etc/docker/daemon.json-skip
+      set -eu
+      tmp="$(mktemp)"
+      jq '."experimental" = true' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
+      set +eu
+  
       sudo systemctl restart docker
       mkdir -p ~/.docker
       echo '
@@ -90,6 +95,8 @@ steps:
 
       Say "Docker INFO"
       docker version || true
+      Say "Final Docker Config"
+      cat /etc/docker/daemon.json
     displayName: 'Configure Docker'
 
 #  - bash: |
