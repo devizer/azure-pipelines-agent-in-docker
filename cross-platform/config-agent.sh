@@ -11,7 +11,7 @@ DEFAULT_AGENT_VERSION="$(Get-GitHub-Latest-Release microsoft azure-pipelines-age
 if [[ "${DEFAULT_AGENT_VERSION:-}" == v* ]]; then DEFAULT_AGENT_VERSION="${DEFAULT_AGENT_VERSION:1}"; fi
 echo "Latest stable Azure Pipelines Agent Version: [${DEFAULT_AGENT_VERSION:-}]";
 export DEFAULT_AGENT_VERSION;
-if [[ "${AGENT_VERSION:-}" == Stable ]] || [[ "${AGENT_VERSION:-}" == "" ]]; then AGENT_VERSION="${DEFAULT_AGENT_VERSION:-}"
+if [[ "${AGENT_VERSION:-}" == Stable ]] || [[ "${AGENT_VERSION:-}" == "" ]]; then AGENT_VERSION="${DEFAULT_AGENT_VERSION:-}"; fi
 export AGENT_VERSION
 su -c "source /tmp/args; source env.sh; AGENT_VERSION=${AGENT_VERSION:-DEFAULT_AGENT_VERSION}; export AGENT_VERSION; bash install-apa.sh" user; 
 rm -f /tmp/args;
