@@ -9,6 +9,8 @@ steps:
       set -eu; set -o pipefail;
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash;
       Say --Reset-Stopwatch
+      Say "Initial Docker config"
+      cat /etc/docker/daemon.json
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
       export LOOP_DIRECT_IO=off
@@ -19,7 +21,7 @@ steps:
       sudo du /var/lib/docker -d 0 -h
       Say "Final Size of FS"
       sudo df -h -T
-      Say "Docker config"
+      Say "Final Docker config"
       cat /etc/docker/daemon.json
     displayName: 'Compress Docker'
 
