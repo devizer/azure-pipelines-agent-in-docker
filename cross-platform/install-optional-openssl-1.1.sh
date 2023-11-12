@@ -25,7 +25,8 @@ function install_optional_open_ssl_11() {
       # libssl 1.1.1m side-by-side binaries with ld.so.conf registration
       # Special for Ubuntu 22.04, Fedora 36+, and other linux without libssl 1.1
       # Supported Arch: x86_64, i386, arm, aarch64
-      export INSTALL_DIR=/opt/curl-temp TOOLS="curl"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
+      export INSTALL_DIR=/opt/curl-temp TOOLS="curl"; 
+      script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
       tmp="$(mktemp)"
       test -d /opt/networking/lib64 && echo /opt/networking/lib64 >> "$tmp"
