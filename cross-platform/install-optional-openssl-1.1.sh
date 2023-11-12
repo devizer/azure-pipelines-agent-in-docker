@@ -35,5 +35,7 @@ function install_optional_open_ssl_11() {
       sudo mv -f "$tmp" /etc/ld.so.conf
       sudo ldconfig
       sudo rm -rf /opt/curl-temp
+      
+      ldconfig -p | grep libssl
   fi
 }
