@@ -48,8 +48,11 @@ RUN echo; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  source build-gcc-utilities.sh; \
- prepare_os; \
+ adjust_os_repo; \
+ apt-get install curl sudo -y -q; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
+ source install-optional-openssl-1.1.sh; install_optional_open_ssl_11; \
+ prepare_os; \
  smart-apt-install locales systemd apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
     lsof unzip net-tools bsdutils sudo p7zip-full wget git time ncdu tree nano procps p7zip-full jq pv binutils bsdutils \
     build-essential autoconf automake libtool flex bison; \

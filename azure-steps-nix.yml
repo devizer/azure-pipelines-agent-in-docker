@@ -165,7 +165,7 @@ steps:
       # DO NOT REMOVE LOCAL IMAGE for the VERSIONs Report step 
       true
       
-    displayName: 'Build and test local x64 image'
+    displayName: 'x64-only local image'
     env:
       MY_VSTS_PAT: $(VSTS_PAT)
 

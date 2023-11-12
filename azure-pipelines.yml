@@ -9,6 +9,21 @@ jobs:
       maxParallel: 5
       matrix:
 
+        'Bookworm 12':
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:bookworm"
+          TAG: bookworm
+          BASE_IMAGE: 'debian:bookworm'
+
+        'Jammy 22.04':
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jammy"
+          TAG: jammy
+          BASE_IMAGE: 'ubuntu:jammy'
+
+        'Jammy 23.10':
+          TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:mantic"
+          TAG: mantic
+          BASE_IMAGE: 'ubuntu:mantic'
+
         'Jessie 8':
           TAGS: "-t devizervlad/crossplatform-azure-pipelines-agent:jessie"
           TAG: jessie
