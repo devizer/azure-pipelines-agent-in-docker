@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
-Say "Installing dotnet"; 
+libcver="$(ldd --version | awk 'NR==1{print 1000 * $NF}')"
+Say "Installing dotnet. libc ver is '$libcver'"; 
+# TODO NET 8 requires 2.23
 export DOTNET_TARGET_DIR=/usr/share/dotnet 
 export DOTNET_VERSIONS="2.1 2.2 3.0 3.1 5.0 6.0 7.0"
-if [[ "$SLIM_IMAGE" == "true" ]]; then export DOTNET_VERSIONS="7.0"; fi
+if [ "$libcver" -ge 2230 ]; then export DOTNET_VERSIONS="$DOTNET_VERSIONS 8.0"; fi
+if [[ "$SLIM_IMAGE" == "true" ]]; then 
+  export DOTNET_VERSIONS="7.0"; 
+  if [ "$libcver" -ge 2230 ]; then export DOTNET_VERSIONS="8.0"; fi
+fi
 curl -ksSL -o /tmp/install-DOTNET.sh https://raw.githubusercontent.com/devizer/test-and-build/master/lab/install-DOTNET.sh; 
 set +e
 Say "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER is '${DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER}'"
