@@ -13,7 +13,7 @@ echo "Latest stable Azure Pipelines Agent Version: [${DEFAULT_AGENT_VERSION:-}]"
 export DEFAULT_AGENT_VERSION;
 if [[ "${AGENT_VERSION:-}" == Stable ]] || [[ "${AGENT_VERSION:-}" == "" ]]; then AGENT_VERSION="${DEFAULT_AGENT_VERSION:-}"; fi
 export AGENT_VERSION
-su -c "source /tmp/args; source env.sh; AGENT_VERSION=${AGENT_VERSION:-DEFAULT_AGENT_VERSION}; export AGENT_VERSION; bash install-apa.sh" user; 
+su -c "source /tmp/args; source env.sh; AGENT_VERSION=${AGENT_VERSION:-$DEFAULT_AGENT_VERSION}; echo Agent Version is \$AGENT_VERSION; export AGENT_VERSION; bash install-apa.sh" user;
 rm -f /tmp/args;
 touch "/home/user/azure-pipelines-agent/.welldone"
 
