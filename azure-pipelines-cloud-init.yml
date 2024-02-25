@@ -13,46 +13,61 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 360
   strategy:
+    # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
+    # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.raw
+    # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
+    # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
+      'arm64-debian-12':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-amd64.tar.xz"
+        KEY: 12-generic-arm64
+        THEARCH: arm64
       'armhf-24.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
         KEY: 24.04-generic-armhf
+        THEARCH: arm
       'arm64-24.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
         KEY: 24.04-generic-arm64
       'armhf-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
+        THEARCH: arm
       'arm64-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
         KEY: 23.10-generic-arm64
       'armhf-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-armhf.img"
         KEY: 22.04-generic-armhf
+        THEARCH: arm
       'arm64-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-arm64.img"
         KEY: 22.04-generic-armhf
       'armhf-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-armhf.img"
         KEY: 20.10-generic-armhf
+        THEARCH: arm
       'arm64-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-arm64.img"
         KEY: 20.10-generic-armhf
       'armhf-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-armhf.img"
         KEY: 18.04-generic-armhf
+        THEARCH: arm
       'arm64-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-arm64.img"
         KEY: 18.04-generic-armhf
       'armhf-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-armhf-disk1.img"
         KEY: 16.04-generic-armhf
+        THEARCH: arm
       'arm64-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
         KEY: 16.04-generic-armhf
       'armhf-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
         KEY: 16.04-generic-armhf
+        THEARCH: arm
       'arm64-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
         KEY: 16.04-generic-armhf
