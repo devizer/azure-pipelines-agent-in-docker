@@ -63,8 +63,8 @@ jobs:
       # /usr/bin/qemu-arm-static --version
       Say "Register qemu static"
       sudo apt-get update -qq
-      sudo apt-get install qemu-system-arm qemu-system-x86 -y -qq
-      sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools aria2 -y
+      sudo apt-get install qemu-system-arm qemu-system-x86 -y -qq | grep "Unpack\|Setting"
+      sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"
 
       docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
       utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
