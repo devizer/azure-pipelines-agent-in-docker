@@ -29,13 +29,13 @@ ls -la $key-BOOT
 Say "Resizing image"
 qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 15G
 sudo virt-resize --expand /dev/sda1 $file disk.intermediate.compacting.qcow2
-qemu-img convert -O qcow2 -c -p disk.intermediate.compacting.qcow2 $key.qcow2
+qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
 rm -f disk.intermediate.compacting.qcow2
 sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log
 echo "QCOW2 Size ($key.qcow2)"
-ls -la $key.qcow2
-cat $key.qcow2 | xz -z -3 > $key.qcow2.xz
-ls -la $key.qcow2*
+ls -lah $key.qcow2
+cat $key.qcow2 | xz -z -2 > $key.qcow2.xz
+ls -lah $key.qcow2*
 
-cp -a $key.qcow2* $SYSTEM_ARTIFACTSDIRECTORY
+cp -a $key.qcow2.xz $SYSTEM_ARTIFACTSDIRECTORY
 cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
