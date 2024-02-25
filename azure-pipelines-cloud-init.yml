@@ -62,8 +62,8 @@ jobs:
       # sudo docker cp qemu-user-static:/usr/bin/qemu* /usr/bin
       # /usr/bin/qemu-arm-static --version
       Say "Register qemu static"
-      sudo apt update -qq
-      sudo apt install qemu-system-arm qemu-system-x86 -y -qq
+      sudo apt-get update -qq
+      sudo apt-get install qemu-system-arm qemu-system-x86 -y -qq
       sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools aria2 -y
 
       docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
