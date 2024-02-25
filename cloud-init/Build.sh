@@ -22,6 +22,7 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   echo ""; Say "TRY BOOT VOLUME $boot"
   sudo guestmount -a $file -m $boot $key-MNT
   sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/$key-$(basename $boot)-boot.files.txt
+  sudo ls -la $key-MNT |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/$key-$(basename $boot)-root.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
   # sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
   # ubuntu without any boot volume
