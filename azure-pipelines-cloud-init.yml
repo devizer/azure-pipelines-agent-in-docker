@@ -59,7 +59,7 @@ jobs:
       Say "qemu user static"
       # sudo apt-get install qemu-user-static -y -qq >/dev/null
       docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1 || true
-      sudo docker cp qemu-user-static:/usr/bin/. /usr/bin
+      sudo docker cp qemu-user-static:/usr/bin/qemu* /usr/bin
       /usr/bin/qemu-arm-static --version
       Say "Register qemu static"
       sudo apt update -qq
