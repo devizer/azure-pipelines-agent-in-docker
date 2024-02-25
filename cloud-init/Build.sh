@@ -31,7 +31,7 @@ Say "Content of $key-BOOT"
 ls -la $key-BOOT
 echo "Compressed Content of $key-BOOT"
 pushd $key-BOOT
-xz -9 -e *
+sudo xz -9 -e *
 popd
 
 Say "Resizing image"
