@@ -4,6 +4,8 @@ mkdir -p $work; cd $work
 remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
 key=$KEY
+Say "Downloading raw image $KEY"
+echo "URL is $IMAGEURL"
 try-and-retry curl -ksfSL -o $file "$IMAGEURL" || rm -f $file
 mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
 sudo virt-filesystems --all --long --uuid -h -a $file | sudo tee $key-LOGS/$key-filesystems.log
