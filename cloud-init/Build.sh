@@ -1,8 +1,8 @@
 set -ue; set -o pipefail
 mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/_logs
+sudo mkdir -p $THEWORKDIR/temp $THEWORKDIR/run; sudo chown -R $USER $THEWORKDIR; 
 work=$THEWORKDIR/temp
-sudo mkdir -p $work; sudo chown -R $USER $THEWORKDIR; 
-cd $work
+pushd $work
 remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
 key=$KEY
@@ -79,7 +79,7 @@ sudo chown -R $USER $SYSTEM_ARTIFACTSDIRECTORY
 
 Say "Complete ($key.qcow2)"
 
-rundir=$THEWORKDIR
+rundir=$THEWORKDIR/run
 cat $key-BOOT/initrd.img.xz | xz -d > $rundir/initrd.img
 cat $key-BOOT/vmlinuz.xz | xz -d > $rundir/vmlinuz
 pushd $rundir
@@ -87,3 +87,5 @@ cat $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz | xz -d > disk.qcow2
 cp $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt root.partition.index.txt
 (ls -lah; echo "root.partition.index is $(cat root.partition.index.txt)";) |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/final.artifacts.txt
 popd
+
+popd # $work
