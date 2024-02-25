@@ -19,8 +19,12 @@ jobs:
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
       'arm64-debian-10':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/latest/debian-11-backports-genericcloud-arm64.qcow2"
+        IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
         KEY: 10-generic-arm64
+        THEARCH: arm64
+      'arm64-debian-11':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/latest/debian-11-backports-genericcloud-arm64.qcow2"
+        KEY: 11-generic-arm64
         THEARCH: arm64
       'arm64-debian-12':
         IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
