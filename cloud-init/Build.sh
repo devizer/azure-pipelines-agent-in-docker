@@ -20,6 +20,7 @@ for boot in sda1 sda2 sda3 sda4; do
   sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$boot-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
   sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
+  sudo bash -c "cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT"
   sudo guestunmount $key-MNT
   mv $key-BOOT/vmlinux $key-BOOT/vmlinuz 2>/dev/null
 done
