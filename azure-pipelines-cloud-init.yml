@@ -8,13 +8,13 @@ trigger:
 
 jobs:
 
-- job: cloud-init
+- job: cloudinit
   pool:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 360
   strategy:
     matrix:
-      'armhf_2310':
+      'armhf-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
       'arm64_2310':
