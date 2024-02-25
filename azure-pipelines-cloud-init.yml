@@ -1,0 +1,87 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'cloud-init/*'
+
+jobs:
+
+- job: cloud-init
+  pool:
+    vmImage: 'ubuntu-22.04'
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      '23.10-generic-armhf':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
+        KEY: 23.10-generic-armhf
+      '23.10-generic-arm64':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
+        KEY: 23.10-generic-arm64
+      '22.04-generic-armhf':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-armhf.img"
+        KEY: 22.04-generic-armhf
+      '22.04-generic-arm64':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-arm64.img"
+        KEY: 22.04-generic-armhf
+      '20.04-generic-armhf':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-armhf.img"
+        KEY: 20.10-generic-armhf
+      '20.04-generic-arm64':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-arm64.img"
+        KEY: 20.10-generic-armhf
+      '18.04-generic-armhf':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-armhf.img"
+        KEY: 18.04-generic-armhf
+      '18.04-generic-arm64':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-arm64.img"
+        KEY: 18.04-generic-armhf
+      '16.04-generic-armhf':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-armhf-disk1.img"
+        KEY: 16.04-generic-armhf
+      '16.04-generic-arm64':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
+        KEY: 16.04-generic-armhf
+        
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      cd build-tools
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      echo "CPU: $(Get-CpuName)"
+      Say "/proc/sys/kernel/randomize_va_space"
+      sudo cat /proc/sys/kernel/randomize_va_space
+      echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+      Say "qemu user static"
+      # sudo apt-get install qemu-user-static -y -qq >/dev/null
+      docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1 || true
+      sudo docker cp qemu-user-static:/usr/bin/. /usr/bin
+      /usr/bin/qemu-arm-static --version
+      Say "Register qemu static"
+      sudo apt update -qq
+      sudo apt install qemu-system-arm qemu-system-x86 -y -qq
+      sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools aria2 -y
+
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
+      utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
+      utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
+      try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_fixed_url}"
+    displayName: 'provisioning'
+
+  - script: |
+      set -eu; set -o pipefail
+      cd cloud-init
+      bash -e Build.sh
+    condition: succeededOrFailed()
+    displayName: 'build'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
