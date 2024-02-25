@@ -1,7 +1,7 @@
 set -ue; set -o pipefail
 mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/_logs
 work=$THEWORKDIR/temp
-sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR; 
+sudo mkdir -p $work; sudo chown -R $USER $THEWORKDIR; 
 cd $work
 remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
