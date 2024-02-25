@@ -17,34 +17,41 @@ jobs:
       'armhf-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
-      'arm64_2310':
+      'arm64-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
         KEY: 23.10-generic-arm64
-      'armhf_2204':
+      'armhf-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-armhf.img"
         KEY: 22.04-generic-armhf
-      'arm64_2204':
+      'arm64-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-arm64.img"
         KEY: 22.04-generic-armhf
-      'armhf_2004':
+      'armhf-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-armhf.img"
         KEY: 20.10-generic-armhf
-      'arm64_2004':
+      'arm64-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-arm64.img"
         KEY: 20.10-generic-armhf
-      'armhf_1804':
+      'armhf-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-armhf.img"
         KEY: 18.04-generic-armhf
-      'arm64_1804':
+      'arm64-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-arm64.img"
         KEY: 18.04-generic-armhf
-      'armhf_1604':
+      'armhf-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-armhf-disk1.img"
         KEY: 16.04-generic-armhf
-      'arm64_1604':
+      'arm64-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
         KEY: 16.04-generic-armhf
-        
+      'armhf-14.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
+        KEY: 16.04-generic-armhf
+      'arm64-14.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
+        KEY: 16.04-generic-armhf
+
+
 
   steps:
   - script: |
