@@ -29,6 +29,10 @@ set -e
 sudo chown -R $USER $key-BOOT
 Say "Content of $key-BOOT"
 ls -la $key-BOOT
+echo "Compressed Content of $key-BOOT"
+pushd $key-BOOT
+xz -9 -e *
+popd
 
 Say "Resizing image"
 qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 15G
