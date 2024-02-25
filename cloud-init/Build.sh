@@ -29,14 +29,14 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   if [[ -s $key-BOOT/initrd.img ]] && [[ -s $key-BOOT/vmlinuz ]]; then break; fi
 done
 set -e
-sudo chown -R $USER $key-BOOT
 Say "Content of $key-BOOT"
 pushd $key-BOOT >/dev/null
 ls -lah *
 echo "Compressed Content of $key-BOOT"
-xz -z -3 *
+sudo xz -z -3 *
 ls -lah *
 popd >/dev/null
+sudo chown -R $USER $key-BOOT
 
 Say "Resizing image"
 qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 15G
