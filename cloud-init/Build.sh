@@ -34,8 +34,8 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   # debian
   sudo bash -c "echo 'what about initrd.img?'; ls -lah $key-MNT/initrd.img-*; cp -f -L $key-MNT/initrd.img-* $key-BOOT/initrd.img"
   sudo bash -c "echo 'what about vmlinuz?'; ls -lah $key-MNT/vmlinuz-*; cp -f -L $key-MNT/vmlinuz-* $key-BOOT/vmlinuz"
-  sudo bash -c "echo 'what about boot/initrd.img?'; ls -lah $key-MNT/boot/initrd.img-*; cp -f -L $key-MNT/initrd.img-* $key-BOOT/initrd.img"
-  sudo bash -c "echo 'what about boot/vmlinuz?'; ls -lah $key-MNT/boot/vmlinuz-*; cp -f -L $key-MNT/vmlinuz-* $key-BOOT/vmlinuz"
+  sudo bash -c "echo 'what about boot/initrd.img?'; ls -lah $key-MNT/boot/initrd.img-*; cp -f -L $key-MNT/boot/initrd.img-* $key-BOOT/initrd.img"
+  sudo bash -c "echo 'what about boot/vmlinuz?'; ls -lah $key-MNT/boot/vmlinuz-*; cp -f -L $key-MNT/boot/vmlinuz-* $key-BOOT/vmlinuz"
   sudo guestunmount $key-MNT
   mv $key-BOOT/vmlinux $key-BOOT/vmlinuz 2>/dev/null
   sudo chown -R $USER $key-BOOT
