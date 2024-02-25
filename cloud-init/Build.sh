@@ -15,7 +15,7 @@ sudo guestunmount $key-MNT >/dev/null 2>&1 || true
 set +e 
 for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}' | sort -u); do
   # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
-  echo ""; echo "TRY BOOT VOLUME $boot"
+  echo ""; Say "TRY BOOT VOLUME $boot"
   sudo guestmount -a $file -m $boot $key-MNT
   sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$(basename $boot)-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
@@ -37,6 +37,7 @@ rm -f disk.intermediate.compacting.qcow2
 sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
+Say "Compressing ($key.qcow2)"
 cat $key.qcow2 | xz -z -2 > $key.qcow2.xz
 ls -lah $key.qcow2*
 
