@@ -41,7 +41,9 @@ printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/$key.root.partition.in
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
-cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
+# cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
+time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz $key.qcow2
+
 ls -lah $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
 
 sudo cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
