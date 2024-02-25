@@ -24,8 +24,13 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/$key-$(basename $boot)-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
   # sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
+  # ubuntu without any boot volume
   sudo bash -c "cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT"
+  # ubuntu with a boot volume
   sudo bash -c "cp -f -L $key-MNT/{initrd.img,vmlinu?} $key-BOOT"
+  # debian
+  sudo bash -c "cp -f -L $key-MNT/initrd.img-* $key-BOOT/initrd.img"
+  sudo bash -c "cp -f -L $key-MNT/vmlinuz-* $key-BOOT/vmlinuz"
   sudo guestunmount $key-MNT
   mv $key-BOOT/vmlinux $key-BOOT/vmlinuz 2>/dev/null
   sudo chown -R $USER $key-BOOT
