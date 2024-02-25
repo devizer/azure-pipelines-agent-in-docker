@@ -41,10 +41,9 @@ printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/$key.root.partition.in
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
-cat $key.qcow2 | xz -z -9 -e > $key.qcow2.xz
-ls -lah $key.qcow2*
+cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
+ls -lah $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
 
-sudo cp -a $key.qcow2.xz $SYSTEM_ARTIFACTSDIRECTORY
 sudo cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
 sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
 sudo cp -a $key-LOGS $SYSTEM_ARTIFACTSDIRECTORY
