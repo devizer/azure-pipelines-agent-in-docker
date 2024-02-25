@@ -53,7 +53,7 @@ ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
 echo "CPU: $(Get-CpuName)"
 # cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz
-time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz $key.qcow2
+time 7z a -txz -mx=1 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz $key.qcow2
 
 ls -lah $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz
 
