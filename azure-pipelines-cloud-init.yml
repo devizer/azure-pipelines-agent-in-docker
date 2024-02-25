@@ -19,7 +19,7 @@ jobs:
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
       'arm64-debian-12':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-amd64.tar.xz"
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
         KEY: 12-generic-arm64
         THEARCH: arm64
       'armhf-24.04':
