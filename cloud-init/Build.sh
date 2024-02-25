@@ -6,7 +6,8 @@ file=$KEY.img
 key=$KEY
 Say "Downloading raw image $KEY"
 echo "URL is $IMAGEURL"
-try-and-retry curl -ksfSL -o $file "$IMAGEURL" || rm -f $file
+try-and-retry curl --compressed -ksfSL -o $file "$IMAGEURL" || rm -f $file
+Say "Extracting kernel from /dev/sda1,2"
 mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
 sudo virt-filesystems --all --long --uuid -h -a $file | sudo tee $key-LOGS/$key-filesystems.log
 # http://ask.xmodulo.com/mount-qcow2-disk-image-linux.html
