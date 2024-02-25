@@ -78,5 +78,5 @@ cat $key-BOOT/vmlinuz.xz | xz -d > $rundir/vmlinuz
 pushd $rundir
 cat $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz | xz -d > disk.qcow2
 cp $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt root.partition.index.txt
-(ls -lah; echo "root.partition.index is $(cat root.partition.index.txt";) |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/final.artifacts.txt
+(ls -lah; echo "root.partition.index is $(cat root.partition.index.txt)";) |& tee $SYSTEM_ARTIFACTSDIRECTORY/_logs/final.artifacts.txt
 popd
