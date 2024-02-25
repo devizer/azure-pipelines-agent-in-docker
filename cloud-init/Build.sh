@@ -1,7 +1,7 @@
 set -ue; set -o pipefail
 work=$HOME/build-cloud-init
 mkdir -p $work; cd $work
-remotefile=$(basename $URL)
+remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
 key=$KEY
 try-and-retry curl -ksfSL -o $file "$IMAGEURL" || rm -f $file
