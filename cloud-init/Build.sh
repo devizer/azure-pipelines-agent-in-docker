@@ -7,6 +7,7 @@ key=$KEY
 Say "Downloading raw image $KEY"
 echo "URL is $IMAGEURL"
 try-and-retry curl --compressed -ksfSL -o $file "$IMAGEURL" || rm -f $file
+ls -lah $file
 Say "Extracting kernel from /dev/sda1,2"
 mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
 sudo virt-filesystems --all --long --uuid -h -a $file | sudo tee $key-LOGS/$key-filesystems.log | tee file-systems.txt
