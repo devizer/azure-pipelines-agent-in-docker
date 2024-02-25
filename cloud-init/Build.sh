@@ -38,7 +38,7 @@ sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
-cat $key.qcow2 | xz -z -2 > $key.qcow2.xz
+cat $key.qcow2 | xz -z -1 > $key.qcow2.xz
 ls -lah $key.qcow2*
 
 cp -a $key.qcow2.xz $SYSTEM_ARTIFACTSDIRECTORY
