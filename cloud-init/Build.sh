@@ -9,7 +9,7 @@ key=$KEY
 Say "Downloading raw image $KEY"
 echo "URL is $IMAGEURL"
 try-and-retry curl --compressed -ksfSL -o $file "$IMAGEURL" || rm -f $file
-if [[ "$IMAGEURL" == *".xz" ]]; then echo "Extracting $file.xz" mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
+if [[ "$IMAGEURL" == *".xz" ]]; then echo "Extracting $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
 ls -lah $file
 Say "Extracting kernel from /dev/sda1,2"
 mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
