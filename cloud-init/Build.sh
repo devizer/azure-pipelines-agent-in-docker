@@ -17,7 +17,7 @@ for boot in sda1 sda2 sda3 sda4; do
   # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
   echo ""; echo "TRY BOOT VOLUME $boot"
   sudo guestmount -a $file -m /dev/$boot $key-MNT
-  ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$boot-boot.files.txt
+  sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$boot-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
   sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
   sudo guestunmount $key-MNT
