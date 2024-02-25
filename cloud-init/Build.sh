@@ -1,8 +1,8 @@
 set -ue; set -o pipefail
 mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/_logs
-work=$HOME/build-cloud-init
-work=/transient-builds
-sudo mkdir -p $work; sudo chown -R $USER $work; cd $work
+work=$THEWORKDIR/temp
+sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR; 
+cd $work
 remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
 key=$KEY
@@ -79,8 +79,7 @@ sudo chown -R $USER $SYSTEM_ARTIFACTSDIRECTORY
 
 Say "Complete ($key.qcow2)"
 
-rundir=/transient-builds/run
-sudo mkdir -p $rundir; sudo chown -R $USER $rundir; 
+rundir=$THEWORKDIR
 cat $key-BOOT/initrd.img.xz | xz -d > $rundir/initrd.img
 cat $key-BOOT/vmlinuz.xz | xz -d > $rundir/vmlinuz
 pushd $rundir

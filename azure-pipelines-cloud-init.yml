@@ -1,3 +1,6 @@
+variables:
+  THEWORKDIR: /transient-builds
+
 trigger:
   branches:
     include:
@@ -91,7 +94,7 @@ jobs:
       echo "CPU: $(Get-CpuName)"
 
       export SECOND_DISK_MODE=LOOP
-      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
       export MOVE_DOCKER_TO_RAID=True
       export FS=BTRFS-Compressed
