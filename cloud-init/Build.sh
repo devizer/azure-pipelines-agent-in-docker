@@ -19,8 +19,9 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   sudo guestmount -a $file -m $boot $key-MNT
   sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$(basename $boot)-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
-  sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
+  # sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
   sudo bash -c "cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT"
+  sudo bash -c "cp -f -L $key-MNT/{initrd.img,vmlinu?} $key-BOOT"
   sudo guestunmount $key-MNT
   mv $key-BOOT/vmlinux $key-BOOT/vmlinuz 2>/dev/null
 done
