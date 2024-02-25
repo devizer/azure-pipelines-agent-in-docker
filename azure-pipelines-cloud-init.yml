@@ -14,6 +14,12 @@ jobs:
   timeoutInMinutes: 360
   strategy:
     matrix:
+      'armhf-24.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
+        KEY: 24.04-generic-armhf
+      'arm64-24.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        KEY: 24.04-generic-arm64
       'armhf-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
