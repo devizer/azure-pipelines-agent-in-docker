@@ -31,10 +31,11 @@ done
 set -e
 sudo chown -R $USER $key-BOOT
 Say "Content of $key-BOOT"
-ls -la $key-BOOT
+ls -lah $key-BOOT
 echo "Compressed Content of $key-BOOT"
 pushd $key-BOOT
 sudo xz -9 -e *
+ls -lah *
 popd
 
 Say "Resizing image"
