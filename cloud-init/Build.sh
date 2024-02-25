@@ -1,6 +1,8 @@
 set -ue; set -o pipefail
+mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/logs
 work=$HOME/build-cloud-init
-mkdir -p $work; cd $work
+work=/transient-builds
+sudo mkdir -p $work; sudo chown -R $USER $work; cd $work
 remotefile="$(basename "$IMAGEURL")"
 file=$KEY.img
 key=$KEY
@@ -18,7 +20,7 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
   echo ""; Say "TRY BOOT VOLUME $boot"
   sudo guestmount -a $file -m $boot $key-MNT
-  sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/$key-$(basename $boot)-boot.files.txt
+  sudo ls -la $key-MNT/boot |& tee $SYSTEM_ARTIFACTSDIRECTORY/logs/$key-$(basename $boot)-boot.files.txt
   sudo cp -f -r $key-MNT/boot/* $key-BOOTALL
   # sudo cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT
   sudo bash -c "cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT"
@@ -55,9 +57,18 @@ time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz $key
 
 ls -lah $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
 
-sudo cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key-BOOT/. $SYSTEM_ARTIFACTSDIRECTORY
 sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
 sudo cp -a $key-LOGS $SYSTEM_ARTIFACTSDIRECTORY
 sudo chown -R $USER $SYSTEM_ARTIFACTSDIRECTORY
 
 Say "Complete ($key.qcow2)"
+
+rundir=/transient-builds/run
+sudo mkdir -p $rundir; sudo chown -R $USER $rundir; 
+pushd $rundir
+cat $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz | xz -d > disk.qcow2
+cat $key-BOOT/initrd.img.xz | xz -d > initrd.img
+cat $key-BOOT/vmlinuz.xz | xz -d > vmlinuz.img
+ls -lah 
+popd
