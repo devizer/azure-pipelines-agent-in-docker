@@ -95,6 +95,7 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
+      Say --Reset-Stopwatch
       cd cloud-init
       bash -e Build.sh
     condition: succeededOrFailed()
