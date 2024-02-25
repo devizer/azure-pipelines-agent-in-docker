@@ -58,6 +58,10 @@ qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
 rm -f disk.intermediate.compacting.qcow2
 sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log | tee filesystems.resized.log
 root_partition_index=$(cat filesystems.resized.log | awk '$4 ~ /cloudimg-rootfs/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
+if [[ "${root_partition_index:-}" == "" ]]; then 
+  # debian
+  root_partition_index=$(cat filesystems.resized.log | awk '$3 ~ /ext4/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
+fi
 printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
