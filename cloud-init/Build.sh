@@ -35,13 +35,17 @@ qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 15G
 sudo virt-resize --expand /dev/sda1 $file disk.intermediate.compacting.qcow2
 qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
 rm -f disk.intermediate.compacting.qcow2
-sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log
+sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log | tee filesystems.resized.log
+root_partition_index=$(cat filesystems.resized.log | awk '$4 ~ /cloudimg-rootfs/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
+printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/$key.root.partition.index.txt
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
 cat $key.qcow2 | xz -z -1 > $key.qcow2.xz
 ls -lah $key.qcow2*
 
-cp -a $key.qcow2.xz $SYSTEM_ARTIFACTSDIRECTORY
-cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
-cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key.qcow2.xz $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key-BOOT $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key-LOGS $SYSTEM_ARTIFACTSDIRECTORY
+sudo chown -R $USER $SYSTEM_ARTIFACTSDIRECTORY
