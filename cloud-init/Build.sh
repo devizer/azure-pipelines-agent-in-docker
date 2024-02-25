@@ -55,7 +55,7 @@ echo "CPU: $(Get-CpuName)"
 # cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz
 time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz $key.qcow2
 
-ls -lah $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
+ls -lah $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz
 
 sudo cp -a $key-BOOT/. $SYSTEM_ARTIFACTSDIRECTORY
 # sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
