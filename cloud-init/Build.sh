@@ -47,28 +47,28 @@ qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
 rm -f disk.intermediate.compacting.qcow2
 sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | sudo tee $key-LOGS/$key-filesystems.resized.log | tee filesystems.resized.log
 root_partition_index=$(cat filesystems.resized.log | awk '$4 ~ /cloudimg-rootfs/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
-printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/$key.root.partition.index.txt
+printf $root_partition_index > $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt
 echo "QCOW2 Size ($key.qcow2)"
 ls -lah $key.qcow2
 Say "Compressing ($key.qcow2)"
 echo "CPU: $(Get-CpuName)"
-# cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
-time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz $key.qcow2
+# cat $key.qcow2 | xz -z -9 -e > $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz
+time 7z a -txz -mx=9 -mmt=$(nproc) $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz $key.qcow2
 
 ls -lah $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz
 
 sudo cp -a $key-BOOT/. $SYSTEM_ARTIFACTSDIRECTORY
-sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
-sudo cp -a $key-LOGS $SYSTEM_ARTIFACTSDIRECTORY
+# sudo cp -a $key-BOOTALL $SYSTEM_ARTIFACTSDIRECTORY
+sudo cp -a $key-LOGS/. $SYSTEM_ARTIFACTSDIRECTORY/logs
 sudo chown -R $USER $SYSTEM_ARTIFACTSDIRECTORY
 
 Say "Complete ($key.qcow2)"
 
 rundir=/transient-builds/run
 sudo mkdir -p $rundir; sudo chown -R $USER $rundir; 
+cat $key-BOOT/initrd.img.xz | xz -d > $rundir/initrd.img
+cat $key-BOOT/vmlinuz.xz | xz -d > $rundir/vmlinuz
 pushd $rundir
-cat $SYSTEM_ARTIFACTSDIRECTORY/$key.qcow2.xz | xz -d > disk.qcow2
-cat $key-BOOT/initrd.img.xz | xz -d > initrd.img
-cat $key-BOOT/vmlinuz.xz | xz -d > vmlinuz.img
+cat $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz | xz -d > disk.qcow2
 ls -lah 
 popd
