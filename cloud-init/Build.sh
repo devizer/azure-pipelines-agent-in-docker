@@ -9,11 +9,11 @@ echo "URL is $IMAGEURL"
 try-and-retry curl --compressed -ksfSL -o $file "$IMAGEURL" || rm -f $file
 Say "Extracting kernel from /dev/sda1,2"
 mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
-sudo virt-filesystems --all --long --uuid -h -a $file | sudo tee $key-LOGS/$key-filesystems.log
+sudo virt-filesystems --all --long --uuid -h -a $file | sudo tee $key-LOGS/$key-filesystems.log | tee file-systems.txt
 # http://ask.xmodulo.com/mount-qcow2-disk-image-linux.html
 sudo guestunmount $key-MNT >/dev/null 2>&1 || true
 set +e 
-for boot in sda1 sda2 sda3 sda4; do
+for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}' | sort -u); do
   # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
   echo ""; echo "TRY BOOT VOLUME $boot"
   sudo guestmount -a $file -m /dev/$boot $key-MNT
