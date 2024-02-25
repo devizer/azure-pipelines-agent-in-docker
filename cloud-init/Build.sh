@@ -25,6 +25,8 @@ for boot in $(cat file-systems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}'
   sudo bash -c "cp -f -L $key-MNT/{initrd.img,vmlinu?} $key-BOOT"
   sudo guestunmount $key-MNT
   mv $key-BOOT/vmlinux $key-BOOT/vmlinuz 2>/dev/null
+  sudo chown -R $USER $key-BOOT
+  if [[ -s $key-BOOT/initrd.img ]] && [[ -s $key-BOOT/vmlinuz ]]; then break; fi
 done
 set -e
 sudo chown -R $USER $key-BOOT
