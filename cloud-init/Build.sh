@@ -70,5 +70,6 @@ cat $key-BOOT/initrd.img.xz | xz -d > $rundir/initrd.img
 cat $key-BOOT/vmlinuz.xz | xz -d > $rundir/vmlinuz
 pushd $rundir
 cat $SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2.xz | xz -d > disk.qcow2
-ls -lah 
+cp $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt root.partition.index.txt 
+ls -lah
 popd
