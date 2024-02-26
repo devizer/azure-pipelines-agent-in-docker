@@ -213,7 +213,8 @@ function Wait-For-VM() {
   Say "Mapping root fs of the VM to [$mapto] (127.0.0.1) with advanced options v5"
   # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
   set +e
-  echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin -o allow_other,reconnect,defer_permissions -o Compression=no -o Ciphers=arcfour
+  # fuse: unknown option(s): `-o defer_permissions'
+  echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin -o allow_other,reconnect -o Compression=no -o Ciphers=arcfour
   # returns mapping error via VM_SSHFS_MAP_ERROR
   VM_SSHFS_MAP_ERROR=$?;
   set -e
