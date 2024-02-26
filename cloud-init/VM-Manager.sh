@@ -229,13 +229,14 @@ function Wait-For-VM() {
   Say "Provisioning 2) EXTRACTING"
   echo '
        set -eu;
-       echo "EXTRACTING in VM on $(hostname)"
+       echo "EXTRACTING in VM on $(hostname). Variables are:"
+       cat /etc/variables
        source /etc/variables
        export USER=root HOME=/root
        VM_PROVISIA_FOLDER="${VM_PROVISIA_FOLDER:-$HOME}"
        mkdir -p "${VM_PROVISIA_FOLDER:-$HOME}"
        cd $VM_PROVISIA_FOLDER
-       tar xzf provisia.tar.gz
+       tar xzf /etc/provisia.tar.gz
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
          eval $VM_POSTBOOT_SCRIPT
        else
