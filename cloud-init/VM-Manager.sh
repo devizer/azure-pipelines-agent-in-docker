@@ -220,6 +220,7 @@ function Wait-For-VM() {
   VM_SSHFS_MAP_ERROR=$?;
   set -e
   Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
+  if [[ "$VM_SSHFS_MAP_ERROR" != "0" ]]; then exit $VM_SSHFS_MAP_ERROR; fi
 }
 
 function VM-Launcher-Smoke-Test() {
