@@ -141,7 +141,7 @@ runcmd:
 Say "cloud-localds verbose output"
 cloud-localds -v --disk-format qcow2 "$1" /tmp/cloud-config.txt
 echo "DONE: build schema"
-Ssy "VALIDATE CLOUD CONFIG"
+Say "VALIDATE CLOUD CONFIG"
 sudo cloud-init schema -c /tmp/cloud-config.txt || true
 echo "DONE: checkup schema"
 
