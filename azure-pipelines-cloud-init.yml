@@ -83,11 +83,11 @@ jobs:
         THEARCH: arm64
       'armhf-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
-        KEY: 16.04-generic-armhf
+        KEY: 14.04-generic-armhf
         THEARCH: arm
       'arm64-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
-        KEY: 16.04-generic-armhf
+        KEY: 14.04-generic-armhf
         THEARCH: arm64
 
 
