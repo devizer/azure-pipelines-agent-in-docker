@@ -191,10 +191,9 @@ function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
 function Wait-For-VM() {
-  local n=120
+  local n=500
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
-    echo sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
     set +e
     sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
     local ok=$?;
@@ -203,7 +202,6 @@ function Wait-For-VM() {
     sleep 1
     n=$((n-1))
   done
-  popd
   if [ $ok -ne 0 ]; then
     echo "vm build agent ERROR: VM is not responding via ssh"
     return 1;
