@@ -256,8 +256,11 @@ function VM-Launcher-Smoke-Test() {
   HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
   VM_PROVISIA_FOLDER=/root/provisia
   VM_USER_NAME=user
-  VM_PREBOOT_SCRIPT='echo IM CUSTOM PRE-BOOT'
-  VM_POSTBOOT_SCRIPT='echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). CONTENT IS BELOW; ls -lah'
+  VM_POSTBOOT_SCRIPT='
+echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+echo FREE MEMORY; free -m;
+echo FREE SPACE; df -h -T;
+echo OS IS; cat /etc/*release'
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
   Build-Cloud-Config "/tmp/provisia"
@@ -270,8 +273,8 @@ function VM-Launcher-Smoke-Test() {
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   sleep 1 # sleep 30
   echo FS AS SUDO 
-  sudo ls -lah /transient-builds/run/fs 2>/dev/null || true
+  sudo ls -lah /tmp/provisia/fs 2>/dev/null || true
   echo FS AS $USER USER
-  ls -lah /transient-builds/run/fs 2>/dev/null || true
+  ls -lah /tmp/provisia/fs 2>/dev/null || true
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
