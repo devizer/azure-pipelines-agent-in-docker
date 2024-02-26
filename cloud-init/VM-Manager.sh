@@ -135,7 +135,9 @@ runcmd:
 
 ' > /tmp/cloud-config.txt
 
-cloud-localds --disk-format qcow2 "$1" /tmp/cloud-config.txt
+Say "cloud-localds verbose output"
+cloud-localds -v --disk-format qcow2 "$1" /tmp/cloud-config.txt
+echo DONE
 # qemu-img convert -O qcow2 -c -p cloud-config.img cloud-config.qcow2
   
 }
