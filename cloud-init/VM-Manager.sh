@@ -182,6 +182,9 @@ function File-To-Base64() { cat "$1" | base64 -w 0; }
 function VM-Launcher-Smoke-Test() {
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
+  VM_SSH_PORT=2345
+  VM_CPUS=2
+  VM_MEM=2048M
   HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
   VM_PROVISIA_FOLDER=/root/provisia
   VM_USER_NAME=user
