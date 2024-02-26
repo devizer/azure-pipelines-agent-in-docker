@@ -24,12 +24,12 @@ ssh_pwauth: true
 ssh_deletekeys: False
 
 write_files:
-- encoding: b64
+- encoding: base64
   content: '$(File-To-Base64 "$variables")'
   owner: root:root
   path: /etc/.variables
   permissions: '0644'
-- encoding: b64
+- encoding: base64
   content: '$(File-To-Base64 "$provisia")'
   owner: root:root
   path: /tmp/.provisia
