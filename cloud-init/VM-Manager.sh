@@ -166,7 +166,7 @@ function Launch-VM() {
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a57  \
           -initrd "$location/initrd.img" \
           -kernel "$location/vmlinuz" \
-          -append 'root=/dev/vda${root_partition_index:-1} console=ttyAMA0' \
+          -append "root=/dev/vda${root_partition_index:-1} console=ttyAMA0" \
           -drive file=$cloud_config,if=none,format=qcow2,id=hd1 \
           -device virtio-blk-device,drive=hd1 \
           -drive file="$location/disk.qcow2",if=none,format=qcow2,id=hd0 \
