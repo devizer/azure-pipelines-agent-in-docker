@@ -218,7 +218,7 @@ function Wait-For-VM() {
   Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   if [[ "$VM_SSHFS_MAP_ERROR" != "0" ]]; then exit $VM_SSHFS_MAP_ERROR; fi
 
-  Say "Provisioning 1) COPYING"
+  Say "Provisioning 1) COPYING variables and provisia.tar.gz to VM"
   mkdir -p "$lauch_options/fs/etc/provisia"
   for name in variables provisia.tar.gz; do
     echo "COPYING $name"
@@ -226,14 +226,21 @@ function Wait-For-VM() {
     echo "CH OWNER $lauch_options/fs/etc/$name"
     chown root:root "$lauch_options/fs/etc/$name"
   done 
-  Say "Provisioning 2) EXTRACTING"
+
+  Say "Provisioning 2) BUNDLE"
+  export TARGET_DIR=$HOME/build/bundle
+  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
+  sudo cp -f -v $TARGET_DIR/. "$lauch_options/fs/usr/local/bin"
+
+  Say "Provisioning 3) EXTRACTING and launching"
   echo '
        set -eu;
-       echo "EXTRACTING in VM on $(hostname). Variables are:"
+       export USER=root HOME=/root
+       Say "Welcome to VM host $(hostname)"
        cat /etc/variables
        source /etc/variables
-       export USER=root HOME=/root
        VM_PROVISIA_FOLDER="${VM_PROVISIA_FOLDER:-$HOME}"
+       echo "EXTRACTING provisia.tar.gz to $VM_PROVISIA_FOLDER"
        mkdir -p "${VM_PROVISIA_FOLDER:-$HOME}"
        cd $VM_PROVISIA_FOLDER
        tar xzf /etc/provisia.tar.gz

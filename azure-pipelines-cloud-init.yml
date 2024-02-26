@@ -14,7 +14,7 @@ jobs:
 - job: cloudinit
   pool:
     vmImage: 'ubuntu-22.04'
-  timeoutInMinutes: 360
+  timeoutInMinutes: 120
   strategy:
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.raw
