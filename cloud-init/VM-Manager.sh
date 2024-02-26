@@ -151,7 +151,7 @@ function Launch-VM() {
       qemu-system-arm -name arm32vm \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
-          -drive file=cloud-config.qcow2,if=none,format=qcow2,id=hd1 \
+          -drive file=$cloud_config,if=none,format=qcow2,id=hd1 \
           -device virtio-blk-device,drive=hd1 \
           -drive file="$location/disk.qcow2",if=none,format=qcow2,id=hd0 \
           -device virtio-blk-device,drive=hd0 \
@@ -167,7 +167,7 @@ function Launch-VM() {
           -initrd "$location/initrd.img" \
           -kernel "$location/vmlinuz" \
           -append 'root=/dev/vda${root_partition_index:-1} console=ttyAMA0' \
-          -drive file=cloud-config.qcow2,if=none,format=qcow2,id=hd1 \
+          -drive file=$cloud_config,if=none,format=qcow2,id=hd1 \
           -device virtio-blk-device,drive=hd1 \
           -drive file="$location/disk.qcow2",if=none,format=qcow2,id=hd0 \
           -device virtio-blk-device,drive=hd0 \
