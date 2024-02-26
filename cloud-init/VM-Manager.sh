@@ -193,10 +193,12 @@ function File-To-Base64() { cat "$1" | base64 -w 0; }
 function Wait-For-VM() {
   local n=120
   while [ $n -gt 0 ]; do
-    echo "Waiting for ssh connection to VM on port $VM_SSH_PORT."
+    echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     echo sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
+    set +e
     sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
     local ok=$?;
+    set -e
     if [ $ok -eq 0 ]; then break; fi
     sleep 1
     n=$((n-1))
@@ -212,9 +214,11 @@ function Wait-For-VM() {
   mkdir -p "$mapto"
   Say "Mapping root fs of the VM to [$mapto] (127.0.0.1) with advanced options v5"
   # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
+  set +e
   echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin
   # returns mapping error via VM_SSHFS_MAP_ERROR
   VM_SSHFS_MAP_ERROR=$?;
+  set -e
   Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
 }
 
