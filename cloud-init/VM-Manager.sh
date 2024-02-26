@@ -191,7 +191,7 @@ function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
 function Wait-For-VM() {
-  local n=500
+  local n=100
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
@@ -199,7 +199,7 @@ function Wait-For-VM() {
     local ok=$?;
     set -e
     if [ $ok -eq 0 ]; then break; fi
-    sleep 1
+    sleep 5
     n=$((n-1))
   done
   if [ $ok -ne 0 ]; then
