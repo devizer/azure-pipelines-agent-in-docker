@@ -244,6 +244,6 @@ function VM-Launcher-Smoke-Test() {
   echo FS AS SUDO 
   sudo ls -lah /transient-builds/run/fs 2>/dev/null || true
   echo FS AS $USER USER
-  ls -lah /transient-builds/run/fs || true
+  ls -lah /transient-builds/run/fs 2>/dev/null || true
   Say "VM-Launcher-Smoke-Test() COMPLETED"
 }
