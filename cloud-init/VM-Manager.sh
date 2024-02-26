@@ -127,6 +127,9 @@ runcmd:
      cd $HOME
      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
+     echo "VALIDATING SYSTEM CLOUD CONFIG"
+     cloud-init schema --system
+
      echo "PROCESSING VM_POSTBOOT_SCRIPT"
      uptime
      source /etc/.variables
