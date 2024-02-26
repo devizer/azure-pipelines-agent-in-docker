@@ -230,8 +230,8 @@ function Wait-For-VM() {
 
   Say "Provisioning 2) BUNDLE"
   export TARGET_DIR=$HOME/build/bundle; mkdir -p "$TARGET_DIR"
-  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
-  sudo cp -f -v "$TARGET_DIR"/* "$lauch_options/fs/usr/local/bin"
+  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+  sudo cp -f "$TARGET_DIR"/* "$lauch_options/fs/usr/local/bin"
 
   Say "Provisioning 3) EXTRACTING and launching"
   echo '
@@ -281,8 +281,8 @@ echo OS IS; cat /etc/*release'
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   sleep 1 # sleep 30
   echo FS AS SUDO 
-  sudo ls -lah /tmp/provisia/fs 2>/dev/null || true
+  sudo ls /tmp/provisia/fs 2>/dev/null || true
   echo FS AS $USER USER
-  ls -lah /tmp/provisia/fs 2>/dev/null || true
+  ls /tmp/provisia/fs 2>/dev/null || true
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
