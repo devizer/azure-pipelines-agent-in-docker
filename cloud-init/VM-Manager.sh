@@ -195,7 +195,7 @@ function Wait-For-VM() {
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
-    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM (\$(uname -m)), HOST is \$(hostname); uname -a; echo VM HOST NAME is \$(hostname)'" 2>/dev/null
+    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a;'"
     local ok=$?;
     set -e
     if [ $ok -eq 0 ]; then break; fi
