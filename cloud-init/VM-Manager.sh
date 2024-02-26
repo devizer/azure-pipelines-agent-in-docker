@@ -1,4 +1,4 @@
-set -o pipefial
+set -o pipefail
 
 function Build-Cloud-Config() {
 # FOLDER lauch_options:
