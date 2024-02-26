@@ -26,14 +26,10 @@ ssh_deletekeys: False
 write_files:
 - encoding: base64
   content: '$(File-To-Base64 "$variables")'
-  owner: root:root
   path: /etc/.variables
-  permissions: '0644'
 - encoding: base64
   content: '$(File-To-Base64 "$provisia")'
-  owner: root:root
   path: /tmp/.provisia
-  permissions: '0644'
   
 bootcmd:
   - |
@@ -137,6 +133,8 @@ runcmd:
      bash -e -c "$VM_POSTBOOT_SCRIPT"
 
 ' > /tmp/cloud-config.txt
+
+if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then cp -f /tmp/cloud-config.txt $SYSTEM_ARTIFACTSDIRECTORY/_logs || true; fi
 
 Say "cloud-localds verbose output"
 cloud-localds -v --disk-format qcow2 "$1" /tmp/cloud-config.txt
