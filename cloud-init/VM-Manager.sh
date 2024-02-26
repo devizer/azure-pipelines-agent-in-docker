@@ -240,7 +240,7 @@ function VM-Launcher-Smoke-Test() {
 
   Wait-For-VM /transient-builds/run/fs
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
-  sleep 30
+  sleep 1 # sleep 30
   echo FS AS SUDO 
   sudo ls -lah /transient-builds/run/fs 2>/dev/null || true
   echo FS AS $USER USER
