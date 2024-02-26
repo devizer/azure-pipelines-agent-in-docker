@@ -51,14 +51,14 @@ bootcmd:
         tar xzf /tmp/.provisia -C "$pf"
         ls -lah "$pf"
         
-        header "UnLock root and create the \"$user\" user"
         user='$VM_USER_NAME'
+        header "UnLock root and create the \"$user\" user"
         useradd -m -s /bin/bash -p pass $user
         pass=p1ssw0rd
         printf "$pass\n$pass\n" | sudo passwd root
-        sudo passwd -u root
+        passwd -u root
         printf "$pass\n$pass\n" | sudo passwd $user
-        sudo passwd -u user
+        passwd -u user
 
         header "Configure SSH Daemon"
         sshd=/etc/ssh/sshd_config
