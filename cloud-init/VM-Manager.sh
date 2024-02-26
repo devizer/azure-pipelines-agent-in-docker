@@ -260,7 +260,7 @@ function VM-Launcher-Smoke-Test() {
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
   Build-Cloud-Config "/tmp/provisia"
-  ls -la "/tmp/cloud-config.qcow2"
+  ls -la "/tmp/provisia/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
   Launch-VM $THEARCH "/tmp/provisia/cloud-config.qcow2" /transient-builds/run
   sleep 30
