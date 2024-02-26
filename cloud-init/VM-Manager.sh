@@ -191,11 +191,11 @@ function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
 function Wait-For-VM() {
-  local n=150
+  local n=120
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
-    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a;'" 2>/dev/null
+    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a; uptime'" 2>/dev/null
     local ok=$?;
     set -e
     if [ $ok -eq 0 ]; then break; fi
