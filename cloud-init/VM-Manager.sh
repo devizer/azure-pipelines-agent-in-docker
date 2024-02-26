@@ -191,7 +191,7 @@ function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
 function Wait-For-VM() {
-  local n=100
+  local n=150
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
@@ -237,6 +237,7 @@ function VM-Launcher-Smoke-Test() {
   ls -la "/tmp/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
   Launch-VM $THEARCH "/tmp/cloud-config.qcow2" /transient-builds/run
+  sleep 30
 
   Wait-For-VM /transient-builds/run/fs
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
