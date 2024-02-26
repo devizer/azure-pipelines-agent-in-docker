@@ -243,7 +243,7 @@ function Wait-For-VM() {
        fi
        echo "DONE at VM"
 ' > "$lauch_options/fs/tmp/launcher.sh"
-  sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -c -e /tmp/launcher.sh"
+  sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
 }
 
 function VM-Launcher-Smoke-Test() {
