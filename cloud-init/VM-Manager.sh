@@ -265,7 +265,7 @@ function VM-Launcher-Smoke-Test() {
   Launch-VM $THEARCH "/tmp/provisia/cloud-config.qcow2" /transient-builds/run
   sleep 30
 
-  Wait-For-VM /transient-builds/run/fs
+  Wait-For-VM "/tmp/provisia"
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   sleep 1 # sleep 30
   echo FS AS SUDO 
