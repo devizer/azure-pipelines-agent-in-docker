@@ -209,7 +209,7 @@ function Wait-For-VM() {
   local mapto="$1"
   VM_ROOT_FS="$mapto"
   echo "SSH is ready. Mapping root fs to $VM_ROOT_FS"
-  mkdir -p "$mapto"
+  sudo mkdir -p "$mapto"; sudo chown -R $USER "$mapto"
   Say "Mapping root fs of the VM to [$mapto] (127.0.0.1) with advanced options v5"
   # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
   set +e
@@ -240,9 +240,10 @@ function VM-Launcher-Smoke-Test() {
 
   Wait-For-VM /transient-builds/run/fs
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
+  sleep 8
   echo fs as sudo 
   sudo ls -lah /transient-builds/run/fs
   echo fs as $USER user
   ls -lah /transient-builds/run/fs || true
-  sleep 66
+  Say "VM-Launcher-Smoke-Test() COMPLETED"
 }
