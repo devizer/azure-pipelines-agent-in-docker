@@ -1,6 +1,12 @@
 
 function Build-Cloud-Config() {
-variables="$(mktemp)"
+# FOLDER lauch_options:
+# ./variables - variables
+# ./provisia.tar.gz files
+# ./fs - folder with the root file system over sshfs
+# ./cloud-config.qcow2
+local lauch_options="$1"
+mkdir -p "$lauch_options"
 echo '
 VM_PROVISIA_FOLDER='"'"$VM_PROVISIA_FOLDER"'"'
 VM_VARIABLES='"'"${VM_VARIABLES:-}"'"'
@@ -9,28 +15,19 @@ VM_PREBOOT_SCRIPT='"'"${VM_PREBOOT_SCRIPT:-}"'"'
 VM_POSTBOOT_SCRIPT='"'"${VM_POSTBOOT_SCRIPT:-}"'"'
 VM_POSTBOOT_ROLE='"'"${VM_POSTBOOT_ROLE:-root}"'"'
 VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/root}"'"'
-' > "$variables"
+' > "$lauch_options/variables"
 
-provisia="$(mktemp)"
 pushd "$HOST_PROVISIA_FOLDER" >/dev/null
-tar czf "$provisia" .
+tar --owner=0 --group=0 -czf "$lauch_options/provisia.tar.gz" .
 popd >/dev/null
 
 echo '
 #cloud-config
-debug: false
-disable_root: false
+# debug: false
+# disable_root: false
 ssh_pwauth: true
-ssh_deletekeys: False
+# ssh_deletekeys: False
 
-write_files:
-- encoding: base64
-  content: '$(File-To-Base64 "$variables")'
-  path: /etc/.variables
-- encoding: base64
-  content: '$(File-To-Base64 "$provisia")'
-  path: /tmp/.provisia
-  
 bootcmd:
   - |
     header() { printf "  \n----------------\n$1\n"; }
@@ -115,7 +112,9 @@ bootcmd:
     else
         echo "PREBOOT already completed previously"
     fi
+' > /tmp/cloud-config.txt
 
+echo '
 runcmd:
   - |
      echo "I am [$(whoami)] running from runcmd section"
@@ -131,21 +130,16 @@ runcmd:
      source /etc/.variables
      cd "$VM_PROVISIA_FOLDER"
      bash -e -c "$VM_POSTBOOT_SCRIPT"
-
-' > /tmp/cloud-config.txt
+' >/dev/null
 
 if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then cp -f /tmp/cloud-config.txt $SYSTEM_ARTIFACTSDIRECTORY/_logs || true; fi
 
 Say "cloud-localds verbose output"
-cloud-localds -v --disk-format qcow2 "$1" /tmp/cloud-config.txt
+cloud-localds -v --disk-format qcow2 "$lauch_options/cloud-config.qcow2" /tmp/cloud-config.txt
 echo "DONE: build schema"
 Say "VALIDATE CLOUD CONFIG"
 sudo cloud-init schema -c /tmp/cloud-config.txt || true
 echo "DONE: checkup schema"
-
-
-# qemu-img convert -O qcow2 -c -p cloud-config.img cloud-config.qcow2
-  
 }
 
 function Launch-VM() {
@@ -191,6 +185,8 @@ function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
 function Wait-For-VM() {
+  local lauch_options="$1"
+
   local n=150
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
@@ -206,7 +202,7 @@ function Wait-For-VM() {
     echo "vm build agent ERROR: VM is not responding via ssh"
     return 1;
   fi
-  local mapto="$1"
+  local mapto="$lauch_options/fs"
   VM_ROOT_FS="$mapto"
   echo "SSH is ready. Mapping root fs to $VM_ROOT_FS"
   sudo mkdir -p "$mapto"; sudo chown -R $USER "$mapto"
@@ -221,6 +217,33 @@ function Wait-For-VM() {
   set -e
   Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   if [[ "$VM_SSHFS_MAP_ERROR" != "0" ]]; then exit $VM_SSHFS_MAP_ERROR; fi
+
+  Say "Provisioning 1) COPYING"
+  mkdir -p "$lauch_options/fs/etc/provisia"
+  for name in variables provisia.tar.gz; do
+    echo "COPYING $name"
+    cp -f "$lauch_options/$name" "$lauch_options/fs/etc/$name"
+    echo "CH OWNER $lauch_options/fs/etc/$name"
+    chown root:root "$lauch_options/fs/etc/$name"
+  done 
+  Say "Provisioning 2) EXTRACTING"
+  echo '
+       set -eu;
+       echo "EXTRACTING in VM on $(hostname)"
+       source /etc/variables
+       export USER=root HOME=/root
+       VM_PROVISIA_FOLDER="${VM_PROVISIA_FOLDER:-$HOME}"
+       mkdir -p "${VM_PROVISIA_FOLDER:-$HOME}"
+       cd $VM_PROVISIA_FOLDER
+       tar xzf provisia.tar.gz
+       if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
+         eval $VM_POSTBOOT_SCRIPT
+       else
+         echo "MISSING VM_POSTBOOT_SCRIPT PARAMETER"
+       fi
+       echo "DONE at VM"
+' > "$lauch_options/fs/tmp/launcher.sh"
+  sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -c -e /tmp/launcher.sh"
 }
 
 function VM-Launcher-Smoke-Test() {
@@ -236,10 +259,10 @@ function VM-Launcher-Smoke-Test() {
   VM_POSTBOOT_SCRIPT='echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). CONTENT IS BELOW; ls -lah'
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
-  Build-Cloud-Config "/tmp/cloud-config.qcow2"
+  Build-Cloud-Config "/tmp/provisia"
   ls -la "/tmp/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
-  Launch-VM $THEARCH "/tmp/cloud-config.qcow2" /transient-builds/run
+  Launch-VM $THEARCH "/tmp/provisia/cloud-config.qcow2" /transient-builds/run
   sleep 30
 
   Wait-For-VM /transient-builds/run/fs
