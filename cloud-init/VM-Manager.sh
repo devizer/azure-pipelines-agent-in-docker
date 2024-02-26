@@ -1,3 +1,4 @@
+set -o pipefial
 
 function Build-Cloud-Config() {
 # FOLDER lauch_options:
@@ -211,7 +212,7 @@ function Wait-For-VM() {
   set +e
   # fuse: unknown option(s): `-o defer_permissions'
   # does not work -o reconnect -o Compression=no -o Ciphers=arcfour
-  echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin -o allow_other
+  echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin -o allow_other || echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin -o allow_other
   # returns mapping error via VM_SSHFS_MAP_ERROR
   VM_SSHFS_MAP_ERROR=$?;
   set -e
