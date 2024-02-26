@@ -127,9 +127,12 @@ runcmd:
      cd $HOME
      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
+     echo "PROCESSING VM_POSTBOOT_SCRIPT"
+     uptime
      source /etc/.variables
      cd "$VM_PROVISIA_FOLDER"
      bash -e -c "$VM_POSTBOOT_SCRIPT"
+
 ' > /tmp/cloud-config.txt
 
 cloud-localds --disk-format qcow2 "$1" /tmp/cloud-config.txt
