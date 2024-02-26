@@ -228,7 +228,7 @@ function Wait-For-VM() {
   done 
 
   Say "Provisioning 2) BUNDLE"
-  export TARGET_DIR=$HOME/build/bundle
+  export TARGET_DIR=$HOME/build/bundle; mkdir -p "$TARGET_DIR"
   script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
   sudo cp -f -v $TARGET_DIR/. "$lauch_options/fs/usr/local/bin"
 
