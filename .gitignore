@@ -355,3 +355,5 @@ MigrationBackup/
 .idea/**/contentModel.xml
 .idea/**/workspace.xml
 .idea/**
+
+*.tmp

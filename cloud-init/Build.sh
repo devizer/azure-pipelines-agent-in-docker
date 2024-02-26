@@ -89,3 +89,7 @@ cp $SYSTEM_ARTIFACTSDIRECTORY/root.partition.index.txt root.partition.index.txt
 popd
 
 popd # $work
+
+Say "VM-Launcher-Smoke-Test in [$(pwd)]"
+source VM-Manager.sh 
+VM-Launcher-Smoke-Test
