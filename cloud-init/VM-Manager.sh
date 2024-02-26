@@ -195,7 +195,7 @@ function Wait-For-VM() {
   while [ $n -gt 0 ]; do
     echo "$n) Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
-    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a;'"
+    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a;'" 2>/dev/null
     local ok=$?;
     set -e
     if [ $ok -eq 0 ]; then break; fi
@@ -245,5 +245,5 @@ function VM-Launcher-Smoke-Test() {
   sudo ls -lah /transient-builds/run/fs 2>/dev/null || true
   echo FS AS $USER USER
   ls -lah /transient-builds/run/fs 2>/dev/null || true
-  Say "VM-Launcher-Smoke-Test() COMPLETED"
+  Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
