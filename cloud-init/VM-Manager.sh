@@ -190,6 +190,34 @@ function Launch-VM() {
 function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
 
+function Wait-For-VM() {
+  local n=120
+  while [ $n -gt 0 ]; do
+    echo "Waiting for ssh connection to $vm_key on port $VM_SSH_PORT."
+    echo sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
+    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh /opt/nvm/nvm.sh; echo VM HOST NAME is \$(hostname)'"
+    local ok=$?;
+    if [ $ok -eq 0 ]; then break; fi
+    sleep 1
+    n=$((n-1))
+  done
+  popd
+  if [ $ok -ne 0 ]; then
+    echo "vm build agent ERROR: VM is not responding via ssh"
+    return 1;
+  fi
+  local mapto="$1"
+  VM_ROOT_FS="$mapto"
+  echo "SSH is ready. Mapping root fs to $VM_ROOT_FS"
+  mkdir -p "$mapto"
+  Say "Mapping root fs of the $vm_key to [$mapto] (127.0.0.1) with advanced options v5"
+  # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
+  echo "p1ssw0rd" | sshfs root@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin
+  # returns mapping error via VM_SSHFS_MAP_ERROR
+  VM_SSHFS_MAP_ERROR=$?;
+  Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
+}
+
 function VM-Launcher-Smoke-Test() {
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
@@ -207,5 +235,12 @@ function VM-Launcher-Smoke-Test() {
   ls -la "/tmp/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
   Launch-VM $THEARCH "/tmp/cloud-config.qcow2" /transient-builds/run
-  sleep 1300
+
+  Wait-For-VM /transient-builds/run/fs
+  Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
+  echo fs as sudo 
+  sudo ls -lah /transient-builds/run/fs
+  echo fs as $USER user
+  ls -lah /transient-builds/run/fs || true
+  sleep 66
 }
