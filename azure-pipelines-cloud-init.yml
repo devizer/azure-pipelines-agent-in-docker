@@ -122,7 +122,7 @@ jobs:
       sudo apt-get install sshpass sshfs -y -qq | grep "Unpack\|Setting"
       mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
       # fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf
-      printf "\nuser_allow_other" | sudo tee -a /etc/fuse.conf
+      printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
       docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
       utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
