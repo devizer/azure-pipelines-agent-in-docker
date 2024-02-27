@@ -38,24 +38,14 @@ bootcmd:
         printenv | sort
 
         export USER=root HOME=/root
-
-        header "Custom VARIABLES"
-        cat /etc/.variables
-
-        header "Extracting provisia"
-        pf='$VM_PROVISIA_FOLDER'
-        mkdir -p "$pf"
-        ls -lah /tmp/.provisia
-        tar xzf /tmp/.provisia -C "$pf"
-        ls -lah "$pf"
         
         user='$VM_USER_NAME'
         header "UnLock root and create the \"$user\" user"
         useradd -m -s /bin/bash -p pass $user
         pass=p1ssw0rd
-        printf "$pass\n$pass\n" | sudo passwd root
+        printf "$pass\n$pass\n" | passwd root
         passwd -u root
-        printf "$pass\n$pass\n" | sudo passwd $user
+        printf "$pass\n$pass\n" | passwd $user
         passwd -u user
 
         header "Configure SSH Daemon"
@@ -75,10 +65,10 @@ bootcmd:
         timedatectl set-timezone UTC
         
         header "Adding user to nopasswd sudoers"
-        echo "user    ALL=(ALL:ALL) NOPASSWD: ALL" | sudo EDITOR="tee -a" visudo
+        echo "$user    ALL=(ALL:ALL) NOPASSWD: ALL" | sudo EDITOR="tee -a" visudo
 
         header "Add user to sudo group"
-        usermod -aG sudo user
+        usermod -aG sudo $user
 
         header "HOSTNAME configuration"
         if [ -f /etc/os-release ]; then
@@ -90,7 +80,7 @@ bootcmd:
         fi
         hostn="$ID-$VERSION_CODENAME-$(uname -m | sed "s/_/\-/g")"
         hostp=$(hostname)
-        echo "Changing hostname from [$hostn] to [$hostn]"
+        echo "Changing hostname from [$hostp] to [$hostn]"
         hostname $hostn
         echo "$hostn" > /etc/hostname
         sed -i "/$hostp/d" /etc/hosts
@@ -270,7 +260,7 @@ function VM-Launcher-Smoke-Test() {
   VM_MEM=2048M
   HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
   VM_PROVISIA_FOLDER=/root/provisia
-  VM_USER_NAME=user
+  VM_USER_NAME=john
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
 Say "FREE MEMORY"; free -m;
