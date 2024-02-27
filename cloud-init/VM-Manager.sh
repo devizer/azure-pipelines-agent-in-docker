@@ -258,6 +258,12 @@ function Wait-For-VM() {
 function VM-Launcher-Smoke-Test() {
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
+  Say "Build Universe.CpuUsage"
+  Reset-Target-Framework -fw net46 -l latest
+  pushd Universe.CpuUsage.Tests
+  time msbuild /t:Restore,Build /p:Configuration=Release /v:m
+  popd
+
   VM_SSH_PORT=2345
   VM_CPUS=2
   VM_MEM=2048M
@@ -280,10 +286,10 @@ time csc -out:/tmp/hello-world.exe /tmp/hello-world.cs
 Say "Exec /tmp/hello-world.exe"
 time mono /tmp/hello-world.exe
 
-Say "Build Universe.CpuUsage"
-Reset-Target-Framework -fw net46 -l latest
+# Say "Build Universe.CpuUsage"
+# Reset-Target-Framework -fw net46 -l latest
 pushd Universe.CpuUsage.Tests
-time msbuild /t:Restore,Build /p:Configuration=Release /v:m
+# time msbuild /t:Restore,Build /p:Configuration=Release /v:m
 Say "TEST Universe.CpuUsage"
 cd bin/Release/net46
 time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
