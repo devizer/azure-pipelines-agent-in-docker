@@ -1,5 +1,5 @@
 set -ue; set -o pipefail
-XZ_COMPRESSION_LEVEL=1
+XZ_COMPRESSION_LEVEL=2
 mkdir -p $SYSTEM_ARTIFACTSDIRECTORY/_logs
 sudo mkdir -p $THEWORKDIR/temp $THEWORKDIR/run; sudo chown -R $USER $THEWORKDIR; 
 work=$THEWORKDIR/temp
