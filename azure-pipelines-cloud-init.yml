@@ -21,6 +21,10 @@ jobs:
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
+      'arm64-debian-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
+        KEY: 13-generic-arm64
+        THEARCH: arm64
       'arm64-debian-10':
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
         KEY: 10-generic-arm64
