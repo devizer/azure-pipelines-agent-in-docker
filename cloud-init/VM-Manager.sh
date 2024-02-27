@@ -274,7 +274,7 @@ function VM-Launcher-Smoke-Test() {
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
-echo "OS IS"; cat /etc/*release;
+Say "OS IS"; cat /etc/*release;
 export GCC_FORCE_GZIP_PRIORITY=true
 Say "Installing MONO"; time (export INSTALL_DIR=/usr/local TOOLS="mono"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 Say "Installing MS BUILD"; time (export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
@@ -285,6 +285,9 @@ echo -e "public class Program {public static void Main() {System.Console.WriteLi
 time csc -out:/tmp/hello-world.exe /tmp/hello-world.cs
 Say "Exec /tmp/hello-world.exe"
 time mono /tmp/hello-world.exe
+
+Say "Installing mono certificates"
+script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true
 
 # Say "Build Universe.CpuUsage"
 # Reset-Target-Framework -fw net46 -l latest
