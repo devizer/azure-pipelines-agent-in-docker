@@ -273,6 +273,7 @@ Say "Installing MONO"; time (export INSTALL_DIR=/usr/local TOOLS="mono"; script=
 Say "Installing MS BUILD"; time (export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 Say "Installing .NET Test Runners"; time (url=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash)
 time nunit3-console
+time nuget || true
 '
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
