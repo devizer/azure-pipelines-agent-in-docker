@@ -286,8 +286,11 @@ time csc -out:/tmp/hello-world.exe /tmp/hello-world.cs
 Say "Exec /tmp/hello-world.exe"
 time mono /tmp/hello-world.exe
 
-Say "Installing mono certificates"
-script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true
+
+Say "Import mozilla certificates"
+time mozroots --import --sync
+Say "Installing mono certificates snapshot"
+time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
 
 # Say "Build Universe.CpuUsage"
 # Reset-Target-Framework -fw net46 -l latest
