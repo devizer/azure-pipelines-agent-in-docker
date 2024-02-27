@@ -301,6 +301,9 @@ Say "TEST Universe.CpuUsage"
 cd bin/Release/net46
 time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
 popd
+
+Say "Installing nuget"
+url=https://raw.githubusercontent.com/devizer/glist/master/bin/install-nuget-6.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 time nuget || true
 '
   VM_POSTBOOT_ROLE='root'
