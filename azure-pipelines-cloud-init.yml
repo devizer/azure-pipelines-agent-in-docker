@@ -149,4 +149,4 @@ jobs:
     displayName: 'Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
-      artifactName: '$(System.JobName)'
+      artifactName: '$(Agent.JobName)'
