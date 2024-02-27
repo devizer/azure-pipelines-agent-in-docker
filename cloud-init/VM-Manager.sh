@@ -266,9 +266,14 @@ function VM-Launcher-Smoke-Test() {
   VM_USER_NAME=user
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
-echo FREE MEMORY; free -m;
-echo FREE SPACE; df -h -T;
-echo OS IS; cat /etc/*release'
+Say "FREE MEMORY"; free -m;
+echo "FREE SPACE"; df -h -T;
+echo "OS IS"; cat /etc/*release;
+Say "Installing MONO"; time (export INSTALL_DIR=/usr/local TOOLS="mono"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
+Say "Installing MS BUILD"; export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | time bash
+Say "Installing .NET Test Runners"; url=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | time bash
+nunit3-console
+'
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
   Build-Cloud-Config "/tmp/provisia"
@@ -280,9 +285,7 @@ echo OS IS; cat /etc/*release'
   Wait-For-VM "/tmp/provisia"
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   sleep 1 # sleep 30
-  echo FS AS SUDO 
-  sudo ls /tmp/provisia/fs 2>/dev/null || true
-  echo FS AS $USER USER
-  ls /tmp/provisia/fs 2>/dev/null || true
+  echo "FS AS SUDO: $(sudo ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
+  echo "FS AS USER: $(ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
