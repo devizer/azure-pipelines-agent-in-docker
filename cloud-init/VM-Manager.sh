@@ -269,10 +269,16 @@ echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW;
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
 echo "OS IS"; cat /etc/*release;
+export GCC_FORCE_GZIP_PRIORITY=true
 Say "Installing MONO"; time (export INSTALL_DIR=/usr/local TOOLS="mono"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 Say "Installing MS BUILD"; time (export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 Say "Installing .NET Test Runners"; time (url=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash)
 time nunit3-console
+Say "Test CSC"
+echo -e "public class Program {public static void Main() {System.Console.WriteLine(\"Hello World\");}}" > /tmp/hello-world.cs
+time csc -out:/tmp/hello-world.exe /tmp/hello-world.cs
+Say "Exec /tmp/hello-world.exe"
+time mono /tmp/hello-world.exe
 time nuget || true
 '
   VM_POSTBOOT_ROLE='root'
