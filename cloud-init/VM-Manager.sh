@@ -246,7 +246,7 @@ function Wait-For-VM() {
        cd $VM_PROVISIA_FOLDER
        tar xzf /etc/provisia.tar.gz
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
-         eval $VM_POSTBOOT_SCRIPT
+         eval "$VM_POSTBOOT_SCRIPT"
        else
          echo "MISSING VM_POSTBOOT_SCRIPT PARAMETER"
        fi
