@@ -266,6 +266,9 @@ echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW;
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
 Say "OS IS"; cat /etc/*release;
+Say "Time Zone Is"; cat /etc/timezone
+Say "Locales are"; locale --all
+Say "Current Locale"; locale
 export GCC_FORCE_GZIP_PRIORITY=true
 Say "Installing MONO"; time (export INSTALL_DIR=/usr/local TOOLS="mono"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
 Say "Installing MS BUILD"; time (export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
