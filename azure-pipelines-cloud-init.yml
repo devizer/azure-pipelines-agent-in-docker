@@ -11,7 +11,7 @@ trigger:
 
 jobs:
 
-- job: cloudinit
+- job: Image
   pool:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 120
@@ -103,6 +103,8 @@ jobs:
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
+      printenv | sort; echo "";
+      
 
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
