@@ -259,8 +259,9 @@ function VM-Launcher-Smoke-Test() {
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
   Say "Build Universe.CpuUsage"
+  pushd /tmp/cloud-init-smoke-test-provisia
   Reset-Target-Framework -fw net46 -l latest
-  pushd Universe.CpuUsage.Tests
+  cd Universe.CpuUsage.Tests
   time msbuild /t:Restore,Build /p:Configuration=Release /v:m
   popd
 
