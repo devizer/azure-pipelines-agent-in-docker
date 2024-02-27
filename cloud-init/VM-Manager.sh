@@ -287,9 +287,9 @@ Say "Exec /tmp/hello-world.exe"
 time mono /tmp/hello-world.exe
 
 
-Say "Import mozilla certificates"
+Say "Import Mozilla Certificates"
 time mozroots --import --sync
-Say "Installing mono certificates snapshot"
+Say "Installing Mono Certificates snapshot"
 time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
 
 # Say "Build Universe.CpuUsage"
