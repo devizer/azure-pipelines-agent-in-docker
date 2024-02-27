@@ -279,6 +279,15 @@ echo -e "public class Program {public static void Main() {System.Console.WriteLi
 time csc -out:/tmp/hello-world.exe /tmp/hello-world.cs
 Say "Exec /tmp/hello-world.exe"
 time mono /tmp/hello-world.exe
+
+Say "Build Universe.CpuUsage"
+Reset-Target-Framework -fw net46 -l latest
+pushd Universe.CpuUsage.Tests
+time msbuild /t:Restore,Build /p:Configuration=Release /v:m
+Say "TEST Universe.CpuUsage"
+cd bin/Release/net46
+time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
+popd
 time nuget || true
 '
   VM_POSTBOOT_ROLE='root'
