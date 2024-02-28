@@ -1,8 +1,9 @@
 set -o pipefail
 
 function Prepare-VM-Image() {
-  
+  echo "todo: download and expand image and kernel to specified folder"
 }
+
 function Build-Cloud-Config() {
 # FOLDER lauch_options:
 # ./variables - variables
