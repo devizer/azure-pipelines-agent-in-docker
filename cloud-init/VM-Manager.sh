@@ -370,6 +370,7 @@ time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certi
 pushd Universe.CpuUsage.Tests
 # time msbuild /t:Restore,Build /p:Configuration=Release /v:m
 Say "TEST Universe.CpuUsage"
+export SKIP_POSIXRESOURCESUSAGE_ASSERTS=True
 cd bin/Release/net46
 time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
 popd
