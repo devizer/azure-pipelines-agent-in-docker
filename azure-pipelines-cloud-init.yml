@@ -147,6 +147,7 @@ jobs:
         Say "Compress $file"
         # xz -z -3 $file
         7z a -txz -mx=$XZ_COMPRESSION_LEVEL -mmt=$(nproc) $file.xz $file
+        rm $file
       done
       Say "OK"
       ls -lah
