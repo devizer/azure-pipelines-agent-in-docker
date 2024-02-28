@@ -39,9 +39,12 @@ bootcmd:
 
     if [ ! -f /etc/.preboot-completed ]; then
         header "pwd is [$(pwd)]. Environment is"
+        echo "BASH_VERSION: $BASH_VERSION"
         printenv | sort
 
         export USER=root HOME=/root
+        header "PROCESSES"
+        ps aux
         
         user='$VM_USER_NAME'
         header "UnLock root and create the \"$user\" user"
@@ -75,10 +78,10 @@ bootcmd:
         usermod -aG sudo $user
 
         header "HOSTNAME configuration"
-        if [[ -f /etc/os-release ]]; then
+        if [ -f /etc/os-release ]; then
            . /etc/os-release
-           if [[ -z "$VERSION_CODENAME" ]]; then VERSION_CODENAME=$DISTRIB_CODENAME; fi
-           if [[ -z "$VERSION_CODENAME" ]]; then VERSION_CODENAME=$VERSION_ID; fi
+           if [ -z "$VERSION_CODENAME" ]; then VERSION_CODENAME=$DISTRIB_CODENAME; fi
+           if [ -z "$VERSION_CODENAME" ]; then VERSION_CODENAME=$VERSION_ID; fi
         else
            ID=centos
            VERSION_CODENAME=6
