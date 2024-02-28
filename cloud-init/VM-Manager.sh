@@ -122,7 +122,7 @@ bootcmd:
         printf "$pass\n$pass\n" | passwd root
         passwd -u root
         printf "$pass\n$pass\n" | passwd $user
-        passwd -u user
+        passwd -u $user
 
         header "Configure SSH Daemon"
         sshd=/etc/ssh/sshd_config
