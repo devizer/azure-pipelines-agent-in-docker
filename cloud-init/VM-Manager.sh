@@ -75,9 +75,10 @@ bootcmd:
         usermod -aG sudo $user
 
         header "HOSTNAME configuration"
-        if [ -f /etc/os-release ]; then
+        if [[ -f /etc/os-release ]]; then
            . /etc/os-release
-           if [ -z "$VERSION_CODENAME" ]; then VERSION_CODENAME=$VERSION_ID; fi
+           if [[ -z "$VERSION_CODENAME" ]]; then VERSION_CODENAME=$DISTRIB_CODENAME; fi
+           if [[ -z "$VERSION_CODENAME" ]]; then VERSION_CODENAME=$VERSION_ID; fi
         else
            ID=centos
            VERSION_CODENAME=6
