@@ -306,6 +306,8 @@ popd
 Say "Installing nuget"
 url=https://raw.githubusercontent.com/devizer/glist/master/bin/install-nuget-6.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 time nuget || true
+Say "/etc/os-release"
+cat "/etc/os-release"
 '
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
