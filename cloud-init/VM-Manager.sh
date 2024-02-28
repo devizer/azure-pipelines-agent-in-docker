@@ -342,6 +342,18 @@ function VM-Launcher-Smoke-Test() {
   VM_USER_NAME=john
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+Say "RAM DISK for /tmp"
+mount -t tmpfs -o mode=1777 tmpfs /tmp
+Say "RAM DISK for /var/tmp"
+mount -t tmpfs -o mode=1777 tmpfs /var/tmp
+Say "RAM DISK for /var/lib/apt"
+mount -t tmpfs tmpfs /var/lib/apt
+Say "RAM DISK for /var/cache/apt"
+mount -t tmpfs tmpfs /var/cache/apt
+Say "Mounts"
+df -h -T
+Say --Reset-Stopwatch
+
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
 Say "OS IS"; cat /etc/*release;
