@@ -361,7 +361,7 @@ time mono /tmp/hello-world.exe
 
 
 Say "Import Mozilla Certificates"
-time try-and-retry mozroots --import --sync
+time try-and-retry try-and-retry mozroots --import --sync
 Say "Installing Mono Certificates snapshot"
 time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
 
