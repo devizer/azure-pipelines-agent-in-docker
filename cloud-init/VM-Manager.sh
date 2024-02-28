@@ -352,7 +352,6 @@ Say "RAM DISK for /var/cache/apt"
 mount -t tmpfs tmpfs /var/cache/apt
 Say "Mounts"
 df -h -T
-Say --Reset-Stopwatch
 
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
