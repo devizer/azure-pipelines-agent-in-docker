@@ -141,7 +141,8 @@ jobs:
       set -eu; set -o pipefail
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
-      cd /transient-builds
+      cd $SYSTEM_ARTIFACTSDIRECTORY
+      ls -lah
       for file in initrd.img vmlinuz disk.qcow2; do
         Say "Compress $file"
         # xz -z -3 $file
