@@ -132,10 +132,18 @@ jobs:
   - script: |
       set -eu; set -o pipefail
       Say --Reset-Stopwatch
-      cd cloud-init # todo: separate step smoke test
-      bash -e Build.sh
+      cd cloud-init 
+      bash -e Build-Step.sh
     # condition: succeededOrFailed()
-    displayName: 'Build and Test Images'
+    displayName: 'Build'
+
+  - script: |
+      set -eu; set -o pipefail
+      Say --Reset-Stopwatch
+      cd cloud-init 
+      bash -e Smoke-Test-Step.sh 
+    # condition: succeededOrFailed()
+    displayName: 'Smoke Test'
 
   - script: |
       set -eu; set -o pipefail
@@ -145,7 +153,6 @@ jobs:
       ls -lah
       for file in initrd.img vmlinuz disk.qcow2; do
         Say "Compress $file"
-        # xz -z -3 $file
         7z a -txz -mx=$XZ_COMPRESSION_LEVEL -mmt=$(nproc) $file.xz $file
         rm $file
         xz -t $file.xz
