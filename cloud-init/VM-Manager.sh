@@ -1,5 +1,8 @@
 set -o pipefail
 
+function Prepare-VM-Image() {
+  
+}
 function Build-Cloud-Config() {
 # FOLDER lauch_options:
 # ./variables - variables

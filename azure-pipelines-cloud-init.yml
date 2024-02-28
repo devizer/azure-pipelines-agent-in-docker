@@ -109,19 +109,14 @@ jobs:
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
-      export MOVE_DOCKER_TO_RAID=True
+      export MOVE_DOCKER_TO_RAID=""
       export FS=BTRFS-Compressed
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
       Say "/proc/sys/kernel/randomize_va_space"
       sudo cat /proc/sys/kernel/randomize_va_space
       echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
-      Say "qemu user static"
-      # sudo apt-get install qemu-user-static -y -qq >/dev/null
-      docker run --name qemu-user-static multiarch/qemu-user-static >/dev/null 2>&1 || true
-      # sudo docker cp qemu-user-static:/usr/bin/qemu* /usr/bin
-      # /usr/bin/qemu-arm-static --version
-      Say "Register qemu static"
+      Say "Install libguestfs-tools"
       sudo apt-get update -qq
       sudo apt-get install qemu-system-arm qemu-system-x86 -y -qq | grep "Unpack\|Setting"
       sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"
@@ -130,19 +125,16 @@ jobs:
       # fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
-      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null 2>&1
-      utils_fixed_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/58e96809ba79e162b901095fad1c6555bb91b746/4gcc/build-gcc-utilities.sh
-      utils_master_url=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
-      try-and-retry curl -kSL -o /tmp/build-gcc-utilities.sh "${utils_fixed_url}"
+      try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
     displayName: 'provisioning'
 
   - script: |
       set -eu; set -o pipefail
       Say --Reset-Stopwatch
-      cd cloud-init
+      cd cloud-init # todo: separate step smoke test
       bash -e Build.sh
     condition: succeededOrFailed()
-    displayName: 'build'
+    displayName: 'Build and Test Images'
 
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
