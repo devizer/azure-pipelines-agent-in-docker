@@ -15,7 +15,11 @@ function Prepare-VM-Image() {
   Say "Downloading raw cloud image as $(pwd)/$file"
   echo "URL is $url"
   try-and-retry curl --connect-timeout 30 -ksfSL -o $file "$url" || rm -f $file
+  # rpi.img.xz -> rpi.img
   if [[ "$url" == *".xz" ]]; then echo "Extracting $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
+  # rpi.zip -> rpi.img
+  if [[ "$url" == *".zip" ]]; then echo "Extracting $file.zip"; mv $file $file.zip; 7z x $file.zip; rm -f $file.zip; mv *.img $file; fi
+  ls -lah; echo ""
   ls -lah $file
   Say "Extracting kernel from /dev/sda1,2,..."
   mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
@@ -26,7 +30,7 @@ function Prepare-VM-Image() {
   for boot in $(cat "${to_folder}"/_logs/filesystems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}' | sort -u); do
     # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
     echo ""; Say "TRY BOOT VOLUME $boot"
-    sudo guestmount -a $file -m $boot $key-MNT
+    try-and-retry sudo guestmount -a $file -m $boot $key-MNT
     echo The BOOT content
     sudo ls -la $key-MNT/boot |& tee "${to_folder}"/_logs/$(basename $boot)-boot.files.txt
     echo The ROOT content
@@ -460,4 +464,7 @@ cat "/etc/os-release"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
 
-Prepare-VM-Image "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz" /raspberry 16G
+Prepare-VM-Image "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip" /raspberry-v10 16G
+# Prepare-VM-Image "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz" /raspberry 16G
+
+
