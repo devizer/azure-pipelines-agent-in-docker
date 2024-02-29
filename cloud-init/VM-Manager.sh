@@ -390,7 +390,8 @@ time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certi
 
 oldpwd=$(pwd)
 Say "OPTIONAL Build Universe.CpuUsage"
-Reset-Target-Framework -fw net47 -l latest
+# net47 error: /usr/local/lib/mono/msbuild/Current/bin/Microsoft.Common.CurrentVersion.targets(2101,5): error MSB3248: Parameter "AssemblyFiles" has invalid value "/usr/local/lib/mono/4.7-api/mscorlib.dll". Could not load file or assembly 'System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. [/root/provisia/Universe.CpuUsage/Universe.CpuUsage.csproj]
+Reset-Target-Framework -fw net46 -l latest
 pushd Universe.CpuUsage.Tests
 time msbuild /t:Restore,Build /p:Configuration=Release /v:m |& tee $oldpwd/msbuild.log || Say --Display-As=Error "MSBUILD FAILED on $(hostname)"
 Say "TEST Universe.CpuUsage"
