@@ -22,8 +22,6 @@ jobs:
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
-    https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz
-
       'armhf-raspberryos-12':
         IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz"
         KEY: 12-raspberryos-armhf
