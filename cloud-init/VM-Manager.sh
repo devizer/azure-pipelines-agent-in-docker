@@ -26,7 +26,7 @@ function Prepare-VM-Image() {
   for boot in $(cat "${to_folder}"/_logs/filesystems.txt | awk '$1 ~ /dev/ && $1 !~ /sda$/ {print $1}' | sort -u); do
     # export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
     echo ""; Say "TRY BOOT VOLUME $boot"
-    sudo guestmount -a $file -m $boot $key-MNT
+    try-and-retry sudo guestmount -a $file -m $boot $key-MNT
     echo The BOOT content
     sudo ls -la $key-MNT/boot |& tee "${to_folder}"/_logs/$(basename $boot)-boot.files.txt
     echo The ROOT content
