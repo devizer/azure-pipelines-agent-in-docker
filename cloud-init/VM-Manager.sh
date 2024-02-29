@@ -314,14 +314,31 @@ function Wait-For-VM() {
        mkdir -p "${VM_PROVISIA_FOLDER:-$HOME}"
        cd $VM_PROVISIA_FOLDER
        tar xzf /etc/provisia.tar.gz
+       err=0
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
-         eval "$VM_POSTBOOT_SCRIPT"
+         eval "$VM_POSTBOOT_SCRIPT" || err=111
+         if [[ $err == 0 ]]; 
+           echo "SUCCESS. JOB DONE at VM"
+         else
+           echo "JOB FAILED"
        else
          echo "MISSING VM_POSTBOOT_SCRIPT PARAMETER"
        fi
-       echo "DONE at VM"
+       
+       Say "Storing outcome folder [$VM_OUTCOME_FOLDER] as /outcome.tar"
+       pushd $VM_OUTCOME_FOLDER
+       tar cf /outcome.tar .
+       popd
+       Say Bye
 ' > "$lauch_options/fs/tmp/launcher.sh"
   sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
+  Say "Grab Outcome folder (at VM) /outcome.tar to $HOST_OUTCOME_FOLDER"
+  cp -f -v $lauch_options/fs/outcome.tar /tmp/outcome.tar
+  Say "Extract outcome.tar to $HOST_OUTCOME_FOLDER"
+  sudo mkdir -p $HOST_OUTCOME_FOLDER; sudo chown -R $USER $HOST_OUTCOME_FOLDER
+  pushd $HOST_OUTCOME_FOLDER
+    tar xf /tmp/outcome.tar
+  popd
 }
 
 function VM-Launcher-Smoke-Test() {
@@ -334,12 +351,6 @@ function VM-Launcher-Smoke-Test() {
   time msbuild /t:Restore,Build /p:Configuration=Release /v:m
   popd
 
-  VM_SSH_PORT=2345
-  VM_CPUS=2
-  VM_MEM=2048M
-  HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
-  VM_PROVISIA_FOLDER=/root/provisia
-  VM_USER_NAME=john
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
 Say "RAM DISK for /tmp"
@@ -376,10 +387,11 @@ time try-and-retry try-and-retry mozroots --import --sync
 Say "Installing Mono Certificates snapshot"
 time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
 
-# Say "Build Universe.CpuUsage"
-# Reset-Target-Framework -fw net46 -l latest
+oldpwd=$(pwd)
+Say "OPTIONAL Build Universe.CpuUsage"
+Reset-Target-Framework -fw net47 -l latest
 pushd Universe.CpuUsage.Tests
-# time msbuild /t:Restore,Build /p:Configuration=Release /v:m
+time msbuild /t:Restore,Build /p:Configuration=Release /v:m |& tee $oldpwd/msbuild.log || Say --Display-As=Error "MSBUILD FAILED on $(hostname)"
 Say "TEST Universe.CpuUsage"
 export SKIP_POSIXRESOURCESUSAGE_ASSERTS=True
 cd bin/Release/net46
@@ -394,6 +406,13 @@ cat "/etc/os-release"
 '
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
+  HOST_OUTCOME_FOLDER=$SYSTEM_ARTIFACTSDIRECTORY/_outcome
+  VM_SSH_PORT=2345
+  VM_CPUS=2
+  VM_MEM=2048M
+  HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
+  VM_PROVISIA_FOLDER=/root/provisia
+  VM_USER_NAME=john
   Build-Cloud-Config "/tmp/provisia"
   ls -la "/tmp/provisia/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
