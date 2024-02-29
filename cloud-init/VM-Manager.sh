@@ -317,10 +317,11 @@ function Wait-For-VM() {
        err=0
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
          eval "$VM_POSTBOOT_SCRIPT" || err=111
-         if [[ $err == 0 ]]; 
-           echo "SUCCESS. JOB DONE at VM"
+         if [[ $err == 0 ]]; then
+           Say "SUCCESS. JOB DONE at VM. Uptime: $(uptime -p)"
          else
-           echo "JOB FAILED"
+           Say --Display-As=Error "JOB FAILED. Uptime: $(uptime -p)"
+         fi
        else
          echo "MISSING VM_POSTBOOT_SCRIPT PARAMETER"
        fi
@@ -329,7 +330,7 @@ function Wait-For-VM() {
        pushd $VM_OUTCOME_FOLDER
        tar cf /outcome.tar .
        popd
-       Say Bye
+       Say "Bye. Uptime: $(uptime -p)"
 ' > "$lauch_options/fs/tmp/launcher.sh"
   sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
   Say "Grab Outcome folder (at VM) /outcome.tar to $HOST_OUTCOME_FOLDER"
