@@ -16,6 +16,7 @@ function Prepare-VM-Image() {
   echo "URL is $url"
   try-and-retry curl --connect-timeout 30 -ksfSL -o $file "$url" || rm -f $file
   if [[ "$url" == *".xz" ]]; then echo "Extracting $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
+  if [[ "$url" == *".zip" ]]; then echo "Extracting $file.zip"; mv $file $file.zip; 7z x $file.zip; rm -f $file.zip; fi
   ls -lah $file
   Say "Extracting kernel from /dev/sda1,2,..."
   mkdir -p $key-MNT $key-BOOTALL $key-BOOT $key-LOGS
