@@ -257,14 +257,14 @@ function File-To-Base64() { cat "$1" | base64 -w 0; }
 function Wait-For-VM() {
   local lauch_options="$1"
 
-  local n=0
+  local n=1
   local startAt="$(get_global_seconds)"
   while [ 1 -eq 1 ]; do
     local current="$(get_global_seconds)"
     current="$((current-startAt))"
     current="$((15*60 - current))"
-    if [[ $current -ge 0 ]]; then break; fi
-    echo "{$current #$n} Waiting for ssh connection to VM on port $VM_SSH_PORT."
+    if [[ $current -le 0 ]]; then break; fi
+    echo "{#$n:$current} Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
     sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a; uptime'" 2>/dev/null
     local ok=$?;
