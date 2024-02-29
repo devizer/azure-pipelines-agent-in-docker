@@ -261,8 +261,8 @@ function Wait-For-VM() {
   local startAt="$(get_global_seconds)"
   while [ 1 -eq 1 ]; do
     local current="$(get_global_seconds)"
-    current="$((current-startAt))"
-    current="$((15*60 - current))"
+    elapsed="$((current-startAt))"
+    current="$((15*60 - elapsed))"
     if [[ $current -le 0 ]]; then break; fi
     echo "{#$n:$current} Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
@@ -274,13 +274,13 @@ function Wait-For-VM() {
     n=$((n+1))
   done
   if [ $ok -ne 0 ]; then
-    echo "VM build agent ERROR: VM is not responding via ssh"
-    Say --Display-As=Error "VM build agent ERROR: VM is not responding via ssh"
+    echo "VM build agent ERROR: VM is not responding via ssh. Elsapsed $elapsed seconds."
+    Say --Display-As=Error "VM build agent ERROR: VM is not responding via ssh. Elsapsed $elapsed seconds."
     return 1;
   fi
   local mapto="$lauch_options/fs"
   VM_ROOT_FS="$mapto"
-  echo "SSH is ready. Mapping root fs to $VM_ROOT_FS"
+  Say "SSH is ready. Elapsed $elapsed seconds. Mapping root fs to $VM_ROOT_FS"
   sudo mkdir -p "$mapto"; sudo chown -R $USER "$mapto"
   Say "Mapping root fs of the VM to [$mapto] (127.0.0.1) with advanced options v5"
   # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
@@ -450,7 +450,7 @@ cat "/etc/os-release"
   ls -la "/tmp/provisia/cloud-config.qcow2"
   Say "THEARCH: $THEARCH"
   Launch-VM $THEARCH "/tmp/provisia/cloud-config.qcow2" /transient-builds/run
-  sleep 30
+  sleep 1
 
   Wait-For-VM "/tmp/provisia"
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
