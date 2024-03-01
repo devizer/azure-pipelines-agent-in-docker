@@ -116,7 +116,6 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       printenv | sort; echo "";
       
-
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
@@ -127,11 +126,11 @@ jobs:
       Say "/proc/sys/kernel/randomize_va_space"
       sudo cat /proc/sys/kernel/randomize_va_space
       echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+      
       Say "Install libguestfs-tools"
-      sudo apt-get update -qq
-      sudo apt-get install qemu-system-arm qemu-system-x86 -y -qq | grep "Unpack\|Setting"
-      sudo apt-get install cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"
-      sudo apt-get install sshpass sshfs -y -qq | grep "Unpack\|Setting"
+      time (sudo apt-get update -qq; sudo apt-get install qemu-system-arm qemu-system-x86 sshpass sshfs cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"; )
+
+      # config sshfs and sshpass
       mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
       # fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
