@@ -140,6 +140,7 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
       cd cloud-init 
       bash -e Build-Step.sh
@@ -148,6 +149,7 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
       cd cloud-init 
       bash -e Smoke-Test-Step.sh 
@@ -156,8 +158,8 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
-      Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
       cd $SYSTEM_ARTIFACTSDIRECTORY
       ls -lah
       for file in initrd.img vmlinuz disk.qcow2; do
