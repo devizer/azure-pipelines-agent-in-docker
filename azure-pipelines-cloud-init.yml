@@ -22,14 +22,16 @@ jobs:
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.raw
     matrix:
-      'armhf-raspberryos-10':
-        IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip"
-        KEY: 10-raspberryos-armhf # 5.1
-        THEARCH: arm
-      'armhf-raspberryos-12':
-        IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz"
-        KEY: 12-raspberryos-armhf # 6.1
-        THEARCH: arm
+      # 'armhf-raspberryos-10':
+      #   # MISSING KERNEL, NEEDS DTD
+      #   IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip"
+      #   KEY: 10-raspberryos-armhf # 5.1
+      #   THEARCH: arm
+      # 'armhf-raspberryos-12':
+      #   # NEEDS DTD
+      #   IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz"
+      #   KEY: 12-raspberryos-armhf # 6.1
+      #   THEARCH: arm
       'arm64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
         KEY: 13-generic-arm64

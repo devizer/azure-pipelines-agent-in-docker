@@ -464,7 +464,6 @@ cat "/etc/os-release"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 }
 
-Prepare-VM-Image "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip" /raspberry-v10 16G
 # Prepare-VM-Image "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz" /raspberry 16G
 
 

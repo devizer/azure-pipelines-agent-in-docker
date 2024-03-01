@@ -378,11 +378,12 @@ function get_global_seconds() {
 
 
 function VM-Launcher-Smoke-Test() {
+  FW_TEST_VERSION=net472
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
   Say "Build Universe.CpuUsage"
   pushd /tmp/cloud-init-smoke-test-provisia
-  Reset-Target-Framework -fw net46 -l latest
+  Reset-Target-Framework -fw $FW_TEST_VERSION -l latest
   cd Universe.CpuUsage.Tests
   time msbuild /t:Restore,Build /p:Configuration=Release /v:m
   popd
@@ -423,15 +424,15 @@ time try-and-retry try-and-retry mozroots --import --sync
 Say "Installing Mono Certificates snapshot"
 time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
 
-oldpwd=$(pwd)
-Say "OPTIONAL Build Universe.CpuUsage"
+# oldpwd=$(pwd)
+# Say "OPTIONAL Build Universe.CpuUsage"
 # net47 error: /usr/local/lib/mono/msbuild/Current/bin/Microsoft.Common.CurrentVersion.targets(2101,5): error MSB3248: Parameter "AssemblyFiles" has invalid value "/usr/local/lib/mono/4.7-api/mscorlib.dll". Could not load file or assembly "System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" or one of its dependencies. [/root/provisia/Universe.CpuUsage/Universe.CpuUsage.csproj]
-Reset-Target-Framework -fw net46 -l latest
+# Reset-Target-Framework -fw '$FW_TEST_VERSION' -l latest
 pushd Universe.CpuUsage.Tests
-time msbuild /t:Restore,Build /p:Configuration=Release /v:m |& tee $oldpwd/msbuild.log || Say --Display-As=Error "MSBUILD FAILED on $(hostname)"
+# time msbuild /t:Restore,Build /p:Configuration=Release /v:m |& tee $oldpwd/msbuild.log || Say --Display-As=Error "MSBUILD FAILED on $(hostname)"
 Say "TEST Universe.CpuUsage"
 export SKIP_POSIXRESOURCESUSAGE_ASSERTS=True
-cd bin/Release/net46
+cd bin/Release/'$FW_TEST_VERSION'
 time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
 popd
 
