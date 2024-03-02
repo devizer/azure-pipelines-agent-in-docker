@@ -32,6 +32,11 @@ jobs:
       #   IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz"
       #   KEY: 12-raspberryos-armhf # 6.1
       #   THEARCH: arm
+      'armhf-debian-10':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-10-genericcloud-armhf.qcow2.xz/download"
+        KEY: 10-generic-armhf
+        THEARCH: arm
+        NEWSIZE: "SKIP" # 44G
       'armhf-debian-11':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-armhf.qcow2.xz/download"
         KEY: 11-generic-armhf
