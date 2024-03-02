@@ -56,12 +56,17 @@ function Prepare-VM-Image() {
   sudo chown -R $USER $key-BOOT
   ls -lah $key-BOOT
 
-  Say "Resizing image up to $size"
-  qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 $size
-  sudo virt-resize --expand /dev/sda1 $file disk.intermediate.compacting.qcow2
-  # qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
-  mv disk.intermediate.compacting.qcow2 $key.qcow2 # faster!
-  rm -f disk.intermediate.compacting.qcow2
+  if [[ "$size" == "SKIP" ]]; then
+    Say "Skip image resizing"
+    mv $file $key.qcow2
+  else
+    Say "Resizing image up to $size"
+    qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 $size
+    sudo virt-resize --expand /dev/sda1 $file disk.intermediate.compacting.qcow2
+    # qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
+    mv disk.intermediate.compacting.qcow2 $key.qcow2 # faster!
+    rm -f disk.intermediate.compacting.qcow2
+  fi
   sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | tee "${to_folder}"/_logs/filesystems.resized.txt
   root_partition_index=$(cat "${to_folder}"/_logs/filesystems.resized.txt | awk '$4 ~ /cloudimg-rootfs/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
   if [[ "${root_partition_index:-}" == "" ]]; then 
