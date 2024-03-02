@@ -16,7 +16,7 @@ function Prepare-VM-Image() {
   echo "URL is $url"
   try-and-retry curl --connect-timeout 30 -ksfSL -o $file "$url" || rm -f $file
   # rpi.img.xz -> rpi.img
-  if [[ "$url" == *".xz" ]]; then echo "Extracting $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
+  if [[ "$url" == *".xz" ]] || [[ "$url" == *".xz/download" ]]; then echo "Extracting $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
   # rpi.zip -> rpi.img
   if [[ "$url" == *".zip" ]]; then echo "Extracting $file.zip"; mv $file $file.zip; 7z x $file.zip; rm -f $file.zip; mv *.img $file; fi
   ls -lah; echo ""
