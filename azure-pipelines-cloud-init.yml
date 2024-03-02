@@ -36,7 +36,7 @@ jobs:
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-armhf.qcow2.xz/download"
         KEY: 11-generic-armhf
         THEARCH: arm
-        NEWSIZE: 43G
+        NEWSIZE: 44G
       'arm64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
         KEY: 13-generic-arm64
