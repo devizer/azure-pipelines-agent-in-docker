@@ -390,6 +390,8 @@ function VM-Launcher-Smoke-Test() {
 
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+Say "APT UPDATE"
+apt-get update -qq
 Say "Query package list"
 list-packages |& tee /root/packages.txt
 Say "RAM DISK for /tmp"
