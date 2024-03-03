@@ -424,6 +424,9 @@ echo "Total packages: $(cat /root/packages.txt | wc -l)"
 
 hostname |& tee /root/_logs/hostname.txt
 jq --version |& tee /root/_logs/jq.version.txt
+git --version |& tee /root/_logs/git.version.txt
+grep --version | head -1 |& tee /root/_logs/grep.version.txt
+awk --version | head -1 |& tee /root/_logs/awk.version.txt
 openssl version |& tee /root/_logs/openssl.version.txt
 uname -r | tee /root/_logs/kernel.version.txt
 pushd /etc
