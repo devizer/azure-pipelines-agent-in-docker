@@ -412,7 +412,8 @@ mkdir -p /root/_logs
 
 Say "APT UPDATE"
 apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
-apt-get install -y debconf-utils jq -y -qq
+apt-get install -y debconf-utils -y -qq # missing on old distros
+apt-get install -y jq gawk -y -qq
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt || true
