@@ -240,13 +240,15 @@ function Launch-VM() {
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
-          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
+          -blockdev driver=file,node-name=f0,filename="$cloud_config" -device floppy,drive=f0 \
           \
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
           -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           -nographic &
   fi
+
+  # $ -blockdev driver=file,node-name=f0,filename=/path/to/floppy.img -device floppy,drive=f0
 
   if [[ "$arch" == "arm64" ]]; then
       qemu-system-aarch64 -name arm64vm \
@@ -258,11 +260,17 @@ function Launch-VM() {
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
-          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
+          -blockdev driver=file,node-name=f0,filename="$cloud_config" -device floppy,drive=f0 \
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
           -nographic &
   fi
+
+echo '
+works well but sda and sdb are randomized
+          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
+'>/dev/null
 }
 
 function As-Base64() { base64 -w 0; }
