@@ -231,17 +231,20 @@ function Launch-VM() {
     echo "WARNING! Missing $location/root.partition.index.txt. Assuming fiest partition"
   fi
 
+  # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
   if [[ "$arch" == "arm" ]]; then
       qemu-system-arm -name arm32vm \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
-          -drive file=$cloud_config,if=none,format=qcow2,id=hd1 \
-          -device virtio-blk-device,drive=hd1 \
-          -drive file="$location/disk.qcow2",if=none,format=qcow2,id=hd0 \
-          -device virtio-blk-device,drive=hd0 \
+          \
+          -global virtio-blk-device.scsi=off \
+          -device virtio-scsi-device,id=scsi \
+          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
+          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          \
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
-          -append "console=ttyAMA0 root=/dev/vda${root_partition_index:-1}" \
+          -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           -nographic &
   fi
 
@@ -250,11 +253,13 @@ function Launch-VM() {
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a57  \
           -initrd "$location/initrd.img" \
           -kernel "$location/vmlinuz" \
-          -append "root=/dev/vda${root_partition_index:-1} console=ttyAMA0" \
-          -drive file=$cloud_config,if=none,format=qcow2,id=hd1 \
-          -device virtio-blk-device,drive=hd1 \
-          -drive file="$location/disk.qcow2",if=none,format=qcow2,id=hd0 \
-          -device virtio-blk-device,drive=hd0 \
+          -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" \
+          \
+          -global virtio-blk-device.scsi=off \
+          -device virtio-scsi-device,id=scsi \
+          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
+          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
           -nographic &
   fi
