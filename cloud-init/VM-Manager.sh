@@ -440,9 +440,10 @@ echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW;
 mkdir -p /root/_logs
 
 Say "APT UPDATE"
-apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
-apt-get install -y debconf-utils -y -qq # missing on old distros
-apt-get install -y jq gawk -y -qq
+echo "Invloke apt-get update"
+time (apt-get --allow-releaseinfo-change update -qq || apt-get update -qq)
+echo "Invloke apt-get install"
+time (apt-get install -y --force-yes -qq debconf-utils jq gawk) # missing on old distros
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt || true
