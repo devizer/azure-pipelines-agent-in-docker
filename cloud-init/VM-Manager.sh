@@ -239,8 +239,8 @@ function Launch-VM() {
           \
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
-          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
           \
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
@@ -257,8 +257,8 @@ function Launch-VM() {
           \
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
-          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          -drive file="$cloud_config",id=cloudconfig,if=none -device scsi-hd,drive=cloudconfig \
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
           -nographic &
