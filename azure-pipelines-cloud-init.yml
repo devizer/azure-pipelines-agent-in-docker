@@ -42,10 +42,12 @@ jobs:
         KEY: 11-generic-armhf
         THEARCH: arm
         NEWSIZE: "SKIP" # 44G
-      'arm64-debian-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
-        KEY: 13-generic-arm64
-        THEARCH: arm64
+      'armhf-debian-12':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-12-genericcloud-armhf.qcow2.xz/download"
+        KEY: 12-generic-armhf
+        THEARCH: arm
+        NEWSIZE: "SKIP" # 44G
+
       'arm64-debian-10':
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
         KEY: 10-generic-arm64
@@ -58,6 +60,11 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
         KEY: 12-generic-arm64
         THEARCH: arm64
+      'arm64-debian-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
+        KEY: 13-generic-arm64
+        THEARCH: arm64
+
       'armhf-24.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
         KEY: 24.04-generic-armhf
