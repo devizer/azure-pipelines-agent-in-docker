@@ -422,8 +422,9 @@ Say "Query package list"
 list-packages > /root/_logs/packages.txt
 echo "Total packages: $(cat /root/packages.txt | wc -l)"
 
-jq --version |& /root/_logs/jq.version.txt
-openssl --version |& /root/_logs/openssl.version.txt
+hostname |& tee /root/_logs/hostname.txt
+jq --version |& tee /root/_logs/jq.version.txt
+openssl --version |& tee /root/_logs/openssl.version.txt
 uname -r | tee /root/_logs/kernel.version.txt
 pushd /etc
 cp -a -L *release /root/_logs
