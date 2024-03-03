@@ -240,7 +240,7 @@ function Launch-VM() {
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
-          -blockdev driver=file,node-name=f0,filename="$cloud_config" -device floppy,drive=f0 \
+          -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
           \
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
@@ -260,7 +260,7 @@ function Launch-VM() {
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
-          -blockdev driver=file,node-name=f0,filename="$cloud_config" -device floppy,drive=f0 \
+          -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
           -nographic &
