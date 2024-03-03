@@ -59,6 +59,7 @@ function Prepare-VM-Image() {
   if [[ "$size" == "SKIP" ]]; then
     Say "Skip image resizing"
     mv $file $key.qcow2
+    cp -f "${to_folder}"/_logs/filesystems.txt "${to_folder}"/_logs/filesystems.resized.txt
   else
     Say "Resizing image up to $size"
     qemu-img create -f qcow2 disk.intermediate.compacting.qcow2 $size
@@ -66,8 +67,8 @@ function Prepare-VM-Image() {
     # qemu-img convert -O qcow2 disk.intermediate.compacting.qcow2 $key.qcow2
     mv disk.intermediate.compacting.qcow2 $key.qcow2 # faster!
     rm -f disk.intermediate.compacting.qcow2
+    sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | tee "${to_folder}"/_logs/filesystems.resized.txt
   fi
-  sudo virt-filesystems --all --long --uuid -h -a $key.qcow2 | tee "${to_folder}"/_logs/filesystems.resized.txt
   root_partition_index=$(cat "${to_folder}"/_logs/filesystems.resized.txt | awk '$4 ~ /cloudimg-rootfs/ {print $1}' | sed 's/\/dev\/sda//' | sort -u)
   if [[ "${root_partition_index:-}" == "" ]]; then 
     # debian
