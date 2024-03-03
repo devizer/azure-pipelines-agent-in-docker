@@ -408,18 +408,28 @@ function VM-Launcher-Smoke-Test() {
 
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+mkdir -p /root/_logs
 
 Say "APT UPDATE"
 apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
-apt-get install -y debconf-utils
+apt-get install -y debconf-utils jq -y -qq
 
 Say "Grab debconf-get-selections"
-debconf-get-selections --installer |& tee /root/debconf-get-selections.part1.txt || true
-debconf-get-selections             |& tee /root/debconf-get-selections.part2.txt || true
+debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt || true
+debconf-get-selections             |& tee /root/_logs/debconf-get-selections.part2.txt || true
 
 Say "Query package list"
-list-packages > /root/packages.txt
+list-packages > /root/_logs/packages.txt
 echo "Total packages: $(cat /root/packages.txt | wc -l)"
+
+jq --version |& /root/_logs/jq.version.txt
+openssl --version |& /root/_logs/openssl.version.txt
+uname -r | tee /root/_logs/kernel.version.txt
+pushd /etc
+cp -a -L *release /root/_logs
+popd
+
+cp -a -f /etc/apt /root/_logs
 
 Say "RAM DISK for /tmp"
 mount -t tmpfs -o mode=1777 tmpfs /tmp
@@ -489,6 +499,7 @@ cat "/etc/os-release"
   sleep 1
 
   Wait-For-VM "/tmp/provisia"
+  pushd $HOST_OUTCOME_FOLDER/_logs; cp -a * $SYSTEM_ARTIFACTSDIRECTORY/_logs; popd
   Say "(2nd) Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   sleep 1 # sleep 30
   echo "FS AS SUDO: $(sudo ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
