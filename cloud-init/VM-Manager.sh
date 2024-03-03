@@ -334,14 +334,32 @@ function Wait-For-VM() {
   echo '
        set -eu;
 
-test -d /etc/apt/apt.conf.d && echo '"'"'
-Acquire::AllowReleaseInfoChange::Suite "true";
-Acquire::Check-Valid-Until "0";
-APT::Get::Assume-Yes "true";
-APT::Get::AllowUnauthenticated "true";
-Acquire::AllowInsecureRepositories "1";
-Acquire::AllowDowngradeToInsecureRepositories "1";
-'"'"' | >/etc/apt/apt.conf.d/99Z_Custom
+test -d /etc/apt/apt.conf.d && echo "
+Acquire::AllowReleaseInfoChange::Suite \"true\";
+Acquire::Check-Valid-Until \"0\";
+APT::Get::Assume-Yes \"true\";
+APT::Get::AllowUnauthenticated \"true\";
+Acquire::AllowInsecureRepositories \"1\";
+Acquire::AllowDowngradeToInsecureRepositories \"1\";
+" | >/etc/apt/apt.conf.d/99Z_Custom
+
+. /etc/os-release
+ver="${ID:-}:${VERSION_ID:-}"
+if [[ "$ver" == "debian:8" ]]; then
+FIX Debian Jessie sources.list
+echo "
+deb http://archive.debian.org/debian jessie main non-free contrib
+deb http://archive.debian.org/debian jessie-backports main non-free contrib
+"> /etc/apt/sources.list
+fi
+
+if [[ "$ver" == "debian:9" ]]; then
+Say "FIX Debian Stretch sources.list"
+echo "
+deb http://archive.debian.org/debian stretch main non-free contrib
+deb http://archive.debian.org/debian stretch-backports main non-free contrib
+"> /etc/apt/sources.list
+fi
 
        export USER=root HOME=/root
        Say "Welcome to VM host $(hostname)"
@@ -354,7 +372,7 @@ Acquire::AllowDowngradeToInsecureRepositories "1";
        tar xzf /etc/provisia.tar.gz
        err=0
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
-         eval "$VM_POSTBOOT_SCRIPT" || err=111
+         bash -c "$VM_POSTBOOT_SCRIPT" || err=111
          if [[ $err == 0 ]]; then
            Say "SUCCESS. JOB DONE at VM. Uptime: $(uptime -p)"
          else
