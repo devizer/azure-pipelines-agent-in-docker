@@ -395,10 +395,17 @@ function VM-Launcher-Smoke-Test() {
 
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+
+Say "Grab debconf-get-selections"
+debconf-get-selections --installer |& tee /root/debconf-get-selections.part1.txt || true
+debconf-get-selections             |& tee /root/debconf-get-selections.part2.txt || true
+
 Say "APT UPDATE"
 apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
+
 Say "Query package list"
 list-packages |& tee /root/packages.txt
+
 Say "RAM DISK for /tmp"
 mount -t tmpfs -o mode=1777 tmpfs /tmp
 Say "RAM DISK for /var/tmp"
