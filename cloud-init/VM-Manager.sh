@@ -346,7 +346,7 @@ Acquire::AllowDowngradeToInsecureRepositories \"1\";
 . /etc/os-release
 ver="${ID:-}:${VERSION_ID:-}"
 if [[ "$ver" == "debian:8" ]]; then
-FIX Debian Jessie sources.list
+Say "FIX sources.list for [$ver]"
 echo "
 deb http://archive.debian.org/debian jessie main non-free contrib
 deb http://archive.debian.org/debian jessie-backports main non-free contrib
@@ -354,7 +354,7 @@ deb http://archive.debian.org/debian jessie-backports main non-free contrib
 fi
 
 if [[ "$ver" == "debian:9" ]]; then
-Say "FIX Debian Stretch sources.list"
+Say "FIX sources.list for [$ver]"
 echo "
 deb http://archive.debian.org/debian stretch main non-free contrib
 deb http://archive.debian.org/debian stretch-backports main non-free contrib
