@@ -333,6 +333,16 @@ function Wait-For-VM() {
   Say "Provisioning 3) EXTRACTING and launching"
   echo '
        set -eu;
+
+test -d /etc/apt/apt.conf.d && echo '"'"'
+Acquire::AllowReleaseInfoChange::Suite "true";
+Acquire::Check-Valid-Until "0";
+APT::Get::Assume-Yes "true";
+APT::Get::AllowUnauthenticated "true";
+Acquire::AllowInsecureRepositories "1";
+Acquire::AllowDowngradeToInsecureRepositories "1";
+'"'"' | >/etc/apt/apt.conf.d/99Z_Custom
+
        export USER=root HOME=/root
        Say "Welcome to VM host $(hostname)"
        cat /etc/variables
