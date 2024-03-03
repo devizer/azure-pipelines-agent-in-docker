@@ -396,15 +396,17 @@ function VM-Launcher-Smoke-Test() {
   VM_POSTBOOT_SCRIPT='
 echo IM CUSTOM POST-BOOT. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
 
+Say "APT UPDATE"
+apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
+apt-get install -y debconf-utils
+
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/debconf-get-selections.part1.txt || true
 debconf-get-selections             |& tee /root/debconf-get-selections.part2.txt || true
 
-Say "APT UPDATE"
-apt-get --allow-releaseinfo-change update -qq || apt-get update -qq
-
 Say "Query package list"
-list-packages |& tee /root/packages.txt
+list-packages > /root/packages.txt
+echo "Total packages: $(cat /root/packages.txt | wc -l)"
 
 Say "RAM DISK for /tmp"
 mount -t tmpfs -o mode=1777 tmpfs /tmp
@@ -454,7 +456,7 @@ popd
 
 Say "Installing nuget"
 url=https://raw.githubusercontent.com/devizer/glist/master/bin/install-nuget-6.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
-time nuget || true
+time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
 '
