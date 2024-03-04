@@ -92,6 +92,7 @@ function Build-Cloud-Config() {
 local lauch_options="$1"
 mkdir -p "$lauch_options"
 echo '
+VM_SSH_PORT='$VM_SSH_PORT'
 VM_PROVISIA_FOLDER='"'"$VM_PROVISIA_FOLDER"'"'
 VM_VARIABLES='"'"${VM_VARIABLES:-}"'"'
 VM_USER_NAME='"'"${VM_USER_NAME:-user}"'"'
@@ -233,6 +234,7 @@ function Launch-VM() {
   fi
 
   # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
+  pid=""
   if [[ "$arch" == "arm" ]]; then
       qemu-system-arm -name arm32vm \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
@@ -247,6 +249,8 @@ function Launch-VM() {
           -device virtio-net-device,netdev=net0 \
           -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           -nographic &
+        
+        pid=$!
   fi
 
   # $ -blockdev driver=file,node-name=f0,filename=/path/to/floppy.img -device floppy,drive=f0
@@ -265,6 +269,13 @@ function Launch-VM() {
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
           -nographic &
+
+        pid=$!
+  fi
+
+  if [[ -n "$pid" ]]; then
+    launch_options="$(dirname "$cloud_config")"
+    printf $pid > "$launch_options"/pid
   fi
 
 echo '
@@ -276,6 +287,36 @@ works well but sda and sdb are randomized
 
 function As-Base64() { base64 -w 0; }
 function File-To-Base64() { cat "$1" | base64 -w 0; }
+
+# Needs only for Building VM
+function Shutdown-VM-and-CleapUP() {
+  local lauch_options="$1"
+  source "$lauch_options/variables"
+  echo '
+     set -eu; set -o pipefail
+     journalctl --flush --rotate --vacuum-time=1s
+     journalctl --user --flush --rotate --vacuum-time=1s    
+     journalctl --vacuum-size=4K
+     rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia
+     shutdown -P now || shutdown -H now || shutdown now
+     ' > "$lauch_options/shutdown.sh"
+
+  Say "Shutdown VM"
+  echo "Content of launch options [$lauch_options]"
+  ls -lah "$lauch_options"
+  cp -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
+  try-and-retry sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -c /tmp/shutdown.sh" || true
+  sleep 20
+  pid="$(cat "$lauch_options/pid")"
+  if [[ -z "$pid" ]]; then
+    echo "WARNING! Unknown pid. Do not wait"
+  else
+    echo "VM PID is [$pid]. Waiting for exit"
+    wait $pid
+  fi
+
+  Say "Shutdown-VM-and-CleapUP() completed."
+}
 
 function Wait-For-VM() {
   local lauch_options="$1"
@@ -385,13 +426,13 @@ fi
        
        Say "Storing outcome folder [$VM_OUTCOME_FOLDER] as /outcome.tar"
        pushd $VM_OUTCOME_FOLDER
-       tar cf /outcome.tar .
+       tar cf /tmp/job-outcome.tar .
        popd
        Say "Bye. Uptime: $(uptime -p)"
 ' > "$lauch_options/fs/tmp/launcher.sh"
   sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
   Say "Grab Outcome folder (at VM) /outcome.tar to $HOST_OUTCOME_FOLDER"
-  cp -f -v $lauch_options/fs/outcome.tar /tmp/outcome.tar
+  cp -f -v $lauch_options/fs/tmp/job-outcome.tar /tmp/outcome.tar
   Say "Extract outcome.tar to $HOST_OUTCOME_FOLDER"
   sudo mkdir -p $HOST_OUTCOME_FOLDER; sudo chown -R $USER $HOST_OUTCOME_FOLDER
   pushd $HOST_OUTCOME_FOLDER
@@ -540,4 +581,6 @@ cat "/etc/os-release"
   echo "FS AS SUDO: $(sudo ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
   echo "FS AS USER: $(ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
+
+  Shutdown-VM-and-CleapUP
 }
