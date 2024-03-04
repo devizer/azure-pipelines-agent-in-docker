@@ -248,7 +248,7 @@ function Launch-VM() {
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
           -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
-          -nographic &
+          -nographic -no-reboot &
         
         pid=$!
   fi
@@ -268,7 +268,7 @@ function Launch-VM() {
           -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
-          -nographic &
+          -nographic -no-reboot &
 
         pid=$!
   fi
