@@ -305,7 +305,7 @@ function Shutdown-VM-and-CleapUP() {
   echo "Content of launch options [$lauch_options]"
   ls -lah "$lauch_options"
   cp -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
-  try-and-retry sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -c /tmp/shutdown.sh" || true
+  try-and-retry sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash /tmp/shutdown.sh" || true
   sleep 20
   pid="$(cat "$lauch_options/pid")"
   if [[ -z "$pid" ]]; then
