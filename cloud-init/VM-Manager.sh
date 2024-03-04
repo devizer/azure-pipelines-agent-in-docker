@@ -294,10 +294,10 @@ function Shutdown-VM-and-CleapUP() {
   source "$lauch_options/variables"
   echo '
      set -eu; set -o pipefail
-     journalctl --flush --rotate --vacuum-time=1s
-     journalctl --user --flush --rotate --vacuum-time=1s    
+     journalctl --flush --rotate --vacuum-time=1s || journalctl --rotate --vacuum-time=1s
+     journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --rotate --vacuum-time=1s
      journalctl --vacuum-size=4K
-     rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia
+     rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build
      shutdown -P now || shutdown -H now || shutdown now
      ' > "$lauch_options/shutdown.sh"
 
