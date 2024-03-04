@@ -206,7 +206,7 @@ jobs:
       sudo chown $USER disk.qcow2
       cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
       popd
-    condition: false
+    condition: eq('1', '2)
     displayName: 'Sparsify image'
   
   - script: |
