@@ -200,7 +200,7 @@ jobs:
       Say "Compacting image, size is $NEWSIZE"
       pushd /transient-builds/run
       qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
-      time try-and-retry timeout 1200 sudo virt-sparsify -v --check-tmpdir=continue --convert qcow2 disk.qcow2 copy.qcow2
+      time try-and-retry timeout 1200 sudo virt-sparsify -v --compress --check-tmpdir=continue --convert qcow2 disk.qcow2 copy.qcow2
       sudo mv copy.qcow2 disk.qcow2
       sudo chown $USER disk.qcow2
       cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
