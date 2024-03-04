@@ -507,14 +507,14 @@ popd
 
 cp -a -f /etc/apt /root/_logs
 
-Say "RAM DISK for /tmp"
-mount -t tmpfs -o mode=1777 tmpfs /tmp
-Say "RAM DISK for /var/tmp"
-mount -t tmpfs -o mode=1777 tmpfs /var/tmp
-Say "RAM DISK for /var/lib/apt"
-mount -t tmpfs tmpfs /var/lib/apt
-Say "RAM DISK for /var/cache/apt"
-mount -t tmpfs tmpfs /var/cache/apt
+# Say "RAM DISK for /tmp"
+# mount -t tmpfs -o mode=1777 tmpfs /tmp
+# Say "RAM DISK for /var/tmp"
+# mount -t tmpfs -o mode=1777 tmpfs /var/tmp
+# Say "RAM DISK for /var/lib/apt"
+# mount -t tmpfs tmpfs /var/lib/apt
+# Say "RAM DISK for /var/cache/apt"
+# mount -t tmpfs tmpfs /var/cache/apt
 Say "Mounts"
 df -h -T
 
