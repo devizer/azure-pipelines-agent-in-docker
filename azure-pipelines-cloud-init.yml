@@ -188,6 +188,24 @@ jobs:
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
+      DEFAULT_NEWSIZE="${DEFAULT_NEWSIZE:-16G}"
+      NEWSIZE="${NEWSIZE:-$DEFAULT_NEWSIZE}"
+      if [[ "$NEWSIZE" == SKIP ]]; then NEWSIZE="$DEFAULT_NEWSIZE"; fi
+      
+      Say "Compacting image, size is $NEWSIZE"
+      pushd /transient-builds/run
+      qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
+      time sudo virt-sparsify -v --check-tmpdir=ignore --convert qcow2 disk.qcow2 copy.qcow2 && sudo mv copy.qcow2 disk.qcow2
+      sudo chown $USER disk.qcow2
+      cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
+      popd
+    displayName: 'Sparify image'
+
+  
+  
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
       cd $SYSTEM_ARTIFACTSDIRECTORY
       ls -lah

@@ -584,16 +584,4 @@ cat "/etc/os-release"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 
   Shutdown-VM-and-CleapUP "/tmp/provisia"
-
-  DEFAULT_NEWSIZE="${DEFAULT_NEWSIZE:-16G}"
-  NEWSIZE="${NEWSIZE:-$DEFAULT_NEWSIZE}"
-  if [[ "$NEWSIZE" == SKIP ]]; then NEWSIZE="$DEFAULT_NEWSIZE"; fi
-  Say "Compacting image, size is $NEWSIZE"
-  pushd /transient-builds/run
-  qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
-  time sudo virt-sparsify -v -x --check-tmpdir=ignore --convert qcow2 disk.qcow2 copy.qcow2 && sudo mv copy.qcow2 disk.qcow2
-  sudo chown $USER disk.qcow2
-  cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
-  popd
-
 }
