@@ -591,7 +591,7 @@ cat "/etc/os-release"
   Say "Compacting image, size is $NEWSIZE"
   pushd /transient-builds/run
   qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
-  time virt-sparsify --check-tmpdir=ignore --convert qcow2 disk.qcow2 copy.qcow2 && mv copy.qcow2 disk.qcow2
+  time virt-sparsify -v -x --check-tmpdir=ignore --convert qcow2 disk.qcow2 copy.qcow2 && mv copy.qcow2 disk.qcow2
   cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
   popd
 
