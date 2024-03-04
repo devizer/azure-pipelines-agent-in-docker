@@ -1,7 +1,8 @@
 set -ue; set -o pipefail
 source VM-Manager.sh 
 
-Prepare-VM-Image "$IMAGEURL" $THEWORKDIR/run "${NEWSIZE:-16G}"
+DEFAULT_NEWSIZE="${DEFAULT_NEWSIZE:-16G}"
+Prepare-VM-Image "$IMAGEURL" $THEWORKDIR/run "${NEWSIZE:-$DEFAULT_NEWSIZE}"
 
 Say "Copy VM ($THEWORKDIR/run) to Artifacts ($SYSTEM_ARTIFACTSDIRECTORY)"
 # later we will compress it

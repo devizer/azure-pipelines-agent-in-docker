@@ -305,6 +305,7 @@ function Shutdown-VM-and-CleapUP() {
   echo "Content of launch options [$lauch_options]"
   ls -lah "$lauch_options"
   cp -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
+  # It normally fails three times because on first ssh server stops
   try-and-retry sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash /tmp/shutdown.sh" || true
   sleep 20
   pid="$(cat "$lauch_options/pid")"
@@ -583,4 +584,15 @@ cat "/etc/os-release"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 
   Shutdown-VM-and-CleapUP "/tmp/provisia"
+
+  DEFAULT_NEWSIZE="${DEFAULT_NEWSIZE:-16G}"
+  NEWSIZE="${NEWSIZE:-$DEFAULT_NEWSIZE}"
+  if [[ "$NEWSIZE" == SKIP ]]; then NEWSIZE="$DEFAULT_NEWSIZE"; fi
+  Say "Compacting image, size is $NEWSIZE"
+  pushd /transient-builds/run
+  qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
+  time virt-sparsify --convert qcow2 disk.qcow2 copy.qcow2 && mv copy.qcow2 disk.qcow2
+  cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
+  popd
+
 }

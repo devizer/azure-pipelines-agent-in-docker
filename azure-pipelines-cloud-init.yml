@@ -1,5 +1,6 @@
 variables:
   THEWORKDIR: /transient-builds
+  DEFAULT_NEWSIZE: 16G
   XZ_COMPRESSION_LEVEL: 9
 
 trigger:
