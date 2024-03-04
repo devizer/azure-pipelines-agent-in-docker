@@ -582,5 +582,5 @@ cat "/etc/os-release"
   echo "FS AS USER: $(ls /tmp/provisia/fs 2>/dev/null | wc -l) files and folders"
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 
-  Shutdown-VM-and-CleapUP
+  Shutdown-VM-and-CleapUP "/tmp/provisia"
 }
