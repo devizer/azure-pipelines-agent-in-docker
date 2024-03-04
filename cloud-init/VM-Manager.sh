@@ -441,9 +441,9 @@ mkdir -p /root/_logs
 
 Say "APT UPDATE"
 echo "Invloke apt-get update"
-time (apt-get --allow-releaseinfo-change update -qq || apt-get update -qq)
+time (apt-get --allow-releaseinfo-change update || apt-get update )
 echo "Invloke apt-get install"
-time (apt-get install -y --force-yes -qq debconf-utils jq gawk) # missing on old distros
+time (apt-get install -y --force-yes debconf-utils jq gawk) # missing on old distros
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt || true
