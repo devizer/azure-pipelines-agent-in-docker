@@ -493,7 +493,7 @@ debconf-get-selections             |& tee /root/_logs/debconf-get-selections.par
 
 Say "Query package list"
 list-packages > /root/_logs/packages.txt
-echo "Total packages: $(cat /root/packages.txt | wc -l)"
+echo "Total packages: $(cat /root/_logs/packages.txt | wc -l)"
 
 hostname |& tee /root/_logs/hostname.txt
 jq --version |& tee /root/_logs/jq.version.txt
