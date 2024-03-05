@@ -23,8 +23,9 @@ https://ftp.debian.org/debian/dists/bookworm/main/installer-amd64/current/images
 Say "Creating cloud image for debian [$codename]"
 set_title "[$codename] cloud image"
 links=$(eval "echo \$links_$codename")
-work=/debian-$codename-$arch
-mkdir -p $work
+work=/transient-builds/debian-$codename-$arch
+sudo mkdir -p $work
+sudo chown -R $USER $work
 cd $work
 
 for link in $links; do
