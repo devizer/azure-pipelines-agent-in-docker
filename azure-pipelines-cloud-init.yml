@@ -177,6 +177,15 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
       cd cloud-init 
+      bash -e Try-KVM.sh bookworm
+    # condition: succeededOrFailed()
+    displayName: 'Try KVM'
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
+      cd cloud-init 
       bash -e Build-Step.sh
     # condition: succeededOrFailed()
     displayName: 'Build'
