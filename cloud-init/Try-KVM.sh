@@ -4,13 +4,12 @@ codename=${1:-bookworm}
 arch=x86_64
 
 set -eu
-if [[ "$(command -v kvm-ok)" == "" ]]; then
   sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils -y
   sudo systemctl status libvirtd
   sudo adduser $USER libvirt
   sudo adduser $USER kvm
+  Say "Validate KVM"
   sudo kvm-ok
-fi
 set +eu
 
 links_bookworm='
