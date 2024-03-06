@@ -22,7 +22,7 @@ Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
 (time (apt-get --allow-releaseinfo-change update -q || apt-get update -q)) |& tee /root/_logs/apt.update.txt
-echo "Invloke apt-get install"
+Say "Invloke apt-get install"
 (time (apt-get install -y --force-yes debconf-utils jq gawk || { for pack in debconf-utils jq gawk git; do Say "Installing $pack"; apt-get install -y -q $pack; done; })) |& tee /root/_logs/apt.install.txt # missing on old distros
 
 Say "Grab debconf-get-selections"
