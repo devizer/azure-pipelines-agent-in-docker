@@ -3,14 +3,14 @@ set -eu; set -o pipefail;
 echo Provisioning Script. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
 mkdir -p /root/_logs
 
-Say "APT UPDATE"
-echo "Invloke apt-get update"
-(time (apt-get --allow-releaseinfo-change update || apt-get update )) |& tee /root/_logs/apt.update.txt
-echo "Invloke apt-get install"
-(time (apt-get install -y --force-yes debconf-utils jq gawk)) |& tee /root/_logs/apt.install.txt # missing on old distros
-
 Say "PATH"
 echo $PATH |& tee /root/_logs/PATH.txt
+
+Say "APT UPDATE"
+echo "Invloke apt-get update"
+(time (apt-get --allow-releaseinfo-change update -q || apt-get update -q)) |& tee /root/_logs/apt.update.txt
+echo "Invloke apt-get install"
+(time (apt-get install -y --force-yes debconf-utils jq gawk || { for pack in debconf-utils jq gawk git; do Say "Installing $pack"; apt-get install -y -q $pack; done; })) |& tee /root/_logs/apt.install.txt # missing on old distros
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt 2>/dev/null 1>&2 || true
@@ -20,12 +20,12 @@ Say "Query package list"
 list-packages > /root/_logs/packages.txt
 echo "Total packages: $(cat /root/_logs/packages.txt | wc -l)"
 
-hostname |& tee /root/_logs/hostname.txt
-jq --version |& tee /root/_logs/jq.system.version.txt
-git --version |& tee /root/_logs/git.version.txt
-grep --version | head -1 |& tee /root/_logs/grep.version.txt
-awk --version | head -1 |& tee /root/_logs/awk.version.txt
-openssl version |& tee /root/_logs/openssl.version.txt
+hostname |& tee /root/_logs/hostname.txt 
+jq --version |& tee /root/_logs/jq.system.version.txt || true
+git --version |& tee /root/_logs/git.version.txt || true
+grep --version | head -1 |& tee /root/_logs/grep.version.txt || true
+awk --version | head -1 |& tee /root/_logs/awk.version.txt || true
+openssl version |& tee /root/_logs/openssl.version.txt || true
 uname -r | tee /root/_logs/kernel.version.txt
 pushd /etc
 cp -a -L *release /root/_logs
