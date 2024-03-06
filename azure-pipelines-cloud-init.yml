@@ -139,6 +139,11 @@ jobs:
   steps:
   - script: |
       set -eu; set -o pipefail
+      printenv | sort;
+    displayName: 'Variables'
+
+  - script: |
+      set -eu; set -o pipefail
       cd build-tools
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
@@ -170,7 +175,7 @@ jobs:
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
       try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
-    displayName: 'provisioning'
+    displayName: 'Provisioning'
 
   - script: |
       set -eu; set -o pipefail
