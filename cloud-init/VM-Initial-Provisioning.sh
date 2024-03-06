@@ -6,6 +6,14 @@ mkdir -p /root/_logs
 Say "PATH"
 echo $PATH |& tee /root/_logs/PATH.txt
 
+set +e
+Say "Adjusting os repo"
+utils=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
+try-and-retry curl -kfSL -o /tmp/build-gcc-utilities.sh $utils
+source /tmp/build-gcc-utilities.sh
+adjust_os_repo
+set -e
+
 Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
