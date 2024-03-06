@@ -113,6 +113,9 @@ echo '
 ssh_pwauth: true
 # ssh_deletekeys: False
 preserve_sources_list: true
+apt_preserve_sources_list: true
+apt:
+  preserve_sources_list: true
 
 bootcmd:
   - |
