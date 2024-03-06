@@ -112,6 +112,7 @@ echo '
 # disable_root: false
 ssh_pwauth: true
 # ssh_deletekeys: False
+preserve_sources_list: true
 
 bootcmd:
   - |
