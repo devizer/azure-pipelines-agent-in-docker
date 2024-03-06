@@ -29,8 +29,8 @@ pushd /etc
 cp -a -L *release /root/_logs
 popd
 
-Say "Optinally check jq version"
-jq_raw_ver="$(jq --version | head -1)"
+jq_raw_ver="$(jq --version 2>&1 | head -1)"
+Say "Optinally check jq version, $jq_raw_ver"
 need_update_jq=true
 if [[ "${jq_raw_ver}" == *"1.6"* ]] || [[ "${jq_raw_ver}" == *"1.7"* ]]; then need_update_jq=false; fi
 if [[ "${need_update_jq}" == true ]]; then
@@ -83,7 +83,7 @@ pushd Universe.CpuUsage.Tests
 # time msbuild /t:Restore,Build /p:Configuration=Release /v:m |& tee $oldpwd/msbuild.log || Say --Display-As=Error "MSBUILD FAILED on $(hostname)"
 Say "TEST Universe.CpuUsage"
 export SKIP_POSIXRESOURCESUSAGE_ASSERTS=True
-cd bin/Release/'$FW_TEST_VERSION'
+cd bin/Release/$FW_TEST_VERSION
 time nunit3-console --workers 1 Universe.CpuUsage.Tests.dll
 popd
 
