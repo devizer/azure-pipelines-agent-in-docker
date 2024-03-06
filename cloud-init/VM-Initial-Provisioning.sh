@@ -14,14 +14,18 @@ try-and-retry curl -kfSL -o /tmp/build-gcc-utilities.sh $utils
 source /tmp/build-gcc-utilities.sh
 export SKIP_REPO_UPDATE=true
 adjust_os_repo
-  if [[ "${os_ver}" == "debian:8" ]]; then
+  
     # on azure jessie/non-free and jessie/contrib are not available
+  test -f /etc/os-release && source /etc/os-release
+  os_ver="${ID:-}:${VERSION_ID:-}"
+  if [[ "${os_ver}" == "debian:8" ]]; then
     echo '
-deb http://archive.debian.org/debian/ jessie main non-free contrib
+deb http://archive.debian.org/debian/ jessie main
 deb http://archive.debian.org/debian-security jessie/updates main non-free contrib
 deb http://archive.debian.org/debian jessie-backports main non-free contrib
 ' > /etc/apt/sources.list
   fi
+
 Say "Adjusted os repo"
 cat /etc/apt/sources.list
 set -e
