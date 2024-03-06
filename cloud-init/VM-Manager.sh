@@ -410,7 +410,8 @@ function Wait-For-VM() {
        pushd $VM_OUTCOME_FOLDER
        tar cf /tmp/job-outcome.tar .
        popd
-       Say "Bye. Uptime: $(uptime -p)"
+       Say "Bye. Uptime: $(uptime -p). Err=$err"
+       exit $err
 ' > "$lauch_options/fs/tmp/launcher.sh"
   sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
   Say "Grab Outcome folder (at VM) /outcome.tar to $HOST_OUTCOME_FOLDER"
