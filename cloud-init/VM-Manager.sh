@@ -363,6 +363,10 @@ function Wait-For-VM() {
   Say "Mapping finished. Exit code $VM_SSHFS_MAP_ERROR";
   if [[ "$VM_SSHFS_MAP_ERROR" != "0" ]]; then exit $VM_SSHFS_MAP_ERROR; fi
 
+  echo Say "SLEEPING?"
+  sleep ${SLEEP:-1}
+
+
   Say "Provisioning 1) COPYING variables and provisia.tar.gz to VM"
   mkdir -p "$lauch_options/fs/etc/provisia"
   for name in variables provisia.tar.gz; do
@@ -380,33 +384,6 @@ function Wait-For-VM() {
   Say "Provisioning 3) EXTRACTING and launching"
   echo '
        set -eu;
-
-test -d /etc/apt/apt.conf.d && echo "
-Acquire::AllowReleaseInfoChange::Suite \"true\";
-Acquire::Check-Valid-Until \"0\";
-APT::Get::Assume-Yes \"true\";
-APT::Get::AllowUnauthenticated \"true\";
-Acquire::AllowInsecureRepositories \"1\";
-Acquire::AllowDowngradeToInsecureRepositories \"1\";
-" | >/etc/apt/apt.conf.d/99Z_Custom
-
-. /etc/os-release
-ver="${ID:-}:${VERSION_ID:-}"
-if [[ "$ver" == "debian:8" ]]; then
-Say "FIX sources.list for [$ver]"
-echo "
-deb http://archive.debian.org/debian jessie main non-free contrib
-deb http://archive.debian.org/debian jessie-backports main non-free contrib
-"> /etc/apt/sources.list
-fi
-
-if [[ "$ver" == "debian:9" ]]; then
-Say "FIX sources.list for [$ver]"
-echo "
-deb http://archive.debian.org/debian stretch main non-free contrib
-deb http://archive.debian.org/debian stretch-backports main non-free contrib
-"> /etc/apt/sources.list
-fi
 
        export USER=root HOME=/root
        Say "Welcome to VM host $(hostname)"
