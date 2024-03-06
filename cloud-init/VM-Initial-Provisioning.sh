@@ -8,10 +8,11 @@ echo "Invloke apt-get update"
 (time (apt-get --allow-releaseinfo-change update || apt-get update )) |& tee /root/_logs/apt.update.txt
 echo "Invloke apt-get install"
 (time (apt-get install -y --force-yes debconf-utils jq gawk)) |& tee /root/_logs/apt.install.txt # missing on old distros
+echo $PATH > /root/_logs/PATH.txt
 
 Say "Grab debconf-get-selections"
-debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt || true
-debconf-get-selections             |& tee /root/_logs/debconf-get-selections.part2.txt || true
+debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt 2>/dev/null 1>&2 || true
+debconf-get-selections             |& tee /root/_logs/debconf-get-selections.part2.txt 2>/dev/null 1>&2 || true
 
 Say "Query package list"
 list-packages > /root/_logs/packages.txt
