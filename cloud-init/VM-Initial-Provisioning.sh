@@ -12,6 +12,7 @@ cat /etc/apt/sources.list
 utils=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
 try-and-retry curl -kfSL -o /tmp/build-gcc-utilities.sh $utils
 source /tmp/build-gcc-utilities.sh
+export SKIP_REPO_UPDATE=true
 adjust_os_repo
 Say "Adjusted os repo"
 cat /etc/apt/sources.list
