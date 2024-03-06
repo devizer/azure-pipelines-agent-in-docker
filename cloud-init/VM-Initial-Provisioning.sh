@@ -8,10 +8,13 @@ echo $PATH |& tee /root/_logs/PATH.txt
 
 set +e
 Say "Adjusting os repo"
+cat /etc/apt/sources.list
 utils=https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh
 try-and-retry curl -kfSL -o /tmp/build-gcc-utilities.sh $utils
 source /tmp/build-gcc-utilities.sh
 adjust_os_repo
+Say "Adjusted os repo"
+cat /etc/apt/sources.list
 set -e
 
 Say "APT UPDATE"
