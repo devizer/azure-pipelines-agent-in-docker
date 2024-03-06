@@ -38,7 +38,7 @@ jobs:
         KEY: 8-generic-armhf
         THEARCH: arm
         NEWSIZE: "SKIP" # 44G
-        SLEEP: 150
+        SLEEP: 1
       'armhf-debian-9':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-9-genericcloud-armhf.qcow2.xz/download"
         KEY: 9-generic-armhf
