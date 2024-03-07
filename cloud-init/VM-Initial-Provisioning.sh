@@ -34,8 +34,10 @@ Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
 (time (apt-get --allow-releaseinfo-change update -q || apt-get update -q)) |& tee /root/_logs/apt.update.txt
-Say "Invloke apt-get install"
-(time (apt-get install -y --force-yes debconf-utils jq gawk || { for pack in debconf-utils jq gawk git; do Say "Installing $pack"; apt-get install -y -q $pack; done; })) |& tee /root/_logs/apt.install.txt # missing on old distros
+export APT_PACKAGES="debconf-utils jq gawk git"
+Say "Invloke apt-get install [$APT_PACKAGES]"
+# --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
+(time (apt-get install -y --force-yes $APT_PACKAGES || { for pack in $APT_PACKAGES; do Say "Installing one-by-one: $pack"; apt-get install -y -q $pack; done; })) |& tee /root/_logs/apt.install.txt # missing on old distros
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt 2>/dev/null 1>&2 || true
