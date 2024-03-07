@@ -234,8 +234,15 @@ jobs:
     displayName: 'Compress artifact image'
 
   - task: PublishBuildArtifacts@1
-    condition: succeededOrFailed()
+    condition: succeeded()
     displayName: 'Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
+
+  - task: PublishBuildArtifacts@1
+    condition: failed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)-$(Build.BUILDNUMBER)'
