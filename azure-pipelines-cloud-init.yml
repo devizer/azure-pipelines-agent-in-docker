@@ -235,14 +235,14 @@ jobs:
 
   - task: PublishBuildArtifacts@1
     condition: succeeded()
-    displayName: 'Publish'
+    displayName: 'Publish Final'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
   - task: PublishBuildArtifacts@1
     condition: failed()
-    displayName: 'Publish'
+    displayName: 'Publish Errors'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)-$(Build.BUILDNUMBER)'

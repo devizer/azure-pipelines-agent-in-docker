@@ -34,10 +34,11 @@ Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
 (time (apt-get --allow-releaseinfo-change update -q || apt-get update -q)) |& tee /root/_logs/apt.update.txt
-export APT_PACKAGES="debconf-utils jq gawk git"
+export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
 (time (apt-get install -y --force-yes $APT_PACKAGES || { for pack in $APT_PACKAGES; do Say "Installing one-by-one: $pack"; apt-get install -y -q $pack; done; })) |& tee /root/_logs/apt.install.txt # missing on old distros
+mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
 
 Say "Grab debconf-get-selections"
 debconf-get-selections --installer |& tee /root/_logs/debconf-get-selections.part1.txt 2>/dev/null 1>&2 || true
@@ -48,15 +49,18 @@ list-packages > /root/_logs/packages.txt
 echo "Total packages: $(cat /root/_logs/packages.txt | wc -l)"
 
 hostname |& tee /root/_logs/hostname.txt 
-jq --version |& tee /root/_logs/jq.system.version.txt || true
-git --version |& tee /root/_logs/git.version.txt || true
-grep --version | head -1 |& tee /root/_logs/grep.version.txt || true
-awk --version | head -1 |& tee /root/_logs/awk.version.txt || true
+jq --version    |& tee /root/_logs/jq.system.version.txt || true
+git --version   |& tee /root/_logs/git.version.txt || true
+grep --version  | head -1 |& tee /root/_logs/grep.version.txt || true
+awk --version   | head -1 |& tee /root/_logs/awk.version.txt || true
 openssl version |& tee /root/_logs/openssl.version.txt || true
-uname -r | tee /root/_logs/kernel.version.txt
+uname -r |& tee /root/_logs/kernel.version.txt
 pushd /etc
 cp -a -L *release /root/_logs
 popd
+sshpass -V | head -1 |& tee /root/_logs/sshpass.version.txt || true
+sshfs --version      |& tee /root/_logs/sshfs.version.txt || true
+rsync --version      |& tee /root/_logs/rsync.version.txt || true
 
 jq_raw_ver="$(jq --version 2>&1 | head -1)"
 Say "Optinally check jq version, $jq_raw_ver"
@@ -68,7 +72,7 @@ if [[ "${need_update_jq}" == true ]]; then
   jq --version |& tee /root/_logs/jq.upgraded.version.txt
 fi
 
-cp -a -f /etc/apt /root/_logs
+cp -a -f -L /etc/apt /root/_logs
 
 # Say "RAM DISK for /tmp"
 # mount -t tmpfs -o mode=1777 tmpfs /tmp
