@@ -6,6 +6,9 @@ mkdir -p /root/_logs
 Say "PATH"
 echo $PATH |& tee /root/_logs/PATH.txt
 
+Say "BUILD_SOURCEVERSION = [$BUILD_SOURCEVERSION]"
+Say "FORTY_TWO = [$FORTY_TWO]"
+
 set +e
 Say "Adjusting os repo"
 cat /etc/apt/sources.list

@@ -102,6 +102,11 @@ VM_POSTBOOT_ROLE='"'"${VM_POSTBOOT_ROLE:-root}"'"'
 VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/root}"'"'
 ' > "$lauch_options/variables"
 
+echo $VM_VARIABLES | awk -F=";" '{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
+  echo "$var=${!var}" >> "$lauch_options/variables"
+  echo "PASS VAR $var"
+done
+
 pushd "$HOST_PROVISIA_FOLDER" >/dev/null
 tar --owner=0 --group=0 -czf "$lauch_options/provisia.tar.gz" .
 popd >/dev/null
@@ -468,6 +473,8 @@ function VM-Launcher-Smoke-Test() {
   VM_POSTBOOT_ROLE='root'
   VM_OUTCOME_FOLDER='/root'
   HOST_OUTCOME_FOLDER=$SYSTEM_ARTIFACTSDIRECTORY/_outcome
+  VM_VARIABLES="BUILD_SOURCEVERSION;FORTY_TWO"
+  FORTY_TWO=42
   VM_SSH_PORT=2345
   VM_CPUS=2
   VM_MEM=2048M
