@@ -30,8 +30,8 @@ Say "Adjusted os repo"
 cat /etc/apt/sources.list
 set -e
 
-echo DISABLE unattended-upgrades
-systemctl disable unattended-upgrades || echo "Can't disable unattended-upgrades. It's ok."
+echo STOP UNATTENDED-UPGRADES
+systemctl stop unattended-upgrades || echo "Can't stop unattended-upgrades. It's ok."
 Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
