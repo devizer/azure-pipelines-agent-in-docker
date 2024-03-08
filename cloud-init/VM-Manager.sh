@@ -168,6 +168,7 @@ bootcmd:
            if [ -z "$VERSION_CODENAME" ]; then VERSION_CODENAME=$VERSION_ID; fi
            if [ "$VERSION_CODENAME" = "14.04" ]; then VERSION_CODENAME=trusty; fi
            if [ "$VERSION_CODENAME" = "16.04" ]; then VERSION_CODENAME=xenial; fi
+           if [ "$ID-$VERSION_CODENAME" = "debian-8" ]; then VERSION_CODENAME=jessie; fi
         else
            ID=centos
            VERSION_CODENAME=6
