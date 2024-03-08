@@ -104,7 +104,8 @@ VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/root}"'"'
 
 echo "${VM_VARIABLES:-}" | awk -FFS=";" 'BEGIN{FS=";"}{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
   echo "PASS VAR '$var'"
-  echo "export $var=${!var}" | tee -a "$lauch_options/variables"
+  echo "$var='${!var}'" | tee -a "$lauch_options/variables"
+  echo "export $var" | tee -a "$lauch_options/variables"
 done
 
 pushd "$HOST_PROVISIA_FOLDER" >/dev/null
@@ -115,7 +116,7 @@ echo '
 #cloud-config
 # debug: false
 # disable_root: false
-ssh_pwauth: true
+# ssh_pwauth: true
 # ssh_deletekeys: False
 preserve_sources_list: true
 apt_preserve_sources_list: true
