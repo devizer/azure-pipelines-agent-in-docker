@@ -102,8 +102,8 @@ VM_POSTBOOT_ROLE='"'"${VM_POSTBOOT_ROLE:-root}"'"'
 VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/root}"'"'
 ' > "$lauch_options/variables"
 
-echo $VM_VARIABLES | awk -F=";" '{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
-  echo "PASS VAR $var"
+echo "${VM_VARIABLES:-}" | awk -FFS=";" 'BEGIN{FS=";"}{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
+  echo "PASS VAR '$var'"
   echo "export $var=${!var}" | tee -a "$lauch_options/variables"
 done
 
