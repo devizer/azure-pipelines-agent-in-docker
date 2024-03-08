@@ -129,6 +129,6 @@ cat "/etc/os-release"
 if [[ "$(command -v systemctl)" != "" ]]; then
   for s in apt-daily-upgrade.timer apt-daily.timer unattended-upgrades; do
     Say "Disable $s"
-    systemctl disable $s || Say --DisplayAs=Error "Can't disable $s. It's ok."
+    systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
   done
 fi
