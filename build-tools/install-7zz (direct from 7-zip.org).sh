@@ -5,6 +5,8 @@ set -o pipefail
 TMPDIR="${TMPDIR:-/tmp}"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 LINK_AS_7Z="${LINK_AS_7Z:-}"
+# Either 2107 or 2301
+VERSION_7Z="${VERSION_7Z:-2301}"
 
 function smart_sudo() {
   if [[ "$(command -v sudo)" ]]; then 
@@ -57,11 +59,11 @@ function download_file() {
 }
 
 function install_7zz() {
-  local  url_x86_64="https://www.7-zip.org/a/7z2107-linux-x64.tar.xz"
-  local    url_i686="https://www.7-zip.org/a/7z2107-linux-x86.tar.xz"
-  local url_aarch64="https://www.7-zip.org/a/7z2107-linux-arm64.tar.xz"
-  local     url_arm="https://www.7-zip.org/a/7z2107-linux-arm.tar.xz"
-  local     url_osx="https://www.7-zip.org/a/7z2107-mac.tar.xz"
+  local  url_x86_64="https://www.7-zip.org/a/7z${VERSION_7Z}-linux-x64.tar.xz"
+  local    url_i686="https://www.7-zip.org/a/7z${VERSION_7Z}-linux-x86.tar.xz"
+  local url_aarch64="https://www.7-zip.org/a/7z${VERSION_7Z}-linux-arm64.tar.xz"
+  local     url_arm="https://www.7-zip.org/a/7z${VERSION_7Z}-linux-arm.tar.xz"
+  local     url_osx="https://www.7-zip.org/a/7z${VERSION_7Z}-mac.tar.xz"
   local machine="$(uname -a)"
   local suffix="unknown";
   local long="$(getconf LONG_BIT)"
