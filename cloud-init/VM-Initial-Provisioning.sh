@@ -32,6 +32,11 @@ set -e
 
 echo STOP UNATTENDED-UPGRADES
 systemctl stop unattended-upgrades || echo "Can't stop unattended-upgrades. It's ok."
+
+Say "Installing 7z 23.01"
+(time (export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-7zz%20(direct%20from%207-zip.org).sh"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7zz2301.install.txt
+time 7z b -mmt=1 -md=18
+
 Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free

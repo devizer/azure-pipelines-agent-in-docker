@@ -79,7 +79,7 @@ function install_7zz() {
     suffix="max"
   fi
 
-  local url="https://www.7-zip.org/a/7z2107-${suffix}.tar.xz"
+  local url="https://www.7-zip.org/a/7z${VERSION_7Z}-${suffix}.tar.xz"
   local file="${TMPDIR}/$(basename "$url")"
   echo "Downloading $url"
   DOWNLOAD_SHOW_PROGRESS=True download_file "$url" "$file"
