@@ -103,8 +103,8 @@ VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/root}"'"'
 ' > "$lauch_options/variables"
 
 echo $VM_VARIABLES | awk -F=";" '{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
-  echo "$var=${!var}" >> "$lauch_options/variables"
   echo "PASS VAR $var"
+  echo "export $var=${!var}" | tee -a "$lauch_options/variables"
 done
 
 pushd "$HOST_PROVISIA_FOLDER" >/dev/null
