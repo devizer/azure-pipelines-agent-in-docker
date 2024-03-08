@@ -125,3 +125,8 @@ url=https://raw.githubusercontent.com/devizer/glist/master/bin/install-nuget-6.s
 time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
+
+for s in apt-daily-upgrade.timer apt-daily.timer unattended-upgrades; do
+  Say "Disable $s"
+  systemctl disable $s || Say --DisplayAs=Error "Can't disable $s. It's ok."
+done
