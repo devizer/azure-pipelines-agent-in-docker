@@ -116,6 +116,7 @@ function install_7zz() {
       if [[ "$ok7zz"  == "OK" ]]; then linkTo="${INSTALL_DIR}/7zz"; fi
       if [[ -n "${linkTo:-}" ]]; then
           echo '#!/usr/bin/env sh
+set -e
 "'$linkTo'" "$@"' | smart_sudo tee "${LINK_AS_7Z:-}" >/dev/null
           smart_sudo chmod +x "${LINK_AS_7Z:-}"
           echo "Added the "${LINK_AS_7Z:-}" shell link to $linkTo"
