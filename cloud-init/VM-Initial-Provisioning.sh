@@ -44,6 +44,10 @@ Say "APT UPDATE"
 echo "Invloke apt-get update"
 # TODO: Remove non-free
 (time (apt-get --allow-releaseinfo-change update -q || apt-get update -q)) |& tee /root/_logs/apt.update.txt
+
+Say "Install .NET Dependencies"
+url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
+
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
