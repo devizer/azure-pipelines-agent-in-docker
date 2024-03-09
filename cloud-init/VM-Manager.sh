@@ -116,12 +116,68 @@ echo '
 #cloud-config
 # debug: false
 # disable_root: false
-# ssh_pwauth: true
-# ssh_deletekeys: False
+ssh_pwauth: true
+ssh_deletekeys: false
 preserve_sources_list: true
 apt_preserve_sources_list: true
 apt:
   preserve_sources_list: true
+
+
+ssh_keys:
+  rsa_private: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    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
+    -----END OPENSSH PRIVATE KEY-----
+
+  rsa_public: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNVM1R0R94e/1WIHHJaSPs6oKOXDHzGYfaiwSyz+gr3og0avnNbLEfGfCpybOQB4MYVU0WTy+drwJVTW11BitUXmb1sEvPnATZoAa6rjrAVoC2vqYIktLMoS5q2m9klSy56fh1a31zuI2el9uhJ8wo9C6yXEV8paigZzv6h7jf8Z1TVFpfFORNKSpKKo1DmSVEV487a5f7hxpOjVlfZ3w62LzsmCM7bY+rxrx+rDC4EbixHro4Rxgbb1UC4R+A9Rp/bedzqEU0sniTupGSmgbCt13W0jRjIvLgYXJu80AEHpQH+M7AE5CcosCp3Fxr9f4MG+Tz+qimvUHxLWg1Y+XKhA/gRNFgOtLgkjDt7Tk3+jeQkKBmFvW+ddD5+AU0sL5PCkoSl9m+1OtwhhfczXejclZh/i45zowbOqwk2v55urcxWAiLU2LTEnPGk6xIFMMd9F7lB6s7EomGJdoyn/aQYwuwJngUFgvett+g8ayJjEkm8xoC4ucTVG/dT5q0OcTjRogQK6DsKvIib9q31fL9kFdlFfIU74uUSxJN2hYBG8GhW+n+lUajvbNp2BJzhu+p+oAqldXEGXMUvLnNo9CV5nUdq43oSZGsqWZ+Sy8ODsQLtHNVZ8n/qXjT5qB6gn+JjXFsoRjiZUZt/2Aj1JBgNoIvmMT56WlTUwlITVqDcw== devizer@github.io
+
 
 bootcmd:
   - |
