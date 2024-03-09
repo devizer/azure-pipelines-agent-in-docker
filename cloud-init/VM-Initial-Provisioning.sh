@@ -48,9 +48,14 @@ echo "Invloke apt-get update"
 Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
-Say "Optinal Lib SSL 1.1"
+Say "Optional Lib SSL 1.1"
+export INSTALL_DIR=/opt/local/libssl-1.1
+mkdir -p $INSTALL_DIR
+printf "\n/usr/local/libssl-1.1\n" >> /etc/ld.so.conf || true
+ldconfig || true
 url=https://raw.githubusercontent.com/devizer/glist/master/install-libssl-1.1.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
+export INSTALL_DIR=
 
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
 Say "Invloke apt-get install [$APT_PACKAGES]"
