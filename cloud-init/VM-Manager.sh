@@ -123,6 +123,28 @@ apt_preserve_sources_list: true
 apt:
   preserve_sources_list: true
 
+ssh_keys:
+  rsa_private: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn
+    NhAAAAAwEAAQAAAIEAr6hCXO2P/4mta2fAJyCA0KQqfpSi1gQat/kdt8o564T4MHq/NQGm
+    aPkjy7zc2U6cjQ76IRykp3CqJ8r7RkfRPFymQa6Q8iasOx4KYxXK6lb2ZvnhrZxEBokSBD
+    yOpHydWaB2qr1AMxSudzKk7cyp9Kep+rQaG7OZxdN7wjNOuzUAAAIIAvJTTgLyU04AAAAH
+    c3NoLXJzYQAAAIEAr6hCXO2P/4mta2fAJyCA0KQqfpSi1gQat/kdt8o564T4MHq/NQGmaP
+    kjy7zc2U6cjQ76IRykp3CqJ8r7RkfRPFymQa6Q8iasOx4KYxXK6lb2ZvnhrZxEBokSBDyO
+    pHydWaB2qr1AMxSudzKk7cyp9Kep+rQaG7OZxdN7wjNOuzUAAAADAQABAAAAgF/Uoe/kww
+    ycZfoUriYqe1xYU76fBH9R2enIhMgCEbtF3clFDg+zCMB4O2kpbis30fy60QdDgyi+NHZl
+    LNTY1XL7jxNivtkDhLaFNJumj9P8S46vfBYYYp/F+qyA3QNH55lYd2u99TOINIW7dN1LkA
+    hDBY6f+hUcH+b6ycnpGbB5AAAAQQDPU0TzOoX4X2s3o/lKQwwgfLTZerFKiCOwhU+RgGt7
+    0jfXHJAxbefmQeaVqFyZo69uE3HGAuPdTCDzEVfQwbuzAAAAQQDUmrKXTLawIxT1sbT4du
+    lvUKmjAMDdXA62ZmNWsnoChaIXgfW93t1HXV4wKqloqfVuJjS4eOZt0ZUmZ0wGDxVjAAAA
+    QQDTgvP2eM2RcfNDvzhWf2OyvO5dJTEMkrSHUKKiSXv+mrVB85MBlCkoAWSBWWWuhsdeaz
+    s13UmQCeWl9RTSj/yHAAAAEWRldml6ZXJAZ2l0aHViLmlvAQ==
+    -----END OPENSSH PRIVATE KEY-----
+
+  rsa_public: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCvqEJc7Y//ia1rZ8AnIIDQpCp+lKLWBBq3+R23yjnrhPgwer81AaZo+SPLvNzZTpyNDvohHKSncKonyvtGR9E8XKZBrpDyJqw7HgpjFcrqVvZm+eGtnEQGiRIEPI6kfJ1ZoHaqvUAzFK53MqTtzKn0p6n6tBobs5nF03vCM067NQ== devizer@github.io
+
+
 bootcmd:
   - |
     header() { printf "  \n----------------\n$1\n"; }
