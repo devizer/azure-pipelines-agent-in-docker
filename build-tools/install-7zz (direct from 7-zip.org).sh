@@ -76,7 +76,7 @@ function install_7zz() {
     if [[ "${long:-}" == "32" ]]; then suffix="linux-x86"; else suffix="linux-x64"; fi
   fi
   if [[ "$(uname -s)" == "Darwin" ]]; then
-    suffix="max"
+    suffix="mac"
   fi
 
   local url="https://www.7-zip.org/a/7z${VERSION_7Z}-${suffix}.tar.xz"

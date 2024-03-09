@@ -308,6 +308,25 @@ function Launch-VM() {
         pid=$!
   fi
 
+  if [[ "$arch" == "x64" ]]; then
+      # NOT TESTED NOT TESTED 
+      qemu-system-x86_64 -name x64vm \
+          -smp $VM_CPUS -m $VM_MEM -M q35 -cpu qemu64 \
+          -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
+          \
+          -global virtio-blk-device.scsi=off \
+          -device virtio-scsi-device,id=scsi \
+          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
+          \
+          -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
+          -device virtio-net-device,netdev=net0 \
+          -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
+          -nographic -no-reboot -serial stdio &
+        
+        pid=$!
+  fi
+
   if [[ -n "$pid" ]]; then
     launch_options="$(dirname "$cloud_config")"
     printf $pid > "$launch_options"/pid

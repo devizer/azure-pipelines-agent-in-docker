@@ -33,6 +33,14 @@ jobs:
       #   IMAGEURL: "https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz"
       #   KEY: 12-raspberryos-armhf # 6.1
       #   THEARCH: arm
+      
+      # 'x64-arch':
+      #  # BTRFS is not supported yet
+      #  IMAGEURL: "https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2"
+      #  KEY: rolling-arch
+      #  THEARCH: x64
+      #  NEWSIZE: "16G" # 44G
+      
       'armhf-debian-8':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-8-genericcloud-armhf.qcow2.xz/download"
         KEY: 8-generic-armhf

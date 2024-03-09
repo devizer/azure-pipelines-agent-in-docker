@@ -48,6 +48,10 @@ echo "Invloke apt-get update"
 Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
+Say "Optinal Lib SSL 1.1"
+url=https://raw.githubusercontent.com/devizer/glist/master/install-libssl-1.1.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
+
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
@@ -75,6 +79,8 @@ popd
 sshpass -V | head -1 |& tee /root/_logs/sshpass.version.txt || true
 sshfs --version      |& tee /root/_logs/sshfs.version.txt || true
 rsync --version      |& tee /root/_logs/rsync.version.txt || true
+Say 'LOCLALES.GEN'
+cat /etc/locale.gen | grep -v -E '\#' | grep -v -E '^$' |& tee /root/_logs/locale.gen.txt || true
 
 jq_raw_ver="$(jq --version 2>&1 | head -1)"
 Say "Optinally check jq version, $jq_raw_ver"
