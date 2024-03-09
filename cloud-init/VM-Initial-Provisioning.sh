@@ -49,10 +49,9 @@ Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
 Say "Optional Lib SSL 1.1"
-export INSTALL_DIR=/opt/local/libssl-1.1
+export INSTALL_DIR=/usr/local/libssl-1.1
 mkdir -p $INSTALL_DIR
-printf "\n/usr/local/libssl-1.1\n" >> /etc/ld.so.conf || true
-ldconfig || true
+printf "\n$INSTALL_DIR\n" >> /etc/ld.so.conf || true
 url=https://raw.githubusercontent.com/devizer/glist/master/install-libssl-1.1.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 ldconfig || true
 ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
