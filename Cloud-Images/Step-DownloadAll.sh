@@ -22,4 +22,7 @@ done
 
 Say "COMPLETED"
 
+sz1="$(du -h -d 0 "$THEWORKDIR" | awk '{print $1}')"
+Say "Size of ${THEWORKDIR}: $sz1"
+compsize "${THEWORKDIR}"
 df -h -T

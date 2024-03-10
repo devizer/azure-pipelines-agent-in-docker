@@ -46,7 +46,7 @@ jobs:
       echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
       
       Say "Install qemu-system"
-      time (sudo apt-get update -qq; sudo apt-get install qemu-system-arm qemu-system-x86 sshpass sshfs qemu-system-i386 qemu-efi -y -qq | grep "Unpack\|Setting"; )
+      time (sudo apt-get update -qq; sudo apt-get install btrfs-compsize qemu-system-arm qemu-system-x86 qemu-system-i386 sshpass sshfs qemu-efi -y -qq | grep "Unpack\|Setting\|initram"; )
 
       # config sshfs and sshpass
       mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
