@@ -499,7 +499,7 @@ function get_global_seconds() {
 
 
 function VM-Launcher-Smoke-Test() {
-  echo $THEARCH |& tee -a $SYSTEM_ARTIFACTSDIRECTORY/arch.txt
+  printf $THEARCH > $SYSTEM_ARTIFACTSDIRECTORY/arch.txt
 
   FW_TEST_VERSION=net472
   mkdir -p /tmp/cloud-init-smoke-test-provisia

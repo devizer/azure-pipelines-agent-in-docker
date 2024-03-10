@@ -231,7 +231,7 @@ jobs:
       Say --Reset-Stopwatch
       cd $SYSTEM_ARTIFACTSDIRECTORY
       ls -lah
-      for file in initrd.img vmlinuz disk.qcow2; do
+      for file in initrd.img vmlinuz disk.qcow2 arch.txt root.partition.index.txt; do
         Say "Compress $file ($(numfmt --to=iec-i --suffix=B --format="%.2f" $(stat --printf="%s" "$file")))"
         time 7z a -bso0 -bsp0 -txz -mx=$XZ_COMPRESSION_LEVEL -mmt=$(nproc) $file.xz $file
         rm $file
