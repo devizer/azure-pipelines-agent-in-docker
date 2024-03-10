@@ -373,7 +373,9 @@ function my_clean_up() {
      rm -f "${tmp}"     >/dev/null 2>&1 || true
      rm -rf "${tmp}_"   >/dev/null 2>&1 || true
   fi
-  exit 77
+  if [[ -n "${1:-}" ]]; then
+    exit 77
+  fi
 }
 trap 'my_clean_up $LINENO' ERR
 
