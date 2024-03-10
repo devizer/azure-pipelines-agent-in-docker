@@ -86,59 +86,59 @@ jobs:
         KEY: 13-generic-arm64
         THEARCH: arm64
 
-      'armhf-24.04':
+      'armhf-ubuntu-24.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
         KEY: 24.04-generic-armhf
         THEARCH: arm
-      'arm64-24.04':
+      'arm64-ubuntu-24.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
         KEY: 24.04-generic-arm64
         THEARCH: arm64
-      'armhf-23.10':
+      'armhf-ubuntu-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
         THEARCH: arm
-      'arm64-23.10':
+      'arm64-ubuntu-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
         KEY: 23.10-generic-arm64
         THEARCH: arm64
-      'armhf-22.04':
+      'armhf-ubuntu-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-armhf.img"
         KEY: 22.04-generic-armhf
         THEARCH: arm
-      'arm64-22.04':
+      'arm64-ubuntu-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-arm64.img"
         KEY: 22.04-generic-armhf
         THEARCH: arm64
-      'armhf-20.04':
+      'armhf-ubuntu-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-armhf.img"
         KEY: 20.10-generic-armhf
         THEARCH: arm
-      'arm64-20.04':
+      'arm64-ubuntu-20.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-arm64.img"
         KEY: 20.10-generic-armhf
         THEARCH: arm64
-      'armhf-18.04':
+      'armhf-ubuntu-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-armhf.img"
         KEY: 18.04-generic-armhf
         THEARCH: arm
-      'arm64-18.04':
+      'arm64-ubuntu-18.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-arm64.img"
         KEY: 18.04-generic-armhf
         THEARCH: arm64
-      'armhf-16.04':
+      'armhf-ubuntu-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-armhf-disk1.img"
         KEY: 16.04-generic-armhf
         THEARCH: arm
-      'arm64-16.04':
+      'arm64-ubuntu-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
         KEY: 16.04-generic-armhf
         THEARCH: arm64
-      'armhf-14.04':
+      'armhf-ubuntu-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
         KEY: 14.04-generic-armhf
         THEARCH: arm
-      'arm64-14.04':
+      'arm64-ubuntu-14.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
         KEY: 14.04-generic-armhf
         THEARCH: arm64
@@ -246,11 +246,11 @@ jobs:
     displayName: 'Publish Final'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
-      artifactName: '$(Agent.JobName)'
+      artifactName: 'Succeeded $(Agent.JobName)'
 
   - task: PublishBuildArtifacts@1
     condition: failed()
     displayName: 'Publish Errors'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
-      artifactName: '$(Agent.JobName)-$(Build.BUILDNUMBER)'
+      artifactName: 'Failed $(Agent.JobName)-$(Build.BUILDNUMBER)'
