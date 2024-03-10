@@ -10,8 +10,12 @@ images='
   armhf-debian-12
   arm64-debian-10      arm64-debian-11      arm64-debian-12      arm64-debian-13
 '
+
+sudo chown -R $USER "$THEWORKDIR"
+n=0
 for image in $images; do
-  Say "Downloading and extracting Cloud Image [$image]"
+  n=$((n+1))
+  Say "${n}) Downloading and extracting Cloud Image [$image]"
   toFolder="$THEWORKDIR/$image"
   bash Download-CloudImage.sh "$image" "$toFolder"
 done
