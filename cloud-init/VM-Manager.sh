@@ -499,6 +499,8 @@ function get_global_seconds() {
 
 
 function VM-Launcher-Smoke-Test() {
+  echo $THEARCH |& tee -a $SYSTEM_ARTIFACTSDIRECTORY/arch.txt
+
   FW_TEST_VERSION=net472
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
