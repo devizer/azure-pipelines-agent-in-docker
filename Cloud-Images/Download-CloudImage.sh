@@ -28,10 +28,6 @@ for a list of images see https://devizer.visualstudio.com/azure-pipelines-agent-
 metadata is cached in '$CLOUD_IMAGE_METADATA'
 '
 # https://hub.docker.com/v2/repositories/library/ubuntu/tags/?page_size=10000
-if [[ "${1:-}" == "--reset-metadata" ]]; then
-  test -f "$CLOUD_IMAGE_METADATA" && rm -f "$CLOUD_IMAGE_METADATA" >/dev/null 2>&1 || true
-  exit 0
-fi
 
 # Include Detected: [ ..\Azure-DevOps-Api.Includes\*.sh ]
 # File: [C:\Cloud\vg\PUTTY\Repo-BASH\Azure-DevOps-Api.Includes\$DEFAULTS.sh]
@@ -335,8 +331,25 @@ function Update-CloudImage-Metadata() {
   say Green "Total images: $(cat "${artifacts}".Succeeded | wc -l)"
 }
 
+
+if [[ "${1:-}" == "--reset-metadata" ]]; then
+  test -f "$CLOUD_IMAGE_METADATA" && rm -f "$CLOUD_IMAGE_METADATA" >/dev/null 2>&1 || true
+  exit 0
+fi
+
+if [[ "${1:-}" == "--show-images" ]]; then
+  Azure-DevOps-Lazy-CTOR
+  Update-CloudImage-Metadata
+  cat "$CLOUD_IMAGE_METADATA"
+  exit 0
+fi
+
+
 Azure-DevOps-Lazy-CTOR
 echo "AZURE_DEVOPS_IODIR = [$AZURE_DEVOPS_IODIR]"
+
+
+
 
 DOWNLOAD_CLOUD_IMAGE_FOLDER="${TMPDIR:-/tmp}/.cloud-image-downloads"
 if [[ "${1:-}" == "--temp" ]]; then
