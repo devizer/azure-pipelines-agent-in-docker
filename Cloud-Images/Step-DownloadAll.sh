@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 Say --Reset-Stopwatch
-bash Download-CloudImage.sh "$image" "$toFolder"
+bash Download-CloudImage.sh --show-images
 
 images='
   armhf-debian-8       armhf-debian-9       armhf-debian-10      armhf-debian-11     
@@ -20,7 +20,8 @@ for image in $images; do
   n=$((n+1))
   Say "${n}) Downloading and extracting Cloud Image [$image]"
   toFolder="$THEWORKDIR/$image"
-  bash Download-CloudImage.sh "$image" "$toFolder"
+  # No Any Root
+  time bash Download-CloudImage.sh "$image" "$toFolder"
 done
 
 Say "COMPLETED"
