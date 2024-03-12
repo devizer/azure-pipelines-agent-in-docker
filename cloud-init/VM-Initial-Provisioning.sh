@@ -56,7 +56,7 @@ Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
 if [[ "$dpkg_arch" == armel ]]; then
-  Say Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel"
+  Say --Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel"
 else
   Say "Optional Lib SSL 1.1"
   export INSTALL_DIR=/usr/local/libssl-1.1
