@@ -1,6 +1,7 @@
 set -eu; set -o pipefail;
 
-echo Provisioning Script. FOLDER IS $(pwd). USER IS $(whoami). CONTENT IS BELOW; ls -lah;
+dpkg_arch="$(dpkg --print-architecture)"
+echo Provisioning Script. FOLDER IS $(pwd). USER IS $(whoami). ARCH is ${dpkg_arch}. CONTENT IS BELOW; ls -lah;
 mkdir -p /root/_logs
 
 Say "PATH"
@@ -36,16 +37,6 @@ set -e
 echo STOP UNATTENDED-UPGRADES
 systemctl stop unattended-upgrades || echo "Can't stop unattended-upgrades. It's ok."
 
-dpkg_arch="$(dpkg --print-architecture)"
-if [[ "$dpkg_arch" == armel ]]; then
-  Say "Installing 7z 16.02 for armel"
-  (time (export INSTALL_DIR=/usr/local TOOLS="7z"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7z-16.02.install.txt
-else
-  Say "Installing 7z 23.01"
-  (time (export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-7zz%20(direct%20from%207-zip.org).sh"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7zz2301.install.txt
-fi
-time 7z b -mmt=1 -md=18
-
 
 Say "APT UPDATE"
 echo "Invloke apt-get update"
@@ -54,6 +45,7 @@ echo "Invloke apt-get update"
 
 Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
+
 
 if [[ "$dpkg_arch" == armel ]]; then
   Say --Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel"
@@ -67,6 +59,17 @@ else
   ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
   export INSTALL_DIR=
 fi
+
+if [[ "$dpkg_arch" == armel ]]; then
+  Say "Installing 7z 16.02 for armel"
+  (time (export INSTALL_DIR=/usr/local TOOLS="7z"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7z-16.02.install.txt
+else
+  Say "Installing 7z 23.01"
+  (time (export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-7zz%20(direct%20from%207-zip.org).sh"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7zz2301.install.txt
+fi
+time 7z b -mmt=1 -md=18
+
+
 
 
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
