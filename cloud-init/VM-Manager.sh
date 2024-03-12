@@ -365,8 +365,11 @@ function Shutdown-VM-and-CleapUP() {
      journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --vacuum-time=1s
      journalctl --vacuum-size=4K
      try-and-retry rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build
-     test "$(dpkg --print-architecture)" = armel && shutdown -r now; shutdown now; shutdown -H now; 
-     shutdown -r now; shutdown now; shutdown -H now; 
+     if [[ "$(dpkg --print-architecture)" = armel ]]; then
+       shutdown -r now
+     else
+       shutdown -P now || shutdown -H now || shutdown now
+     fi
      ' > "$lauch_options/shutdown.sh"
 
   Say "Shutdown VM"
