@@ -365,7 +365,7 @@ function Shutdown-VM-and-CleapUP() {
      journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --vacuum-time=1s
      journalctl --vacuum-size=4K
      try-and-retry rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build
-     shutdown -P now || shutdown -H now || shutdown now
+     shutdown -r now; shutdown now; shutdown -H now; 
      ' > "$lauch_options/shutdown.sh"
 
   Say "Shutdown VM"
