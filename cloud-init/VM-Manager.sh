@@ -274,7 +274,7 @@ function Launch-VM() {
           # https://serverfault.com/a/868278
           qemu-system-arm -M versatilepb -name armel32vm \
             -kernel vmlinuz -initrd initrd.img \
-            -hda disk.qcow2 \
+            -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
             -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22 \
             -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" -nographic -no-reboot &
