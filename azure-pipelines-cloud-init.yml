@@ -42,6 +42,12 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
+      'armel-debian-8':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-8-genericcloud-armel.qcow2.xz/download"
+        KEY: 8-generic-armel
+        THEARCH: armel
+        NEWSIZE: "SKIP" # 44G
+        SLEEP: 1
       'armhf-debian-8':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-8-genericcloud-armhf.qcow2.xz/download"
         KEY: 8-generic-armhf

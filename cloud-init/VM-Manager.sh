@@ -270,6 +270,18 @@ function Launch-VM() {
 
   # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
   pid=""
+  if [[ "$arch" == "armel" ]]; then
+          # https://serverfault.com/a/868278
+          qemu-system-arm -M versatilepb -name armel32vm \
+            -kernel vmlinuz -initrd initrd.img \
+            -hda disk.qcow2 \
+            -hdb "$cloud_config" \
+            -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22 \
+            -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" -nographic -no-reboot &
+
+        pid=$!
+  fi
+
   if [[ "$arch" == "arm" ]]; then
       qemu-system-arm -name arm32vm \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
