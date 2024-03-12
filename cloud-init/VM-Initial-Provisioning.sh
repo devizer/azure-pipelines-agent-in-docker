@@ -36,7 +36,8 @@ set -e
 echo STOP UNATTENDED-UPGRADES
 systemctl stop unattended-upgrades || echo "Can't stop unattended-upgrades. It's ok."
 
-if [[ "$(dpkg --print-architecture)" == armel ]]; then
+dpkg_arch="$(dpkg --print-architecture)"
+if [[ "$dpkg_arch" == armel ]]; then
   Say "Installing 7z 16.02 for armel"
   (time (export INSTALL_DIR=/usr/local TOOLS="7z"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7z-16.02.install.txt
 else
@@ -54,14 +55,19 @@ echo "Invloke apt-get update"
 Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
-Say "Optional Lib SSL 1.1"
-export INSTALL_DIR=/usr/local/libssl-1.1
-mkdir -p $INSTALL_DIR
-printf "\n$INSTALL_DIR\n" >> /etc/ld.so.conf || true
-url=https://raw.githubusercontent.com/devizer/glist/master/install-libssl-1.1.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
-ldconfig || true
-ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
-export INSTALL_DIR=
+if [[ "$dpkg_arch" == armel ]]; then
+  Say Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel"
+else
+  Say "Optional Lib SSL 1.1"
+  export INSTALL_DIR=/usr/local/libssl-1.1
+  mkdir -p $INSTALL_DIR
+  printf "\n$INSTALL_DIR\n" >> /etc/ld.so.conf || true
+  url=https://raw.githubusercontent.com/devizer/glist/master/install-libssl-1.1.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+  ldconfig || true
+  ldconfig -p | grep "libssl\|libcrypto" |& tee /root/_logs/libssl.version.txt
+  export INSTALL_DIR=
+fi
+
 
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync"
 Say "Invloke apt-get install [$APT_PACKAGES]"
