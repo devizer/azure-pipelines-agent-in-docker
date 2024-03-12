@@ -273,7 +273,7 @@ function Launch-VM() {
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
           qemu-system-arm -M versatilepb -name armel32vm \
-            -kernel vmlinuz -initrd initrd.img \
+            -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
             -audiodev id=none,driver=none \
             -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
