@@ -42,6 +42,15 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
+      'armhf-ubuntu-14.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
+        KEY: 14.04-generic-armhf
+        THEARCH: arm
+      'arm64-ubuntu-14.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
+        KEY: 14.04-generic-armhf
+        THEARCH: arm64
+
       'armel-debian-8':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-8-genericcloud-armel.qcow2.xz/download"
         KEY: 8-generic-armel
@@ -141,14 +150,6 @@ jobs:
       'arm64-ubuntu-16.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-arm64-disk1.img"
         KEY: 16.04-generic-armhf
-        THEARCH: arm64
-      'armhf-ubuntu-14.04':
-        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img"
-        KEY: 14.04-generic-armhf
-        THEARCH: arm
-      'arm64-ubuntu-14.04':
-        IMAGEURL: "https://cloud-images.ubuntu.com/releases/trusty/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img"
-        KEY: 14.04-generic-armhf
         THEARCH: arm64
 
 
