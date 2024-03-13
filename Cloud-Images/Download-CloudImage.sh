@@ -115,7 +115,7 @@ function Azure-DevOps-GetTempFileFullName() {
 # File: [C:\Cloud\vg\PUTTY\Repo-BASH\Azure-DevOps-Api.Includes\Azure-DevOps-Lazy-CTOR.sh]
 function Azure-DevOps-Lazy-CTOR() {
   if [[ -z "${AZURE_DEVOPS_IODIR:-}" ]]; then
-    AZURE_DEVOPS_IODIR="$(MkTemp-Folder-Smarty session azure-api)"
+    AZURE_DEVOPS_IODIR="$(MkTemp-Folder-Smarty session azure-devops-api)"
     # echo AZUREAPI_IODIR: $AZUREAPI_IODIR
   fi
 };
@@ -153,8 +153,8 @@ function download_file() {
   # eval try-and-retry wget $progress1 --no-check-certificate -O '$file' '$url' || eval try-and-retry curl $progress2 -kSL -o '$file' '$url'
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\download_file_fialover.sh]
-function download_file_fialover() {
+# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\download_file_failover.sh]
+function download_file_failover() {
   local file="$1"
   shift
   for url in "$@"; do
@@ -201,8 +201,37 @@ function find_hash_algorithm() {
   done
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\Format_Thousand.sh]
-function Format_Thousand() {
+# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\format_size.sh]
+function Format_Size() {
+  local num="$1"
+  local fractionalDigits="${2:-1}"
+  local measureUnit="${3:-}"
+  # echo "ARGS: num=$num measureUnit=$measureUnit fractionalDigits=$fractionalDigits" >&2
+  awk -v n="$num" -v measureUnit="$measureUnit" -v fractionalDigits="$fractionalDigits" 'BEGIN { 
+    if (n<1999) {
+      y=n; s="";
+    } else if (n<1999999) {
+      y=n/1024.0; s="K";
+    } else if (n<1999999999) {
+      y=n/1024.0/1024.0; s="M";
+    } else if (n<1999999999999) {
+      y=n/1024.0/1024.0/1024.0; s="G";
+    } else {
+      y=n/1024.0/1024.0/1024.0/1024.0; s="T";
+    }
+    format="%." fractionalDigits "f";
+    yFormatted=sprintf(format, y);
+    if (length(s)==0) { yFormatted=y; }
+    print yFormatted s measureUnit;
+  }' 2>/dev/null || echo "$num"
+}
+# for a in '123 1 " bytes"' '456 1 " bytes"' '123456 1 " bytes"' '456789 1 " bytes"' '5555555555 1 " bytes"' '3456354345345 2 " words"'; do
+#   formatted="$(eval "Format_Size $a")"
+#   echo "$a: [$formatted]"
+# done
+
+# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\format_thousand.sh]
+function format_thousand() {
   local num="$1"
   # LC_NUMERIC=en_US.UTF-8 printf "%'.0f\n" "$num" # but it is locale dependent
   # Next is locale independent version for positive integers
@@ -231,6 +260,30 @@ EOF_SHOW_GLIBC_VERSION
     GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
   fi
   echo "${GLIBC_VERSION:-}"
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\get_global_seconds.sh]
+function get_global_seconds() {
+  theSYSTEM="${theSYSTEM:-$(uname -s)}"
+  if [[ ${theSYSTEM} != "Darwin" ]]; then
+      # uptime=$(</proc/uptime);                                # 42645.93 240538.58
+      uptime="$(cat /proc/uptime 2>/dev/null)";                 # 42645.93 240538.58
+      if [[ -z "${uptime:-}" ]]; then
+        # secured, use number of seconds since 1970
+        echo "$(date +%s)"
+        return
+      fi
+      IFS=' ' read -ra uptime <<< "$uptime";                    # 42645.93 240538.58
+      uptime="${uptime[0]}";                                    # 42645.93
+      uptime=$(LC_ALL=C LC_NUMERIC=C printf "%.0f\n" "$uptime") # 42645
+      echo $uptime
+  else 
+      # https://stackoverflow.com/questions/15329443/proc-uptime-in-mac-os-x
+      boottime=`sysctl -n kern.boottime | awk '{print $4}' | sed 's/,//g'`
+      unixtime=`date +%s`
+      timeAgo=$(($unixtime - $boottime))
+      echo $timeAgo
+  fi
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-BASH\Includes\MkTempSmarty.sh]
@@ -364,7 +417,7 @@ if [[ ! -s "$CLOUD_IMAGE_METADATA" ]]; then Update-CloudImage-Metadata; fi
 
 url="$(cat "$CLOUD_IMAGE_METADATA" | awk -F"|" -v image="$image" '(index($2, image) != 0) {print $4}' | head -1)"
 size="$(cat "$CLOUD_IMAGE_METADATA" | awk -F"|" -v image="$image" '(index($2, image) != 0) {print $3}' | head -1)"
-size_h="$(Format_Thousand "$size")"
+size_h="$(format_thousand "$size")"
 
 say Green "Downloading Cloud Image $image"
 echo "     to : $storeTo"
