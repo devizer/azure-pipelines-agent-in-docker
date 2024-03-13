@@ -20,8 +20,14 @@ jobs:
     matrix:
       'ubuntu':
         POOL: ubuntu-latest
-      'mac':
-        POOL: macos-latest
+      'mac-11':
+        POOL: macos-11
+        THEWORKDIR: /Users/runner/transient-builds
+      'mac-12':
+        POOL: macos-12
+        THEWORKDIR: /Users/runner/transient-builds
+      'mac-13':
+        POOL: macos-13
         THEWORKDIR: /Users/runner/transient-builds
 
   steps:
@@ -70,7 +76,7 @@ jobs:
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR;
-      for p in qemu sshpass sshfs hudochenkov/sshpass/sshpass; do Say "Installing $p"; time brew install $p && Say "Done: $p" || true; done
+      for p in qemu sshpass sshfs hudochenkov/sshpass/sshpass; do Say "Installing $p"; time brew install $p && Say "Done: $p" || Say --Display-As=Error "Error installing $p"; done
     condition: eq(variables['Agent.OS'], 'Darwin')
     displayName: 'Provisioning Mac'
 
