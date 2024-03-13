@@ -68,7 +68,7 @@ jobs:
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
-      brew install qemu sshpass sshfs
+      for p in qemu sshpass sshfs; do Say "Installing $p"; brew install $p; done
     condition: eq(variables['Agent.OS'], 'Darwin')
     displayName: 'Provisioning Mac'
 
