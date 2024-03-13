@@ -546,6 +546,7 @@ function VM-Launcher-Smoke-Test() {
   VM_USER_NAME=john
   Build-Cloud-Config "/tmp/provisia"
   ls -la "/tmp/provisia/cloud-config.qcow2"
+
   Say "THEARCH: $THEARCH"
   Launch-VM $THEARCH "/tmp/provisia/cloud-config.qcow2" /transient-builds/run
   sleep 1
@@ -559,4 +560,5 @@ function VM-Launcher-Smoke-Test() {
   Say "VM-Launcher-Smoke-Test() COMPLETED."
 
   Shutdown-VM-and-CleapUP "/tmp/provisia"
+  cp -f -v "/tmp/provisia/cloud-config.qcow2" $SYSTEM_ARTIFACTSDIRECTORY
 }
