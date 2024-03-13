@@ -15,6 +15,16 @@ jobs:
   pool:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 120
+  pool:
+    vmImage: $(POOL)
+  timeoutInMinutes: 120
+  strategy:
+    maxParallel: 2
+    matrix:
+      'ubuntu':
+        POOL: ubuntu-latest
+      'mac':
+        POOL: macos-latest
 
   steps:
   - script: |
@@ -23,6 +33,7 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
       printenv | sort;
+      7z b -mmt=1 -md=18
     displayName: 'Variables'
 
   - script: |
@@ -54,7 +65,15 @@ jobs:
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
       try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
-    displayName: 'Provisioning'
+    condition: eq(variables['Agent.OS'], 'Linux')
+    displayName: 'Provisioning Linux'
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      brew install qemu sshpass sshfs
+    condition: eq(variables['Agent.OS'], 'Darwin')
+    displayName: 'Provisioning Mac'
 
   - script: |
       set -eu; set -o pipefail
