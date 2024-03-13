@@ -76,7 +76,7 @@ jobs:
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR;
-      for p in "brew install qemu" "brew cask install osxfuse" "brew install homebrew/fuse/sshfs" "brew install hudochenkov/sshpass/sshpass"; do
+      for p in "brew install --cask osxfuse" "brew install qemu" "brew cask install osxfuse" "brew install homebrew/fuse/sshfs" "brew install hudochenkov/sshpass/sshpass"; do
         Say "Installing [$p]"; time eval $p && Say "Done: [$p]" || Say --Display-As=Error "Error installing [$p]";
       done
       
