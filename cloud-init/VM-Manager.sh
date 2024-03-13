@@ -139,7 +139,7 @@ bootcmd:
         user='$VM_USER_NAME'
         header "UnLock root and create the \"$user\" user"
         useradd -m -s /bin/bash -p pass $user
-        pass=p1ssw0rd
+        pass=pass
         printf "$pass\n$pass\n" | passwd root
         passwd -u root
         printf "$pass\n$pass\n" | passwd $user
@@ -377,7 +377,7 @@ function Shutdown-VM-and-CleapUP() {
   ls -lah "$lauch_options"
   cp -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
   # It normally fails three times because on first ssh server stops
-  try-and-retry sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash /tmp/shutdown.sh" || true
+  try-and-retry sshpass -p "pass" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash /tmp/shutdown.sh" || true
   sleep 20
   pid="$(cat "$lauch_options/pid")"
   if [[ -z "$pid" ]]; then
@@ -402,7 +402,7 @@ function Wait-For-VM() {
     if [[ $current -le 0 ]]; then break; fi
     echo "{#$n:$current} Waiting for ssh connection to VM on port $VM_SSH_PORT."
     set +e
-    sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a; uptime'" 2>/dev/null
+    sshpass -p "pass" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo WELCOME TO VM; uname -a; uptime'" 2>/dev/null
     local ok=$?;
     set -e
     if [ $ok -eq 0 ]; then break; fi
@@ -423,7 +423,7 @@ function Wait-For-VM() {
   set +e
   # fuse: unknown option(s): `-o defer_permissions'
   # does not work -o reconnect -o Compression=no -o Ciphers=arcfour
-  try-and-retry bash -e -c "echo p1ssw0rd | sshfs root@127.0.0.1:/ '$mapto' -p ${VM_SSH_PORT} -o password_stdin -o allow_other"
+  try-and-retry bash -e -c "echo pass | sshfs root@127.0.0.1:/ '$mapto' -p ${VM_SSH_PORT} -o password_stdin -o allow_other"
   # returns mapping error via VM_SSHFS_MAP_ERROR
   VM_SSHFS_MAP_ERROR=$?;
   set -e
@@ -480,7 +480,7 @@ function Wait-For-VM() {
        Say "Bye. Uptime: $(uptime -p). Err=$err"
        exit $err
 ' > "$lauch_options/fs/tmp/launcher.sh"
-  sshpass -p "p1ssw0rd" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
+  sshpass -p "pass" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
   Say "Grab Outcome folder (at VM) /outcome.tar to $HOST_OUTCOME_FOLDER"
   cp -f -v $lauch_options/fs/tmp/job-outcome.tar /tmp/outcome.tar
   Say "Extract outcome.tar to $HOST_OUTCOME_FOLDER"
@@ -543,7 +543,7 @@ function VM-Launcher-Smoke-Test() {
   VM_MEM=2048M
   HOST_PROVISIA_FOLDER=/tmp/cloud-init-smoke-test-provisia
   VM_PROVISIA_FOLDER=/root/provisia
-  VM_USER_NAME=john
+  VM_USER_NAME=user
   Build-Cloud-Config "/tmp/provisia"
   ls -la "/tmp/provisia/cloud-config.qcow2"
 
