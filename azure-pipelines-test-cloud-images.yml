@@ -13,9 +13,6 @@ jobs:
 
 - job: Test
   pool:
-    vmImage: 'ubuntu-22.04'
-  timeoutInMinutes: 120
-  pool:
     vmImage: $(POOL)
   timeoutInMinutes: 120
   strategy:
