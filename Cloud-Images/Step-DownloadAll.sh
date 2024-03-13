@@ -3,6 +3,8 @@ Say --Reset-Stopwatch
 bash Download-CloudImage.sh --show-images
 
 images='
+  armel-debian-8
+
   armhf-debian-8       armhf-debian-9       armhf-debian-10      armhf-debian-11     
   armhf-debian-12
   arm64-debian-10      arm64-debian-11      arm64-debian-12      arm64-debian-13
