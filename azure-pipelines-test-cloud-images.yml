@@ -37,8 +37,12 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
       printenv | sort;
-      7z b -mmt=1 -md=18
     displayName: 'Variables'
+
+  - script: |
+      echo "CPU: $(Get-CpuName)"
+      7z b -mmt=1 -md=18
+    displayName: 'Benchmark'
 
   - script: |
       set -eu; set -o pipefail
