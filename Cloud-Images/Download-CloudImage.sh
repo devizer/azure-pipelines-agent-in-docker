@@ -378,13 +378,17 @@ tmp="$(MkTemp-File-Smarty "$image" "$DOWNLOAD_CLOUD_IMAGE_FOLDER")"
 echo "    tmp : ${tmp}.zip"
 
 function my_clean_up() {
-  test -n "${1:-}" && echo "[Download-CloudImage.sh] An error occurred on line $1. Cleanup and abort"
+  if [[ -n "${1:-}" ]]; then
+    echo "[Download-CloudImage.sh] An error occurred on line $1. Cleanup and abort"
+  fi
   if [[ -n "${tmp:-}" ]]; then
      rm -f "${tmp}.zip" >/dev/null 2>&1 || true
      rm -f "${tmp}"     >/dev/null 2>&1 || true
      rm -rf "${tmp}_"   >/dev/null 2>&1 || true
   fi
-  test -n "${1:-}" && exit 77
+  if [[ -n "${1:-}" ]]; then
+    exit 77
+  fi
 }
 trap 'my_clean_up $LINENO' ERR
 
