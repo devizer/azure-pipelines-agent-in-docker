@@ -16,7 +16,7 @@ jobs:
     vmImage: $(POOL)
   timeoutInMinutes: 120
   strategy:
-    maxParallel: 2
+    maxParallel: 4
     matrix:
       'ubuntu':
         POOL: ubuntu-latest
