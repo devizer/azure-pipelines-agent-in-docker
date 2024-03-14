@@ -42,6 +42,17 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
+      'armhf-ubuntu-24.04':
+        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/20240302/noble-server-cloudimg-armhf.img"
+        KEY: 24.04-generic-armhf
+        THEARCH: arm
+      'arm64-ubuntu-24.04':
+        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        KEY: 24.04-generic-arm64
+        THEARCH: arm64
+
+      
       'armel-debian-9':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-9-genericcloud-armel.qcow2.xz/download"
         KEY: 9-generic-armel
@@ -115,15 +126,6 @@ jobs:
         KEY: 13-generic-arm64
         THEARCH: arm64
 
-      'armhf-ubuntu-24.04':
-        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
-        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/20240302/noble-server-cloudimg-armhf.img"
-        KEY: 24.04-generic-armhf
-        THEARCH: arm
-      'arm64-ubuntu-24.04':
-        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
-        KEY: 24.04-generic-arm64
-        THEARCH: arm64
       'armhf-ubuntu-23.10':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
         KEY: 23.10-generic-armhf
