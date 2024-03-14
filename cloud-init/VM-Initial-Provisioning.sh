@@ -1,5 +1,6 @@
 set -eu; set -o pipefail;
 
+export DEBIAN_FRONTEND=noninteractive
 dpkg_arch="$(dpkg --print-architecture)"
 echo Provisioning Script. FOLDER IS $(pwd). USER IS $(whoami). ARCH is ${dpkg_arch}. CONTENT IS BELOW; ls -lah;
 mkdir -p /root/_logs
@@ -165,6 +166,10 @@ url=https://raw.githubusercontent.com/devizer/glist/master/bin/install-nuget-6.s
 time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
+
+Say "Upgrading"
+time apt-get upgrade -y
+Say "Upgrading completed"
 
 if [[ "$(command -v systemctl)" != "" ]]; then
   for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
