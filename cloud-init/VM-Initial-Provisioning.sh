@@ -167,7 +167,7 @@ time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
 
-if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] && [[ "${os_ver}" != "ubuntu:24.04" ]]; then
+if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] && [[ "${os_ver}" != "ubuntu:22.04" ]] && [[ "${os_ver}" != "ubuntu:24.04" ]]; then
   Say "Upgrading"
   time apt-get upgrade -y
   Say "Upgrading completed"
