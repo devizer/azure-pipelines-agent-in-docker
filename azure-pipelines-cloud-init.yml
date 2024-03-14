@@ -53,15 +53,21 @@ jobs:
         THEARCH: arm64
 
       
-      'armel-debian-9':
-        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-9-genericcloud-armel.qcow2.xz/download"
-        KEY: 9-generic-armel
+      'armel-debian-11':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-armel.qcow2.xz/download"
+        KEY: 11-generic-armel
         THEARCH: armel
         NEWSIZE: "SKIP" # 44G
         SLEEP: 1
       'armel-debian-10':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-10-genericcloud-armel.qcow2.xz/download"
         KEY: 10-generic-armel
+        THEARCH: armel
+        NEWSIZE: "SKIP" # 44G
+        SLEEP: 1
+      'armel-debian-9':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-9-genericcloud-armel.qcow2.xz/download"
+        KEY: 9-generic-armel
         THEARCH: armel
         NEWSIZE: "SKIP" # 44G
         SLEEP: 1
