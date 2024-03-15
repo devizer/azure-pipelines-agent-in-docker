@@ -42,8 +42,8 @@ jobs:
   - script: |
       echo "CPU: $(Get-CpuName)"
       Say "IO Benchmark for $HOME"
-      File-IO-Benchmark 'HOME FS' / 4G $(nproc)T 30 1
-    displayName: 'IO Benchmark for $(HOME)'
+      File-IO-Benchmark 'HOME FS' $HOME 4G $(nproc)T 30 1
+    displayName: 'IO Benchmark for ${{ variables.HOME }}'
 
   - script: |
       echo "CPU: $(Get-CpuName)"
