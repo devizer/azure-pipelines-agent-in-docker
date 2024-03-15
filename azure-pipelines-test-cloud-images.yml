@@ -43,7 +43,8 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       Say "IO Benchmark for $HOME"
       [ "$(uname -s)" = Darwin ] && export DISABLE_UNICODE=True && brew install fio
-      File-IO-Benchmark "HOME" $HOME 4G $(nproc)T 30 1
+      nproc="$(nproc 2>/dev/null || sysctl -n hw.logicalcpu 2>/dev/null)"
+      File-IO-Benchmark "HOME FS" "$HOME" 4G "${nproc:-2}T" 30 1
     displayName: 'IO Benchmark for ${{ variables.HOME }}'
 
   - script: |
