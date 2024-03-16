@@ -51,9 +51,9 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       Say "Installing 7z 23.01"
       export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://raw.githubusercontent.com/devizer/azure-pipelines-agent-in-docker/master/build-tools/install-7zz%20(direct%20from%207-zip.org).sh"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
-      Say "7z single core benchmark"
+      Say "7z SINGLE-CORE Benchmark"
       7z b -mmt=1 -md=18 | grep "7\-Zip\|18:"
-      Say "7z multi core benchmark"
+      Say "7z MULTI-CORE Benchmark"
       7z b -md=18 | grep "7\-Zip\|18:"
     displayName: 'Benchmark'
 
