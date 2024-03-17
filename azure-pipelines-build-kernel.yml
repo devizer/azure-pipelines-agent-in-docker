@@ -13,7 +13,7 @@ trigger:
 
 jobs:
 
-- job: Image
+- job: Kernel
   pool:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 120
@@ -26,14 +26,14 @@ jobs:
         KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.272.tar.xz
       '5.10.213':
         KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.213.tar.xz
+      '5.15.152':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.152.tar.xz
       '6.8.1':
         KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.1.tar.xz
       '6.6.22':
         KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.22.tar.xz
       '6.1.82':
         KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.82.tar.xz
-      '5.15.152':
-        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.152.tar.xz
 
 
   steps:

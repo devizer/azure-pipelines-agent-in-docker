@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 source install-linaro-arm32.sh 
-sudo apt install bc build-essential gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi git unzip libncurses5-dev bison flex libssl-dev
+sudo apt install bc build-essential gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi git unzip libncurses5-dev bison flex libssl-dev | grep "Setting\|Unpack"
 
 echo '
 https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.310.tar.xz
@@ -22,6 +22,7 @@ time tar xJf kernel.tar.xz
 cd linux*
 
 target=$HOME/kernel-outcome
+Say "TARGET FOLDER: [$target]"
 flags="-mcpu=armv4t -march=armv4t -mlittle-endian"
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=arm-none-eabi- O=$target versatile_defconfig
 time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=arm-none-eabi- O=$target -j |& tee my.log
