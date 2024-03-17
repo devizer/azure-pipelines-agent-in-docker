@@ -59,6 +59,7 @@ jobs:
       df -h -T
       echo ""
       sudo mount
+    condition: eq(1,2)
     displayName: 'Provisioning'
 
   - script: |
