@@ -32,6 +32,13 @@ flags="-mcpu=armv4t -march=armv4t -mlittle-endian"
 flags=""
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target versatile_defconfig
 
+echo '
+CONFIG_PCI=y
+CONFIG_VIRTIO_PCI=y
+CONFIG_PCI_HOST_GENERIC=y
+' >> "$target"/.config
+
+
 Say "make all"
 time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=0 all |& tee $target/my.all.log
 
