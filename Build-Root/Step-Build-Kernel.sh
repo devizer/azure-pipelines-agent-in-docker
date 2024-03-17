@@ -33,6 +33,7 @@ flags=""
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target versatile_defconfig
 
 echo '
+CONFIG_HAVE_PCI=y
 CONFIG_PCI=y
 CONFIG_VIRTIO_PCI=y
 CONFIG_PCI_HOST_GENERIC=y
