@@ -76,9 +76,10 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       from=$HOME/kernel-outcome
       cd $from
-      7z a -mx=1 $SYSTEM_ARTIFACTSDIRECTORY/kernel.7z
+      artifact="$SYSTEM_ARTIFACTSDIRECTORY/kernel AGENT_JOBNAME.7z"
+      7z a -mx=1 "$artifact"
       Say "OK"
-      ls -h $SYSTEM_ARTIFACTSDIRECTORY/kernel.7z
+      ls -h "$artifact"
     # condition: succeededOrFailed()
     displayName: 'Compress artifact'
 
