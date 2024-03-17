@@ -31,4 +31,12 @@ Say "TARGET FOLDER: [$target]"
 flags="-mcpu=armv4t -march=armv4t -mlittle-endian"
 flags=""
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target versatile_defconfig
-time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=0 all |& tee $target/my.log
+
+Say "make all"
+time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=1 all |& tee $target/my.log
+
+Say "make bzImage"
+time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=1 bzImage |& tee $target/bzImage.log || Say --Display-As=Error "Can't make bzImage. It's ok"
+
+Say "make vmlinux"
+time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=1 vmlinux |& tee $target/bzImage.log || Say --Display-As=Error "Can't make vmlinux. It's ok"
