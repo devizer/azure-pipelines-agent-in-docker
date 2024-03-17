@@ -1,0 +1,96 @@
+variables:
+  THEWORKDIR: /transient-builds
+  DEFAULT_NEWSIZE: 16G
+  XZ_COMPRESSION_LEVEL: 9
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'cloud-init/*'
+
+jobs:
+
+- job: Image
+  pool:
+    vmImage: 'ubuntu-22.04'
+  timeoutInMinutes: 120
+  strategy:
+    maxParallel: 8
+    matrix:
+      '4.19.310':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.310.tar.xz
+      '5.4.272':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.272.tar.xz
+      '5.10.213':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.213.tar.xz
+      '6.8.1':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.1.tar.xz
+      '6.6.22':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.22.tar.xz
+      '6.1.82':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.82.tar.xz
+      '5.15.152':
+        KERNEL_URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.152.tar.xz
+
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      echo "CPU: $(Get-CpuName)"
+      printenv | sort;
+    displayName: 'Variables'
+
+  - script: |
+      set -eu; set -o pipefail
+      
+      export SECOND_DISK_MODE=LOOP
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
+      export LOOP_DIRECT_IO=off
+      export MOVE_DOCKER_TO_RAID=""
+      export FS=BTRFS-Compressed
+      export BTRFS_COMPRESS_MODE=zstd:1
+      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+      Say "Mounts"
+      df -h -T
+      echo ""
+      sudo mount
+    displayName: 'Provisioning'
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
+      cd Build-Root
+      bash -e Step-Build-Kernel.sh 
+    # condition: succeededOrFailed()
+    displayName: 'Build Kernel'
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      from=$HOME/kernel-outcome
+      cd $from
+      7z a -mx=1 $SYSTEM_ARTIFACTSDIRECTORY/kernel.7z
+      Say "OK"
+      ls -h $SYSTEM_ARTIFACTSDIRECTORY/kernel.7z
+    # condition: succeededOrFailed()
+    displayName: 'Compress artifact'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeeded()
+    displayName: 'Publish Final'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Succeeded $(Agent.JobName)'
+
+  - task: PublishBuildArtifacts@1
+    condition: failed()
+    displayName: 'Publish Errors'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Failed $(Agent.JobName)-$(Build.BUILDNUMBER)'
