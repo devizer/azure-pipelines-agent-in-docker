@@ -27,5 +27,5 @@ target=$HOME/kernel-outcome
 Say "TARGET FOLDER: [$target]"
 flags="-mcpu=armv4t -march=armv4t -mlittle-endian"
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=arm-none-eabi- O=$target versatile_defconfig
-time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=arm-none-eabi- O=$target -j |& tee my.log
+time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=arm-none-eabi- O=$target -j V=1 |& tee my.log
 
