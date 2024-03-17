@@ -1,4 +1,6 @@
 set -eu; set -o pipefail
+nohup bash Anti-Freeze.sh &
+
 source install-linaro-arm32.sh 
 Say "Apt install"
 sudo apt-get update -qq
