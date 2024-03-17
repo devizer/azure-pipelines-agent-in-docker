@@ -172,10 +172,10 @@ if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] &&
   time apt-get upgrade -y
   Say "Upgrading completed"
 else
-  # Say "SKIPPING APT UPGRADE. Almost all done"
-  Say "SAFE Upgrading"
-  apt-get install aptitude -y -qq
-  aptitude safe-upgrade -y
+  Say "SKIPPING APT UPGRADE. Almost all done"
+  # Say "SAFE Upgrading"
+  # apt-get install aptitude -y -qq
+  # aptitude safe-upgrade -y
 fi
 
 if [[ "$(command -v systemctl)" != "" ]]; then
