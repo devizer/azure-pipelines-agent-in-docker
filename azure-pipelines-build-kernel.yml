@@ -76,9 +76,12 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       from=$HOME/kernel-outcome
       cd $from
-      artifact="$SYSTEM_ARTIFACTSDIRECTORY/$AGENT_JOBNAME.7z"
+      artifact="${AGENT_JOBNAME}.7z"
       artifact="${artifact//[\/]/-}"; artifact="${artifact//[:]/-}"; artifact="${artifact//[\ ]/-}";
-      7z a -mx=1 "$artifact"
+      Say "Artifact: [$artifact]"
+      artifact="$SYSTEM_ARTIFACTSDIRECTORY/$artifact"
+      Say "Archive: [$artifact]"
+      time 7z a -mx=3 "$artifact"
       Say "OK"
       ls -h "$artifact"
     # condition: succeededOrFailed()
