@@ -1,5 +1,6 @@
 set -eu; set -o pipefail
 source install-linaro-arm32.sh 
+Say "Apt install"
 sudo apt install bc build-essential gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi git unzip libncurses5-dev bison flex libssl-dev | grep "Setting\|Unpack"
 
 echo '
