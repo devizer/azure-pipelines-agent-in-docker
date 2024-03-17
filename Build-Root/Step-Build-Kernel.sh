@@ -18,6 +18,8 @@ https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.152.tar.xz
 ' >/dev/null
 
 work=$HOME/build/kernel
+mkdir -p $work
+pushd $work
 KERNEL_URL="${KERNEL_URL:-https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.310.tar.xz}"
 Say "Download Kernel"
 echo "URL IS $KERNEL_URL"
@@ -46,3 +48,4 @@ time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COM
 
 Say "make vmlinux"
 time make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target -j1 V=0 vmlinux |& tee $target/my.vmlinux.log || Say --Display-As=Error "Can't make vmlinux. It's ok"
+popd
