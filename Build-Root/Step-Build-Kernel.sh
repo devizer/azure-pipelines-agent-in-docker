@@ -45,6 +45,7 @@ flags=""
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target kvmconfig || make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target kvm_guest.config
 
 
+./scripts/config --file $target/.config --set-val CONFIG_ARCH_MULTI_V5 y 
 ./scripts/config --file $target/.config --set-val CONFIG_HAVE_PCI y
 ./scripts/config --file $target/.config --set-val CONFIG_PCI y
 ./scripts/config --file $target/.config --set-val CONFIG_VIRTIO_PCI y
