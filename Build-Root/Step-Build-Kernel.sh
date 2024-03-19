@@ -50,6 +50,8 @@ flags=""
 ./scripts/config --file $target/.config --set-val CONFIG_VIRTIO_PCI y
 ./scripts/config --file $target/.config --set-val CONFIG_PCI_HOST_GENERIC y
 
+sed -i 's/=m$/=y/g'  $target/.config
+
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target olddefconfig
 
 
