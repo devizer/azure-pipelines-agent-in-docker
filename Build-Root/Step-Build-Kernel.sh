@@ -40,12 +40,12 @@ flags="-mcpu=armv4t -march=armv4t -mlittle-endian"
 flags=""
 # https://vccolombo.github.io/cybersecurity/linux-kernel-qemu-setup/
      Say "defconfig"
-     make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target defconfig
+     make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target versatile_defconfig # defconfig
      Say "kvmconfig or kvm_guest.config"
      make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target kvmconfig || make CFLAGS="$flags" CPPFLAGS="$flags" CXXFLAGS="$flags" ARCH=arm CROSS_COMPILE=${CROZ_PREFIX} O=$target kvm_guest.config
 
 
-./scripts/config --file $target/.config --set-val CONFIG_ARCH_MULTI_V5 y 
+# ./scripts/config --file $target/.config --set-val CONFIG_ARCH_MULTI_V5 y 
 ./scripts/config --file $target/.config --set-val CONFIG_HAVE_PCI y
 ./scripts/config --file $target/.config --set-val CONFIG_PCI y
 ./scripts/config --file $target/.config --set-val CONFIG_VIRTIO_PCI y
