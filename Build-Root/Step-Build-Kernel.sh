@@ -1,10 +1,14 @@
 set -eu; set -o pipefail
-nohup bash Anti-Freeze.sh &
 
 source install-linaro-arm32.sh 
+function Short-Apt() { grep "Unpack\|Setting" || true; }
 Say "Apt install"
 sudo apt-get update -qq
-sudo apt-get install bc build-essential gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi git unzip libncurses5-dev bison flex libssl-dev | grep "Setting\|Unpack"
+sudo apt-get install bc build-essential gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi git unzip libncurses5-dev bison flex libssl-dev | Short-Apt
+
+for p in libmpc-dev libmpc3; do
+  sudo apt-get install -y -qq $p | Short-Apt
+done
 
 echo '
 https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.310.tar.xz
@@ -26,6 +30,8 @@ echo "URL IS $KERNEL_URL"
 time try-and-retry curl -ksfSL -o kernel.tar.xz "$KERNEL_URL"
 time tar xJf kernel.tar.xz
 cd linux*
+
+nohup bash Anti-Freeze.sh &
 
 target=$HOME/kernel-outcome
 mkdir -p "$target"
