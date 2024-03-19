@@ -16,7 +16,7 @@ jobs:
 - job: Kernel
   pool:
     vmImage: 'ubuntu-22.04'
-  timeoutInMinutes: 100
+  timeoutInMinutes: 200
   strategy:
     maxParallel: 8
     matrix:
