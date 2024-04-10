@@ -29,9 +29,10 @@ function install_optional_open_ssl_11() {
       script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
       tmp="$(mktemp)"
+      sudo cat /etc/ld.so.conf >> "$tmp"; 
+      echo "" >> "$tmp"; 
       test -d /opt/networking/lib64 && echo /opt/networking/lib64 >> "$tmp"
       test -d /opt/networking/lib && echo /opt/networking/lib >> "$tmp"
-      sudo cat /etc/ld.so.conf >> "$tmp"; 
       sudo mv -f "$tmp" /etc/ld.so.conf
       sudo ldconfig
       sudo rm -rf /opt/curl-temp
