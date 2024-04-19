@@ -231,7 +231,7 @@ jobs:
       cd cloud-init 
       bash -e Smoke-Test-Step.sh 
     # condition: succeededOrFailed()
-    displayName: 'Smoke Test'
+    displayName: 'Provisioning VM'
 
   - script: |
       set -eu; set -o pipefail

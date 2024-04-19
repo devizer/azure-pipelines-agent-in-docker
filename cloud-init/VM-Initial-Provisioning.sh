@@ -167,7 +167,18 @@ time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
 
-if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] && [[ "${os_ver}" != "ubuntu:22.04" ]] && [[ "${os_ver}" != "ubuntu:24.04" ]]; then
+function Disbale-Unattended() {
+  if [[ "$(command -v systemctl)" != "" ]]; then
+    for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
+      Say "Disable $s"
+      systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
+    done
+  fi
+}
+Disbale-Unattended
+
+# if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] && [[ "${os_ver}" != "ubuntu:22.04" ]] && [[ "${os_ver}" != "ubuntu:24.04" ]] && [[ "${os_ver}" != "ubuntu:23.10" ]]; then
+if [[ "${os_ver}" != "ubuntu"* ]]; then
   Say "Upgrading"
   time apt-get upgrade -y
   Say "Upgrading completed"
@@ -178,9 +189,4 @@ else
   # aptitude safe-upgrade -y
 fi
 
-if [[ "$(command -v systemctl)" != "" ]]; then
-  for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
-    Say "Disable $s"
-    systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
-  done
-fi
+Disbale-Unattended
