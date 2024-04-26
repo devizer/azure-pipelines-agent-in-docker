@@ -44,11 +44,13 @@ jobs:
       
       'armhf-ubuntu-24.04':
         # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-armhf.img"
-        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/20240302/noble-server-cloudimg-armhf.img"
+        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/20240302/noble-server-cloudimg-armhf.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-armhf.img"
         KEY: 24.04-generic-armhf
         THEARCH: arm
       'arm64-ubuntu-24.04':
-        IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img"
         KEY: 24.04-generic-arm64
         THEARCH: arm64
 
