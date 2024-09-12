@@ -13,6 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
  LC_ALL=en_US.UTF8 \
  LANG=en_US.UTF8 \
  BASE_DOCKER_IMAGE=${BASE_IMAGE}
+ QEMU_IMAGE_ID=${QEMU_IMAGE_ID}
 
 WORKDIR /
 SHELL ["/bin/bash", "-c"]
@@ -29,7 +30,8 @@ RUN echo; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say --Reset-Stopwatch; \
  smart-apt-install curl xz-utils p7zip-full unzip jq pv; \
- bash Install/Download-CloudImage.sh --temp /tmp armrl-debian-11 /Cloud-Image; \
+ bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
+ ls -la /Cloud-Image; \
  smart-apt-install sshfs rsync qemy-system-arm locales apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
     lsof unzip time procps p7zip-full jq pv binutils \
     ; \
