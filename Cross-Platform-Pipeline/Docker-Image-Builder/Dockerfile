@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
  container=docker \
  LC_ALL=en_US.UTF8 \
  LANG=en_US.UTF8 \
- BASE_DOCKER_IMAGE=${BASE_IMAGE} \
+ BASE_DOCKER_IMAGE=${BASE_IMAGE}
 
 WORKDIR /
 SHELL ["/bin/bash", "-c"]
