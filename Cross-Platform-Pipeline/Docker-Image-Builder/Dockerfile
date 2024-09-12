@@ -25,7 +25,7 @@ RUN echo; \
  set -e; set -u; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
- apt-get update -qq; apt-get install curl -qq -y; \
+ apt-get update -qq; apt-get install curl sudo -qq -y; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say --Reset-Stopwatch; \
  smart-apt-install curl xz-utils p7zip-full unzip; \
