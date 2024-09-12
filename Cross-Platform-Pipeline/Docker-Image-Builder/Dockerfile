@@ -23,10 +23,10 @@ COPY Install /Install
 RUN echo; \
  export SLIM_IMAGE BASE_DOCKER_IMAGE BUILD_URL JOB_URL BUILD_SOURCEVERSION BUILD_SOURCEBRANCHNAME BUILD_BUILDID; \
  set -e; set -u; \
- Say --Reset-Stopwatch; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
+ Say --Reset-Stopwatch; \
  smart-apt-install curl xz-utils p7zip-full unzip; \
  bash Install/Download-CloudImage.sh --temp /tmp armrl-debian-11 /Cloud-Image; \
  smart-apt-install sshfs rsync qemy-system-arm locales apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
