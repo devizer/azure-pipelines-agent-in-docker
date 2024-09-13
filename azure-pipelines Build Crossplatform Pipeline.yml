@@ -1,0 +1,104 @@
+variables:
+  THEWORKDIR: /transient-builds
+  DEFAULT_NEWSIZE: 16G
+  XZ_COMPRESSION_LEVEL: 9
+
+trigger:
+  branches:
+    include:
+    - manual
+
+jobs:
+
+- job: Push
+  pool:
+    vmImage: 'ubuntu-22.04'
+  timeoutInMinutes: 120
+  strategy:
+    maxParallel: 8
+    matrix:
+      'arm64-debian-10':
+         QEMU_IMAGE_ID: 'arm64-debian-10'
+      'arm64-debian-11':
+         QEMU_IMAGE_ID: 'arm64-debian-11'
+      'arm64-debian-12':
+         QEMU_IMAGE_ID: 'arm64-debian-12'
+      'arm64-debian-13':
+         QEMU_IMAGE_ID: 'arm64-debian-13'
+      'arm64-ubuntu-14.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-14.04'
+      'arm64-ubuntu-16.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-16.04'
+      'arm64-ubuntu-18.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-18.04'
+      'arm64-ubuntu-20.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-20.04'
+      'arm64-ubuntu-22.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-22.04'
+      'arm64-ubuntu-23.10':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-23.10'
+      'arm64-ubuntu-24.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-24.04'
+      'armel-debian-10':
+         QEMU_IMAGE_ID: 'armel-debian-10'
+      'armel-debian-11':
+         QEMU_IMAGE_ID: 'armel-debian-11'
+      'armel-debian-8':
+         QEMU_IMAGE_ID: 'armel-debian-8'
+      'armel-debian-9':
+         QEMU_IMAGE_ID: 'armel-debian-9'
+      'armhf-debian-10':
+         QEMU_IMAGE_ID: 'armhf-debian-10'
+      'armhf-debian-11':
+         QEMU_IMAGE_ID: 'armhf-debian-11'
+      'armhf-debian-12':
+         QEMU_IMAGE_ID: 'armhf-debian-12'
+      'armhf-debian-8':
+         QEMU_IMAGE_ID: 'armhf-debian-8'
+      'armhf-debian-9':
+         QEMU_IMAGE_ID: 'armhf-debian-9'
+      'armhf-ubuntu-14.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-14.04'
+      'armhf-ubuntu-16.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-16.04'
+      'armhf-ubuntu-18.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-18.04'
+      'armhf-ubuntu-20.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-20.04'
+      'armhf-ubuntu-22.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-22.04'
+      'armhf-ubuntu-23.10':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-23.10'
+      'armhf-ubuntu-24.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-24.04'
+
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      printenv | sort;
+    displayName: 'Variables'
+
+  - script: |
+      set -eu; set -o pipefail
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      echo "CPU: $(Get-CpuName)"
+      cd cloud-init 
+      cd Cross-Platform-Pipeline
+      bash -e local-build.sh
+    # condition: succeededOrFailed()
+    displayName: 'Build & Test'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeeded()
+    displayName: 'Publish Final'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Succeeded $(Agent.JobName)'
+
+  - task: PublishBuildArtifacts@1
+    condition: failed()
+    displayName: 'Publish Errors'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: 'Failed $(Agent.JobName)-$(Build.BUILDNUMBER)'
