@@ -14,7 +14,7 @@ jobs:
 - job: Push
   pool:
     vmImage: 'ubuntu-22.04'
-  timeoutInMinutes: 120
+  timeoutInMinutes: 20
   strategy:
     maxParallel: 8
     matrix:
