@@ -22,7 +22,7 @@ echo "For VM Content" > "${VM_PROVISIA_FOLDER}"/my-source.txt
 
 pushd "${VM_PROVISIA_FOLDER}" >/dev/null
 tar czf /Cloud-Image/provisia.tar.gz .
-ls -lah /Cloud-Image/provisia.tar.gz
+# ls -lah /Cloud-Image/provisia.tar.gz
 popd >/dev/null
 
 echo '

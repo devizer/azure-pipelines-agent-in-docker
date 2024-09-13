@@ -23,7 +23,7 @@ docker run -v $(pwd)/smoke-test/job:/job --privileged --name qemu-vm-container -
 
 Say "smoke test results (./smoke-test/job/results.txt)"
 sudo chown -R $USER smoke-test/job
-ls -laR smoke-test
+# ls -laR smoke-test
 cat smoke-test/job/results.txt
 
 
