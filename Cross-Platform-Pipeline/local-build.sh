@@ -17,5 +17,5 @@ Say "Crossplatform Pipeline Images"
 docker image ls | grep "devizervlad/crossplatform-pipeline"
 
 # https://stackoverflow.com/a/49021109 (fuse in container)
-docker run --name qemu-vm-host --hostname qemu-vm-host --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -it devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -c "uname -a; Say \"FOLDER IS [\$(pwd)]\"; free -m; df -h -T; uname -a"
+docker run --privileged --name qemu-vm-host --hostname qemu-vm-host --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -it devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -c "uname -a; Say \"FOLDER IS [\$(pwd)]\"; free -m; df -h -T; uname -a"
 
