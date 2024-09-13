@@ -88,7 +88,7 @@ jobs:
       bash -e local-build.sh
       popd
 
-      cp -f -v Cross-Platform-Pipeline/smoke-test/job/results.txt $SYSTEM_ARTIFACTSDIRECTORY/results.txt
+      cp -f -v -r Cross-Platform-Pipeline/smoke-test/job/* $SYSTEM_ARTIFACTSDIRECTORY/
     # condition: succeededOrFailed()
     displayName: 'Build & Test'
 
