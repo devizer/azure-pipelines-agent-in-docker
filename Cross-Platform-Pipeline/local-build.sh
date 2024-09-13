@@ -26,4 +26,4 @@ sudo chown -R $USER smoke-test/job
 # ls -laR smoke-test
 cat smoke-test/job/results.txt
 
-
+echo ${QEMU_IMAGE_ID} > smoke-test/job/image.txt
