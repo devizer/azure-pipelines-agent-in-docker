@@ -13,15 +13,15 @@ Launch-VM $arch /Cloud-Image/cloud-config.qcow2 /Cloud-Image
 pid=$(cat /Cloud-Image/pid)
 Say "VM LAUNCHED. PID is $pid"
 
-export VM_PROVISIA_FOLDER=/app
-export HOST_OUTCOME_FOLDER=/app
+export VM_PROVISIA_FOLDER=/job
+export HOST_OUTCOME_FOLDER="${VM_PROVISIA_FOLDER}"
 export VM_POSTBOOT_SCRIPT="$@"
-mkdir -p /app
-echo "For VM Content" > /app/my-source.txt
+mkdir -p "${VM_PROVISIA_FOLDER}"
+echo "For VM Content" > "${VM_PROVISIA_FOLDER}"/my-source.txt
 
-pushd /app
+pushd "${VM_PROVISIA_FOLDER}" >/dev/null
 tar czf /Cloud-Image/provisia.tar.gz .
-popd
+popd >/dev/null
 
 echo '
 VM_SSH_PORT='$VM_SSH_PORT'

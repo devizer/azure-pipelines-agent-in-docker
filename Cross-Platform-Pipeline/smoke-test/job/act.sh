@@ -1,0 +1,2 @@
+Say "Perform smoke test job"
+(echo "HOST: $(hostname)"; echo "KERNEL: $(uname -r)"; printf "\n\nMEMORY\n"; Drop-FS-Cache; free -m; printf "\n\nSTORAGE\n"; df -h -T; printf "\n\nOS RELEASE\n"; cat /etc/os-release) | tee results.txt
