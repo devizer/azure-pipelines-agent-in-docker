@@ -35,10 +35,7 @@ RUN echo; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
  ls -la /Cloud-Image; \
  echo insecure >> ~/.curlrc; \
- bash install-locales.sh; \
- Say "Installing optional ssl 1.1.1m"; \
-    source install-optional-openssl-1.1.sh; install_optional_open_ssl_11; \
- chown -R user /home/user; \
+ printf "en_US.UTF-8 UTF-8\n" > /etc/locale.gen; dpkg-reconfigure locales; \
  echo "Core dumps: $(ls *.core)" \
  sudo rm -f /pre-configure/on-build/*.core || true; \
  sudo rm -f /pre-configure/*.core || true; \
