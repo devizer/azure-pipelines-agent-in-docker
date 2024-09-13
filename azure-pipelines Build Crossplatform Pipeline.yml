@@ -2,6 +2,7 @@ variables:
   THEWORKDIR: /transient-builds
   DEFAULT_NEWSIZE: 16G
   XZ_COMPRESSION_LEVEL: 9
+  BASE_IMAGE: 'ubuntu:22.04'
 
 trigger:
   branches:
@@ -83,6 +84,7 @@ jobs:
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
+      try-and-retry docker pull -q $BASE_IMAGE
       cd Cross-Platform-Pipeline
       bash -e local-build.sh
     # condition: succeededOrFailed()
