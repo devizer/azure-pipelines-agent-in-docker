@@ -463,6 +463,7 @@ function Wait-For-VM() {
        tar xzf /etc/provisia.tar.gz
        err=0
        if [[ -n "${VM_POSTBOOT_SCRIPT:-}" ]]; then
+         echo "Launching post-boot script"
          bash -c "$VM_POSTBOOT_SCRIPT" || err=111
          if [[ $err == 0 ]]; then
            Say "SUCCESS. JOB DONE at VM. Uptime: $(uptime -p)"
