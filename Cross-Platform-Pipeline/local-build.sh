@@ -1,5 +1,5 @@
 cd Docker-Image-Builder 
-export BASE_IMAGE="${BASE_IMAGE:-ubuntu:24.04}"
+export BASE_IMAGE="${BASE_IMAGE:-ubuntu:18.04}"
 export QEMU_IMAGE_ID="${QEMU_IMAGE_ID:-arm64-debian-10}"
 time docker build \
   --build-arg BASE_IMAGE="${BASE_IMAGE}" \

@@ -30,8 +30,8 @@ RUN echo; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say --Reset-Stopwatch; \
  smart-apt-install curl xz-utils p7zip-full unzip jq pv; \
- smart-apt-install sshfs rsync qemu-system-arm locales apt-utils inetutils-ping apt-transport-https ca-certificates gnupg2 software-properties-common \
-    lsof unzip time procps p7zip-full jq pv binutils; \
+ smart-apt-install sshfs rsync qemu-system-arm locales apt-utils inetutils-ping \
+    lsof unzip time procps p7zip-full jq pv binutils ncdu; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
  ls -la /Cloud-Image; \
  echo insecure >> ~/.curlrc; \
