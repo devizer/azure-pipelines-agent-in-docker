@@ -16,7 +16,7 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 20
   strategy:
-    maxParallel: 8
+    maxParallel: 10
     matrix:
       'arm64-debian-10':
          QEMU_IMAGE_ID: 'arm64-debian-10'
