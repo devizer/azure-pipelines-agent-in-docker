@@ -2,7 +2,7 @@ set -eu; set -o pipefail
 cp -v -f ../cloud-init/VM-Manager.sh ./Docker-Image-Builder/Install/
 chmod +x ./Docker-Image-Builder/Install/*.sh
 cd Docker-Image-Builder 
-export BASE_IMAGE="${BASE_IMAGE:-ubuntu:20.04}"
+export BASE_IMAGE="${BASE_IMAGE:-ubuntu:22.04}"
 export QEMU_IMAGE_ID="${QEMU_IMAGE_ID:-armhf-debian-12}"
 docker rm -f qemu-vm || true
 docker rm -f qemu-vm-host || true
