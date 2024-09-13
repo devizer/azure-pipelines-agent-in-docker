@@ -1,5 +1,6 @@
 #!/bin/bash
-set -eu; set -o pipefail
+echo ">>> ENTRY-POINT <<<"
+set -eu; set -o pipefail;
 source /Install/VM-Manager.sh
 arch="$(cat /Cloud-Image/arch.txt)"
 export VM_SSH_PORT=22022

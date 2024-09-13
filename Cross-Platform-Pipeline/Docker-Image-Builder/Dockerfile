@@ -49,4 +49,4 @@ RUN echo; \
 
 # systemd should have pid=1 
 # CMD ["/bin/bash"]
-ENTRYPOINT ["/Install/Entry-Point.sh]
+ENTRYPOINT [/Install/Entry-Point.sh]
