@@ -10,3 +10,4 @@ Say "LAUNCH-VM in $(pwd)"
 Launch-VM $arch /Cloud-Image/cloud-config.qcow2 /Cloud-Image
 pid=$(cat /Cloud-Image/pid)
 Say "VM LAUNCHED. PID is $pid"
+Wait-For-VM /Cloud-Image
