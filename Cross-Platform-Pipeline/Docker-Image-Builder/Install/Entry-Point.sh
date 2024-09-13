@@ -17,6 +17,7 @@ mkdir -p /app
 echo "For VM Content" > /app/my-source.txt
 
 pushd /app
+tar czf /Cloud-Image/provisia.tar.gz .
 popd
 
 echo '
