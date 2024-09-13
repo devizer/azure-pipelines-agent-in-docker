@@ -6,4 +6,5 @@ time docker build \
   --build-arg QEMU_IMAGE_ID="${QEMU_IMAGE_ID}" \
   -t devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} . 
 
-
+Say "Crossplatform Pipeline Images"
+docker image ls | grep "devizervlad/crossplatform-pipeline"
