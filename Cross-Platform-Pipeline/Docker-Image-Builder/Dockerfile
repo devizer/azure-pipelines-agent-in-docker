@@ -29,12 +29,12 @@ RUN echo; \
  echo "Starting in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
  printf "en_US.UTF-8 UTF-8\n" > /etc/locale.gen; dpkg-reconfigure locales || true; \
- apt-get update -qq; apt-get install curl sudo locales -qq -y; \
+ apt-get update -qq; apt-get install -qq curl sudo locales -y | grep Setting; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say --Reset-Stopwatch; \
  apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip jq pv \
     sshpass sshfs rsync qemu-system-arm locales apt-utils inetutils-ping \
-    lsof unzip jq pv ncdu; \
+    lsof unzip jq pv ncdu | grep Setting; \
  echo insecure >> ~/.curlrc; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
  echo "Core dumps: $(ls *.core)" \
