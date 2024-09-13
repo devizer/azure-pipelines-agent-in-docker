@@ -90,6 +90,7 @@ jobs:
       try-and-retry docker pull -q $BASE_IMAGE
       cd Cross-Platform-Pipeline
       bash -e local-build.sh
+      cp -f -v Cross-Platform-Pipeline/smoke-test/job/results.txt $SYSTEM_ARTIFACTSDIRECTORY/results.txt
     # condition: succeededOrFailed()
     displayName: 'Build & Test'
 
@@ -106,3 +107,29 @@ jobs:
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: 'Failed $(Agent.JobName)-$(Build.BUILDNUMBER)'
+
+
+- job: 'Combine'
+  condition: succeededOrFailed()
+  pool:
+    vmImage: 'ubuntu-latest'
+  timeoutInMinutes: 30
+  dependsOn:
+    - Push
+
+  steps: 
+
+  - task: DownloadPipelineArtifact@2
+    condition: succeededOrFailed()
+    displayName: 'Download of all platforms to $(RAW_ARTIFACTS_DIR)'
+    inputs:
+      path: '$(SYSTEM.ARTIFACTSDIRECTORY)\All'
+      patterns: 
+        "**"
+    
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      artifactName: 'Push Combined'
