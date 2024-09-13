@@ -19,7 +19,7 @@ popd
 
 Say "Smoketest of newly created image for [$QEMU_IMAGE_ID]"
 # https://stackoverflow.com/a/49021109 (fuse in container)
-docker run -v $(pwd)/smoke-test/job:/job --privileged --name qemu-vm-container --hostname qemu-vm-container --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -t devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -e -c "echo; bash -e act.sh"
+docker run -v $(pwd)/smoke-test/job:/job --name qemu-vm-container --hostname qemu-vm-container --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -t devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -e -c "echo; bash -e act.sh"
 
 Say "smoke test results (./smoke-test/job/results.txt)"
 sudo chown -R $USER smoke-test/job
