@@ -15,5 +15,7 @@ time docker build \
 Say "Crossplatform Pipeline Images"
 docker image ls | grep "devizervlad/crossplatform-pipeline"
 
-docker run --name qemu-vm -it devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -c "uname -a; free -m; df -h -T"
+https://stackoverflow.com/a/49021109
+
+docker run --name qemu-vm --hostname qemu-vm --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -it devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} bash -c "uname -a; free -m; df -h -T"
 
