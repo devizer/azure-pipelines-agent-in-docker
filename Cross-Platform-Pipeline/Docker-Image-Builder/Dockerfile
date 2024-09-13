@@ -48,4 +48,5 @@ RUN echo; \
  Say "FINISHED for $(uname -m). PATH is [$PATH]"; 
 
 # systemd should have pid=1 
-CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
+ENTRYPOINT ["/Install/Entry-Point.sh]
