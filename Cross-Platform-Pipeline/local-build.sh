@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 cp -v -f ../cloud-init/VM-Manager.sh ./Docker-Image-Builder/Install/
-chmod +x /Docker-Image-Builder/Install/*.sh
+chmod +x ./Docker-Image-Builder/Install/*.sh
 cd Docker-Image-Builder 
 export BASE_IMAGE="${BASE_IMAGE:-ubuntu:24.04}"
 export QEMU_IMAGE_ID="${QEMU_IMAGE_ID:-armel-debian-8}"
