@@ -2,7 +2,7 @@ set -eu; set -o pipefail
 cp -v -f ../cloud-init/VM-Manager.sh ./Docker-Image-Builder/Install/
 chmod +x ./Docker-Image-Builder/Install/*.sh
 cd Docker-Image-Builder 
-export BASE_IMAGE="${BASE_IMAGE:-ubuntu:24.04}"
+export BASE_IMAGE="${BASE_IMAGE:-ubuntu:20.04}"
 export QEMU_IMAGE_ID="${QEMU_IMAGE_ID:-armel-debian-8}"
 docker rm -f qemu-vm || true
 docker rmi -f devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID} || true
