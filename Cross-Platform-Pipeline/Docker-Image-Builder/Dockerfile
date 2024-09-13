@@ -13,7 +13,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
  LC_ALL=en_US.UTF8 \
  LANG=en_US.UTF8 \
  BASE_DOCKER_IMAGE=${BASE_IMAGE} \
- QEMU_IMAGE_ID=${QEMU_IMAGE_ID}
+ QEMU_IMAGE_ID=${QEMU_IMAGE_ID} \
+ USER=root \
+ HOME=/root
 
 WORKDIR /
 SHELL ["/bin/bash", "-c"]
