@@ -5,6 +5,8 @@ source /Install/VM-Manager.sh
 arch="$(cat /Cloud-Image/arch.txt)"
 export VM_SSH_PORT=22022
 export VM_CPUS="$(nproc)" 
+if [[ $VM_CPUS -gt 2 ]]; then VM_CPUS=2; fi
+Say "Virtual CPUS: $VM_CPUS"
 export VM_MEM="2048M"
 Say "LAUNCH-VM [QEMU_IMAGE_ID]"
 Launch-VM $arch /Cloud-Image/cloud-config.qcow2 /Cloud-Image
