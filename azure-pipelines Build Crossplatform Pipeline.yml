@@ -124,6 +124,14 @@ jobs:
       path: '$(SYSTEM.ARTIFACTSDIRECTORY)\All'
       patterns: 
         "**"
+  - powershell: |
+       $reportLines = Get-ChildItem -Path "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\All" -Filter "Succeeded Push*" -recurse -force | Sort-Object -Property FullName -Descending | % {$_.FullName} | % { 
+         $kernel = Get-Content "$($_)\kernel.txt" | Select -First 1
+         $image = Get-Content "$($_)\image.txt" | Select -First 1
+         "$($image): $($kernel)"
+       }
+       $reportLines >  "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-REPORT.TXT" 
+
     
   - task: PublishBuildArtifacts@1
     # condition: succeededOrFailed()
