@@ -31,7 +31,7 @@ RUN echo; \
  script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
  Say --Reset-Stopwatch; \
  apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip jq pv \
-    sshfs rsync qemu-system-arm locales apt-utils inetutils-ping \
+    sshpass sshfs rsync qemu-system-arm locales apt-utils inetutils-ping \
     lsof unzip jq pv ncdu; \
  echo insecure >> ~/.curlrc; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
