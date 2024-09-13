@@ -13,6 +13,7 @@ Say "VM LAUNCHED. PID is $pid"
 
 export VM_PROVISIA_FOLDER=/app
 export HOST_OUTCOME_FOLDER=/app
+export VM_POSTBOOT_SCRIPT="$@"
 mkdir -p /app
 echo "For VM Content" > /app/my-source.txt
 
