@@ -324,7 +324,7 @@ function Launch-VM() {
   if [[ "$arch" == "x64" ]]; then
       # NOT TESTED NOT TESTED 
       qemu-system-x86_64 -name x64vm \
-          -smp $VM_CPUS -m $VM_MEM -M q35 -cpu qemu64 \
+          -smp $VM_CPUS -m $VM_MEM -M microvm -cpu qemu64 \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           \
           -global virtio-blk-device.scsi=off \
