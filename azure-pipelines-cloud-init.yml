@@ -166,14 +166,14 @@ jobs:
         KEY: 13-generic-arm64
         THEARCH: arm64
 
-      'armhf-ubuntu-23.10':
-        IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
-        KEY: 23.10-generic-armhf
-        THEARCH: arm
-      'arm64-ubuntu-23.10':
-        IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
-        KEY: 23.10-generic-arm64
-        THEARCH: arm64
+      # 'armhf-ubuntu-23.10':
+      #  IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-armhf.img"
+      #  KEY: 23.10-generic-armhf
+      #  THEARCH: arm
+      #'arm64-ubuntu-23.10':
+      #  IMAGEURL: "https://cloud-images.ubuntu.com/releases/23.10/release/ubuntu-23.10-server-cloudimg-arm64.img"
+      #  KEY: 23.10-generic-arm64
+      #  THEARCH: arm64
       'armhf-ubuntu-22.04':
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-armhf.img"
         KEY: 22.04-generic-armhf
