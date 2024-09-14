@@ -344,17 +344,11 @@ function Launch-VM() {
       # NOT TESTED NOT TESTED 
       # -cpu qemu32: stuck
       qemu-system-x86_64 -name i386vm \
-          -smp $VM_CPUS -m $VM_MEM -M microvm \
+          -smp $VM_CPUS -m $VM_MEM -M q35 -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
-          \
-          -global virtio-blk-device.scsi=off \
-          -device virtio-scsi-device,id=scsi \
-          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
+          -hda "$location/disk.qcow2" \
           -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
-          \
-          -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
-          -device virtio-net-device,netdev=net0 \
-          -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
+          -append "console=ttyS0 root=/dev/vda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
         pid=$!
