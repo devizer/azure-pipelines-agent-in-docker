@@ -349,6 +349,7 @@ function Launch-VM() {
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
+          -nic user,id=vmnic,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
