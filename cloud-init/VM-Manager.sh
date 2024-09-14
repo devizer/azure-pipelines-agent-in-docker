@@ -347,7 +347,7 @@ function Launch-VM() {
           -smp $VM_CPUS -m $VM_MEM -M q35 -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
-          -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
+          -cdrom "$cloud_config" \
           -append "console=ttyS0 root=/dev/vda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
