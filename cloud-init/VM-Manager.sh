@@ -343,12 +343,13 @@ function Launch-VM() {
   if [[ "$arch" == "i386" ]]; then
       # NOT TESTED NOT TESTED 
       # -cpu qemu32: stuck
+      # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
       qemu-system-x86_64 -name i386vm \
           -smp $VM_CPUS -m $VM_MEM -M q35 -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
-          -append "console=ttyS0 root=/dev/vda${root_partition_index:-1}" \
+          -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
         pid=$!
