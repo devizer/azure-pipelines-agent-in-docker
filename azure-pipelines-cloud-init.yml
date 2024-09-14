@@ -2,6 +2,7 @@ variables:
   THEWORKDIR: /transient-builds
   DEFAULT_NEWSIZE: 16G
   XZ_COMPRESSION_LEVEL: 9
+  AGENT_IMAGE: 'ubuntu-22.04'
 
 trigger:
   branches:
@@ -15,7 +16,7 @@ jobs:
 
 - job: Image
   pool:
-    vmImage: 'ubuntu-22.04'
+    vmImage: $(AGENT_IMAGE)
   timeoutInMinutes: 150
   strategy:
     maxParallel: 8
@@ -47,6 +48,7 @@ jobs:
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-12-genericcloud-i386.qcow2.xz/download"
         KEY: 12-generic-i386
         THEARCH: i386
+        AGENT_IMAGE: ubuntu-24.04
       
       'x64-debian-10':
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
