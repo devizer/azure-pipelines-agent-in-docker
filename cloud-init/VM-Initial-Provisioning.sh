@@ -48,8 +48,8 @@ Say "Install .NET Dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash && echo "Successfully installed .NET Core Dependencies"
 
 
-if [[ "$dpkg_arch" == armel ]]; then
-  Say --Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel"
+if [[ "$dpkg_arch" == armel ]] || [[ "$(uname -m)" == i?86 ]]; then
+  Say --Display-As=Error "Temporary Skipping Lib SSL 1.1 for armel/i386"
 else
   Say "Optional Lib SSL 1.1"
   export INSTALL_DIR=/usr/local/libssl-1.1
@@ -61,7 +61,10 @@ else
   export INSTALL_DIR=
 fi
 
-if [[ "$dpkg_arch" == armel ]]; then
+if [[ "$dpkg_arch" == i?86 ]]; then
+  Say "Installing system (apt) 7z 16.02 for i386"
+  apt-get install -y -qq p7zip-full
+elif [[ "$dpkg_arch" == armel ]]; then
   Say "Installing 7z 16.02 for armel"
   (time (export INSTALL_DIR=/usr/local TOOLS="7z"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)) |& tee /root/_logs/7z-16.02.install.txt
 else
