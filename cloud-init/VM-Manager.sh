@@ -342,8 +342,9 @@ function Launch-VM() {
 
   if [[ "$arch" == "i386" ]]; then
       # NOT TESTED NOT TESTED 
+      # -cpu qemu32: stuck
       qemu-system-x86_64 -name i386vm \
-          -smp $VM_CPUS -m $VM_MEM -M microvm -cpu qemu32 \
+          -smp $VM_CPUS -m $VM_MEM -M microvm \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           \
           -global virtio-blk-device.scsi=off \
