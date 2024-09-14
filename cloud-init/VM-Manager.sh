@@ -335,7 +335,7 @@ function Launch-VM() {
           -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -device virtio-net-device,netdev=net0 \
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
-          -nographic -no-reboot -serial stdio &
+          -nographic -no-reboot &
         
         pid=$!
   fi
