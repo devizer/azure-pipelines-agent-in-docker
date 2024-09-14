@@ -19,7 +19,7 @@ jobs:
     vmImage: $(AGENT_IMAGE)
   timeoutInMinutes: 150
   strategy:
-    maxParallel: 8
+    maxParallel: 10
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.raw
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
@@ -48,7 +48,14 @@ jobs:
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-12-genericcloud-i386.qcow2.xz/download"
         KEY: 12-generic-i386
         THEARCH: i386
-        AGENT_IMAGE: ubuntu-22.04
+      'i386-debian-11':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-i386.qcow2.xz/download"
+        KEY: 11-generic-i386
+        THEARCH: i386
+      'i386-debian-10':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-10-genericcloud-i386.qcow2.xz/download"
+        KEY: 10-generic-i386
+        THEARCH: i386
       
       'x64-debian-10':
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
@@ -58,10 +65,10 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
         KEY: 11-generic-x64
         THEARCH: x64
-      # 'x64-debian-12':
-      #  IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
-      #  KEY: 12-generic-x64
-      #  THEARCH: x64
+      'x64-debian-12':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+        KEY: 12-generic-x64
+        THEARCH: x64
       'x64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-amd64-daily.qcow2"
         KEY: 13-generic-x64
