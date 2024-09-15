@@ -26,15 +26,15 @@ RUN echo; \
  set -e; set -u; set -o pipefail; \
  echo "Starting image building in '$(pwd)' for $(uname -m)"; \
  find . -name "*.sh" | xargs chmod +x; \
- apt-get update -qq; apt-get install -qq curl sudo -y | grep Setting; \
+ apt-get update -qq; apt-get install -qq curl sudo -y | grep Unpack; \
  echo insecure >> ~/.curlrc; \
- script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash; \
+ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null; \
  Say --Reset-Stopwatch; \
  Say "$QEMU_IMAGE_ID Image is building"; \
  \
  if [[ "$QEMU_IMAGE_ID" == i?86* ]] || [[ "$QEMU_IMAGE_ID" == x64* ]]; then qemu_packet=qemu-system-x86; else qemu_packet=qemu-system-arm; fi; \
  \
- try-and-retry apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip sshpass sshfs $qemu_packet jq | grep "Setting\|Unpack"; \
+ try-and-retry apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip sshpass sshfs $qemu_packet jq | grep "Setting"; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
  rm -f /pre-configure/on-build/*.core || true; \
  rm -f /pre-configure/*.core || true; \
