@@ -19,7 +19,7 @@ jobs:
     vmImage: $(AGENT_IMAGE)
   timeoutInMinutes: 150
   strategy:
-    maxParallel: 7
+    maxParallel: 9
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.raw
     # https://cloud.debian.org/cdimage/cloud/OpenStack/current-10/debian-10-openstack-arm64.qcow2
