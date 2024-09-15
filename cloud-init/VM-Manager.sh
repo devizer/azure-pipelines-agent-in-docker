@@ -323,7 +323,7 @@ function Launch-VM() {
 
   if [[ "$arch" == "x64" ]]; then
       # NOT TESTED NOT TESTED 
-      qemu-system-x86_64 -name x64vm \
+      qemu-system-x86_64-microvm -name x64vm \
           -smp $VM_CPUS -m $VM_MEM -M microvm -cpu qemu64 \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           \
@@ -344,7 +344,7 @@ function Launch-VM() {
       # NOT TESTED NOT TESTED 
       # -cpu qemu32: stuck
       # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
-      qemu-system-x86_64 -name i386vm \
+      qemu-system-i386 -name i386vm \
           -smp $VM_CPUS -m $VM_MEM -M q35 -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
