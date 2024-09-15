@@ -18,6 +18,22 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      'i386-debian-10':
+         QEMU_IMAGE_ID: 'i386-debian-10'
+      'i386-debian-11':
+         QEMU_IMAGE_ID: 'i386-debian-11'
+      'i386-debian-12':
+         QEMU_IMAGE_ID: 'i386-debian-12'
+
+      'x64-debian-10':
+         QEMU_IMAGE_ID: 'x64-debian-10'
+      'x64-debian-11':
+         QEMU_IMAGE_ID: 'x64-debian-11'
+      'x64-debian-12':
+         QEMU_IMAGE_ID: 'x64-debian-12'
+      'x64-debian-13':
+         QEMU_IMAGE_ID: 'x64-debian-13'
+
       'arm64-debian-10':
          QEMU_IMAGE_ID: 'arm64-debian-10'
       'arm64-debian-11':
