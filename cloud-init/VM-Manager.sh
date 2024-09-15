@@ -326,14 +326,9 @@ function Launch-VM() {
       qemu-system-x86_64 -name x64vm \
           -smp $VM_CPUS -m $VM_MEM -M pc -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
-          \
-          -global virtio-blk-device.scsi=off \
-          -device virtio-scsi-device,id=scsi \
-          -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
-          -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
-          \
-          -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
-          -device virtio-net-device,netdev=net0 \
+          -hda "$location/disk.qcow2" \
+          -cdrom "$cloud_config" \
+          -nic user,id=vmnic,hostfwd=tcp::$VM_SSH_PORT-:22 \
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
@@ -345,7 +340,7 @@ function Launch-VM() {
       # -cpu qemu32: stuck
       # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
       qemu-system-i386 -name i386vm \
-          -smp $VM_CPUS -m $VM_MEM -M q35 -cpu coreduo \
+          -smp $VM_CPUS -m $VM_MEM -M pc -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
