@@ -16,29 +16,8 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 20
   strategy:
-    maxParallel: 10
+    maxParallel: 6
     matrix:
-      'armhf-ubuntu-24.04':
-         QEMU_IMAGE_ID: 'armhf-ubuntu-24.04'
-      'arm64-ubuntu-24.04':
-         QEMU_IMAGE_ID: 'arm64-ubuntu-24.04'
-
-      'i386-debian-10':
-         QEMU_IMAGE_ID: 'i386-debian-10'
-      'i386-debian-11':
-         QEMU_IMAGE_ID: 'i386-debian-11'
-      'i386-debian-12':
-         QEMU_IMAGE_ID: 'i386-debian-12'
-
-      'x64-debian-10':
-         QEMU_IMAGE_ID: 'x64-debian-10'
-      'x64-debian-11':
-         QEMU_IMAGE_ID: 'x64-debian-11'
-      'x64-debian-12':
-         QEMU_IMAGE_ID: 'x64-debian-12'
-      'x64-debian-13':
-         QEMU_IMAGE_ID: 'x64-debian-13'
-
       'arm64-debian-10':
          QEMU_IMAGE_ID: 'arm64-debian-10'
       'arm64-debian-11':
@@ -57,7 +36,8 @@ jobs:
          QEMU_IMAGE_ID: 'arm64-ubuntu-20.04'
       'arm64-ubuntu-22.04':
          QEMU_IMAGE_ID: 'arm64-ubuntu-22.04'
-
+      'arm64-ubuntu-24.04':
+         QEMU_IMAGE_ID: 'arm64-ubuntu-24.04'
       'armel-debian-8':
          QEMU_IMAGE_ID: 'armel-debian-8'
       'armel-debian-9':
@@ -66,7 +46,6 @@ jobs:
          QEMU_IMAGE_ID: 'armel-debian-10'
       'armel-debian-11':
          QEMU_IMAGE_ID: 'armel-debian-11'
-
       'armhf-debian-8':
          QEMU_IMAGE_ID: 'armhf-debian-8'
       'armhf-debian-9':
@@ -77,7 +56,6 @@ jobs:
          QEMU_IMAGE_ID: 'armhf-debian-11'
       'armhf-debian-12':
          QEMU_IMAGE_ID: 'armhf-debian-12'
-
       'armhf-ubuntu-14.04':
          QEMU_IMAGE_ID: 'armhf-ubuntu-14.04'
       'armhf-ubuntu-16.04':
@@ -88,7 +66,26 @@ jobs:
          QEMU_IMAGE_ID: 'armhf-ubuntu-20.04'
       'armhf-ubuntu-22.04':
          QEMU_IMAGE_ID: 'armhf-ubuntu-22.04'
-
+      'armhf-ubuntu-24.04':
+         QEMU_IMAGE_ID: 'armhf-ubuntu-24.04'
+      'i386-debian-10':
+         QEMU_IMAGE_ID: 'i386-debian-10'
+      'i386-debian-11':
+         QEMU_IMAGE_ID: 'i386-debian-11'
+      'i386-debian-12':
+         QEMU_IMAGE_ID: 'i386-debian-12'
+      'x64-debian-10':
+         QEMU_IMAGE_ID: 'x64-debian-10'
+      'x64-debian-11':
+         QEMU_IMAGE_ID: 'x64-debian-11'
+      'x64-debian-12':
+         QEMU_IMAGE_ID: 'x64-debian-12'
+      'x64-debian-13':
+         QEMU_IMAGE_ID: 'x64-debian-13'
+      'x64-ubuntu-22.04':
+         QEMU_IMAGE_ID: 'x64-ubuntu-22.04'
+      'x64-ubuntu-24.04':
+         QEMU_IMAGE_ID: 'x64-ubuntu-24.04'
   steps:
   - script: |
       set -eu; set -o pipefail

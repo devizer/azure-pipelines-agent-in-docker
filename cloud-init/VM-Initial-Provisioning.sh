@@ -75,7 +75,7 @@ time 7z b -mmt=1 -md=18
 
 
 
-
+# open-vm-tools?
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync gcc"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
