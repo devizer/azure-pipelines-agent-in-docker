@@ -4,11 +4,15 @@ Say --Reset-Stopwatch
 source /Install/VM-Manager.sh
 arch="$(cat /Cloud-Image/arch.txt)"
 export VM_SSH_PORT=22022
-export VM_CPUS="$(nproc)" 
-if [[ $VM_CPUS -gt 2 ]]; then VM_CPUS=2; fi
-Say "Virtual CPUS: $VM_CPUS"
-export VM_MEM="2048M"
-Say "LAUNCH-VM [QEMU_IMAGE_ID]"
+if [[ -z "${VM_CPUS:-}" ]]; then
+  VM_CPUS="$(nproc)" 
+  if [[ $VM_CPUS -gt 2 ]]; then VM_CPUS=2; fi
+fi
+export VM_CPUS
+export VM_MEM="${VM_MEM:-2048M}"
+if [[ "$QEMU_IMAGE_ID" == armel* ]]; then export VM_MEM="256M"; fi
+Say "Virtual CPUS: $VM_CPUS, MEMORY: $VM_MEM"
+Say "LAUNCH-VM [$QEMU_IMAGE_ID]"
 Launch-VM $arch /Cloud-Image/cloud-config.qcow2 /Cloud-Image
 pid=$(cat /Cloud-Image/pid)
 Say "VM LAUNCHED. PID is $pid"
@@ -18,7 +22,12 @@ export HOST_OUTCOME_FOLDER="${VM_PROVISIA_FOLDER}"
 export VM_OUTCOME_FOLDER="${VM_PROVISIA_FOLDER}"
 export VM_POSTBOOT_SCRIPT="$@"
 mkdir -p "${VM_PROVISIA_FOLDER}"
-echo "For VM Content" > "${VM_PROVISIA_FOLDER}"/my-source.txt
+# echo "For VM Content" > "${VM_PROVISIA_FOLDER}"/my-source.txt
+
+# -o allow_other
+mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
+printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
+
 
 pushd "${VM_PROVISIA_FOLDER}" >/dev/null
 tar czf /Cloud-Image/provisia.tar.gz .
