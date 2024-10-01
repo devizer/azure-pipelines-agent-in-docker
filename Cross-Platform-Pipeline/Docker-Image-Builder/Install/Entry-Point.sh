@@ -26,7 +26,9 @@ mkdir -p "${VM_PROVISIA_FOLDER}"
 
 # -o allow_other
 mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
-printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
+if [[ -z "$(grep user_allow_other /etc/fuse.conf)" ]]; then
+  printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
+fi
 
 
 pushd "${VM_PROVISIA_FOLDER}" >/dev/null

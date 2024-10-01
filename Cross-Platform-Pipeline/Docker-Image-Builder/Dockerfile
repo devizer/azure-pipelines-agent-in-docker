@@ -36,6 +36,7 @@ RUN echo; \
  \
  try-and-retry apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip sshpass sshfs $qemu_packet jq | grep " qemu\| jq\| ssh" | grep -v Selecting; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \
+ printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf > /dev/null; \
  rm -f /pre-configure/on-build/*.core || true; \
  rm -f /pre-configure/*.core || true; \
  rm -rf /root/build || true; \
