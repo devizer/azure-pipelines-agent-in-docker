@@ -47,4 +47,10 @@ VM_POSTBOOT_ROLE='"'"${VM_POSTBOOT_ROLE:-root}"'"'
 VM_OUTCOME_FOLDER='"'"${VM_OUTCOME_FOLDER:-/job}"'"'
 ' > "/Cloud-Image/variables"
 
+echo "${VM_VARIABLES:-}" | awk -FFS=";" 'BEGIN{FS=";"}{for(i=1;i<=NF;i++){print $i}}' | while IFS= read -r var; do
+  echo "PASS VAR '$var' into"
+  echo "$var='${!var}'" | tee -a "/Cloud-Image/variables"
+  echo "export $var" | tee -a "/Cloud-Image/variables"
+done
+
 Wait-For-VM /Cloud-Image

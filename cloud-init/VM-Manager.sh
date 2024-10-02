@@ -464,7 +464,7 @@ function Wait-For-VM() {
        set -eu;
 
        export USER=root HOME=/root
-       Say "Welcome to VM host $(hostname)"
+       Say "Welcome to VM \"$(hostname)\""
        cat /etc/variables
        source /etc/variables
        VM_PROVISIA_FOLDER="${VM_PROVISIA_FOLDER:-$HOME}"
@@ -489,7 +489,7 @@ function Wait-For-VM() {
        pushd $VM_OUTCOME_FOLDER
        tar cf /tmp/job-outcome.tar .
        popd
-       Say "Bye. Uptime: $(uptime -p). Err=$err"
+       Say "Bye. Uptime: $(uptime -p). Error=$err"
        exit $err
 ' > "$lauch_options/fs/tmp/launcher.sh"
   sshpass -p "pass" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash -e /tmp/launcher.sh"
