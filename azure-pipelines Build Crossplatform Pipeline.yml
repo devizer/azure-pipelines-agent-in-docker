@@ -18,6 +18,15 @@ jobs:
   strategy:
     maxParallel: 6
     matrix:
+      'armel-debian-8':
+         QEMU_IMAGE_ID: 'armel-debian-8'
+      'armel-debian-9':
+         QEMU_IMAGE_ID: 'armel-debian-9'
+      'armel-debian-10':
+         QEMU_IMAGE_ID: 'armel-debian-10'
+      'armel-debian-11':
+         QEMU_IMAGE_ID: 'armel-debian-11'
+
       'arm64-debian-10':
          QEMU_IMAGE_ID: 'arm64-debian-10'
       'arm64-debian-11':
@@ -38,14 +47,7 @@ jobs:
          QEMU_IMAGE_ID: 'arm64-ubuntu-22.04'
       'arm64-ubuntu-24.04':
          QEMU_IMAGE_ID: 'arm64-ubuntu-24.04'
-      'armel-debian-8':
-         QEMU_IMAGE_ID: 'armel-debian-8'
-      'armel-debian-9':
-         QEMU_IMAGE_ID: 'armel-debian-9'
-      'armel-debian-10':
-         QEMU_IMAGE_ID: 'armel-debian-10'
-      'armel-debian-11':
-         QEMU_IMAGE_ID: 'armel-debian-11'
+
       'armhf-debian-8':
          QEMU_IMAGE_ID: 'armhf-debian-8'
       'armhf-debian-9':
