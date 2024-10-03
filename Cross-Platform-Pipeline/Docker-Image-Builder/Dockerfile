@@ -32,7 +32,7 @@ RUN echo; \
  Say --Reset-Stopwatch; \
  Say "$QEMU_IMAGE_ID Image is building"; \
  \
- if [[ "$QEMU_IMAGE_ID" == i?86* ]] || [[ "$QEMU_IMAGE_ID" == x64* ]]; then qemu_packet="qemu-system-x86 qemu-system-x86-microvm"; else qemu_packet=qemu-system-arm; fi; \
+ if [[ "$QEMU_IMAGE_ID" == i?86* ]] || [[ "$QEMU_IMAGE_ID" == x64* ]]; then qemu_packet="qemu-system-x86"; else qemu_packet=qemu-system-arm; fi; \
  \
  try-and-retry apt-get -y -qq --no-install-recommends --no-install-suggests install curl xz-utils p7zip-full unzip sshpass sshfs $qemu_packet jq | grep " qemu\| jq\| ssh" | grep -v Selecting; \
  bash Install/Download-CloudImage.sh --temp /tmp ${QEMU_IMAGE_ID} /Cloud-Image; \

@@ -272,9 +272,9 @@ function Launch-VM() {
   pid=""
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
+          # 6.2 (22.04): -audiodev id=none,driver=none \
           qemu-system-arm -M versatilepb -m 256M -name armel32vm \
             -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
-            -audiodev id=none,driver=none \
             -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
             -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22 \
