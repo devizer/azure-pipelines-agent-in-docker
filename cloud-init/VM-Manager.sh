@@ -268,12 +268,19 @@ function Launch-VM() {
     echo "WARNING! Missing $location/root.partition.index.txt. Assuming fiest partition"
   fi
 
+  
+  qemuAccell="";
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True" ]];        then qemuAccell="-accel tcg" fi;
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Multi" ]];  then qemuAccell="-accel tcg,thread=multi" fi;
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Single" ]]; then qemuAccell="-accel tcg,thread=single" fi;
+
   # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
   pid=""
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
           # 6.2 (22.04): -audiodev id=none,driver=none \
           qemu-system-arm -M versatilepb -m 256M -name armel32vm \
+            $qemuAccell \
             -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
             -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
@@ -285,6 +292,7 @@ function Launch-VM() {
 
   if [[ "$arch" == "arm" ]]; then
       qemu-system-arm -name arm32vm \
+          $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           \
@@ -305,6 +313,7 @@ function Launch-VM() {
 
   if [[ "$arch" == "arm64" ]]; then
       qemu-system-aarch64 -name arm64vm \
+          $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a57  \
           -initrd "$location/initrd.img" \
           -kernel "$location/vmlinuz" \
@@ -324,6 +333,7 @@ function Launch-VM() {
   if [[ "$arch" == "x64" ]]; then
       # qemu-system-x86_64-microvm needs kvm
       qemu-system-x86_64 -name x64vm \
+          $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M pc -cpu core2duo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
@@ -340,6 +350,7 @@ function Launch-VM() {
       # -cpu qemu32: stuck
       # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
       qemu-system-i386 -name i386vm \
+          $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M pc -cpu coreduo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \

@@ -12,7 +12,7 @@ export VM_CPUS
 export VM_MEM="${VM_MEM:-2048M}"
 if [[ "$QEMU_IMAGE_ID" == armel* ]]; then export VM_MEM="256M"; fi
 Say "Virtual CPUS: $VM_CPUS, MEMORY: $VM_MEM"
-Say "LAUNCH-VM [$QEMU_IMAGE_ID]"
+Say "LAUNCH-VM [$QEMU_IMAGE_ID]. TGC acceleration is \"${QEMU_TCG_ACCELERATOR:-}\""
 Launch-VM $arch /Cloud-Image/cloud-config.qcow2 /Cloud-Image
 pid=$(cat /Cloud-Image/pid)
 Say "VM LAUNCHED. PID is $pid"
