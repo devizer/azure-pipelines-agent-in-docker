@@ -270,9 +270,9 @@ function Launch-VM() {
 
   
   qemuAccell="";
-  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True" ]];        then qemuAccell="-accel tcg" fi;
-  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Multi" ]];  then qemuAccell="-accel tcg,thread=multi" fi;
-  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Single" ]]; then qemuAccell="-accel tcg,thread=single" fi;
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True" ]];        then qemuAccell="-accel tcg"; fi;
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Multi" ]];  then qemuAccell="-accel tcg,thread=multi"; fi;
+  if [[ "${QEMU_TCG_ACCELERATOR:-}" == "True:Single" ]]; then qemuAccell="-accel tcg,thread=single"; fi;
 
   # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
   pid=""
