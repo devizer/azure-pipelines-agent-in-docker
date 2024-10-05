@@ -334,7 +334,7 @@ function Launch-VM() {
       # qemu-system-x86_64-microvm needs kvm
       qemu-system-x86_64 -name x64vm \
           $qemuAccell \
-          -smp $VM_CPUS -m $VM_MEM -M pc -cpu core2duo \
+          -smp $VM_CPUS -m $VM_MEM -M ubuntu,accell=tgc -cpu core2duo \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
