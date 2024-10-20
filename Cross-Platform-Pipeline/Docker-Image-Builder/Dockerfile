@@ -8,6 +8,9 @@ VOLUME [ "/sys/fs/cgroup" ]
 # VOLUME [ "/var/run/docker.sock" ]
 VOLUME [ "/var/run" ]
 
+EXPOSE 22022
+EXPOSE 40000-49999
+
 ENV DEBIAN_FRONTEND=noninteractive \
  container=docker \
  BASE_DOCKER_IMAGE=${BASE_IMAGE} \
