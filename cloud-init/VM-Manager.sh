@@ -276,6 +276,8 @@ function Launch-VM() {
 
   # https://www.qemu.org/2021/01/19/virtio-blk-scsi-configuration/
   pid=""
+  if [[ -n "${VM_FORWARD_PORTS:-}" ]]; then VM_FORWARD_PORTS=",${VM_FORWARD_PORTS}"; fi
+  # Example: export VM_FORWARD_PORTS="hostfwd=tcp::5432-:5432,hostfwd=tcp::8080-:80"
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
           # 6.2 (22.04): -audiodev id=none,driver=none \
@@ -284,7 +286,7 @@ function Launch-VM() {
             -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
             -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
-            -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22 \
+            -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-} \
             -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" -nographic -no-reboot &
 
         pid=$!
@@ -301,7 +303,7 @@ function Launch-VM() {
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
           -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
           \
-          -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22 \
+          -netdev user,id=net0,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-} \
           -device virtio-net-device,netdev=net0 \
           -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
@@ -324,7 +326,7 @@ function Launch-VM() {
           -drive file="$location/disk.qcow2",id=root,if=none -device scsi-hd,drive=root \
           -drive file="$cloud_config",id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom \
           \
-          -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22,id=net0 -device virtio-net-device,netdev=net0 \
+          -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-},id=net0 -device virtio-net-device,netdev=net0 \
           -nographic -no-reboot &
 
         pid=$!
@@ -337,7 +339,7 @@ function Launch-VM() {
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
-          -nic user,id=vmnic,hostfwd=tcp::$VM_SSH_PORT-:22 \
+          -nic user,id=vmnic,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-} \
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
