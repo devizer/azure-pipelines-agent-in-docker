@@ -20,12 +20,15 @@ jobs:
       '2022-latest':
         SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2022-latest"
         TAGS: "-t devizervlad/mssql-server-tuned:latest -t devizervlad/mssql-server-tuned:2022"
+        LOCAL_TAG: "mssql-server-tuned:2022"
       '2019-latest':
         SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2019-latest"
         TAGS: "-t devizervlad/mssql-server-tuned:2019"
+        LOCAL_TAG: "mssql-server-tuned:2019"
       '2017-latest':
         SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2017-latest"
         TAGS: "-t devizervlad/mssql-server-tuned:2017"
+        LOCAL_TAG: "mssql-server-tuned:2017"
 
   steps:
   - bash: |
@@ -43,7 +46,7 @@ jobs:
       time docker build \
         --build-arg BUILDER_IMAGE="${BUILDER_IMAGE}" \
         --build-arg SQL_BASE_IMAGE="${SQL_BASE_IMAGE}" \
-        $TAGS . 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY/Build-[$key].log"
+        $TAGS -t $LOCAL_TAG . 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY/Build-[$key].log"
     retryCountOnTaskFailure: 2
     displayName: 'Build $(SQL_BASE_IMAGE)'
 
@@ -71,11 +74,10 @@ jobs:
 
   - bash: |
       set -eu; set -o pipefail
-      onlyTags="$(echo "$TAGS" | sed 's/\-t//g')"
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
       file=mssql-server-tuned-$key
-      Say "Saving [$onlyTags] as [$file.tar.gz]"
-      time docker save $onlyTags | gzip -1 > $file.tar.gz
+      Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
+      time docker save $LOCAL_TAG | gzip -1 > $file.tar.gz
       ls -lah $file.tar.gz
     displayName: 'Save Offline Image'
 
