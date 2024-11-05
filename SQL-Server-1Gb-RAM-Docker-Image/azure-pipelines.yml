@@ -75,6 +75,7 @@ jobs:
 
   - bash: |
       set -eu; set -o pipefail
+      Say "CPU: $(Get-CpuName)"
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
       file=mssql-server-tuned-docker-image-$key
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
