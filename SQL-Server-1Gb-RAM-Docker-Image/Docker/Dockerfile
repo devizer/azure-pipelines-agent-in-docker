@@ -1,4 +1,5 @@
 ARG BUILDER_IMAGE
+ARG SQL_BASE_IMAGE
 
 FROM ${BUILDER_IMAGE} AS build
 SHELL ["/bin/bash", "-c"]
