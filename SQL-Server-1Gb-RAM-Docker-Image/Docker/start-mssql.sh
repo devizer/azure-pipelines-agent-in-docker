@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eu; set -o pipefail
 
 LD_PRELOAD=/opt/mssql-memorypolicy-muter/wrapper.so; 

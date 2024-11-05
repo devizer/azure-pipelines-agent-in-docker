@@ -65,7 +65,7 @@ jobs:
       docker run --pull never --name sqlserver --privileged -e "MSSQL_PID=Express" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=p@assw0rd!" -p 1433:1433 -d devizervlad/mssql-server-tuned:$key
       docker logs -f sqlserver &
       sleep 30
-      docker exec -t sqlserver /opt/mssql-tools18/bin/sqlcmd -H localhost -U sa -P "p@assw0rd!" -Q "Select @@VERSION" -C
+      docker exec -t sqlserver sqlcmd -H localhost -U sa -P "p@assw0rd!" -Q "Select @@VERSION" -C
     displayName: 'RUN & Query $(SQL_BASE_IMAGE)'
 
 
