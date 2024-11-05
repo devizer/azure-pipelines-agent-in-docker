@@ -49,8 +49,6 @@ jobs:
 
   - bash: |
       set -eu; set -o pipefail
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
-      Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       key="$(echo $TAGS | awk -F':' '{print $NF}')"
       docker run -t --rm devizervlad/mssql-server-tuned:$key bash -e -c "find / -name '*sqlcmd*'"
@@ -58,6 +56,17 @@ jobs:
       docker run -t --rm devizervlad/mssql-server-tuned:$key bash -e -c "sqlcmd -? | head -3"
 
     displayName: 'Show SQLCMD $(SQL_BASE_IMAGE)'
+
+  - bash: |
+      set -eu; set -o pipefail
+      docker rm -f sqlserver >/dev/null 2>&1
+      Say "CPU: $(Get-CpuName)"
+      key="$(echo $TAGS | awk -F':' '{print $NF}')"
+      docker run --pull never --name sqlserver --privileged -e "MSSQL_PID=Express" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=p@assw0rd!" -p 1433:1433 -d devizervlad/mssql-server-tuned:$key
+      docker logs -f sqlserver &
+      sleep 30
+      docker exec -t sqlserver /opt/mssql-tools18/bin/sqlcmd -H localhost -U sa -P "p@assw0rd!" -Q "Select @@VERSION" -C
+    displayName: 'RUN & Query $(SQL_BASE_IMAGE)'
 
 
   - task: PublishBuildArtifacts@1
