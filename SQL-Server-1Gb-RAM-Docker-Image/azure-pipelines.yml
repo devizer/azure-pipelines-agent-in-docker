@@ -78,10 +78,11 @@ jobs:
       Say "CPU: $(Get-CpuName)"
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
       file=mssql-server-tuned-docker-image-$key
+      echo "COMPRESSION_LEVEL: [${COMPRESSION_LEVEL}]"
+      7z | head -1
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
       time docker save $LOCAL_TAG | gzip -${COMPRESSION_LEVEL} > $file.tar.gz
       Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
-      7z | head -1
       time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
       ls -lah $file.tar*
     displayName: 'Save Offline Image'
