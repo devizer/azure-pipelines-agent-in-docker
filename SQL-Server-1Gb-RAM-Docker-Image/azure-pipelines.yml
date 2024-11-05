@@ -1,6 +1,6 @@
 variables:
   BUILDER_IMAGE: "debian:bullseye"
-  COMPRESSION_LEVEL: "1"
+  COMPRESSION_LEVEL: "9"
 
 trigger:
   branches:
