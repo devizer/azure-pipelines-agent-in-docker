@@ -80,6 +80,7 @@ jobs:
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
       time docker save $LOCAL_TAG | gzip -1 > $file.tar.gz
       Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
+      7z | head -1
       time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
       ls -lah $file.tar*
     displayName: 'Save Offline Image'
