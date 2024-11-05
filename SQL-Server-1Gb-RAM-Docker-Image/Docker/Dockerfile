@@ -21,4 +21,5 @@ RUN \
 FROM ${SQL_BASE_IMAGE}
 USER root
 COPY --from=build /opt/mssql-memorypolicy-muter/ /opt/mssql-memorypolicy-muter/
+RUN cp -f /opt/mssql-memorypolicy-muter/sqlcmd.sh /usr/local/bin/sqlcmd; fi
 CMD /opt/mssql-memorypolicy-muter/start-mssql.sh
