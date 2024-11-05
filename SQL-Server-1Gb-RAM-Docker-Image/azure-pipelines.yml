@@ -1,0 +1,65 @@
+variables:
+  BUILDER_IMAGE: "debian:bullsye"
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'SQL-Server-1Gb-RAM-Docker-Image/**'
+
+jobs:
+
+- job: publish
+  pool:
+    vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: 12
+  strategy:
+    matrix:
+      '2022-latest':
+        SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2022-latest"
+        TAGS: "-t devizervlad/mssql-server-tuned:2022 -t devizervlad/mssql-server-tuned:latest"
+      '2019-latest':
+        SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2019-latest"
+        TAGS: "-t devizervlad/mssql-server-tuned:2019"
+      '2017-latest':
+        SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2017-latest"
+        TAGS: "-t devizervlad/mssql-server-tuned:2017"
+
+  steps:
+  - bash: |
+      set -eu; set -o pipefail
+      cd SQL-Server-1Gb-RAM-Docker-Image/Docker
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
+      Say "Pull [$BUILDER_IMAGE]"
+      try-and-retry docker pull -q $BUILDER_IMAGE
+      Say "Pull [$SQL_BASE_IMAGE]"
+      try-and-retry docker pull -q $SQL_BASE_IMAGE
+      key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
+      Say "BUILDING [$key]"
+      time docker build \
+        --build-arg BUILDER_IMAGE="${BUILDER_IMAGE}" \
+        --build-arg SQL_BASE_IMAGE="${SQL_BASE_IMAGE}" \
+        $TAGS . 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY/Build-[$key].log"
+    retryCountOnFailure: 2
+    displayName: 'Build $(SQL_BASE_IMAGE)'
+
+  - bash: |
+      set -eu; set -o pipefail
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
+      key="$(echo $TAGS | awk -F':' '{print $NF}')"
+      docker run -t --rm devizervlad/mssql-server-tuned:$key bash -c "find / -name '*sqlcmd*'"
+    displayName: 'Show SQLCMD $(SQL_BASE_IMAGE)'
+
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
