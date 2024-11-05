@@ -79,7 +79,7 @@ jobs:
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
       file=mssql-server-tuned-docker-image-$key
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
-      time docker save $LOCAL_TAG | gzip -1 > $file.tar.gz
+      time docker save $LOCAL_TAG | gzip -${COMPRESSION_LEVEL} > $file.tar.gz
       Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
       7z | head -1
       time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
