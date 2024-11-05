@@ -77,7 +77,7 @@ jobs:
       Say "Saving [$onlyTags] as [$file.tar.gz]"
       time docker save $onlyTags | gzip -1 > $file.tar.gz
       ls -lah $file.tar.gz
-   displayName: 'Save Offline Image'
+    displayName: 'Save Offline Image'
 
 
 
