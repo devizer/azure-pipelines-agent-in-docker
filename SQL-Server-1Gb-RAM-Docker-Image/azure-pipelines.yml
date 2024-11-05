@@ -66,7 +66,7 @@ jobs:
       Say "CPU: $(Get-CpuName)"
       key="$(echo $TAGS | awk -F':' '{print $NF}')"
       docker run --pull never --name sqlserver --privileged -e "MSSQL_PID=Express" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=p@assw0rd!" -p 1433:1433 -d devizervlad/mssql-server-tuned:$key
-      (docker logs -f sqlserver | grep -v -e "^$") &
+      (docker logs -f sqlserver | grep -v -e "^\s.*$") &
       sleep 30
       echo "QEURY VERSION"
       docker exec -t sqlserver sqlcmd -H localhost -U sa -P "p@assw0rd!" -Q "Select @@VERSION" -C
