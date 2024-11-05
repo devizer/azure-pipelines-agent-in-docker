@@ -1,5 +1,6 @@
 variables:
   BUILDER_IMAGE: "debian:bullseye"
+  COMPRESSION_LEVEL: "1"
 
 trigger:
   branches:
@@ -75,10 +76,12 @@ jobs:
   - bash: |
       set -eu; set -o pipefail
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
-      file=mssql-server-tuned-$key
+      file=mssql-server-tuned-docker-image-$key
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
       time docker save $LOCAL_TAG | gzip -1 > $file.tar.gz
-      ls -lah $file.tar.gz
+      Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
+      time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
+      ls -lah $file.tar*
     displayName: 'Save Offline Image'
 
 
