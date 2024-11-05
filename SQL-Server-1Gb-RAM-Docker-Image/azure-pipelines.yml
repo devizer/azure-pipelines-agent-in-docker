@@ -53,9 +53,9 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       key="$(echo $TAGS | awk -F':' '{print $NF}')"
-      docker run -t --rm devizervlad/mssql-server-tuned:$key bash -c "find / -name '*sqlcmd*'"
+      docker run -t --rm devizervlad/mssql-server-tuned:$key bash -e -c "find / -name '*sqlcmd*'"
       Say "sqlcmd version"
-      docker run -t --rm devizervlad/mssql-server-tuned:$key bash -c "sqlcmd -? | head -3"
+      docker run -t --rm devizervlad/mssql-server-tuned:$key bash -e -c "sqlcmd -? | head -3"
 
     displayName: 'Show SQLCMD $(SQL_BASE_IMAGE)'
 
