@@ -15,7 +15,7 @@ jobs:
 - job: publish
   pool:
     vmImage: 'ubuntu-20.04'
-  timeoutInMinutes: 12
+  timeoutInMinutes: 35
   strategy:
     matrix:
       '2022-latest':
