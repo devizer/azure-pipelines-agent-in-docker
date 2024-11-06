@@ -38,6 +38,18 @@ jobs:
       script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
+      Say "Docker Login"
+      try-and-retry docker login -u devizervlad -p "$DOCKER_PASSWORD"
+    displayName: 'Bootstrap'
+    env:
+       DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+
+  - bash: |
+      set -eu; set -o pipefail
+      cd SQL-Server-1Gb-RAM-Docker-Image/Docker
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      Say "CPU: $(Get-CpuName)"
       Say "Pull [$BUILDER_IMAGE]"
       try-and-retry docker pull -q $BUILDER_IMAGE
       Say "Pull [$SQL_BASE_IMAGE]"
@@ -77,6 +89,15 @@ jobs:
       set -eu; set -o pipefail
       Say "CPU: $(Get-CpuName)"
       key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
+      Say "Push images"
+      docker image ls | grep mssql-server-tuned
+      time try-and-retry docker push --all-tags devizervlad/mssql-server-tuned
+    displayName: 'Push images'
+
+  - bash: |
+      set -eu; set -o pipefail
+      Say "CPU: $(Get-CpuName)"
+      key="$(echo $SQL_BASE_IMAGE | awk -F':' '{print $NF}')"
       file=mssql-server-tuned-docker-image-$key
       echo "COMPRESSION_LEVEL: [${COMPRESSION_LEVEL}]"
       7z | head -1
@@ -85,12 +106,13 @@ jobs:
       Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
       time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
       ls -lah $file.tar*
+      cp -av $file.tar* "$SYSTEM_ARTIFACTSDIRECTORY/"
     displayName: 'Save Offline Image'
 
 
 
   - task: PublishBuildArtifacts@1
-    condition: succeededOrFailed()
+    # condition: succeededOrFailed()
     displayName: 'Publish'
     inputs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
