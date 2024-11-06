@@ -21,5 +21,14 @@ RUN \
 FROM ${SQL_BASE_IMAGE}
 USER root
 COPY --from=build /opt/mssql-memorypolicy-muter/ /opt/mssql-memorypolicy-muter/
+# It works
 RUN cp -f /opt/mssql-memorypolicy-muter/sqlcmd.sh /usr/local/bin/sqlcmd;
+
+# It is not tested
+# RUN \
+#  exe="$(ls -1 /opt/mssql-tools*/bin/sqlcmd 2>/dev/null | head -1)"
+#  if [[ -n "$exe" ]] && [[ -x "$exe" ]]; then ln -s -f "$exe" /usr/local/bin/sqlcmd; fi
+#
+
 CMD /opt/mssql-memorypolicy-muter/start-mssql.sh
+
