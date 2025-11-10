@@ -16,7 +16,7 @@ echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 fc-list :spacing=100 | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
 
 mkdir /tmp/fonts
-fc-list :spacing=100 | sort | awk -F':' '{print $1}' | grep -i -E 'ttf$' | while IFS='' read -r file; do
+fc-list :spacing=100 | sort | awk -F':' '{print $1}' | grep -i -E '(ttf|otf)$' | while IFS='' read -r file; do
   name="$(basename "$file")"
   cp -f "$file" "/tmp/fonts/$name"
 done
