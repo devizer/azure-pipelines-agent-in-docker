@@ -357,3 +357,4 @@ MigrationBackup/
 .idea/**
 
 *.tmp
+SQL-Server-1Gb-RAM-Docker-Image/test.sh
