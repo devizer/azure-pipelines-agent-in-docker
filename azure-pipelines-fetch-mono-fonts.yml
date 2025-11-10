@@ -42,7 +42,7 @@ jobs:
       export MOVE_DOCKER_TO_RAID=True
       export FS
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
-      export FREE_ROOT_SPACE_MB=6000
+      export FREE_ROOT_SPACE_MB=2000
       sudo rm -rf /var/lib/docker || true
       if [[ -f /swapfile ]]; then sudo swapoff /swapfile || true; sudo rm -rf /swapfile; fi
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
