@@ -9,7 +9,11 @@ time apt-get install sudo less fontconfig mc htop ncdu p7zip-full software-prope
 # apt-get -y install apt-fast | grep "Setting"
 
 
-time apt-get install -y --no-install-recommends $(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex\|python\|texlive\|node-webfont") # | grep "Unpack\|Setting"
+fonts="$(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex\|python\|texlive\|node-webfont")"
+echo;
+echo "FONTS"
+echo $fonts
+time apt-get install -y --no-install-recommends $fonts # | grep "Unpack\|Setting"
 echo "DONE: apt-get install <fonts>"
 echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 
