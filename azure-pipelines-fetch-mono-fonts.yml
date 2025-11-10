@@ -20,7 +20,7 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 100
   strategy:
-    maxParallel: 4
+    maxParallel: 9
     matrix:
       'v25.10 On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
@@ -81,3 +81,33 @@ jobs:
   - bash: Show-System-Stat
     condition: eq(variables['Agent.OS'], 'Linux')
     displayName: 'Linux System Statistic'
+
+- job: 'Combine'
+  condition: succeededOrFailed()
+  pool:
+    vmImage: 'ubuntu-latest'
+  timeoutInMinutes: 30
+  dependsOn:
+    - Fonts
+
+  steps: 
+
+  - task: DownloadPipelineArtifact@2
+    # condition: succeededOrFailed()
+    displayName: 'Download of all platforms to $(RAW_ARTIFACTS_DIR)'
+    inputs:
+      path: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      patterns: 
+        "**"
+
+  - bash: |
+      cd "$(SYSTEM.ARTIFACTSDIRECTORY)"
+      7z m "Condensed, Mono, etc Fonts.7z" -mx=4
+
+    
+  - task: PublishBuildArtifacts@1
+    # condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      artifactName: 'Combined Fonts'

@@ -29,6 +29,7 @@ function Deploy-Fonts() {
     name="$(basename "$file")"
     cp -v -f "$file" "$dir/$name"
   done
+  touch "$dir/$title has $(cat "listFile" | wc -l) fonts.txt"
 }
 
 
