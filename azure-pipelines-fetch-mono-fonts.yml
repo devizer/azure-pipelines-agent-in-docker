@@ -1,5 +1,6 @@
 variables:
   CMAKE_VER: 3.23.2 #3.22.3
+  IMAGE: 'ubuntu:22.04'
 
 trigger:
   branches:
@@ -21,6 +22,9 @@ jobs:
   strategy:
     maxParallel: 4
     matrix:
+      'On BTRFS Compressed Cached v25.10':
+         FS: 'BTRFS-Compressed'
+         IMAGE: 'ubuntu:25.10'
       'On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
       'On EXT2 Cached':
@@ -58,7 +62,7 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       Say "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
-      docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:22.04
+      docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips "${IMAGE:-ubuntu:22.04}"
       docker exec fonts bash -c "mkdir -p $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" fonts bash -e /scrips/build-fonts-in-container.sh
       docker cp fonts:/$SYSTEM_ARTIFACTSDIRECTORY/. $SYSTEM_ARTIFACTSDIRECTORY
