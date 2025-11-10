@@ -8,8 +8,9 @@ time apt-get install sudo less fontconfig mc htop ncdu p7zip-full software-prope
 # apt-get update
 # apt-get -y install apt-fast | grep "Setting"
 
+# grep -v 'font-manager\|font-manager-common\|font-viewer\|gnome-font-viewer\|thunar-font-manager\|nemo-font-manager\|nautilus-font-manager\|birdfont\|fontforge\|trufont\|open-font-design-toolkit\|fontcustom\|bumpfontversion\|emacs-intl-fonts\|elpa-clojure-mode-extra-font-locking\|fluid-soundfont-gm\|fluid-soundfont-gs\|musescore-general-soundfont\|musescore-general-soundfont-large\|musescore-general-soundfont-small\|timgm6mb-soundfont\|font-downloader\|dvi2ps'
 
-fonts="$(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex\|python\|texlive\|node-webfont")"
+fonts="$(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex\|python\|texlive\|node-webfont" | grep -v 'font-manager\|font-manager-common\|font-viewer\|gnome-font-viewer\|thunar-font-manager\|nemo-font-manager\|nautilus-font-manager\|birdfont\|fontforge\|trufont\|open-font-design-toolkit\|fontcustom\|bumpfontversion\|emacs-intl-fonts\|elpa-clojure-mode-extra-font-locking\|fluid-soundfont-gm\|fluid-soundfont-gs\|musescore-general-soundfont\|musescore-general-soundfont-large\|musescore-general-soundfont-small\|timgm6mb-soundfont\|font-downloader\|dvi2ps')"
 echo;
 echo "FONTS"
 echo $fonts
