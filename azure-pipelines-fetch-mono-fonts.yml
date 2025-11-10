@@ -42,6 +42,9 @@ jobs:
       export MOVE_DOCKER_TO_RAID=True
       export FS
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
+      export FREE_ROOT_SPACE_MB=2000
+      sudo rm -rf /var/lib/docker || true
+      if [[ -f /swapfile ]]; then sudo swapoff /swapfile || true; sudo rm -rf /swapfile; fi
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
       docker image ls
       Say "lzop: [$(lzop --version | tr '\n' ' ')]"
@@ -55,7 +58,7 @@ jobs:
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       Say "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
-      docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:22.04
+      docker run -d --name fonts -t -v $(pwd)/build-tools:/scrips ubuntu:24.04
       docker exec fonts bash -c "mkdir -p $SYSTEM_ARTIFACTSDIRECTORY"
       docker exec -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" fonts bash -e /scrips/build-fonts-in-container.sh
       docker cp fonts:/$SYSTEM_ARTIFACTSDIRECTORY/. $SYSTEM_ARTIFACTSDIRECTORY
