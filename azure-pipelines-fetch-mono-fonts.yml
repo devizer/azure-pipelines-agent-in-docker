@@ -102,7 +102,8 @@ jobs:
 
   - bash: |
       cd "$(SYSTEM.ARTIFACTSDIRECTORY)"
-      7z m "Condensed, Mono, etc Fonts.7z" -mx=4
+      7z a -sdel -mx=4 -ms=on -mqs=on "Condensed, Mono, etc Fonts.7z"
+    displayName: 'pack'
 
     
   - task: PublishBuildArtifacts@1
