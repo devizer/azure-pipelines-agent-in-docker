@@ -22,16 +22,19 @@ jobs:
   strategy:
     maxParallel: 4
     matrix:
-      'On BTRFS Compressed Cached v25.10':
+      'v25.10 On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
          IMAGE: 'ubuntu:25.10'
-      'On BTRFS Compressed Cached':
+      'v24.04 On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
-      'On EXT2 Cached':
+         IMAGE: 'ubuntu:24.04'
+      'v22.04 On BTRFS Compressed Cached':
+         FS: 'BTRFS-Compressed'
+      'v22.04 On EXT2 Cached':
          FS: 'EXT2'
-      'On BTRFS Plain Cached':
+      'v22.04 On BTRFS Plain Cached':
          FS: 'BTRFS'
-      'On EXT4 Out Of the Box':
+      'v22.04 On EXT4 Out Of the Box':
          EXT4_OUT_OF_THE_BOX: 'True'
         
 

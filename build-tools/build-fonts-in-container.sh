@@ -1,4 +1,5 @@
 set -eu; set -o pipefail
+cat /etc/*release
 export DEBIAN_FRONTEND=noninteractive
 echo "SYSTEM_ARTIFACTSDIRECTORY: [$SYSTEM_ARTIFACTSDIRECTORY]"
 time apt-get update
@@ -18,12 +19,23 @@ time apt-get install -y --no-install-recommends $fonts # | grep "Unpack\|Setting
 echo "DONE: apt-get install <fonts>"
 echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 
+echo "MONO FONTS"
 fc-list :spacing=100 | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
 
-mkdir /tmp/fonts
+mkdir /tmp/fonts-mono
 fc-list :spacing=100 | sort | awk -F':' '{print $1}' | grep -i -E '(ttf|otf)$' | while IFS='' read -r file; do
   name="$(basename "$file")"
-  cp -f "$file" "/tmp/fonts/$name"
+  cp -f "$file" "/tmp/fonts-mono/$name"
 done
 
 7z a "$SYSTEM_ARTIFACTSDIRECTORY"/mono-fonts.7z /tmp/fonts $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
+
+echo "CONDENSED FONTS"
+fc-list | sort | grep -E '(C|c)ondensed' | tee $SYSTEM_ARTIFACTSDIRECTORY/condensed-fonts-raw.txt
+mkdir /tmp/fonts-condensed
+fc-list | sort | grep -E '(C|c)ondensed' | awk -F':' '{print $1}' | grep -i -E '(ttf|otf)$' | while IFS='' read -r file; do
+  name="$(basename "$file")"
+  cp -f "$file" "/tmp/fonts-condensed/$name"
+done
+
+7z a "$SYSTEM_ARTIFACTSDIRECTORY"/condensed-fonts.7z /tmp/fonts-condensed $SYSTEM_ARTIFACTSDIRECTORY/condensed-fonts-raw.txt
