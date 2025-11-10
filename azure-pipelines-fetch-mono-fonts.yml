@@ -19,7 +19,7 @@ jobs:
     vmImage: 'ubuntu-22.04'
   timeoutInMinutes: 100
   strategy:
-    maxParallel: 1
+    maxParallel: 4
     matrix:
       'On BTRFS Compressed Cached':
          FS: 'BTRFS-Compressed'
