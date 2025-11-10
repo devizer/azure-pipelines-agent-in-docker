@@ -9,8 +9,9 @@ time apt-get install sudo less fontconfig mc htop ncdu p7zip-full software-prope
 # apt-get -y install apt-fast | grep "Setting"
 
 
-echo "APT FAST"
 time apt-get install -y $(apt-cache search font | awk '{print $1}' | grep font | grep -v "fontforge-nox\|scalable-cyrfonts-tex") | grep "Unpack\|Setting"
+echo "DONE: apt-get install <fonts>"
+echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 
 fc-list :spacing=100 | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/mono-fonts-raw.txt
 
