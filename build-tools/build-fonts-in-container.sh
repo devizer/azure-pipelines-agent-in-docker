@@ -15,8 +15,7 @@ fonts="$(apt-cache search font | awk '{print $1}' | grep font | grep -v 'fonts-e
 echo;
 echo "FONTS"
 echo $fonts
-# --no-install-recommends
-time apt-get install -y  $fonts # | grep "Unpack\|Setting"
+time apt-get install -y --no-install-recommends $fonts # | grep "Unpack\|Setting"
 echo "DONE: apt-get install <fonts>"
 echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 
@@ -30,7 +29,7 @@ function Deploy-Fonts() {
     name="$(basename "$file")"
     cp -v -f "$file" "$dir/$name"
   done
-  touch "$dir/$title has $(cat "listFile" | wc -l) fonts.txt"
+  touch "$dir/$title has $(cat "$listFile" | wc -l) fonts.txt"
 }
 
 
