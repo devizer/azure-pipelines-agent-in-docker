@@ -15,7 +15,8 @@ fonts="$(apt-cache search font | awk '{print $1}' | grep font | grep -v 'fonts-e
 echo;
 echo "FONTS"
 echo $fonts
-time apt-get install -y --no-install-recommends $fonts # | grep "Unpack\|Setting"
+# --no-install-recommends
+time apt-get install -y  $fonts # | grep "Unpack\|Setting"
 echo "DONE: apt-get install <fonts>"
 echo "BUILD ARTIFACTS to [$SYSTEM_ARTIFACTSDIRECTORY]"
 
