@@ -31,8 +31,10 @@ jobs:
 
       $__ = [System.IO.Directory]::CreateDirectory("C:\VS-Next");
       Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
-      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
-      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
+      if ("$($ENV:KIND)" -ne "Mini") {
+        Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
+        Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
+      }
     displayName: 'Compact'
 
   - powershell: |
