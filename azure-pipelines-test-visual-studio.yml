@@ -14,6 +14,13 @@ jobs:
   pool:
     vmImage: 'windows-2025'
   timeoutInMinutes: 360
+  strategy:
+    maxParallel: 3
+    matrix:
+      'Mini':
+        KIND: 'Mini'
+      'BASIC':
+        KIND: 'Basic Components'
 
   steps:
   - powershell: |
