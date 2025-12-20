@@ -28,6 +28,7 @@ jobs:
       Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
       setx VS_SETUP_INSTALL_FOLDER C:\VS-Next
       Write-Host "VS_SETUP_INSTALL_FOLDER = 'C:\VS-Next'"
+      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
     displayName: 'Compact'
 
   - powershell: |
