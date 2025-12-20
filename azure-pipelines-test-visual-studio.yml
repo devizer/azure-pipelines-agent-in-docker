@@ -40,6 +40,12 @@ jobs:
   - powershell: |
       Demo-Query-VSWhere
       Demo-Find-VisualStudio-MSBuild
+
+      Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
+         ? { $_.FreeSpace -or $_.Size } | 
+         % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
+         ft -AutoSize
+
     condition: succeededOrFailed()
     displayName: 'Info VS'
 
