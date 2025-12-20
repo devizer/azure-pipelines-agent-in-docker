@@ -17,8 +17,6 @@ jobs:
 
   steps:
   - powershell: |
-      # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
-      # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
       iex ((New-Object System.Net.WebClient).DownloadString('https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
       Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
       @("C:\Program Files\Microsoft Visual Studio", "C:\Program Files (x86)\Microsoft Visual Studio") | 
@@ -26,9 +24,8 @@ jobs:
 
       $__ = [System.IO.Directory]::CreateDirectory("C:\VS-Next");
       Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
-      setx VS_SETUP_INSTALL_FOLDER C:\VS-Next
-      Write-Host "VS_SETUP_INSTALL_FOLDER = 'C:\VS-Next'"
       Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
+      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
     displayName: 'Compact'
 
   - powershell: |
@@ -44,6 +41,8 @@ jobs:
     displayName: 'Install Module'
 
   - powershell: |
+      $ENV:VS_SETUP_INSTALL_FOLDER="C:\VS-Next"
+      Write-Host "VS_SETUP_INSTALL_FOLDER = '$($ENV:VS_SETUP_INSTALL_FOLDER)'"
       Test-Setup-VisualStudio "Basic Components" -NoCache
     condition: succeededOrFailed()
     displayName: 'Setup VS'
