@@ -18,14 +18,19 @@ jobs:
   steps:
   - bash: |
       set -eu; set -o pipefail
-      cd build-tools
-      nuhup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
-      nuhup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
+      cmd /c dir
+      nohup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
+      nohup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
     displayName: 'Compact'
 
   - powershell: |
       iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
       Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+    condition: succeededOrFailed()
+    retryCountOnTaskFailure: 4
+    displayName: 'Install Module'
+
+  - powershell: |
       Test-Setup-VisualStudio
     condition: succeededOrFailed()
     displayName: 'Setup VS'
