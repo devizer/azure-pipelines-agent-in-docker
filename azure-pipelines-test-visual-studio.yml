@@ -28,6 +28,12 @@ jobs:
   - powershell: |
       iex ((New-Object System.Net.WebClient).DownloadString('https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
       Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+      if (Test-Path D:\) { setx VS_SETUP_CACHE_FOLDER D:\VS-Cache; $ENV:VS_SETUP_CACHE_FOLDER = "D:\VS-Cache"; Write-Host "VS_SETUP_CACHE_FOLDER = 'D:\VS-Cache'" }
+      Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
+         ? { $_.FreeSpace -or $_.Size } | 
+         % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
+         ft -AutoSize
+
     condition: succeededOrFailed()
     retryCountOnTaskFailure: 4
     displayName: 'Install Module'
