@@ -26,7 +26,7 @@ jobs:
     displayName: 'Compact'
 
   - powershell: |
-      iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
+      iex ((New-Object System.Net.WebClient).DownloadString('https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
       Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
     condition: succeededOrFailed()
     retryCountOnTaskFailure: 4
