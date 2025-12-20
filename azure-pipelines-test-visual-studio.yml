@@ -16,11 +16,13 @@ jobs:
   timeoutInMinutes: 360
 
   steps:
-  - bash: |
-      set -eu; set -o pipefail
-      cmd /c dir
-      nohup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
-      nohup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
+  - powershell: |
+      # set -eu; set -o pipefail
+      # cmd /c dir
+      # nohup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
+      # nohup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
+      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
+      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
     displayName: 'Compact'
 
   - powershell: |
