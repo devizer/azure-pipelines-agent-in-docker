@@ -19,6 +19,8 @@ jobs:
   - powershell: |
       # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
       # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
+      iex ((New-Object System.Net.WebClient).DownloadString('https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
+      Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
       @("C:\Program Files\Microsoft Visual Studio", "C:\Program Files (x86)\Microsoft Visual Studio") | 
         % { $sz = Get-Folder-Size $_; Write-Host "Folder size for $($_): $("{0:n0}" -f ($sz / 1024)) Kb" }
 
@@ -29,7 +31,6 @@ jobs:
     displayName: 'Compact'
 
   - powershell: |
-      iex ((New-Object System.Net.WebClient).DownloadString('https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
       Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
       if (Test-Path D:\) { setx VS_SETUP_CACHE_FOLDER D:\VS-Cache; $ENV:VS_SETUP_CACHE_FOLDER = "D:\VS-Cache"; Write-Host "VS_SETUP_CACHE_FOLDER = 'D:\VS-Cache'" }
       Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
