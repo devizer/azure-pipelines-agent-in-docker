@@ -37,6 +37,12 @@ jobs:
     condition: succeededOrFailed()
     displayName: 'Setup VS'
 
+  - powershell: |
+      Demo-Query-VSWhere
+      Demo-Find-VisualStudio-MSBuild
+    condition: succeededOrFailed()
+    displayName: 'Info VS'
+
   - task: PublishBuildArtifacts@1
     condition: succeededOrFailed()
     displayName: 'Publish'
