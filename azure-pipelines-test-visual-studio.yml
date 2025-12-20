@@ -30,8 +30,8 @@ jobs:
         % { $sz = Get-Folder-Size $_; Write-Host "Folder size for $($_): $("{0:n0}" -f ($sz / 1024)) Kb" }
 
       $__ = [System.IO.Directory]::CreateDirectory("C:\VS-Next");
-      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
       if ("$($ENV:KIND)" -ne "Mini") {
+        Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
         Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
         Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
       }
