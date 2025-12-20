@@ -50,7 +50,7 @@ jobs:
   - powershell: |
       $ENV:VS_SETUP_INSTALL_FOLDER="C:\VS-Next"
       Write-Host "VS_SETUP_INSTALL_FOLDER = '$($ENV:VS_SETUP_INSTALL_FOLDER)'"
-      Test-Setup-VisualStudio "Basic Components" -NoCache
+      Test-Setup-VisualStudio "$($ENV:KIND)" -NoCache
     condition: succeededOrFailed()
     displayName: 'Setup VS'
 
