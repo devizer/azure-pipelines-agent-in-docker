@@ -1,0 +1,38 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'azure-pipelines-test-visual-studio.yml'
+
+jobs:
+
+# 7.84 needs updated build tools
+- job: curl
+  displayName: 'Setup'
+  pool:
+    vmImage: 'windows-2025'
+  timeoutInMinutes: 360
+
+  steps:
+  - bash: |
+      set -eu; set -o pipefail
+      cd build-tools
+      nuhup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
+      nuhup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
+    displayName: 'Compact'
+
+  - powershell: |
+      iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
+      Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+      Test-Setup-VisualStudio
+    condition: succeededOrFailed()
+    displayName: 'Setup VS'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
