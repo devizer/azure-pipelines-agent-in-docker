@@ -12,7 +12,7 @@ jobs:
 - job: curl
   displayName: 'Setup'
   pool:
-    vmImage: 'windows-2025'
+    vmImage: 'windows-2022'
   timeoutInMinutes: 360
   strategy:
     maxParallel: 3
