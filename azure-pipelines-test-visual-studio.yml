@@ -17,12 +17,15 @@ jobs:
 
   steps:
   - powershell: |
-      # set -eu; set -o pipefail
-      # cmd /c dir
-      # nohup bash -c 'compact /c /s:"C:\Program Files\Microsoft Visual Studio"' &
-      # nohup bash -c 'compact /c /s:"C:\Program Files (x86)\Microsoft Visual Studio"' &
-      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
-      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
+      # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files (x86)\Microsoft Visual Studio`""
+      # Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\Program Files\Microsoft Visual Studio`""
+      @("C:\Program Files\Microsoft Visual Studio", "C:\Program Files (x86)\Microsoft Visual Studio") | 
+        % { $sz = Get-Folder-Size $_; Write-Host "Folder size for $($_): $("{0:n0}" -f ($sz / 1024)) Kb" }
+
+      [System.IO.Directory]::CreateDirectory("C:\VS-Next");
+      Start-Process "compact.exe" -ArgumentList "/c", "/s:`"C:\VS-Next`""
+      setx VS_SETUP_INSTALL_FOLDER C:\VS-Next
+      Write-Host "VS_SETUP_INSTALL_FOLDER = 'C:\VS-Next'"
     displayName: 'Compact'
 
   - powershell: |
@@ -39,7 +42,7 @@ jobs:
     displayName: 'Install Module'
 
   - powershell: |
-      Test-Setup-VisualStudio
+      Test-Setup-VisualStudio "Basic Components" -NoCache
     condition: succeededOrFailed()
     displayName: 'Setup VS'
 
