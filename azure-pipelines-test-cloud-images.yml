@@ -122,6 +122,7 @@ jobs:
         cd $img
         7z a "$(System.ARTIFACTSDIRECTORY)/$img.7z" -mx=3
         cd ..
+        rm -rf $img || true
       done
     # condition: succeededOrFailed()
     displayName: 'Pack All Images'
