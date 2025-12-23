@@ -38,7 +38,7 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       printenv | sort;
       sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR;
-      test "$(uname -s)" = "Linux" && df -h -T
+      if [[ "$(uname -s)" == "Linux" ]]; then df -h -T; fi
     displayName: 'Variables'
 
   - script: |
