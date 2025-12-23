@@ -19,7 +19,7 @@ jobs:
     maxParallel: 4
     matrix:
       'ubuntu-latest':
-        POOL: ubuntu-latest
+        POOL: ubuntu-22.04 # 19/72 for 24.04
       'mac-14':
         POOL: macos-14
         THEWORKDIR: /Users/runner/transient-builds
@@ -68,7 +68,7 @@ jobs:
       export LOOP_DIRECT_IO=off
       export MOVE_DOCKER_TO_RAID=""
       export FS=BTRFS-Compressed
-      export BTRFS_COMPRESS_MODE=zstd:1
+      export BTRFS_COMPRESS_MODE=zstd:7
       url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
       Say "Mounts"
       df -h -T
