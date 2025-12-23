@@ -52,6 +52,7 @@ jobs:
   - powershell: |
       $ENV:VS_SETUP_INSTALL_FOLDER="C:\VS-Next"
       Write-Host "VS_SETUP_INSTALL_FOLDER = '$($ENV:VS_SETUP_INSTALL_FOLDER)'"
+      if (Test-Path D:\) { setx VS_SETUP_CACHE_FOLDER D:\VS-Cache; $ENV:VS_SETUP_CACHE_FOLDER = "D:\VS-Cache"; Write-Host "VS_SETUP_CACHE_FOLDER = 'D:\VS-Cache'" }
       Test-Setup-VisualStudio "$($ENV:KIND)" -NoCache
     condition: succeededOrFailed()
     displayName: 'Setup VS'

@@ -18,15 +18,15 @@ jobs:
   strategy:
     maxParallel: 4
     matrix:
-      'ubuntu':
+      'ubuntu-latest':
         POOL: ubuntu-latest
-      'mac-11':
+      'mac-14':
         POOL: macos-14
         THEWORKDIR: /Users/runner/transient-builds
-      'mac-12':
+      'mac-15':
         POOL: macos-15
         THEWORKDIR: /Users/runner/transient-builds
-      'mac-13':
+      'mac-latest':
         POOL: macos-latest
         THEWORKDIR: /Users/runner/transient-builds
 
