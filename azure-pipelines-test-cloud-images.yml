@@ -21,13 +21,13 @@ jobs:
       'ubuntu':
         POOL: ubuntu-latest
       'mac-11':
-        POOL: macos-11
+        POOL: macos-14
         THEWORKDIR: /Users/runner/transient-builds
       'mac-12':
-        POOL: macos-12
+        POOL: macos-15
         THEWORKDIR: /Users/runner/transient-builds
       'mac-13':
-        POOL: macos-13
+        POOL: macos-latest
         THEWORKDIR: /Users/runner/transient-builds
 
   steps:
@@ -37,6 +37,8 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
       printenv | sort;
+      sudo mkdir -p $THEWORKDIR; sudo chown -R $USER $THEWORKDIR;
+      df -h -T
     displayName: 'Variables'
 
   - script: |
@@ -109,6 +111,19 @@ jobs:
       bash -eu Step-DownloadAll.sh
     # condition: succeededOrFailed()
     displayName: 'Download All'
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      cd "$THEWORKDIR"
+      for img in $(ls -1); do
+        Say "Pack $img"
+        cd $img
+        7z a "$(System.ARTIFACTSDIRECTORY)/$img.7z" -mx=3
+        cd ..
+      done
+    # condition: succeededOrFailed()
+    displayName: 'Pack All Images'
 
   - task: PublishBuildArtifacts@1
     condition: succeeded()
