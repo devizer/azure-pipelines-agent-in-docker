@@ -1,5 +1,6 @@
 variables:
   THEWORKDIR: /transient-builds
+  COMPRESSION_LEVEL: 9
 
 trigger:
   branches:
@@ -120,7 +121,7 @@ jobs:
       for img in $(ls -1); do
         Say "Pack $img"
         cd $img
-        7z a "$(System.ARTIFACTSDIRECTORY)/$img.7z" -mx=3
+        7z a "$(System.ARTIFACTSDIRECTORY)/$img.7z" -mx=$COMPRESSION_LEVEL
         cd ..
         rm -rf $img || true
       done
