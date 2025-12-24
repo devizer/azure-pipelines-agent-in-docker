@@ -278,9 +278,16 @@ function Launch-VM() {
   pid=""
   if [[ -n "${VM_FORWARD_PORTS:-}" ]]; then VM_FORWARD_PORTS=",${VM_FORWARD_PORTS}"; fi
   # Example: export VM_FORWARD_PORTS="hostfwd=tcp::5432-:5432,hostfwd=tcp::8080-:80"
+
+  local VM_CPU_FLAGS_Internal=",${VM_CPU_FLAGS:-}"
+  # "" or ",-ssse3"
+  VM_CPU_FLAGS_Internal="${VM_CPU_FLAGS_Internal#,}"
+  if [[ -n "$VM_CPU_FLAGS_Internal" ]]; then VM_CPU_FLAGS_Internal=",$VM_CPU_FLAGS_Internal"; fi
+
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
           # 6.2 (22.04): -audiodev id=none,driver=none \
+          # cpu: arm926 (arm926ejs), arm1136, cortex-a8
           qemu-system-arm -M versatilepb -m 256M -name armel32vm \
             $qemuAccell \
             -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
@@ -292,10 +299,13 @@ function Launch-VM() {
         pid=$!
   fi
 
+  local defaultCpu;
   if [[ "$arch" == "arm" ]]; then
+      defaultCpu=cortex-a15
+      local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
       qemu-system-arm -name arm32vm \
           $qemuAccell \
-          -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a15 \
+          -smp $VM_CPUS -m $VM_MEM -M virt -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           \
           -global virtio-blk-device.scsi=off \
@@ -314,12 +324,14 @@ function Launch-VM() {
   # $ -blockdev driver=file,node-name=f0,filename=/path/to/floppy.img -device floppy,drive=f0
 
   if [[ "$arch" == "arm64" ]]; then
+      defaultCpu=cortex-a57
+      local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
       qemu-system-aarch64 -name arm64vm \
           $qemuAccell \
-          -smp $VM_CPUS -m $VM_MEM -M virt -cpu cortex-a57  \
+          -smp $VM_CPUS -m $VM_MEM -M virt -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}"  \
           -initrd "$location/initrd.img" \
           -kernel "$location/vmlinuz" \
-          -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" \
+          -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           \
           -global virtio-blk-device.scsi=off \
           -device virtio-scsi-device,id=scsi \
@@ -334,8 +346,10 @@ function Launch-VM() {
 
   if [[ "$arch" == "x64" ]]; then
       # qemu-system-x86_64-microvm needs kvm
+      defaultCpu=core2duo
+      local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
       qemu-system-x86_64 -name x64vm \
-          -smp $VM_CPUS -m $VM_MEM -M ubuntu,accel=tcg -cpu core2duo \
+          -smp $VM_CPUS -m $VM_MEM -M pc -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
@@ -350,9 +364,11 @@ function Launch-VM() {
       # NOT TESTED NOT TESTED 
       # -cpu qemu32: stuck
       # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
+      local defaultCpu=coreduo
+      local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
       qemu-system-i386 -name i386vm \
           $qemuAccell \
-          -smp $VM_CPUS -m $VM_MEM -M pc -cpu coreduo \
+          -smp $VM_CPUS -m $VM_MEM -M pc -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
           -hda "$location/disk.qcow2" \
           -cdrom "$cloud_config" \
