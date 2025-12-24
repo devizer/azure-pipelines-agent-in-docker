@@ -15,7 +15,7 @@ jobs:
 - job: Test
   pool:
     vmImage: $(POOL)
-  timeoutInMinutes: 300
+  timeoutInMinutes: 360
   strategy:
     maxParallel: 4
     matrix:
