@@ -273,7 +273,7 @@ jobs:
       sudo swapon
       for f in /swapfile /mnt/swapfile; do
         sudo swapoff $f 2>/dev/null || true
-        rm -rf $f 2>/dev/null || true
+        rm -f $f 2>/dev/null || true
       done
       file=/newswap
       sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=100 status=progress
