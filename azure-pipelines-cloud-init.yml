@@ -2,7 +2,13 @@ variables:
   THEWORKDIR: /transient-builds
   DEFAULT_NEWSIZE: 16G
   XZ_COMPRESSION_LEVEL: 9
-  AGENT_IMAGE: 'ubuntu-22.04'
+  AGENT_IMAGE: 'ubuntu-24.04' # 
+# debian 13 qcow2 files needs new e2fsck (libguests tool)
+# virt-resize: error: libguestfs error: resize2fs: e2fsck 1.46.5 (30-Dec-2021)
+# /dev/sda3 has unsupported feature(s): FEATURE_C12
+# e2fsck: Get a newer version of e2fsck!
+
+
 
 trigger:
   branches:
