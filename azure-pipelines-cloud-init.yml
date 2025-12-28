@@ -47,6 +47,11 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-amd64-daily.qcow2"
         KEY: 13-generic-daily-x64
         THEARCH: x64
+      'arm64-debian-daily-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
+        KEY: 13-generic-daily-arm64
+        THEARCH: arm64
+
       'x64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-amd64.qcow2"
         KEY: 13-generic-x64
@@ -180,10 +185,6 @@ jobs:
       'arm64-debian-12':
         IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
         KEY: 12-generic-arm64
-        THEARCH: arm64
-      'arm64-debian-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
-        KEY: 13-generic-arm64
         THEARCH: arm64
 
       # 'armhf-ubuntu-23.10':
