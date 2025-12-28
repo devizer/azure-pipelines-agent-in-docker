@@ -311,6 +311,9 @@ jobs:
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
       try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
+
+      sudo swapon
+      df -h -T
     displayName: 'Provisioning'
 
   - script: |
