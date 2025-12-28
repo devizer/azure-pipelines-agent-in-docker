@@ -43,9 +43,9 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
-      'x64-debian-13-daily':
+      'x64-debian-daily-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-amd64-daily.qcow2"
-        KEY: 13-generic-x64-daily
+        KEY: 13-generic-daily-x64
         THEARCH: x64
       'x64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-amd64.qcow2"
