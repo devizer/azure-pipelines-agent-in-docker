@@ -75,8 +75,10 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-genericcloud-amd64.qcow2"
         KEY: 13-generic-x64-v3
         THEARCH: x64
+      
       'x64-debian-13-v4':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-azure-amd64.tar.xz" # disk.img 30GB
+        # NO NETWORK: https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-azure-amd64.tar.xz
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-ec2-amd64.tar.xz" # disk.img 30GB
         KEY: 13-generic-x64-v4
         THEARCH: x64
         NEWSIZE: "SKIP" # 30G
@@ -291,7 +293,7 @@ jobs:
       sudo swapon
 
       
-      export FREE_ROOT_SPACE_MB=2000 # 1600 is not enough
+      export FREE_ROOT_SPACE_MB=3000 # 1600 is not enough
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
