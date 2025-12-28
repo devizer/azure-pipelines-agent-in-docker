@@ -341,7 +341,7 @@ function Launch-VM() {
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-},id=net0 -device virtio-net-device,netdev=net0 \
           -nographic -no-reboot &
 
-        pid=$!
+        pid=$! # virtio-net-device
   fi
 
   if [[ "$arch" == "x64" ]]; then
