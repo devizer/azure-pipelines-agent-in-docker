@@ -267,7 +267,22 @@ jobs:
 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f || true
+
+      Say "Reset swap to 100M"
+      echo "SWAP BEFORE"
+      sudo swapon
+      sudo swapoff /swapfile || true
+      rm -rf /swapfile;
+      file=/swap
+      sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=2000 status=progress
+      sudo chmod 600 $file
+      sudo mkswap $file
+      sudo swapon $file
+      echo "SWAP AFTER"
+      sudo swapon
+
       
+      export FREE_ROOT_SPACE_MB=1200
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
