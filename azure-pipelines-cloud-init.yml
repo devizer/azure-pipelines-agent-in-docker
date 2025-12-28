@@ -295,6 +295,16 @@ jobs:
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
+      # required to build cpu usage
+      Say "Installing MONO"; time (export INSTALL_DIR=/usr/local MONO_VER=6.12.0.199 TOOLS="mono"; script="https://master.dl.sourceforge.net/project/gcc-precompiled/build-tools/Install-Build-Tools.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
+      Say "Installing MS BUILD"; time (export MSBUILD_INSTALL_VER=16.6 MSBUILD_INSTALL_DIR=/usr/local; script="https://master.dl.sourceforge.net/project/gcc-precompiled/msbuild/Install-MSBuild.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash)
+    # condition: succeededOrFailed()
+    displayName: 'Install MSBuid on host'
+  
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
       cd cloud-init 
       bash -e Smoke-Test-Step.sh 
     # condition: succeededOrFailed()
