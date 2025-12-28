@@ -73,7 +73,15 @@ else
 fi
 time 7z b -mmt=1 -md=18
 
-
+function Disbale-Unattended() {
+  if [[ "$(command -v systemctl)" != "" ]]; then
+    for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
+      Say "Disable $s"
+      systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
+    done
+  fi
+}
+Disbale-Unattended
 
 # open-vm-tools?
 export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync gcc"
@@ -170,14 +178,6 @@ time nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
 Say "/etc/os-release"
 cat "/etc/os-release"
 
-function Disbale-Unattended() {
-  if [[ "$(command -v systemctl)" != "" ]]; then
-    for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
-      Say "Disable $s"
-      systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
-    done
-  fi
-}
 Disbale-Unattended
 
 # if [[ "${os_ver}" != "ubuntu:16.04" ]] && [[ "${os_ver}" != "ubuntu:18.04" ]] && [[ "${os_ver}" != "ubuntu:22.04" ]] && [[ "${os_ver}" != "ubuntu:24.04" ]] && [[ "${os_ver}" != "ubuntu:23.10" ]]; then
