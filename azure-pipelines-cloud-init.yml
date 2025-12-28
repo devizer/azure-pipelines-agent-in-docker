@@ -271,9 +271,11 @@ jobs:
       Say "Reset swap to 100M"
       echo "SWAP BEFORE"
       sudo swapon
-      sudo swapoff /swapfile || true
-      rm -rf /swapfile;
-      file=/swap
+      for f in /swapfile /mnt/swapfile; do
+        sudo swapoff $f 2>/dev/null || true
+        rm -rf $f 2>/dev/null || true
+      done
+      file=/newswap
       sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=2000 status=progress
       sudo chmod 600 $file
       sudo mkswap $file
