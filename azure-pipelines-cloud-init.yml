@@ -276,7 +276,7 @@ jobs:
         rm -rf $f 2>/dev/null || true
       done
       file=/newswap
-      sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=2000 status=progress
+      sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=100 status=progress
       sudo chmod 600 $file
       sudo mkswap $file
       sudo swapon $file
