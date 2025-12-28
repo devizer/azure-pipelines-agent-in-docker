@@ -69,6 +69,12 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-arm64.qcow2"
         KEY: 13-generic-arm64
         THEARCH: arm64
+
+      'x64-debian-10':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
+        KEY: 10-generic-x64
+        THEARCH: x64
+
         
 
       'x64-ubuntu-24.04':
@@ -80,10 +86,6 @@ jobs:
         KEY: 22.04-generic-x64
         THEARCH: x64
 
-      'x64-debian-10':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
-        KEY: 10-generic-x64
-        THEARCH: x64
       'x64-debian-11':
         IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
         KEY: 11-generic-x64
