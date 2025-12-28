@@ -58,9 +58,20 @@ jobs:
         NEWSIZE: "SKIP" # 44G
         SLEEP: 1
 
-      'x64-debian-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-amd64.qcow2"
-        KEY: 13-generic-x64
+      'x64-debian-13-generic':
+        # IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-amd64.qcow2" # missing network on debian 13
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-generic-amd64.qcow2" # missing network on debian 13
+        KEY: 13-generic-x64-generic
+        THEARCH: x64
+
+      'x64-debian-13-azure':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-azure-amd64.tar.xz"
+        KEY: 13-generic-x64-azure
+        THEARCH: x64
+
+      'x64-debian-13-v3':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-genericcloud-amd64.qcow2"
+        KEY: 13-generic-x64-v3
         THEARCH: x64
 
       'arm64-debian-13':

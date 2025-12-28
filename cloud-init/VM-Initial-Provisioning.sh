@@ -31,7 +31,7 @@ deb http://archive.debian.org/debian jessie-backports main non-free contrib
 ' > /etc/apt/sources.list
   fi
 
-Say "Adjusted os repo"
+Say "Adjusted os repo (final /etc/apt/sources.list)"
 cat /etc/apt/sources.list
 set -e
 

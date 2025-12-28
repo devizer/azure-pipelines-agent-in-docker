@@ -294,7 +294,7 @@ function Launch-VM() {
             -hda "$location/disk.qcow2" \
             -hdb "$cloud_config" \
             -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-} \
-            -append "root=/dev/sda${root_partition_index:-1} console=ttyAMA0" -nographic -no-reboot &
+            -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" -nographic -no-reboot &
 
         pid=$!
   fi
