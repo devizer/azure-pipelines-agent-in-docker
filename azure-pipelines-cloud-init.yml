@@ -302,9 +302,9 @@ jobs:
       msbuild /version
 
       Say "Import Mozilla Certificates (OPTIONALLY)"
-      time mozroots --import --sync || true
+      time sudo mozroots --import --sync || true
       Say "Installing Certificates snapshot"
-      time (script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true)
+      time sudo bash -c 'script="https://master.dl.sourceforge.net/project/gcc-precompiled/ca-certificates/update-ca-certificates.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash || true'
 
     # condition: succeededOrFailed()
     displayName: 'Install MSBuid on host'
