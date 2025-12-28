@@ -345,12 +345,14 @@ jobs:
       sudo apt-get update -qq; sudo apt-get install mono-complete msbuild nuget
       mono --version
       msbuild /version
+      df -h -T
     # condition: succeededOrFailed()
     displayName: 'Install MSBuid on host'
   
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
+      df -h -T
       Say --Reset-Stopwatch
       cd cloud-init 
       bash -e Smoke-Test-Step.sh 
