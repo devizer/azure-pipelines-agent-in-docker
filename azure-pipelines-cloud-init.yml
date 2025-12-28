@@ -8,6 +8,8 @@ variables:
 # /dev/sda3 has unsupported feature(s): FEATURE_C12
 # e2fsck: Get a newer version of e2fsck!
 
+# TODO: Needs new sources: Debian 10 x64
+
 
 
 trigger:
@@ -269,7 +271,8 @@ jobs:
       echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
       
       Say "Install libguestfs-tools"
-      time (sudo apt-get update -qq; sudo apt-get install bsdutils qemu-system-arm qemu-system-x86 sshpass sshfs cloud-image-utils qemu-system-arm qemu-system-i386 qemu-efi aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"; )
+      # qemu-efi is missing on 24.04
+      time (sudo apt-get update -qq; sudo apt-get install bsdutils qemu-system-arm qemu-system-x86 sshpass sshfs cloud-image-utils qemu-system-arm qemu-system-i386 aria2 libguestfs-tools -y -qq | grep "Unpack\|Setting"; )
 
       # config sshfs and sshpass
       mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
