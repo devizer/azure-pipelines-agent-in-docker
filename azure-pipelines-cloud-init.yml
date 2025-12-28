@@ -51,14 +51,12 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
-      'x64-debian-daily-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-amd64-daily.qcow2"
-        KEY: 13-generic-daily-x64
-        THEARCH: x64
-      'arm64-debian-daily-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
-        KEY: 13-generic-daily-arm64
-        THEARCH: arm64
+      'armel-debian-11':
+        IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-armel.qcow2.xz/download"
+        KEY: 11-generic-armel
+        THEARCH: armel
+        NEWSIZE: "SKIP" # 44G
+        SLEEP: 1
 
       'x64-debian-13':
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-amd64.qcow2"
@@ -74,6 +72,15 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
         KEY: 10-generic-x64
         THEARCH: x64
+
+      'x64-debian-daily-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-amd64-daily.qcow2"
+        KEY: 13-generic-daily-x64
+        THEARCH: x64
+      'arm64-debian-daily-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie/daily/latest/debian-13-generic-arm64-daily.qcow2"
+        KEY: 13-generic-daily-arm64
+        THEARCH: arm64
 
         
 
