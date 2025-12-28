@@ -559,6 +559,7 @@ function VM-Launcher-Smoke-Test() {
   printf $THEARCH > $SYSTEM_ARTIFACTSDIRECTORY/arch.txt
 
   FW_TEST_VERSION=net472
+  FW_TEST_VERSION=net46
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
   Say "Build Universe.CpuUsage"
