@@ -132,7 +132,7 @@ df -h -T
 Say "FREE MEMORY"; free -m;
 echo "FREE SPACE"; df -h -T;
 Say "OS IS"; cat /etc/*release;
-Say "Time Zone Is"; cat /etc/timezone
+Say "Time Zone Is"; cat /etc/timezone 2>/dev/null || readlink /etc/localtime | sed 's#^.*/zoneinfo/##'
 Say "Locales are"; locale --all
 Say "Current Locale"; locale
 export GCC_FORCE_GZIP_PRIORITY=true
