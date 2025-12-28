@@ -17,7 +17,7 @@ function Prepare-VM-Image() {
   try-and-retry curl --connect-timeout 30 -ksfSL -o $file "$url" || rm -f $file
   # rpi.img.xz -> rpi.img
   # IF .TAR.XZ
-  if [[ "$url" == *".tar.xz" ]]; then echo "Extracting .TAR.XZ"; mv $file $file.tar.xz; mkdir -p extract; cd extract; tar xJf ../$file.tar.xz; for f in $(ls -1); do echo " ..... mv $f ../$file"; mv $f ../$file; cd ..; done; 
+  if [[ "$url" == *".tar.xz" ]]; then echo "Extracting .TAR.XZ"; mv $file $file.tar.xz; mkdir -p extract; cd extract; tar xJf ../$file.tar.xz; for f in $(ls -1); do echo " ..... mv $f ../$file"; mv $f ../$file; cd ..; rm -f $file.tar.xz || true; done; 
   # IF .XZ
   elif [[ "$url" == *".xz" ]] || [[ "$url" == *".xz/download" ]]; then echo "Extracting .XZ $file.xz"; mv $file $file.xz; cat $file.xz | time xz -d > $file; rm -f $file.xz; fi
   # rpi.zip -> rpi.img
