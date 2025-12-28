@@ -291,7 +291,7 @@ jobs:
       sudo swapon
 
       
-      export FREE_ROOT_SPACE_MB=1600
+      export FREE_ROOT_SPACE_MB=2000 # 1600 is not enough
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
