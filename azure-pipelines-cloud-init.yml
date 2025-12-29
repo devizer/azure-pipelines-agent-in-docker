@@ -344,8 +344,9 @@ jobs:
       echo "CPU: $(Get-CpuName)"
 
       for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL /usr/local/lib/android/sdk /usr/share/swift; do
-        Say "Delete $d"
-        sudo rm -rf "$d" || true
+        sz="$(sudo du -h "$d" --max-depth=0 | awk '{print $1}' || true)"
+        Say "Delete $d, $sz"
+        time sudo rm -rf "$d" || true
       done 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f || true
