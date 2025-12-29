@@ -561,15 +561,10 @@ function get_global_seconds() {
 function VM-Launcher-Smoke-Test() {
   printf $THEARCH > $SYSTEM_ARTIFACTSDIRECTORY/arch.txt
 
-  FW_TEST_VERSION=net472
-  FW_TEST_VERSION=net46
   mkdir -p /tmp/cloud-init-smoke-test-provisia
-  git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
-  Say "Build Universe.CpuUsage"
   pushd /tmp/cloud-init-smoke-test-provisia
-  Reset-Target-Framework -fw $FW_TEST_VERSION -l latest
-  cd Universe.CpuUsage.Tests
-  time msbuild /t:Restore,Build /p:Configuration=Release /v:m
+  cp -av ~/Universe.CpuUsage.Tests.Binaries .
+  ls -la
   popd
   cp -f VM-Initial-Provisioning.sh /tmp/cloud-init-smoke-test-provisia
 

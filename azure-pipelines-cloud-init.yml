@@ -22,6 +22,69 @@ trigger:
 
 jobs:
 
+- job: Pre
+  # todo: replace by some shared script? or zip?
+  pool:
+    vmImage: ubuntu-22.04
+  timeoutInMinutes: 150
+  steps:
+  - script: |
+      set -eu; set -o pipefail
+      printenv | sort;
+    displayName: 'Variables'
+
+  - script: |
+      set -eu; set -o pipefail
+      cd build-tools
+      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+      Say --Reset-Stopwatch
+      echo "CPU: $(Get-CpuName)"
+
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
+      # required to build cpu usage
+      echo '
+      Acquire::AllowReleaseInfoChange::Suite "true";
+      Acquire::Check-Valid-Until "0";
+      APT::Get::Assume-Yes "true";
+      APT::Get::AllowUnauthenticated "true";
+      Acquire::AllowInsecureRepositories "1";
+      Acquire::AllowDowngradeToInsecureRepositories "1";
+      APT::NeverAutoRemove:: ".*";
+      ' | sudo tee /etc/apt/apt.conf.d/99Z_Custom
+      echo "deb https://download.mono-project.com/repo/debian stable-buster main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+      try-and-retry sudo apt-get update -qq; try-and-retry sudo apt-get install mono-complete msbuild nuget
+      mono --version
+      msbuild /version
+      df -h -T
+    # condition: succeededOrFailed()
+    displayName: 'Install MSBuid on host'
+
+  - script: |
+     set -eu; set -o pipefail
+     FW_TEST_VERSION=net472
+     FW_TEST_VERSION=net47
+     mkdir -p /tmp/cloud-init-smoke-test-provisia
+     git clone https://github.com/devizer/Universe.CpuUsage /tmp/cloud-init-smoke-test-provisia
+     Say "Build Universe.CpuUsage"
+     pushd /tmp/cloud-init-smoke-test-provisia
+     Reset-Target-Framework -fw $FW_TEST_VERSION -l latest
+     cd Universe.CpuUsage.Tests
+     time try-and-retry msbuild /t:Restore,Build /p:Configuration=Release /v:m
+     mkdir -p ~/Universe.CpuUsage.Tests.Binaries
+     cd bin/Release/$FW_TEST_VERSION
+     cp -av * ~/Universe.CpuUsage.Tests.Binaries
+     popd
+
+   - task: PublishBuildArtifacts@1
+     condition: succeeded()
+     displayName: 'Universe.CpuUsage.Tests.Binaries'
+     inputs:
+       pathtoPublish: '$(HOME)/Universe.CpuUsage.Tests.Binaries'
+       artifactName: 'Universe.CpuUsage.Tests.Binaries'
+
 - job: Image
   pool:
     vmImage: $(AGENT_IMAGE)
@@ -296,7 +359,7 @@ jobs:
       sudo swapon
 
       
-      export FREE_ROOT_SPACE_MB=3000 # 1600 is not enough
+      export FREE_ROOT_SPACE_MB=2000 # 1600 is not enough
       export SECOND_DISK_MODE=LOOP
       export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
@@ -328,37 +391,42 @@ jobs:
       df -h -T
     displayName: 'Provisioning'
 
+  - task: DownloadBuildArtifacts@0
+    displayName: 'Download Universe.CpuUsage.Tests.Binaries'
+    inputs:
+      buildType: 'current'
+      artifactName: 'Universe.CpuUsage.Tests.Binaries'
+      downloadPath: '$(HOME)'
+    
+  - script: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
+      mkdir -p ~/FS.Usage
+      for d in 2 3 4 5; do
+        Say "max-depth = $d"
+        sudo du / -h --max-depth=$d | tee ~/FS.Usage/du.$d.txt || true
+      done 
+      printenv | sort | tee ~/FS.Usage/Environment.txt
+    displayName: 'Build'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish FS Usage'
+    inputs:
+      pathtoPublish: '$(HOME)/FS.Usage'
+      artifactName: 'FS.Usage'
+
+  
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
       sudo apt-get clean || true
+      ls ~/Universe.CpuUsage.Tests.Binaries
       cd cloud-init 
       bash -e Build-Step.sh
     # condition: succeededOrFailed()
     displayName: 'Build'
 
-  - script: |
-      set -eu; set -o pipefail
-      echo "CPU: $(Get-CpuName)"
-      Say --Reset-Stopwatch
-      # required to build cpu usage
-      echo '
-      Acquire::AllowReleaseInfoChange::Suite "true";
-      Acquire::Check-Valid-Until "0";
-      APT::Get::Assume-Yes "true";
-      APT::Get::AllowUnauthenticated "true";
-      Acquire::AllowInsecureRepositories "1";
-      Acquire::AllowDowngradeToInsecureRepositories "1";
-      APT::NeverAutoRemove:: ".*";
-      ' | sudo tee /etc/apt/apt.conf.d/99Z_Custom
-      echo "deb https://download.mono-project.com/repo/debian stable-buster main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-      sudo apt-get update -qq; sudo apt-get install mono-complete msbuild nuget
-      mono --version
-      msbuild /version
-      df -h -T
-    # condition: succeededOrFailed()
-    displayName: 'Install MSBuid on host'
   
   - script: |
       set -eu; set -o pipefail
@@ -366,7 +434,7 @@ jobs:
       df -h -T
       Say --Reset-Stopwatch
       cd cloud-init 
-      bash -e Smoke-Test-Step.sh 
+      bash -e Smoke-Test-Step.sh
     # condition: succeededOrFailed()
     displayName: 'Provisioning VM'
 
