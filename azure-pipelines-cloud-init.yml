@@ -25,7 +25,7 @@ jobs:
 - job: Image
   pool:
     vmImage: $(AGENT_IMAGE)
-  timeoutInMinutes: 180
+  timeoutInMinutes: 150
   strategy:
     maxParallel: 10
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
