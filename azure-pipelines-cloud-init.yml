@@ -421,7 +421,7 @@ jobs:
     displayName: 'Publish FS Usage'
     inputs:
       pathtoPublish: '$(HOME)/FS.Usage'
-      artifactName: 'FS.Usage'
+      artifactName: 'FS.Usage $(Agent.JobName)'
 
   
   - script: |
