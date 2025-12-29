@@ -349,7 +349,7 @@ jobs:
         time sudo rm -rf "$d" || true
       done 
       Say "CLEAN UP Docker Images"
-      docker image prune -a -f || true
+      docker image prune -a -f | { grep -v "sha256:"; } || true
 
       Say "Reset swap to 100M"
       echo "SWAP BEFORE"
