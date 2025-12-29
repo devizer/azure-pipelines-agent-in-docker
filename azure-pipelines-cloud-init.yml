@@ -77,10 +77,11 @@ jobs:
      cd bin/Release/$FW_TEST_VERSION
      cp -av * ~/Universe.CpuUsage.Tests.Binaries
      popd
+    displayName: 'BUILD Universe.CpuUsage.Tests.Binaries'
 
   - task: PublishBuildArtifacts@1
     condition: succeeded()
-    displayName: 'Universe.CpuUsage.Tests.Binaries'
+    displayName: 'PUBLISH Universe.CpuUsage.Tests.Binaries'
     inputs:
       pathtoPublish: '$(HOME)/Universe.CpuUsage.Tests.Binaries'
       artifactName: 'Universe.CpuUsage.Tests.Binaries'
