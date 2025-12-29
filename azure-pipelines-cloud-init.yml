@@ -343,7 +343,7 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
 
-      for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL; do
+      for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL /usr/local/lib/android/sdk /usr/share/swift; do
         Say "Delete $d"
         rm -rf "$d"
       done 
