@@ -397,7 +397,8 @@ jobs:
       final_disk="$SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2"
       qemu-img create -f qcow2 "${final_disk}" "${NEWSIZE:-$DEFAULT_NEWSIZE}"
       # missing free space. what the heck is --compress?
-      time try-and-retry sudo virt-sparsify --check-tmpdir=continue --convert qcow2 disk.qcow2 "${final_disk}"
+      export TMPDIR="$SYSTEM_ARTIFACTSDIRECTORY"
+      time try-and-retry sudo virt-sparsify --verbose --check-tmpdir=continue --convert qcow2 disk.qcow2 "${final_disk}"
       sudo chown $USER "${final_disk}"
       ls -lah "${final_disk}"
       sudo rm -f disk.qcow2
