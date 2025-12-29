@@ -374,9 +374,9 @@ jobs:
       echo "CPU: $(Get-CpuName)"
       sudo apt-get clean;
       for dir in "$THEWORKDIR" /tmp "$HOME" "$SYSTEM_ARTIFACTSDIRECTORY"; do
-        sz="$(du -h "$dir" --max-depth=0 | awk '{print $1}')"
+        sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
         Say "TREE $dir, $sz"
-        tree -h "$dir" || treu
+        sudo tree -h "$dir" || true
         echo
       done
     # condition: eq('42', '42')
@@ -393,13 +393,12 @@ jobs:
       Say "Compacting image, size is $NEWSIZE"
       pushd /transient-builds/run
       ls -lah disk.qcow2
-      qemu-img create -f qcow2 copy.qcow2 "${NEWSIZE:-$DEFAULT_NEWSIZE}"
+      final_disk="$SYSTEM_ARTIFACTSDIRECTORY/disk.qcow2"
+      qemu-img create -f qcow2 "${final_disk}" "${NEWSIZE:-$DEFAULT_NEWSIZE}"
       # missing free space. what the heck is --compress?
-      time try-and-retry sudo virt-sparsify --check-tmpdir=continue --convert qcow2 disk.qcow2 copy.qcow2
-      sudo mv copy.qcow2 disk.qcow2
-      sudo chown $USER disk.qcow2
-      cp -f -v disk.qcow2 $SYSTEM_ARTIFACTSDIRECTORY
-      ls -lah disk.qcow2
+      time try-and-retry sudo virt-sparsify --check-tmpdir=continue --convert qcow2 disk.qcow2 "${final_disk}"
+      sudo chown $USER "${final_disk}"
+      ls -lah "${final_disk}"
       popd
     # condition: eq('42', '42')
     displayName: 'Sparsify image'
