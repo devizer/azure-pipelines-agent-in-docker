@@ -373,7 +373,7 @@ jobs:
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       sudo apt-get clean;
-      for dir in $THEWORKDIR" /tmp "$HOME"; do
+      for dir in $THEWORKDIR" /tmp "$HOME" "$SYSTEM_ARTIFACTSDIRECTORY"; do
         sz="$(du -h "$dir" --max-depth=0 | awk '{print $1}')"
         Say "TREE $dir ($sz)"
         tree -h "$dir"
