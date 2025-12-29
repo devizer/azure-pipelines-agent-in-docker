@@ -25,7 +25,7 @@ jobs:
 - job: Image
   pool:
     vmImage: $(AGENT_IMAGE)
-  timeoutInMinutes: 240
+  timeoutInMinutes: 180
   strategy:
     maxParallel: 10
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
@@ -369,6 +369,7 @@ jobs:
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
+      df -h -T
       DEFAULT_NEWSIZE="${DEFAULT_NEWSIZE:-16G}"
       NEWSIZE="${NEWSIZE:-$DEFAULT_NEWSIZE}"
       if [[ "$NEWSIZE" == SKIP ]]; then NEWSIZE="$DEFAULT_NEWSIZE"; fi
