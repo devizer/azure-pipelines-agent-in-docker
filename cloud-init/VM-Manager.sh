@@ -565,7 +565,7 @@ function VM-Launcher-Smoke-Test() {
   export FW_TEST_VERSION=net47
   mkdir -p /tmp/cloud-init-smoke-test-provisia
   pushd /tmp/cloud-init-smoke-test-provisia
-  cp -av ~/Universe.CpuUsage.Tests.Binaries/* .
+  cp -av ~/Universe.CpuUsage.Tests.Binaries .
   ls -la
   popd
   cp -f VM-Initial-Provisioning.sh /tmp/cloud-init-smoke-test-provisia
