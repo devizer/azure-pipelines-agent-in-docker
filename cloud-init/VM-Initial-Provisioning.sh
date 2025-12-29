@@ -193,3 +193,5 @@ else
 fi
 
 Disbale-Unattended
+Say "Final Disk Space Usage"
+df -h -T | tee /root/_logs/disk.space.usage.txt || df -h | tee /root/_logs/disk.space.usage.txt || true
