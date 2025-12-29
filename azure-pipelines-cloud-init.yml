@@ -90,7 +90,7 @@ jobs:
     vmImage: $(AGENT_IMAGE)
   dependsOn:
     - Pre
- timeoutInMinutes: 150
+  timeoutInMinutes: 150
   strategy:
     maxParallel: 10
     # https://cloud.debian.org/images/cloud/OpenStack/archive/10.13.0/debian-10.13.0-openstack-amd64.qcow2
