@@ -64,6 +64,12 @@ jobs:
         KEY: 13-generic-x64
         THEARCH: x64
         AGENT_IMAGE: 'ubuntu-24.04'
+      'arm64-debian-13':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-arm64.qcow2"
+        KEY: 13-generic-arm64
+        THEARCH: arm64
+        AGENT_IMAGE: 'ubuntu-24.04'
+
 
       # missing vmlinuz and initrd.ing: 
       
@@ -83,11 +89,6 @@ jobs:
       #  KEY: 13-generic-x64-v4
       #  THEARCH: x64
       #  NEWSIZE: "SKIP" # 30G
-
-      'arm64-debian-13':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-genericcloud-arm64.qcow2"
-        KEY: 13-generic-arm64
-        THEARCH: arm64
 
       'x64-debian-10':
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2"
