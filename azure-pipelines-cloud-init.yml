@@ -345,7 +345,7 @@ jobs:
 
       for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL /usr/local/lib/android/sdk /usr/share/swift; do
         Say "Delete $d"
-        rm -rf "$d"
+        sudo rm -rf "$d" || true
       done 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f || true
