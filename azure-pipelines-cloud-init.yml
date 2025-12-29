@@ -2,7 +2,7 @@ variables:
   THEWORKDIR: /transient-builds
   DEFAULT_NEWSIZE: 16G
   XZ_COMPRESSION_LEVEL: 9
-  AGENT_IMAGE: 'ubuntu-24.04' # 
+  AGENT_IMAGE: 'ubuntu-22.04' # 
 # debian 13 qcow2 files needs new e2fsck (libguests tool)
 # virt-resize: error: libguestfs error: resize2fs: e2fsck 1.46.5 (30-Dec-2021)
 # /dev/sda3 has unsupported feature(s): FEATURE_C12
@@ -63,6 +63,7 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/trixie-backports/latest/debian-13-backports-generic-amd64.qcow2" # missing network on debian 13
         KEY: 13-generic-x64
         THEARCH: x64
+        AGENT_IMAGE: 'ubuntu-24.04'
 
       # missing vmlinuz and initrd.ing: 
       
