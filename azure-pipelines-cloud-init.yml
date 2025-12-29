@@ -408,7 +408,7 @@ jobs:
       mkdir -p ~/FS.Usage
       for d in 2 3 4 5; do
         Say "max-depth = $d"
-        sudo du / -h --max-depth=$d | { grep -v -e '^/proc' || true; } | { grep -v -e '^/run' || true; } | { grep -v -e '^/sys' || true; } | tee ~/FS.Usage/du.$d.txt || true
+        sudo du / -h --max-depth=$d | { grep -v -E '^/proc' || true; } | { grep -v -E '^/run' || true; } | { grep -v -E '^/sys' || true; } | tee ~/FS.Usage/du.$d.txt || true
       done 
       printenv | sort | tee ~/FS.Usage/Environment.txt
     displayName: 'FS Usage'
