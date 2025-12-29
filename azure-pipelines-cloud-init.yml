@@ -332,6 +332,7 @@ jobs:
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       Say --Reset-Stopwatch
+      sudo apt-get clean || true
       cd cloud-init 
       bash -e Build-Step.sh
     # condition: succeededOrFailed()
