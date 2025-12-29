@@ -343,6 +343,10 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
 
+      for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL; do
+        Say "Delete $d"
+        rm -rf "$d"
+      done 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f || true
 
