@@ -370,8 +370,8 @@ jobs:
       '
       for dir in $FOLDERS_TO_CLEAN; do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
         sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
-        Say "Delete $d, $sz"
-        sudo rm -rf "$d"/* || true
+        Say "Delete $dir, $sz"
+        sudo rm -rf "$dir"/* || true
       fi; done 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f | { grep -v "sha256:"; } || true
