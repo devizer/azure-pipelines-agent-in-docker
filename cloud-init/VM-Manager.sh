@@ -44,7 +44,11 @@ function Prepare-VM-Image() {
     sudo bash -c "cp -f -L $key-MNT/boot/{initrd.img,vmlinu?} $key-BOOT"
     # ubuntu with a boot volume
     sudo bash -c "cp -f -L $key-MNT/{initrd.img,vmlinu?} $key-BOOT"
-    # debian
+    # debian 11 arm64, can't find it: 
+    #           12008409 Nov 26 05:20 initrd.img-5.10.0-36-cloud-arm64
+    #           17885537 Nov 26 05:30 initrd.img-6.1.0-0.deb11.41-cloud-arm64
+    #           23238592 Sep 29 11:28 vmlinuz-5.10.0-36-cloud-arm64
+    #           26185664 Nov 20 22:37 vmlinuz-6.1.0-0.deb11.41-cloud-arm64
     sudo bash -c "echo 'what about initrd.img?'; ls -lah $key-MNT/initrd.img-*; cp -f -L $key-MNT/initrd.img-* $key-BOOT/initrd.img"
     sudo bash -c "echo 'what about vmlinuz?'; ls -lah $key-MNT/vmlinuz-*; cp -f -L $key-MNT/vmlinuz-* $key-BOOT/vmlinuz"
     sudo bash -c "echo 'what about boot/initrd.img?'; ls -lah $key-MNT/boot/initrd.img-*; cp -f -L $key-MNT/boot/initrd.img-* $key-BOOT/initrd.img"

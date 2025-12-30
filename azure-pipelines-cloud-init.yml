@@ -118,6 +118,18 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
+      'arm64-ubuntu-24.04':
+        # can't mount root during boot: https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img
+        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        IMAGEURL: "http://cloud-images-archive.ubuntu.com/releases/noble/release-20240821/ubuntu-24.04-server-cloudimg-arm64.img"
+        KEY: 24.04-generic-arm64
+        THEARCH: arm64
+      'arm64-debian-11':
+        # 2 kernels: https://cloud.debian.org/images/cloud/bullseye-backports/latest/debian-11-backports-genericcloud-arm64.qcow2
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/20240904-1860/debian-11-backports-generic-amd64-20240904-1860.qcow2"
+        KEY: 11-generic-arm64
+        THEARCH: arm64
+
       'armel-debian-11':
         IMAGEURL: "https://sourceforge.net/projects/debian-armhf-cloud-images/files/debian-11-genericcloud-armel.qcow2.xz/download"
         KEY: 11-generic-armel
@@ -198,11 +210,6 @@ jobs:
         IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-armhf.img"
         KEY: 24.04-generic-armhf
         THEARCH: arm
-      'arm64-ubuntu-24.04':
-        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
-        IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img"
-        KEY: 24.04-generic-arm64
-        THEARCH: arm64
 
        
       'i386-debian-12':
@@ -279,10 +286,6 @@ jobs:
         IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
         KEY: 10-generic-arm64
         THEARCH: arm64
-      'arm64-debian-11':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/latest/debian-11-backports-genericcloud-arm64.qcow2"
-        KEY: 11-generic-arm64
-        THEARCH: arm64
       'arm64-debian-12':
         IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
         KEY: 12-generic-arm64
@@ -344,11 +347,32 @@ jobs:
       Say --Reset-Stopwatch
       echo "CPU: $(Get-CpuName)"
 
-      for d in /opt/hostedtoolcache/go /opt/hostedtoolcache/CodeQL /usr/local/lib/android/sdk /usr/share/swift; do
-        sz="$(sudo du -h "$d" --max-depth=0 | awk '{print $1}' || true)"
+      
+      CLEANUP_PREINSTALLED_TOOLS="-* +dotnet"
+      remove_Key_go=/opt/hostedtoolcache/go;
+      remove_Key_codeql=/opt/hostedtoolcache/CodeQL
+      remove_Key_android=/usr/local/lib/android/sdk
+      remove_Key_swift=/usr/share/swift
+      remove_Key_jvm=/usr/lib/jvm
+      remove_Key_haskell=/usr/local/.ghcup
+      remove_Key_dotnet=/usr/share/dotnet
+
+
+
+      FOLDERS_TO_CLEAN='
+          /opt/hostedtoolcache/go 
+          /opt/hostedtoolcache/CodeQL 
+          /usr/local/lib/android/sdk 
+          /usr/share/swift 
+          /usr/lib/jvm 
+          /usr/local/.ghcup 
+          /usr/share/dotnet
+      '
+      for dir in $FOLDERS_TO_CLEAN; do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
+        sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
         Say "Delete $d, $sz"
-        sudo rm -rf "$d" || true
-      done 
+        sudo rm -rf "$d"/* || true
+      fi; done 
       Say "CLEAN UP Docker Images"
       docker image prune -a -f | { grep -v "sha256:"; } || true
 
@@ -370,8 +394,8 @@ jobs:
       
       export FREE_ROOT_SPACE_MB=2000 # 1600 is not enough
       export SECOND_DISK_MODE=LOOP
-      export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export LOOP_DIRECT_IO=off
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;$THEWORKDIR;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
       export MOVE_DOCKER_TO_RAID=""
       export FS=BTRFS-Compressed
       export BTRFS_COMPRESS_MODE=zstd:1
