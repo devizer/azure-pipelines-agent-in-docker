@@ -121,12 +121,13 @@ jobs:
       'arm64-ubuntu-24.04':
         # can't mount root during boot: https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img
         # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
-        IMAGEURL: "http://cloud-images-archive.ubuntu.com/releases/noble/release-20240821/ubuntu-24.04-server-cloudimg-arm64.img"
+        # crashes: http://cloud-images-archive.ubuntu.com/releases/noble/release-20240821/ubuntu-24.04-server-cloudimg-arm64.img
+        IMAGEURL: "http://cloud-images-archive.ubuntu.com/releases/noble/release-20240423/ubuntu-24.04-server-cloudimg-arm64.img"
         KEY: 24.04-generic-arm64
         THEARCH: arm64
       'arm64-debian-11':
         # 2 kernels: https://cloud.debian.org/images/cloud/bullseye-backports/latest/debian-11-backports-genericcloud-arm64.qcow2
-        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/20240904-1860/debian-11-backports-generic-amd64-20240904-1860.qcow2"
+        IMAGEURL: "https://cloud.debian.org/images/cloud/bullseye-backports/20240904-1860/debian-11-backports-generic-arm64-20240904-1860.qcow2"
         KEY: 11-generic-arm64
         THEARCH: arm64
 
