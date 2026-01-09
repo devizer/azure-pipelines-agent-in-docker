@@ -86,7 +86,7 @@ jobs:
         Say "HOME='$HOME'"
         time cargo install dirstat-rs
         set +x
-        ds -d 3 "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt" || true
+        ds -d 3 --color=always "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt" || true
 
 
     - name: Upload artifacts 
