@@ -51,7 +51,7 @@ jobs:
 
     - name: "Show temp after Fetch S5 Dashboard API" 
       if: ${{ runner.os == 'Linux' }}
-      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h /tmp | tee "$RUNNER_TEMP"/TMP-FOLDER-TREE.txt || true'
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h /tmp | tee "$SYSTEM_ARTIFACTSDIRECTORY"/TMP-FOLDER-TREE.txt || true'
 
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' }}
@@ -79,13 +79,13 @@ jobs:
         Write-Host "$((Get-Memory-Info).Description)"
         $HOST
 
-    - name: Upload artifacts [${{ env.THEARTIFACTS_NATIVE }}]
+    - name: Upload artifacts 
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: 'System Info ${{ matrix.os }}'
         path: |
-           ${{ runner.temp }}
+           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
           
   Combine:
     name: Combine results in a single Artifact
