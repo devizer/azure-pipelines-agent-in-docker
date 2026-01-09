@@ -55,7 +55,7 @@ jobs:
 
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' }}
-      run: 'cd DevOps-Library; bash Test-On-Bash-Matrix.sh'
+      run: 'cd DevOps-Library; bash Test-On-Bash-Matrix.sh | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Test-On-Bash-Matrix.log" '
 
     - name: 'Tests on ZSH (mac)'
       if: ${{ runner.os == 'macOS' }}
@@ -78,6 +78,17 @@ jobs:
         Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
         Write-Host "$((Get-Memory-Info).Description)"
         $HOST
+
+    - name: 'ds for $HOME'
+      shell: powershell
+      if: ${{ runner.os != 'Windows' }}
+      run: |
+        Say "HOME='$HOME'"
+        cargo install dirstat-rs
+        ds "$HOME"
+
+
+
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
