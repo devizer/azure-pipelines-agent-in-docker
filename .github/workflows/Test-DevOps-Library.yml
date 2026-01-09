@@ -84,8 +84,8 @@ jobs:
       if: ${{ runner.os != 'Windows' }}
       run: |
         Say "HOME='$HOME'"
-        cargo install dirstat-rs
-        ds "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt"
+        time cargo install dirstat-rs
+        ds "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt" || true
 
 
     - name: Upload artifacts 
