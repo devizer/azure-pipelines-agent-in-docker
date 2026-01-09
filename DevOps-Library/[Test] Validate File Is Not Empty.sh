@@ -524,7 +524,7 @@ if [[ -z "$(command -v powershell)" ]]; then
   echo "$(uname -m)"
   return;
 fi
-local win_arch=$(cat <<'EOFWINARCH' | powershell -c -
+local ps_script=$(cat <<'EOFWINARCH'
 function Has-Cmd {
   param([string] $arg)
   if ("$arg" -eq "") { return $false; }
@@ -563,6 +563,7 @@ function Get-CPU-Architecture-Suffix-for-Windows-Implementation() {
 Get-CPU-Architecture-Suffix-for-Windows-Implementation
 EOFWINARCH
 )
+local win_arch=$(echo "$ps_script" | powershell -c - 2>/dev/null)
 echo "$win_arch"
 }
 
