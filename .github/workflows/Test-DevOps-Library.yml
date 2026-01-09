@@ -79,18 +79,20 @@ jobs:
         Write-Host "$((Get-Memory-Info).Description)"
         $HOST
 
-    - name: 'ds for $HOME'
+    - name: 'dirstat-rs (ds)'
       shell: bash
       # if: ${{ runner.os != 'Windows' }}
       run: |
-        Say "HOME='$HOME'"
         echo "Installing dirstat-rs ..."
         { time cargo install dirstat-rs; } 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
-        Say "ds --help"
         ds --help 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"ds --help (dirstat-rs).log"
-        Say "Finally run ds"
-        set +x
-        { time ds -d 6 -m 4.0 "$HOME"; } 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt"
+        counter=0
+        for folder in "/opt" "$HOME" "/"; do
+          counter=$((counter+1))
+          if [[ ! -d "$folder" ]]; then continue; fi
+          Say "${counter}) ANALYZING [$folder] ..."
+          { time ds -d 6 -m 4.0 "$folder"; } 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Disk Usage $counter.txt"
+        done
 
 
     - name: Upload artifacts 
