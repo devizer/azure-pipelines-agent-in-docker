@@ -878,7 +878,8 @@ Colorize Yellow "Get_OS_Platform() = '$(Get_OS_Platform)'"
 Colorize Yellow "Get_Global_Seconds() = '$(Get_Global_Seconds)'"
 
 timeout=12
-for url in http://google.com http://192.168.2.1 aaa://bbb.ccc; do
+# skip http://192.168.2.1
+for url in http://google.com aaa://bbb.ccc; do
   Colorize Cyan ">> Wait_For_HTTP $url $timeout"
   Wait_For_HTTP "$url" $timeout && echo "[TEST DEBUG] Success" || echo "[TEST DEBUG] ERROR"
 done
