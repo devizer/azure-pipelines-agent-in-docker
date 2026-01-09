@@ -855,9 +855,9 @@ Wait_For_HTTP() {
   while [ $t -ge 0 ]; do 
     t=$((t-1)); 
     errHttp=0;
-    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null || errHttp=$?; fi
+    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=$?; fi
     if [ "$errHttp" -ne 0 ]; then
-      if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null || errHttp=$?; fi
+      if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null 2>&1 || errHttp=$?; fi
     fi
     if [ "$errHttp" -eq 0 ]; then Colorize Green " OK"; return; fi; 
     printf ".";
