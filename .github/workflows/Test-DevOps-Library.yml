@@ -48,7 +48,7 @@ jobs:
 
     - name: "Show temp after Fetch S5 Dashboard API" 
       if: ${{ runner.os == 'Linux' }}
-      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; tree -h /tmp'
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h /tmp || true'
 
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' }}
