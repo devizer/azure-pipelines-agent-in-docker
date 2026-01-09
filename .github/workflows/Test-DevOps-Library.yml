@@ -80,8 +80,8 @@ jobs:
         $HOST
 
     - name: 'ds for $HOME'
-      shell: powershell
-      if: ${{ runner.os != 'Windows' }}
+      shell: bash
+      # if: ${{ runner.os != 'Windows' }}
       run: |
         Say "HOME='$HOME'"
         time cargo install dirstat-rs
