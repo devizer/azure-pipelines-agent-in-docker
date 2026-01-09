@@ -56,6 +56,7 @@ jobs:
 
     - name: PS1 Module (5.1)
       shell: powershell
+      if: ${{ runner.os == 'Windows' }}
       run: |
         Install-Module SqlServer-Version-Management -Force -AllowClobber
         Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
