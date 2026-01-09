@@ -89,7 +89,7 @@ jobs:
         ds --help
         Say "Finally run ds"
         set +x
-        ds -d 3 "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt" || true
+        ds -d 4 -m 3.0 "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt" || true
 
 
     - name: Upload artifacts 
