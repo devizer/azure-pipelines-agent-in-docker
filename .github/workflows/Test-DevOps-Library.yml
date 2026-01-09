@@ -46,11 +46,21 @@ jobs:
     - name: "[Test] Fetch S5 Dashboard API.sh" 
       run: 'cd DevOps-Library; bash "[Test] Fetch S5 Dashboard API.sh" '
 
-    - name: PS1 Module
+    - name: PS1 Module (pwsh)
       shell: pwsh
       run: |
         Install-Module SqlServer-Version-Management -Force -AllowClobber
         Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+        Write-Host "$((Get-Memory-Info).Description)"
+        $HOST
+
+    - name: PS1 Module (5.1)
+      shell: powershell
+      run: |
+        Install-Module SqlServer-Version-Management -Force -AllowClobber
+        Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+        Write-Host "$((Get-Memory-Info).Description)"
+        $HOST
 
     - name: Upload artifacts [${{ env.THEARTIFACTS_NATIVE }}]
       uses: actions/upload-artifact@v4
