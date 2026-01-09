@@ -25,6 +25,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
     - name: Environment
       run: 'echo "ZSH: [$(zsh --version 2>/dev/null)]"; printenv | sort;'
     
