@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   Info:
-    name: Gather Benchmarks
+    name: Tests
     strategy:
       fail-fast: false
       matrix:
