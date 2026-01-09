@@ -48,7 +48,7 @@ jobs:
 
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' }}
-      run: 'cd DevOps-Library; bash Test-DevOps-Library.yml'
+      run: 'cd DevOps-Library; bash Test-On-Bash-Matrix.sh'
 
     - name: PS1 Module (pwsh)
       shell: pwsh
