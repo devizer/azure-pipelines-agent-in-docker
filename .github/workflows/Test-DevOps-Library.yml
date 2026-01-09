@@ -56,7 +56,7 @@ jobs:
 
     - name: 'Tests on ZSH (mac)'
       if: ${{ runner.os == 'macOS' }}
-      run: 'cd DevOps-Library; zsh Test-On-Bash-Matrix.sh'
+      run: 'cd DevOps-Library; zsh -e "[Test] ALL.sh"; zsh -e "[Test] Fetch S5 Dashboard API.sh"'
 
 
     - name: PS1 Module (pwsh)
