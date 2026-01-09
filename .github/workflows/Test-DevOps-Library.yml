@@ -84,7 +84,7 @@ jobs:
       # if: ${{ runner.os != 'Windows' }}
       run: |
         Say "HOME='$HOME'"
-        { time cargo install dirstat-rs; } 2>&1 | "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
+        { time cargo install dirstat-rs; } 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
         Say "ds --help"
         ds --help
         Say "Finally run ds"
