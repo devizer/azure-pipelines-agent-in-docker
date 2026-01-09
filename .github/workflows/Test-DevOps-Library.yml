@@ -85,9 +85,7 @@ jobs:
       run: |
         Say "HOME='$HOME'"
         cargo install dirstat-rs
-        ds "$HOME"
-
-
+        ds "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt"
 
 
     - name: Upload artifacts 
