@@ -1,0 +1,80 @@
+name: Test Bash DevOps Library
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Info:
+    name: Gather Benchmarks
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Environment
+      run: 'printenv | sort'
+    
+    - name: "[Test] ALL.sh" 
+      run: 'cd DevOps-Library; bash "[Test] ALL.sh" '
+
+    - name: "[Test] Retry.sh" 
+      run: 'cd DevOps-Library; bash "[Test] Retry.sh" '
+
+    - name: "[Test] Download.sh"
+      run: 'cd DevOps-Library; bash "[Test] Download.sh"'
+
+    - name: "[Test] Validate File Is Not Empty.sh"
+      run: 'cd DevOps-Library; bash "[Test] Validate File Is Not Empty.sh"'
+
+    - name: "[Test] Wait For Http.sh" 
+      run: 'cd DevOps-Library; bash "[Test] Wait For Http.sh" '
+
+    - name: "[Test] Fetch S5 Dashboard API.sh" 
+      run: 'cd DevOps-Library; bash "[Test] Fetch S5 Dashboard API.sh" '
+
+    - name: PS1 Module
+      shell: pwsh
+      run: |
+        Install-Module SqlServer-Version-Management -Force -AllowClobber
+        Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
+
+    - name: Upload artifacts [${{ env.THEARTIFACTS_NATIVE }}]
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'System Info ${{ matrix.os }}'
+        path: |
+           ${{ runner.temp }}
+          
+  Combine:
+    name: Combine results in a single Artifact
+    needs: Info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ runner.temp }}/Combined"
+        merge-multiple: true
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined'
+        path: "${{ runner.temp }}/Combined"
+
