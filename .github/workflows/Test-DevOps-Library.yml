@@ -84,12 +84,13 @@ jobs:
       # if: ${{ runner.os != 'Windows' }}
       run: |
         Say "HOME='$HOME'"
-        { time cargo install dirstat-rs; } 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
+        echo "Installing dirstat-rs ..."
+        { time cargo install dirstat-rs; } 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
         Say "ds --help"
-        ds --help
+        ds --help 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"ds --help (dirstat-rs).log"
         Say "Finally run ds"
         set +x
-        ds -d 4 -m 3.0 "$HOME" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt"
+        { time ds -d 6 -m 4.0 "$HOME"; } 2>&1 | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"HOME Disk Usage.txt"
 
 
     - name: Upload artifacts 
