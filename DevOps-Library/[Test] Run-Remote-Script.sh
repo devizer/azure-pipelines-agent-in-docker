@@ -852,9 +852,15 @@ EOFHELPRRS
   printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url"
 
   local folder="$(MkTemp-Folder-Smarty)"
-  local file="$folder/script"
-  Download_File_Failover "$file" "$arg_url"
-  $arg_runner "$file"
+  local file="$(basename "$arg_url")"
+  if [[ "$file" == "download" ]]; then local x1="$(dirname "$arg_url")"; file="$(basename "$x1")"; fi
+  if [[ -z "$file" ]]; then 
+    file="script"; 
+    if [[ "$arg_runner" == *"pwsh"* || "$arg_runner" == *"powershell"* ]]; then file="script.ps1"; fi
+  fi;
+  local fileFullName="$folder/$file"
+  Download_File_Failover "$fileFullName" "$arg_url"
+  $arg_runner "$fileFullName"
   rm -rf "$folder" 2>/dev/null || true
   
   return 0

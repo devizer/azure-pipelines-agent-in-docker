@@ -876,3 +876,87 @@ function Azure-DevOps-Lazy-CTOR() {
   fi
 };
 
+# Include Directive: [ src\Run-Remote-Script-Body.sh  ]
+# Include File: [\DevOps-Lib.ShellProject\src\Run-Remote-Script-Body.sh]
+Run-Remote-Script() {
+  local arg_runner
+  local arg_url
+  arg_runner=""
+  arg_url=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h|--help)
+        cat << EOFHELPRRS
+Usage: $0 [OPTIONS] <URL>
+
+Arguments:
+  URL                Target URL (required)
+
+Options:
+  -r, --runner STR   Specify the runner string
+  -h, --help         Show this help message and exit
+EOFHELPRRS
+        return 0
+        ;;
+      -r|--runner)
+        # safe detect is $2 present for set -u
+        if [ $# -gt 1 ]; then
+          arg_runner="$2"
+          shift 2
+        else
+          echo "Run-Remote-Script Arguments Error: -r|--runner requires a value" >&2
+          return 1
+        fi
+        ;;
+      *)
+        if [ -z "$arg_url" ]; then
+          arg_url="$1"
+          shift
+        else
+          echo "Run-Remote-Script Arguments Error: Extra argument detected: $1" >&2
+          return 1
+        fi
+        ;;
+    esac
+  done
+
+  if [ -z "$arg_url" ]; then
+    echo "Run-Remote-Script Arguments Error: Missing required argument <URL>" >&2
+    return 1
+  fi
+
+  local additionalError=""
+  local lower="$(To_Lower_Case "$arg_url")"
+  if [[ -z "$arg_runner" ]]; then
+    if [[ "$lower" == *".ps1" ]]; then
+      if [[ "$(command -v pwsh)" ]]; then arg_runner="pwsh"; fi
+      if [[ "$(Get_OS_Platform)" == Windows ]] && [[ -z "$arg_runner" ]]; then arg_runner="powershell -f"; else additionalError=". On $(Get_OS_Platform) it requires pwsh"; fi
+    elif [[ "$lower" == *".sh" ]]; then
+      arg_runner="bash"
+    fi
+  fi
+
+  if [[ -z "$arg_runner" ]]; then
+    echo "Run-Remote-Script Arguments Error: Unable to autodetect runner for script '$arg_url'${additionalError}" >&2
+    return 1
+  fi
+  
+  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url"
+
+  local folder="$(MkTemp-Folder-Smarty)"
+  local file="$(basename "$arg_url")"
+  if [[ "$file" == "download" ]]; then local x1="$(dirname "$arg_url")"; file="$(basename "$x1")"; fi
+  if [[ -z "$file" ]]; then 
+    file="script"; 
+    if [[ "$arg_runner" == *"pwsh"* || "$arg_runner" == *"powershell"* ]]; then file="script.ps1"; fi
+  fi;
+  local fileFullName="$folder/$file"
+  Download_File_Failover "$fileFullName" "$arg_url"
+  $arg_runner "$fileFullName"
+  rm -rf "$folder" 2>/dev/null || true
+  
+  return 0
+}
+
+
