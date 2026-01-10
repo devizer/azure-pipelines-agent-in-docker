@@ -58,6 +58,7 @@ jobs:
         if [[ -n "$(command -v docker)" ]]; then
           # Docker is missing on macOS
           Say "CLEAN UP Docker Images"
+          echo "DOCKER data root: [$(docker info -f '{{.DockerRootDir}}')]"
           docker image prune -a -f | { grep -v "sha256:" || true; }
         fi
         Say "Bye"
