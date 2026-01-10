@@ -35,6 +35,9 @@ jobs:
       run: |
         set -eu; set -o pipefail
         echo "CPU: $(Get-CpuName)"
+        echo "github.workspace = '${{ github.workspace }}'"
+        echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
+        echo
         df -h -T 2>/dev/null || df -h
         
         FOLDERS_TO_CLEAN='
