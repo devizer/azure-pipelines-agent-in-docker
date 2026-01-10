@@ -54,6 +54,7 @@ jobs:
     - name: Raid0
       run: |
 
+        export FREE_ROOT_SPACE_MB=4000 # 1600 is not enough
         export SECOND_DISK_MODE=LOOP
         export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
         export LOOP_DIRECT_IO=off
@@ -64,7 +65,7 @@ jobs:
         Say "Mounts"
         df -h -T 2>/dev/null || df -h
         echo ""
-        sudo mount
+        mount
 
           
   Combine:
