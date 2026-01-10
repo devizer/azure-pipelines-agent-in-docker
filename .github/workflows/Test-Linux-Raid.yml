@@ -68,12 +68,13 @@ jobs:
 
         export FREE_ROOT_SPACE_MB=2500 # 1600 is not enough
         export SECOND_DISK_MODE=LOOP
-        export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
+        export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
         export LOOP_DIRECT_IO=off
         export MOVE_DOCKER_TO_RAID=""
         export FS=BTRFS-Compressed
         export BTRFS_COMPRESS_MODE=zstd:7
-        url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+        # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+        Run-Remote-Script --runner bash https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh
         Say "Mounts"
         df -h -T 2>/dev/null || df -h
         echo ""
