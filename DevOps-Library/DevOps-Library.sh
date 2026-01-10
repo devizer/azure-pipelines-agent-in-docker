@@ -942,7 +942,8 @@ EOFHELPRRS
     return 1
   fi
   
-  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url" "${passthrowArgs[@]}"
+  # ok for non-empty array only
+  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url" ${passthrowArgs[@]+"${passthrowArgs[@]}"}
 
   local folder="$(MkTemp-Folder-Smarty)"
   local file="$(basename "$arg_url")"
@@ -953,10 +954,9 @@ EOFHELPRRS
   fi;
   local fileFullName="$folder/$file"
   Download_File_Failover "$fileFullName" "$arg_url" 
-  $arg_runner "$fileFullName" "${passthrowArgs[@]}"
+  $arg_runner "$fileFullName" ${passthrowArgs[@]+"${passthrowArgs[@]}"}
   rm -rf "$folder" 2>/dev/null || true
   
   return 0
 }
-
 
