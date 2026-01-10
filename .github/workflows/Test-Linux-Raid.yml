@@ -28,6 +28,9 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
+    - name: Variables
+      run: 'printenv | sort'
+
     - name: Clean Up
       run: |
         set -eu; set -o pipefail
