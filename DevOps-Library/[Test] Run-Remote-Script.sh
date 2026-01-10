@@ -887,8 +887,11 @@ Tests-Run-Remote-Script() {
   echo
   Run-Remote-Script "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
   
-  echo
-  Run-Remote-Script --runner "sudo pwsh" "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+  # avoid sudo on windows
+  if [[ "$(Get_OS_Platform)" != Windows ]]; then
+    echo
+    Run-Remote-Script --runner "sudo pwsh" "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+  fi
   
 }
 
