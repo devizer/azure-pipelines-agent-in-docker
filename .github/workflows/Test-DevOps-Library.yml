@@ -74,6 +74,7 @@ jobs:
       shell: powershell
       if: ${{ runner.os == 'Windows' }}
       run: |
+        $ErrorActionPreference = 'Continue'
         Install-Module SqlServer-Version-Management -Force -AllowClobber
         Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
         Write-Host "$((Get-Memory-Info).Description)"
