@@ -48,8 +48,13 @@ jobs:
           Say "Delete $dir, $sz"
           sudo rm -rf "$dir"/* || true
         fi; done 
-        Say "CLEAN UP Docker Images"
-        docker image prune -a -f | { grep -v "sha256:"; } || true
+
+        if [[ -n "$(command -v docker)" ]]; then
+          # Docker is missing on macOS
+          Say "CLEAN UP Docker Images"
+          docker image prune -a -f | { grep -v "sha256:"; } || true
+        fi
+        Say "Bye"
 
     - name: Raid0
       run: |
