@@ -884,7 +884,7 @@ Tests-Run-Remote-Script() {
   Run-Remote-Script "https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh"
   # /opt/pwsh/pwsh -c '$HOST'
 
-  if [[ "$(Get_OS_Platform)" == Linux ]]; then
+  if [[ "$(Get_OS_Platform)" != Windows ]]; then
     Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 6.0  -i "/var/tmp/dot net" --runtime aspnetcore
     Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 8.0  -i "/var/tmp/dot net" --runtime aspnetcore
     Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 10.0 -i "/var/tmp/dot net"
