@@ -96,7 +96,18 @@ jobs:
           { time ds -d 6 -m 4.0 "$folder"; } 2>&1 | tee "$log"
           tmp="$(mktemp)"
           echo "$PATH" | awk -F"[;:]" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null | sort > "$tmp"
-          (printf "\n\n\nPATH\n____\n"; cat "$tmp") | tee -a "$log"
+          (printf "\n\n\nPATH\n____\n"; cat "$tmp"; echo) | tee -a "$log"
+
+          ps1_volumes='
+                 Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
+                    ? { $_.FreeSpace -or $_.Size } | 
+                    % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
+                    ft -autosize
+                    '
+          { df -h -T || dh -h; } | tee -a "$log"
+          { powershell -c "$ps1_volumes"; } | tee -a "$log"
+
+
         done
 
 
