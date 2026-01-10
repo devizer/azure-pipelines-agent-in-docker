@@ -49,7 +49,7 @@ jobs:
             /usr/local/.ghcup 
             /usr/share/dotnet
         '
-        for dir in $FOLDERS_TO_CLEAN; do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
+        for dir in $(echo $FOLDERS_TO_CLEAN); do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
           sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
           Say "Delete $dir, $sz"
           sudo rm -rf "$dir"/* || true
