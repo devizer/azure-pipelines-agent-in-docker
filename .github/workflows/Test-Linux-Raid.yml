@@ -65,7 +65,6 @@ jobs:
 
     - name: Raid0
       run: |
-
         export FREE_ROOT_SPACE_MB=2500 # 1600 is not enough
         export SECOND_DISK_MODE=LOOP
         export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
