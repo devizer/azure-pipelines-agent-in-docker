@@ -790,7 +790,7 @@ Run-Remote-Script() {
   local arg_url
   arg_runner=""
   arg_url=""
-
+  passthrowArgs=()
   while [ $# -gt 0 ]; do
     case "$1" in
       -h|--help)
@@ -821,8 +821,8 @@ EOFHELPRRS
           arg_url="$1"
           shift
         else
-          echo "Run-Remote-Script Arguments Error: Extra argument detected: $1" >&2
-          return 1
+          passthrowArgs+=("$1")
+          shift
         fi
         ;;
     esac
@@ -849,7 +849,7 @@ EOFHELPRRS
     return 1
   fi
   
-  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url"
+  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url" "${passthrowArgs[@]}"
 
   local folder="$(MkTemp-Folder-Smarty)"
   local file="$(basename "$arg_url")"
@@ -859,8 +859,8 @@ EOFHELPRRS
     if [[ "$arg_runner" == *"pwsh"* || "$arg_runner" == *"powershell"* ]]; then file="script.ps1"; fi
   fi;
   local fileFullName="$folder/$file"
-  Download_File_Failover "$fileFullName" "$arg_url"
-  $arg_runner "$fileFullName"
+  Download_File_Failover "$fileFullName" "$arg_url" 
+  $arg_runner "$fileFullName" "${passthrowArgs[@]}"
   rm -rf "$folder" 2>/dev/null || true
   
   return 0
@@ -883,6 +883,13 @@ Tests-Run-Remote-Script() {
   export PSVER=7.4.12 PSDIR=/opt/pwsh
   Run-Remote-Script "https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh"
   # /opt/pwsh/pwsh -c '$HOST'
+
+  if [[ "$(Get_OS_Platform)" == Linux ]]; then
+    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 6.0  -i "/var/tmp/dot net" --runtime aspnetcore
+    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 8.0  -i "/var/tmp/dot net" --runtime aspnetcore
+    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 10.0 -i "/var/tmp/dot net"
+    "/var/tmp/dot net"/dotnet --info
+  fi
 
   echo
   Run-Remote-Script "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
