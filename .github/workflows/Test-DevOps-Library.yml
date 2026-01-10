@@ -95,7 +95,7 @@ jobs:
           log="$SYSTEM_ARTIFACTSDIRECTORY"/"Disk Usage $counter.txt"
           { time ds -d 6 -m 4.0 "$folder"; } 2>&1 | tee "$log"
           tmp="$(mktemp)"
-          echo "$PATH" | awk -F"[;:]" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null > "$tmp"
+          echo "$PATH" | awk -F"[;:]" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null " | sort > "$tmp"
           (printf "\n\n\nPATH\n____\n"; cat "$tmp") | tee -a "$log"
         done
 
