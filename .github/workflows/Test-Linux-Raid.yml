@@ -1,0 +1,88 @@
+name: Test Linux Raid
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Info:
+    name: Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Raid0
+      run: |
+        set -eu; set -o pipefail
+        echo "CPU: $(Get-CpuName)"
+        df -h -T
+        
+        FOLDERS_TO_CLEAN='
+            /opt/hostedtoolcache/go 
+            /opt/hostedtoolcache/CodeQL 
+            /usr/local/lib/android/sdk 
+            /usr/share/swift 
+            /usr/lib/jvm 
+            /usr/local/.ghcup 
+            /usr/share/dotnet
+        '
+        for dir in $FOLDERS_TO_CLEAN; do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
+          sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
+          Say "Delete $dir, $sz"
+          sudo rm -rf "$dir"/* || true
+        fi; done 
+        Say "CLEAN UP Docker Images"
+        docker image prune -a -f | { grep -v "sha256:"; } || true
+
+        export SECOND_DISK_MODE=LOOP
+        export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
+        export LOOP_DIRECT_IO=off
+        export MOVE_DOCKER_TO_RAID=""
+        export FS=BTRFS-Compressed
+        export BTRFS_COMPRESS_MODE=zstd:7
+        url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+        Say "Mounts"
+        df -h -T
+        echo ""
+        sudo mount
+        url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+
+          
+  Combine:
+    name: Combine results in a single Artifact
+    needs: Info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ runner.temp }}/Combined"
+        merge-multiple: false
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined'
+        path: "${{ runner.temp }}/Combined"
+
