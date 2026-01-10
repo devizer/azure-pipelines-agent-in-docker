@@ -874,7 +874,7 @@ Tests-Run-Remote-Script() {
   Run-Remote-Script "https://domain.com/xxx.yyy.zzz" || Colorize Red "ERROR DETECTED (Run-Remote-Script https://domain.com/xxx.yyy.zzz)"
 
   echo
-  export PSVER=7.2.1 PSDIR=/opt/pwsh
+  export PSVER=7.4.12 PSDIR=/opt/pwsh
   Run-Remote-Script "https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh"
   # /opt/pwsh/pwsh -c '$HOST'
 

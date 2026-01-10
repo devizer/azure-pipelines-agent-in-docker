@@ -34,7 +34,7 @@ jobs:
     - name: "[Test] ALL.sh" 
       run: 'cd DevOps-Library; bash "[Test] ALL.sh" '
 
-    - name: Test Run-Remote-Script
+    - name: '[Test] Run-Remote-Script'
       run: 'cd DevOps-Library; bash "[Test] Run-Remote-Script.sh" ' 
 
     - name: "[Test] Retry.sh" 
