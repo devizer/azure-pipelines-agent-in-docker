@@ -83,44 +83,6 @@ jobs:
         Write-Host "$((Get-Memory-Info).Description)"
         $HOST
 
-    - name: 'dirstat-rs (ds)'
-      shell: bash
-      # if: ${{ runner.os != 'Windows' }}
-      run: |
-        echo "Installing dirstat-rs ..."
-        { time cargo install dirstat-rs; } 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
-        ds --help 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"ds --help (dirstat-rs).log"
-        counter=0
-        for folder in "/opt" "$HOME" "/"; do
-          counter=$((counter+1))
-          if [[ ! -d "$folder" ]]; then continue; fi
-          Say "${counter}) ANALYZING [$folder] ..."
-          log="$SYSTEM_ARTIFACTSDIRECTORY"/"Disk Usage $counter.txt"
-          { time ds -d 6 -m 4.0 "$folder"; } 2>&1 | tee "$log"
-          tmp="$(mktemp)"
-          echo "$PATH" | awk -F"[;:]" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null | sort > "$tmp"
-          (printf "\n\n\nPATH\n____\n"; cat "$tmp"; echo) | tee -a "$log"
-
-          ps1_volumes='
-                 Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
-                    ? { $_.FreeSpace -or $_.Size } | 
-                    % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
-                    ft -autosize
-                    '
-          { df -h -T || df -h || true; } | tee -a "$log"
-          { powershell -c "$ps1_volumes" || true; } | tee -a "$log"
-
-
-        done
-
-
-    - name: Upload artifacts 
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: 'System Info ${{ matrix.os }}'
-        path: |
-           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
           
   Combine:
     name: Combine results in a single Artifact

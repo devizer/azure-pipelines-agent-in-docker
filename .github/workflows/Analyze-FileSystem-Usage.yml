@@ -1,0 +1,129 @@
+name: Analyze FileSystem Usage
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "no-master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Info:
+    name: FS Usage
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Variables
+      run: 'printenv | sort'
+
+    - name: Clean Up
+      run: |
+        set -eu; set -o pipefail
+        echo "CPU: $(Get-CpuName)"
+        echo "github.workspace = '${{ github.workspace }}'"
+        echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
+        echo
+        df -h -T 2>/dev/null || df -h
+        
+        FOLDERS_TO_CLEAN='
+            /opt/hostedtoolcache/go 
+            /opt/hostedtoolcache/CodeQL 
+            /usr/local/lib/android/sdk 
+            /usr/share/swift 
+            /usr/lib/jvm 
+            /usr/local/.ghcup 
+            /usr/share/dotnet
+        '
+        for dir in $(echo $FOLDERS_TO_CLEAN); do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
+          sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
+          Say "Delete $dir, $sz"
+          sudo rm -rf "$dir"/* || true
+        fi; done 
+
+        if [[ -n "$(command -v docker)" ]]; then
+          # Docker is missing on macOS
+          Say "CLEAN UP Docker Images"
+          echo "DOCKER data root: [$(docker info -f '{{.DockerRootDir}}')]"
+          docker image prune -a -f | { grep -v "sha256:" || true; }
+        fi
+        Say "Bye"
+
+    
+    - name: 'Install dirstat-rs (ds)'
+      shell: bash
+      run: |
+        { time cargo install dirstat-rs; } 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"Setup dirstat-rs (cargo install dirstat-rs).log"
+        ds --help 2>&1 > "$SYSTEM_ARTIFACTSDIRECTORY"/"ds --help (dirstat-rs).log"
+    
+    - name: 'dirstat-rs (ds)'
+      shell: bash
+      # if: ${{ runner.os != 'Windows' }}
+      run: |
+        counter=0
+        for folder in "/opt" "$HOME" "/"; do
+          counter=$((counter+1))
+          if [[ ! -d "$folder" ]]; then continue; fi
+          Say "${counter}) ANALYZING [$folder] ..."
+          log="$SYSTEM_ARTIFACTSDIRECTORY"/"Disk Usage $counter.txt"
+          { time ds -d 6 -m 4.0 "$folder"; } 2>&1 | tee "$log"
+          tmp="$(mktemp)"
+          echo "$PATH" | awk -F"[;:]" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null | sort > "$tmp"
+          (printf "\n\n\nPATH\n____\n"; cat "$tmp"; echo) | tee -a "$log"
+
+          ps1_volumes='
+                 Get-WmiObject -class Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
+                    ? { $_.FreeSpace -or $_.Size } | 
+                    % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
+                    ft -autosize
+                    '
+          { df -h -T 2>/dev/null || df -h || true; } | tee -a "$log"
+          { powershell -c "$ps1_volumes" 2>/dev/null || true; } | tee -a "$log"
+
+        done
+
+
+    - name: Upload artifacts 
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'System Info ${{ matrix.os }}'
+        path: |
+           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+
+          
+  Combine:
+    name: Combine results in a single Artifact
+    needs: Info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ runner.temp }}/Combined"
+        merge-multiple: false
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined'
+        path: "${{ runner.temp }}/Combined"
+
