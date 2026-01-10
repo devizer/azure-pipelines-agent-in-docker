@@ -104,8 +104,8 @@ jobs:
                     % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
                     ft -autosize
                     '
-          { set +e; df -h -T || dh -h; } | tee -a "$log"
-          { set +e; powershell -c "$ps1_volumes"; } | tee -a "$log"
+          { df -h -T || df -h || true; } | tee -a "$log"
+          { powershell -c "$ps1_volumes" || true; } | tee -a "$log"
 
 
         done
