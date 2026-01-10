@@ -28,11 +28,11 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
-    - name: Raid0
+    - name: Clean Up
       run: |
         set -eu; set -o pipefail
         echo "CPU: $(Get-CpuName)"
-        df -h -T
+        df -h -T 2>/dev/null || df -h
         
         FOLDERS_TO_CLEAN='
             /opt/hostedtoolcache/go 
@@ -51,6 +51,9 @@ jobs:
         Say "CLEAN UP Docker Images"
         docker image prune -a -f | { grep -v "sha256:"; } || true
 
+    - name: Raid0
+      run: |
+
         export SECOND_DISK_MODE=LOOP
         export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp"
         export LOOP_DIRECT_IO=off
@@ -59,7 +62,7 @@ jobs:
         export BTRFS_COMPRESS_MODE=zstd:7
         url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Say "Mounts"
-        df -h -T
+        df -h -T 2>/dev/null || df -h
         echo ""
         sudo mount
 
