@@ -76,7 +76,7 @@ jobs:
           Say "max-depth = $d"
           sudo du / -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee "$SYSTEM_ARTIFACTSDIRECTORY"/FS.Usage/du.$d.txt || true
         done 
-        printenv | sort | tee ~/FS.Usage/Environment.txt
+        printenv | sort | tee "$SYSTEM_ARTIFACTSDIRECTORY"/Environment.txt
 
     
     - name: "Tree for the Root" 
