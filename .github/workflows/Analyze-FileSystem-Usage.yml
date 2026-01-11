@@ -74,7 +74,9 @@ jobs:
         sudo="sudo"; [[ -z "$(command -v sudo)" ]] && sudo=""
         for d in 2 3 4 5 6; do
           Say "max-depth = $d"
-          $sudo du / -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee "$SYSTEM_ARTIFACTSDIRECTORY"/du.$d.txt || true
+          root="/"
+          if [[ "$(Get-OS-Platform)" == Windows ]]; then root='C:\'; fi
+          $sudo du "$root" -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee "$SYSTEM_ARTIFACTSDIRECTORY"/du.$d.txt || true
         done 
         printenv | sort > tee "$SYSTEM_ARTIFACTSDIRECTORY"/Environment.txt
 
