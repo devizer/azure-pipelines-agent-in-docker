@@ -93,10 +93,10 @@ function Azure-DevOps-Lazy-CTOR() {
 };
 
 # Include Directive: [ ..\Includes\*.sh ]
-# Include File: [\Includes\Clean_Up_My_Temp_Folders_and_Files_on_Exit.sh]
+# Include File: [\Includes\Clean-Up-My-Temp-Folders-and-Files-on-Exit.sh]
 # https://share.google/aimode/a99XJQA3NtxMUcjWi
 
-Clean_Up_My_Temp_Folders_and_Files_on_Exit() {
+Clean-Up-My-Temp-Folders-and-Files-on-Exit() {
   local template="${1:-clean.up.list.txt}"
   if [[ -z "${_DEVOPS_LIBRARY_TEMP_FOLDERS_AND_FILES_LIST:-}" ]]; then
      # secondary call is ignored, but clean up queue is not lost
@@ -131,7 +131,7 @@ clean_up_my_temp_folders_and_files_on_exit_implementation() {
 # say Green|Yellow|Red Hello World without quotes
 Colorize() { 
    local str1st="${1:-}"
-   str1st="$(To_Lower_Case "$str1st")"
+   str1st="$(To-Lower-Case "$str1st")"
    local newLine="\n"
    if [[ "$str1st" == "--nonewline" ]] || [[ "$str1st" == "-nonewline" ]]; then newLine=""; shift; fi
    
@@ -143,7 +143,7 @@ Colorize() {
    # local color=""; [[ -n ${!var+x} ]] && color="${!var}"
    local color="$(eval "printf '%s' \"\$Color_${1:-}\"" 2>/dev/null)"
    shift || true
-   if [[ "$(To_Boolean "Env Var DISABLE_COLOR_OUTPUT" "${DISABLE_COLOR_OUTPUT:-}")" == True ]]; then
+   if [[ "$(To-Boolean "Env Var DISABLE_COLOR_OUTPUT" "${DISABLE_COLOR_OUTPUT:-}")" == True ]]; then
      printf "$*${newLine}";
    else
      printf "${color:-}$*${NC}${newLine}";
@@ -151,12 +151,12 @@ Colorize() {
 }
 # say ZZZ the-incorrect-color
 
-# Include File: [\Includes\Download_File.sh]
-Download_File() {
+# Include File: [\Includes\Download-File.sh]
+Download-File() {
   local url="$1"
   local file="$2";
   local progress1="" progress2="" progress3="" 
-  local download_show_progress="$(To_Boolean "Env Var DOWNLOAD_SHOW_PROGRESS" "${DOWNLOAD_SHOW_PROGRESS:-}")"
+  local download_show_progress="$(To-Boolean "Env Var DOWNLOAD_SHOW_PROGRESS" "${DOWNLOAD_SHOW_PROGRESS:-}")"
   if [[ "${download_show_progress}" != "True" ]] || [[ ! -t 1 ]]; then
     progress1="-q -nv"       # wget
     progress2="-s"           # curl
@@ -185,35 +185,35 @@ Download_File() {
   # eval try-and-retry wget $progress1 --no-check-certificate -O '$file' '$url' || eval try-and-retry curl $progress2 -kSL -o '$file' '$url'
 }
 
-# Include File: [\Includes\Download_File_Failover.sh]
-Download_File_Failover() {
+# Include File: [\Includes\Download-File-Failover.sh]
+Download-File-Failover() {
   local file="$1"
   shift
   for url in "$@"; do
     # DEBUG: echo -e "\nTRY: [$url] for [$file]"
     local err=0;
-    Download_File "$url" "$file" || err=$?
+    Download-File "$url" "$file" || err=$?
     # DEBUG: say Green "Download status for [$url] is [$err]"
     if [ "$err" -eq 0 ]; then return; fi
   done
   return 55;
 }
 
-# Include File: [\Includes\Extract_Archive.sh]
+# Include File: [\Includes\Extract-Archive.sh]
 # archive-file and toFolder support relative paths
-Extract_Archive() {
+Extract-Archive() {
   local file="$1"
   local toFolder="$2"
   local needResetFolder=""
-  [[ "$(To_Lower_Case "${3:-}")" =~ ^-[-]?reset ]] && needResetFolder=True
+  [[ "$(To-Lower-Case "${3:-}")" =~ ^-[-]?reset ]] && needResetFolder=True
   local fullFilePath="$(cd "$(dirname "$file")" && pwd)/$(basename "$file")"
   
-  local sudo="sudo"; [[ -z "$(command -v sudo)" || "$(Get_OS_Platform)" == Windows ]] && sudo=""
+  local sudo="sudo"; [[ -z "$(command -v sudo)" || "$(Get-OS-Platform)" == Windows ]] && sudo=""
   $sudo mkdir -p "$toFolder" 2>/dev/null
   pushd "$toFolder" >/dev/null
   if [[ "$needResetFolder" == True ]]; then $sudo rm -f -r "$toFolder"/*; fi
-  local fileLower="$(To_Lower_Case "$file")"
-  local cat="cat"; [[ -n "$(command -v pv)" ]] && [[ "$(Get_OS_Platform)" != Windows ]] && cat="pv"
+  local fileLower="$(To-Lower-Case "$file")"
+  local cat="cat"; [[ -n "$(command -v pv)" ]] && [[ "$(Get-OS-Platform)" != Windows ]] && cat="pv"
   # echo "[DEBUG] cat is '$cat'"
   local cmdExtract
   if [[ "$fileLower" == *".tar.gz" || "$fileLower" == *".tgz" ]]; then
@@ -238,8 +238,8 @@ Extract_Archive() {
   popd >/dev/null
 }
 
-# Include File: [\Includes\Fetch_Distribution_File.sh]
-Fetch_Distribution_File() {
+# Include File: [\Includes\Fetch-Distribution-File.sh]
+Fetch-Distribution-File() {
   local productId="$1"
   local fileNameOnly="$2"
   local fullFileName="$3"
@@ -249,11 +249,11 @@ Fetch_Distribution_File() {
   local tempRoot="$(MkTemp-Folder-Smarty "$productId Setup Metadata")"
   local hashSumsFile="$(MkTemp-File-Smarty "hash-sums.txt" "$tempRoot")"
 
-  local hashAlg="$(EXISTING_HASH_ALGORITHMS="sha512 sha384 sha256 sha224 sha1 md5" Find_Hash_Algorithm)"
+  local hashAlg="$(EXISTING_HASH_ALGORITHMS="sha512 sha384 sha256 sha224 sha1 md5" Find-Hash-Algorithm)"
   DEFINITION_COLOR=Default Say-Definition "Hash Algorithm:" "$hashAlg"
 
-  Download_File_Failover "$hashSumsFile" "$urlHashList"
-  Validate_File_Is_Not_Empty "$hashSumsFile" "The hash sum downloaded as %s, the size is" "Error! download of hash sums failed"
+  Download-File-Failover "$hashSumsFile" "$urlHashList"
+  Validate-File-Is-Not-Empty "$hashSumsFile" "The hash sum downloaded as %s, the size is" "Error! download of hash sums failed"
 
   local hashValueFile="$(MkTemp-File-Smarty "$productId $hashAlg hash.txt" "$tempRoot")"
   cat "$hashSumsFile" | while IFS="|" read -r file alg hashValue; do
@@ -268,10 +268,10 @@ Fetch_Distribution_File() {
   echo "$urlFileList" | awk -F"|" '{for (i=1; i<=NF; i++) print $i}' 2>/dev/null > "$tmp"
   urls=(); while IFS= read -r line; do [[ -n "$line" ]] && urls+=("$line"); done < "$tmp"
   rm -f "$tmp" 2>/dev/null || true
-  Download_File_Failover "$fullFileName" "${urls[@]}"
-  Validate_File_Is_Not_Empty "$fullFileName" "The binary archive succesfully downloaded as %s, the size is" "Error! download of binary archive failed"
+  Download-File-Failover "$fullFileName" "${urls[@]}"
+  Validate-File-Is-Not-Empty "$fullFileName" "The binary archive succesfully downloaded as %s, the size is" "Error! download of binary archive failed"
 
-  local actualHash="$(Get_Hash_Of_File "$hashAlg" "$fullFileName")"
+  local actualHash="$(Get-Hash-Of-File "$hashAlg" "$fullFileName")"
   DEFINITION_COLOR=Default Say-Definition "Actual Hash Value:" "$targetHash"
 
   local toDelete
@@ -288,10 +288,10 @@ Fetch_Distribution_File() {
   fi
 }
 
-# Include File: [\Includes\Find_Decompressor.sh]
-function Find_Decompressor() {
-  local force_gzip_priority="$(To_Boolean "Env Var FORCE_GZIP_PRIORITY", "${FORCE_GZIP_PRIORITY:-}")"
-  if [[ "$(Get_OS_Platform)" == Windows ]]; then
+# Include File: [\Includes\Find-Decompressor.sh]
+function Find-Decompressor() {
+  local force_gzip_priority="$(To-Boolean "Env Var FORCE_GZIP_PRIORITY", "${FORCE_GZIP_PRIORITY:-}")"
+  if [[ "$(Get-OS-Platform)" == Windows ]]; then
       COMPRESSOR_EXT=7z
       if [[ "$force_gzip_priority" == True ]]; then COMPRESSOR_EXT=zip; fi
       COMPRESSOR_EXTRACT="{ echo $COMPRESSOR_EXT on windows does not support pipeline; exit 1 }"
@@ -318,18 +318,18 @@ function Find_Decompressor() {
   fi
 }
 
-# Include File: [\Includes\Find_Hash_Algorithm.sh]
-function Find_Hash_Algorithm() {
+# Include File: [\Includes\Find-Hash-Algorithm.sh]
+function Find-Hash-Algorithm() {
   local alg; local hash
   local algs="${EXISTING_HASH_ALGORITHMS:-sha512 sha384 sha256 sha224 sha1 md5}"
-  if [[ "$(Get_OS_Platform)" == MacOS ]]; then
+  if [[ "$(Get-OS-Platform)" == MacOS ]]; then
     # local file="$(MkTemp-File-Smarty "hash.probe.txt" "hash.algorithm.validator")"
     local file="$(MkTemp-Folder-Smarty "osx.hash.algorithm.validator")/hash.probe.txt"
     printf "%s" "some content" > "$file"
     # echo "[DEBUG] hash probe fille is '$file'" 1>&2
     local algs="${EXISTING_HASH_ALGORITHMS:-sha512 sha384 sha256 sha224 sha1 md5}"
     for alg in $(echo $algs); do
-      hash="$(Get_Hash_Of_File "$alg" "$file")"
+      hash="$(Get-Hash-Of-File "$alg" "$file")"
       # echo "[DEBUG] hash for '$alg' is [$hash] probe fille is '$file'" 1>&2
       if [[ -n "$hash" ]]; then echo "$alg"; break; fi
     done
@@ -345,10 +345,10 @@ function Find_Hash_Algorithm() {
 }
 
 # returns empty string if $alg is not supported by the os
-function Get_Hash_Of_File() {
+function Get-Hash-Of-File() {
   local alg="${1:-md5}"
   local file="${2:-}"
-  if [[ "$(Get_OS_Platform)" == MacOS ]]; then
+  if [[ "$(Get-OS-Platform)" == MacOS ]]; then
     local cmd1; local cmd2;
     [[ "$alg" == sha512 ]] && cmd1="shasum -a 512 -b \"$file\"" && cmd2="openssl dgst -sha512 -r \"$file\""
     [[ "$alg" == sha384 ]] && cmd1="shasum -a 384 -b \"$file\"" && cmd2="openssl dgst -sha384 -r \"$file\""
@@ -369,8 +369,8 @@ function Get_Hash_Of_File() {
   fi
 }
 
-# Include File: [\Includes\Format_Size.sh]
-function Format_Size() {
+# Include File: [\Includes\Format-Size.sh]
+function Format-Size() {
   local num="$1"
   local fractionalDigits="${2:-1}"
   local measureUnit="${3:-}"
@@ -394,17 +394,17 @@ function Format_Size() {
   }' 2>/dev/null || echo "$num"
 }
 
-# Include File: [\Includes\Format_Thousand.sh]
-function Format_Thousand() {
+# Include File: [\Includes\Format-Thousand.sh]
+function Format-Thousand() {
   local num="$1"
   # LC_NUMERIC=en_US.UTF-8 printf "%'.0f\n" "$num" # but it is locale dependent
   # Next is locale independent version for positive integers
   awk -v n="$num" 'BEGIN { len=length(n); res=""; for (i=0;i<=len;i++) { res=substr(n,len-i+1,1) res; if (i > 0 && i < len && i % 3 == 0) { res = "," res } }; print res }' 2>/dev/null || echo "$num"
 }
 
-# Include File: [\Includes\get_glibc_version.sh]
+# Include File: [\Includes\Get-Glibc-Version.sh]
 # returns 21900 for debian 8
-function get_glibc_version() {
+function Get-Glibc-Version() {
   GLIBC_VERSION=""
   GLIBC_VERSION_STRING="$(ldd --version 2>/dev/null| awk 'NR==1 {print $NF}')"
   # '{a=$1; gsub("[^0-9]", "", a); b=$2; gsub("[^0-9]", "", b); if ((a ~ /^[0-9]+$/) && (b ~ /^[0-9]+$/)) {print a*10000 + b*100}}'
@@ -426,8 +426,8 @@ EOF_SHOW_GLIBC_VERSION
   echo "${GLIBC_VERSION:-}"
 }
 
-# Include File: [\Includes\Get_Global_Seconds.sh]
-function Get_Global_Seconds() {
+# Include File: [\Includes\Get-Global-Seconds.sh]
+function Get-Global-Seconds() {
   theSYSTEM="${theSYSTEM:-$(uname -s)}"
   if [[ ${theSYSTEM} != "Darwin" ]]; then
       # uptime=$(</proc/uptime);                                # 42645.93 240538.58
@@ -450,22 +450,22 @@ function Get_Global_Seconds() {
   fi
 }
 
-# Include File: [\Includes\Get_Linux_OS_Bits.sh]
+# Include File: [\Includes\Get-Linux-OS-Bits.sh]
 # Works on Linix, Windows, MacOS
 # return 32|64|<empty string>
-Get_Linux_OS_Bits() {
+Get-Linux-OS-Bits() {
   # getconf may be absent
   echo "$(getconf LONG_BIT 2>/dev/null)"
 }
 
 
-# Include File: [\Includes\Get_NET_RID.sh]
-function Get_NET_RID() {
+# Include File: [\Includes\Get-NET-RID.sh]
+function Get-NET-RID() {
   local machine="$(uname -m)"; machine="${machine:-unknown}"
   local rid=unknown
-  if [[ "$(Get_OS_Platform)" == Linux ]]; then
+  if [[ "$(Get-OS-Platform)" == Linux ]]; then
      local linux_arm linux_arm64 linux_x64
-     if Test_Is_Musl_Linux; then
+     if Test-Is-Musl-Linux; then
          linux_arm="linux-musl-arm"; linux_arm64="linux-musl-arm64"; linux_x64="linux-musl-x64"; 
      else
          linux_arm="linux-arm"; linux_arm64="linux-arm64"; linux_x64="linux-x64"
@@ -474,12 +474,12 @@ function Get_NET_RID() {
        rid=$linux_arm;
      elif [[ "$machine" == aarch64 || "$machine" == armv8* || "$machine" == arm64* ]]; then
        rid=$linux_arm64;
-       if [[ "$(Get_Linux_OS_Bits)" == "32" ]]; then 
+       if [[ "$(Get-Linux-OS-Bits)" == "32" ]]; then 
          rid=$linux_arm; 
        fi
      elif [[ "$machine" == x86_64 ]] || [[ "$machine" == amd64 ]] || [[ "$machine" == i?86 ]]; then
        rid=$linux_x64;
-       if [[ "$(Get_Linux_OS_Bits)" == "32" ]]; then 
+       if [[ "$(Get-Linux-OS-Bits)" == "32" ]]; then 
          rid=linux-i386;
          echo "Warning! Linux 32-bit i386 is not supported by .NET Core" >&2
        fi
@@ -492,7 +492,7 @@ function Get_NET_RID() {
        fi
      fi
   fi
-  if [[ "$(Get_OS_Platform)" == MacOS ]]; then
+  if [[ "$(Get-OS-Platform)" == MacOS ]]; then
        rid=osx-unknown;
        local osx_machine="$(sysctl -n hw.machine 2>/dev/null)"
        if [[ -z "$osx_machine" ]]; then osx_machine="$machine"; fi
@@ -503,9 +503,9 @@ function Get_NET_RID() {
        [[ "$osx_version" == 10.10.* ]] && rid="osx.10.10-x64"
        [[ "$osx_version" == 10.11.* ]] && rid="osx.10.11-x64"
   fi
-  if [[ "$(Get_OS_Platform)" == Windows ]]; then
+  if [[ "$(Get-OS-Platform)" == Windows ]]; then
        rid="win-unknown"
-       local win_arch="$(Get_Windows_OS_Architecture)"
+       local win_arch="$(Get-Windows-OS-Architecture)"
        [[ "$win_arch" == x64 ]] && rid="win-x64"
        [[ "$win_arch" == arm ]] && rid="win-arm"
        [[ "$win_arch" == arm64 ]] && rid="win-arm64"
@@ -519,7 +519,7 @@ function Get_NET_RID() {
 }
 
 # x86|x64|arm|arm64
-function Get_Windows_OS_Architecture() {
+function Get-Windows-OS-Architecture() {
 if [[ -z "$(command -v powershell)" ]]; then
   echo "$(uname -m)"
   return;
@@ -567,8 +567,8 @@ local win_arch=$(echo "$ps_script" | powershell -c - 2>/dev/null)
 echo "$win_arch"
 }
 
-# Include File: [\Includes\Get_OS_Platform.sh]
-function Get_OS_Platform() {
+# Include File: [\Includes\Get-OS-Platform.sh]
+function Get-OS-Platform() {
   _LIB_TheSystem="${_LIB_TheSystem:-$(uname -s)}"
   local ret="Unknown"
   [[ "$_LIB_TheSystem" == "Linux" ]] && ret="Linux"
@@ -578,8 +578,8 @@ function Get_OS_Platform() {
   echo "$ret"
 }
 
-# Include File: [\Includes\Get_Tmp_Folder.sh]
-Get_Tmp_Folder() {
+# Include File: [\Includes\Get-Tmp-Folder.sh]
+Get-Tmp-Folder() {
   # pretty perfect on termux and routers
   local ret="${TMPDIR:-/tmp}" # in windows it is empty, but substitution is correct
   if [[ -z "${_DEVOPS_LIBRARY_TMP_VALIDATED:-}" ]]; then
@@ -588,23 +588,23 @@ Get_Tmp_Folder() {
   fi
   echo "$ret"
 }
-# Include File: [\Includes\Is_Qemu_VM.sh]
+# Include File: [\Includes\Is-Qemu-VM.sh]
 # if windows in qemu then it returns False
-function Is_Qemu_VM() {
-  _LIB_Is_Qemu_VM_Cache="${_LIB_Is_Qemu_VM_Cache:-$(Is_Qemu_VM_Implementation)}"
+function Is-Qemu-VM() {
+  _LIB_Is_Qemu_VM_Cache="${_LIB_Is_Qemu_VM_Cache:-$(Is-Qemu-VM-Implementation)}"
   echo "$_LIB_Is_Qemu_VM_Cache"
 }
 
-function Test_Is_Qemu_VM() {
-  if [[ "$(Is_Qemu_VM)" == True ]]; then return 0; else return 1; fi
+function Test-Is-Qemu-VM() {
+  if [[ "$(Is-Qemu-VM)" == True ]]; then return 0; else return 1; fi
 }
 
-function Is_Qemu_VM_Implementation() {
+function Is-Qemu-VM-Implementation() {
   # termux checkup is Not required
   # if [[ "$(Is_Termux)" == True ]]; then return; fi
   local sudo;
   # We ignore sudo on windows
-  if [[ -z "$(command -v sudo)" ]] || [[ "$(Get_OS_Platform)" == Windows ]]; then sudo=""; else sudo="sudo"; fi
+  if [[ -z "$(command -v sudo)" ]] || [[ "$(Get-OS-Platform)" == Windows ]]; then sudo=""; else sudo="sudo"; fi
   local qemu_shadow="$($sudo grep -r QEMU /sys/devices 2>/dev/null || true)"
   # test -d /sys/firmware/qemu_fw_cfg && echo "Ampere on this Oracle Cloud"
   if [[ "$qemu_shadow" == *"QEMU"* ]]; then
@@ -614,8 +614,8 @@ function Is_Qemu_VM_Implementation() {
   fi
 }
 
-# Include File: [\Includes\Is_Termux.sh]
-function Is_Termux() {
+# Include File: [\Includes\Is-Termux.sh]
+function Is-Termux() {
   if [[ -n "${TERMUX_VERSION:-}" ]] && [[ -n "${PREFIX:-}" ]] && [[ -d "${PREFIX}" ]]; then
     echo True
   else
@@ -623,38 +623,38 @@ function Is_Termux() {
   fi
 }
 
-# Include File: [\Includes\Is_Windows.sh]
-function Is_Windows() {
-  if Test_Is_Windows; then echo "True"; else echo "False"; fi
+# Include File: [\Includes\Is-Windows.sh]
+function Is-Windows() {
+  if Test-Is-Windows; then echo "True"; else echo "False"; fi
 }
 
-function Test_Is_Windows() {
-  if [[ "$(Get_OS_Platform)" == "Windows" ]]; then return 0; else return 1; fi
+function Test-Is-Windows() {
+  if [[ "$(Get-OS-Platform)" == "Windows" ]]; then return 0; else return 1; fi
 }
 
-function Is_WSL() {
-  if Test_Is_WSL; then echo "True"; else echo "False"; fi
+function Is-WSL() {
+  if Test-Is-WSL; then echo "True"; else echo "False"; fi
 }
 
-function Test_Is_WSL() {
+function Test-Is-WSL() {
   _LIB_TheKernel="${_LIB_TheKernel:-$(uname -r)}"
   if [[ "$_LIB_TheKernel" == *"Microsoft" ]]; then return 0; else return 1; fi
 }
 
-function Test_Is_Linux() {
-  if [[ "$(Get_OS_Platform)" == "Linux" ]]; then return 0; else return 1; fi
+function Test-Is-Linux() {
+  if [[ "$(Get-OS-Platform)" == "Linux" ]]; then return 0; else return 1; fi
 }
 
-function Is_Linux() {
-  if Test_Is_Linux; then echo "True"; else echo "False"; fi
+function Is-Linux() {
+  if Test-Is-Linux; then echo "True"; else echo "False"; fi
 }
 
-function Test_Is_MacOS() {
-  if [[ "$(Get_OS_Platform)" == "MacOS" ]]; then return 0; else return 1; fi
+function Test-Is-MacOS() {
+  if [[ "$(Get-OS-Platform)" == "MacOS" ]]; then return 0; else return 1; fi
 }
 
 function Is_MacOS() {
-  if Test_Is_MacOS; then echo "True"; else echo "False"; fi
+  if Test-Is-MacOS; then echo "True"; else echo "False"; fi
 }
 
 
@@ -731,17 +731,17 @@ function MkTemp-File-Smarty() {
 
 
 
-# Include File: [\Includes\RetryOnFail.sh]
-function EchoRedError() { 
+# Include File: [\Includes\Retry-On-Fail.sh]
+function Echo-Red-Error() { 
   Colorize Red "\n$*\n"; 
 }
 
-function RetryOnFail() { 
+function Retry-On-Fail() { 
   "$@" && return; 
-  EchoRedError "Retrying 2 of 3 for \"$*\""; 
+  Echo-Red-Error "Retrying 2 of 3 for \"$*\""; 
   sleep 1; 
   "$@" && return; 
-  EchoRedError "Retrying last, 3 of 3, for \"$*\""; 
+  Echo-Red-Error "Retrying last, 3 of 3, for \"$*\""; 
   sleep 1; 
   "$@"
 }
@@ -769,14 +769,14 @@ Say-Definition() {
   Colorize "$colorValue" "${value}"
 }
 
-# Include File: [\Includes\Test_Has_Command.sh]
-Test_Has_Command() {
+# Include File: [\Includes\Test-Has-Command.sh]
+Test-Has-Command() {
   if command -v "${1:-}" >/dev/null 2>&1; then return 0; else return 1; fi
 }
 
-# Include File: [\Includes\Test_Is_Musl_Linux.sh]
-Test_Is_Musl_Linux() {
-  if Test_Has_Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
+# Include File: [\Includes\Test-Is-Musl-Linux.sh]
+Test-Is-Musl-Linux() {
+  if Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
     return 1;
   elif ldd --version 2>&1 | grep -iq "glibc"; then
     return 1;
@@ -786,15 +786,15 @@ Test_Is_Musl_Linux() {
   return 1; # by default GNU
 }
 
-Is_Musl_Linux() {
+Is-Musl-Linux() {
   if Test_Is_Musl_Linux; then echo "True"; else echo "False"; fi
 }
-# Include File: [\Includes\To_Boolean.sh]
+# Include File: [\Includes\To-Boolean.sh]
 # return True|False
-function To_Boolean() {
+function To-Boolean() {
   local name="${1:-}"
   local value="${2:-}"
-  value="$(To_Lower_Case "$value")"
+  value="$(To-Lower-Case "$value")"
   if [[ "$value" == true ]] || [[ "$value" == on ]] || [[ "$value" == "1" ]] || [[ "$value" == "enable"* ]]; then echo "True"; return; fi
   if [[ "$value" == "" ]] || [[ "$value" == false ]] || [[ "$value" == off ]] || [[ "$value" == "0" ]] || [[ "$value" == "disable"* ]]; then echo "False"; return; fi
   echo "Validation Error! Invalid $name option '$value'. Boolean option accept only True|False|On|Off|Enable(d)|Disable(d)|1|0" >&2
@@ -802,8 +802,8 @@ function To_Boolean() {
 
 # for x in True False 0 1 Enable Disable "" Enabled Disabled; do echo "[$x] as boolean is [$(To_Boolean "Arg" "$x")]"; done
 
-# Include File: [\Includes\To_Lower_Case.sh]
-function To_Lower_Case() {
+# Include File: [\Includes\To-Lower-Case.sh]
+function To-Lower-Case() {
   local a="${1:-}"
   if [[ "${BASH_VERSION:-}" == [4-9]"."* ]]; then
     echo "${a,,}"
@@ -818,24 +818,24 @@ function To_Lower_Case() {
 }
 # x="  Hello  World!  "; echo "[$x] in lower case is [$(To_Lower_Case "$x")]"
 
-# Include File: [\Includes\Validate_File_Is_Not_Empty.sh]
-Validate_File_Is_Not_Empty() {
+# Include File: [\Includes\Validate-File-Is-Not-Empty.sh]
+Validate-File-Is-Not-Empty() {
   local file="$1"
   # echo "Validate_File_Is_Not_Empty('$file')"
   local successMessage="${2:-"File %s exists and isn't empty, size is"}"
   if [[ -f "$file" ]]; then 
     local sz="$(ls -l "$file" | awk '{print $5}')"
     local title="$(printf "$successMessage" "$file" 2>/dev/null)"
-    DEFINITION_COLOR=Default VALUE_COLOR=Green Say-Definition "$title" "$(Format_Thousand "$sz") bytes"
+    DEFINITION_COLOR=Default VALUE_COLOR=Green Say-Definition "$title" "$(Format-Thousand "$sz") bytes"
   else
     local errorMessage="${3:-"File $file exists and is'n empty"}"
     Colorize Red "$errorMessage"
   fi
 }
 
-# Include File: [\Includes\Wait_For_HTTP.sh]
-# Wait_For_HTTP http://localhost:55555 30
-Wait_For_HTTP() {
+# Include File: [\Includes\Wait-For-HTTP.sh]
+# Wait-For-HTTP http://localhost:55555 30
+Wait-For-HTTP() {
   local u="$1"; 
   local t="${2:-30}"; 
 
@@ -850,7 +850,7 @@ Wait_For_HTTP() {
 
   local httpConnectTimeout="${HTTP_CONNECT_TIMEOUT:-3}"
 
-  local startAt="$(Get_Global_Seconds)"
+  local startAt="$(Get-Global-Seconds)"
   local now;
   while [ $t -ge 0 ]; do 
     t=$((t-1)); 
@@ -862,28 +862,27 @@ Wait_For_HTTP() {
     if [ "$errHttp" -eq 0 ]; then Colorize Green " OK"; return; fi; 
     printf ".";
     sleep 1;
-    now="$(Get_Global_Seconds)"; now="${now:-}";
+    now="$(Get-Global-Seconds)"; now="${now:-}";
     local seconds=$((now-startAt))
     if [ "$seconds" -lt 0 ]; then break; fi
   done
   Colorize Red " FAIL";
-  local now2="$(Get_Global_Seconds)"
-  now="$(Get_Global_Seconds)"; now="${now:-}";
+  now="$(Get-Global-Seconds)"; now="${now:-}";
   local seconds2=$((now-startAt))
   Colorize Red "The service at '$u' is not responding during $seconds2 seconds"
   return 1;
 }
 
 
-Say-Definition "Get_OS_Platform() =" "'$(Get_OS_Platform)'"
+Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
 
-Validate_File_Is_Not_Empty /bin/bash
-
-echo
-
-Validate_File_Is_Not_Empty /bin/sh "7-zip binary downloaded as %s, the size is" "Error! download of 7-zip binaries failed"
+Validate-File-Is-Not-Empty /bin/bash
 
 echo
 
-Validate_File_Is_Not_Empty "/bin/no-such-file" "The binary file downloaded as %s, the size is" "Error! download of my project binaries failed"
+Validate-File-Is-Not-Empty /bin/sh "7-zip binary downloaded as %s, the size is" "Error! download of 7-zip binaries failed"
+
+echo
+
+Validate-File-Is-Not-Empty "/bin/no-such-file" "The binary file downloaded as %s, the size is" "Error! download of my project binaries failed"
 

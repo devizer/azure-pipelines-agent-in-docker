@@ -31,7 +31,7 @@ jobs:
     - name: Variables
       run: 'printenv | sort'
 
-    - name: Clean Up
+    - name: Clean Up Folders
       run: |
         set -eu; set -o pipefail
         echo "CPU: $(Get-CpuName)"
@@ -53,11 +53,13 @@ jobs:
           sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
           Say "Delete $dir, $sz"
           sudo rm -rf "$dir"/* || true
-        fi; done 
+        fi; done
+        Say "Bye"
 
+    - name: Clean Up Docker
+      run: |
         if [[ -n "$(command -v docker)" ]]; then
           # Docker is missing on macOS
-          Say "CLEAN UP Docker Images"
           echo "DOCKER data root: [$(docker info -f '{{.DockerRootDir}}')]"
           docker image prune -a -f | { grep -v "sha256:" || true; }
         fi
