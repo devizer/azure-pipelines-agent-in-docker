@@ -859,7 +859,7 @@ EOFHELPRRS
     if [[ "$arg_runner" == *"pwsh"* || "$arg_runner" == *"powershell"* ]]; then file="script.ps1"; fi
   fi;
   local fileFullName="$folder/$file"
-  Download_File_Failover "$fileFullName" "$arg_url" 
+  Download-File-Failover "$fileFullName" "$arg_url" 
   $arg_runner "$fileFullName" ${passthrowArgs[@]+"${passthrowArgs[@]}"}
   rm -rf "$folder" 2>/dev/null || true
   
