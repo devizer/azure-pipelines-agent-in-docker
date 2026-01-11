@@ -833,11 +833,11 @@ EOFHELPRRS
   fi
 
   local additionalError=""
-  local lower="$(To_Lower_Case "$arg_url")"
+  local lower="$(To-Lower-Case "$arg_url")"
   if [[ -z "$arg_runner" ]]; then
     if [[ "$lower" == *".ps1" ]]; then
       if [[ "$(command -v pwsh)" ]]; then arg_runner="pwsh"; fi
-      if [[ "$(Get_OS_Platform)" == Windows ]] && [[ -z "$arg_runner" ]]; then arg_runner="powershell -f"; else additionalError=". On $(Get_OS_Platform) it requires pwsh"; fi
+      if [[ "$(Get-OS-Platform)" == Windows ]] && [[ -z "$arg_runner" ]]; then arg_runner="powershell -f"; else additionalError=". On $(Get-OS-Platform) it requires pwsh"; fi
     elif [[ "$lower" == *".sh" ]]; then
       arg_runner="bash"
     fi
