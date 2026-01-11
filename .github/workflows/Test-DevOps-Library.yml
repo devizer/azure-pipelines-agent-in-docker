@@ -31,6 +31,12 @@ jobs:
     - name: Environment
       run: 'echo "ZSH: [$(zsh --version 2>/dev/null)]"; printenv | sort;'
     
+    - name: "Install-DevOps-Library.sh" 
+      run: 'set -eu; Run-Remote-Script https://devizer.github.io/Install-DevOps-Library.sh; Say-Definition Hello World. RID is $(Get-NET-RID)'
+
+    - name: "DevOps-Library.sh" 
+      run: 'set -eu; Run-Remote-Script https://devizer.github.io/DevOps-Library.sh'
+    
     - name: "[Test] ALL.sh" 
       run: 'cd DevOps-Library; bash "[Test] ALL.sh" '
 
