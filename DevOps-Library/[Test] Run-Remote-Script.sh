@@ -870,13 +870,13 @@ EOFHELPRRS
 Tests-Run-Remote-Script() {
   # Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh
   echo
-  Run-Remote-Script || Colorize Red "ERROR DETECTED (Run-Remote-Script)"
+  Run-Remote-Script || Colorize Red "ERROR ON PURPOSE AS EXPECTED (Run-Remote-Script)"
   echo
-  Run-Remote-Script --runner || Colorize Red "ERROR DETECTED (Run-Remote-Script --runner)"
+  Run-Remote-Script --runner || Colorize Red "ERROR ON PURPOSE AS EXPECTED (Run-Remote-Script --runner)"
   echo
-  Run-Remote-Script --runner no-such-runner || Colorize Red "ERROR DETECTED (Run-Remote-Script --runner no-such-runner)"
+  Run-Remote-Script --runner no-such-runner || Colorize Red "ON PURPOSE AS EXPECTED (Run-Remote-Script --runner no-such-runner)"
   echo
-  Run-Remote-Script "https://domain.com/xxx.yyy.zzz" || Colorize Red "ERROR DETECTED (Run-Remote-Script https://domain.com/xxx.yyy.zzz)"
+  Run-Remote-Script "https://domain.com/xxx.yyy.zzz" || Colorize Red "ON PURPOSE AS EXPECTED (Run-Remote-Script https://domain.com/xxx.yyy.zzz)"
 
   echo
   export PSVER=7.4.12 PSDIR=/opt/pwsh
