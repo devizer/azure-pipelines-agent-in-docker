@@ -65,6 +65,20 @@ jobs:
         fi
         Say "Bye"
 
+    - name: "Classic du" 
+      # if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+      run: |
+      set -eu; set -o pipefail
+      echo "CPU: $(Get-CpuName)"
+      Say --Reset-Stopwatch
+      mkdir -p ~/FS.Usage
+      for d in 2 3 4 5 6; do
+        Say "max-depth = $d"
+        sudo du / -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee "$SYSTEM_ARTIFACTSDIRECTORY"/FS.Usage/du.$d.txt || true
+      done 
+      printenv | sort | tee ~/FS.Usage/Environment.txt
+
+    
     - name: "Tree for the Root" 
       if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
       run: |
