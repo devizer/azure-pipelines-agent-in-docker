@@ -78,7 +78,7 @@ jobs:
           if [[ "$(Get-OS-Platform)" == Windows ]]; then root='C:\'; fi
           $sudo du "$root" -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee "$SYSTEM_ARTIFACTSDIRECTORY"/du.$d.txt || true
         done 
-        printenv | sort > tee "$SYSTEM_ARTIFACTSDIRECTORY"/Environment.txt
+        printenv | sort > "$SYSTEM_ARTIFACTSDIRECTORY"/Environment.txt
 
     
     - name: "Tree for the Root" 
