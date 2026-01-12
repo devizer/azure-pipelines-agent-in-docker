@@ -62,15 +62,15 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h -du /tmp | tee "$SYSTEM_ARTIFACTSDIRECTORY"/TMP-FOLDER-TREE.txt || true'
 
-    - name: "TEST on Alpine" 
+    - name: "ALL TESTS on Alpine" 
       if: ${{ runner.os == 'Linux' }}
       run: 'cd DevOps-Library; bash Test-On-Image.sh alpine'
 
-    - name: "TEST on debian stable slim" 
+    - name: "ALL TESTS on debian stable slim" 
       if: ${{ runner.os == 'Linux' }}
       run: 'cd DevOps-Library; bash Test-On-Image.sh debian:stable-slim'
 
-    - name: "TEST on debian latest" 
+    - name: "ALL TESTS on debian latest" 
       if: ${{ runner.os == 'Linux' }}
       run: 'cd DevOps-Library; bash Test-On-Image.sh debian:latest'
 
