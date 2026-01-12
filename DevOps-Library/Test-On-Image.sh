@@ -11,7 +11,7 @@ saveTo="$(mktemp -d)"; cd "$saveTo"
 Download https://devizer.github.io/Install-DevOps-Library.sh
 Download https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh
 Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1
-docker run -it -v $(pwd -P):/app -w /app alpine sh -e -c '
+docker run -t -v $(pwd -P):/app -w /app alpine sh -e -c '
   if [ -n $(command -v apk) ]]; then apk update; apk add bash; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
