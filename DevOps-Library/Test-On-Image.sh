@@ -7,7 +7,9 @@ Download() {
   try1="wget -q -nv --no-check-certificate -O $file $url 2>/dev/null 1>&2 || curl -kfsSL -o $file $url 2>/dev/null 1>&2"
   eval $try1 || eval $try1 || eval $try1
 }
-saveTo="$(mktemp -d)"; cd "$saveTo"
+saveTo="$(mktemp -d)"; 
+cp -v *.sh "$saveTo"\
+cd "$saveTo"
 Download https://devizer.github.io/Install-DevOps-Library.sh
 Download https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh
 Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1
