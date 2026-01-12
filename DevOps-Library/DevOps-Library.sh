@@ -693,7 +693,9 @@ Test-Has-Command() {
 
 # Include File: [\Includes\Test-Is-Musl-Linux.sh]
 Test-Is-Musl-Linux() {
-  if Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
+  if [[ "$(Is-Termux)" == True ]]; then
+    return 0;
+  elif Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
     return 1;
   elif ldd --version 2>&1 | grep -iq "glibc"; then
     return 1;
@@ -770,10 +772,10 @@ Wait-For-HTTP() {
 
   local startAt="$(Get-Global-Seconds)"
   local now;
-  while [ $t -ge 0 ]; do 
+  while [ $t -ge 0 ]; do
     t=$((t-1)); 
     errHttp=0;
-    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=$?; fi
+    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=$?; else errHttp=404; fi
     if [ "$errHttp" -ne 0 ]; then
       if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null 2>&1 || errHttp=$?; fi
     fi
