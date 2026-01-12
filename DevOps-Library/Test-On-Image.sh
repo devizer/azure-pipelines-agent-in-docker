@@ -8,7 +8,7 @@ Download() {
   eval $try1 || eval $try1 || eval $try1
 }
 saveTo="$(mktemp -d)"; 
-cp -v *.sh "$saveTo"\
+cp -v *.sh "$saveTo"/
 cd "$saveTo"
 Download https://devizer.github.io/Install-DevOps-Library.sh
 Download https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh
