@@ -15,7 +15,7 @@ docker run -t -v $(pwd -P):/app -w /app alpine sh -e -c '
   if [ -n "$(command -v apk)" ]; then apk update; apk add bash; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
-  Wait-For-HTTP https://google-777.com 1; 
+  Wait-For-HTTP https://google-777.com 1 || echo "ERROR AS EXPECTED: https://google-777.com"; 
   Wait-For-HTTP https://google.com 1; bash"
   for test in "[Test] ALL.sh" "[Test] Download.sh" "[Test] Fetch S5 Dashboard API.sh" "[Test] Retry.sh" "[Test] Run-Remote-Script.sh" "[Test] Validate File Is Not Empty.sh" "[Test] Wait For Http.sh" ; do
     Colorize Magenta "RUNNING $test"
