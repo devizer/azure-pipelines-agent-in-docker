@@ -83,7 +83,7 @@ jobs:
 
       docker pull ubuntu:22.04
       Say "Size of /raid-0/docker-file-system"
-      sudo du /raid-0/docker-file-system -d 0 -h
+      sudo du /raid-0/docker-file-system -d 0 -h || true
 
       Say "free -m"
       free -m
