@@ -62,6 +62,18 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h -du /tmp | tee "$SYSTEM_ARTIFACTSDIRECTORY"/TMP-FOLDER-TREE.txt || true'
 
+    - name: "TEST on Alpine" 
+      if: ${{ runner.os == 'Linux' }}
+      run: 'cd DevOps-Library; bash Test-On-Image.sh alpine'
+
+    - name: "TEST on debian stable slim" 
+      if: ${{ runner.os == 'Linux' }}
+      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:stable-slim'
+
+    - name: "TEST on debian latest" 
+      if: ${{ runner.os == 'Linux' }}
+      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:latest'
+
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' }}
       run: 'cd DevOps-Library; bash Test-On-Bash-Matrix.sh | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Test-On-Bash-Matrix.log" '
