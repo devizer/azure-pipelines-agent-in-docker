@@ -64,7 +64,7 @@ jobs:
       Say "jq: [$(command -v jq)]"
       Say "yq: [$(command -v yq)]"
       Say "cat /etc/docker/daemon.json"
-      cat /etc/docker/daemon.json
+      cat /etc/docker/daemon.json || true
 
       # LOOP | BLOCK
       export SECOND_DISK_MODE=LOOP
