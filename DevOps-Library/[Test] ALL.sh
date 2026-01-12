@@ -7,7 +7,7 @@ set -eu; set -o pipefail
 # https://dev.azure.com
 # https://stackoverflow.com/questions/43291389/using-jq-to-assign-multiple-output-variables
 AZURE_DEVOPS_API_BASE="${AZURE_DEVOPS_API_BASE:-https://dev.azure.com/devizer/azure-pipelines-agent-in-docker}"
-AZURE_DEVOPS_ARTIFACT_NAME="${AZURE_DEVOPS_ARTIFACT_NAME:-BinTests}"
+AZURE_DEVOPS_ARTIFACT_NAME="${AZURE_DEVOPS_ARTIFACT_NAME:-BinTests}" # not used anymore
 AZURE_DEVOPS_API_PAT="${AZURE_DEVOPS_API_PAT:-}"; # empty for public project, mandatory for private
 # PIPELINE_NAME="" - optional of more then one pipeline produce same ARTIFACT_NAME
 
@@ -277,7 +277,7 @@ Fetch-Distribution-File() {
   local toDelete
   for toDelete in "$hashSumsFile" "$hashValueFile"; do
     rm -f "$toDelete" 2>/dev/null || true
-    rm -rf "$(dirname "$toDelete")" 2>/dev/null || true
+    # rm -rf "$(dirname "$toDelete")" 2>/dev/null || true
   done
   
   if [[ "$actualHash" == "$targetHash" ]]; then
@@ -290,32 +290,36 @@ Fetch-Distribution-File() {
 
 # Include File: [\Includes\Find-Decompressor.sh]
 function Find-Decompressor() {
-  local force_gzip_priority="$(To-Boolean "Env Var FORCE_GZIP_PRIORITY", "${FORCE_GZIP_PRIORITY:-}")"
+  local COMPRESSOR_EXT=''
+  local COMPRESSOR_EXTRACT=''
+  local force_fast_compression="$(To-Boolean "Env Var FORCE_FAST_COMPRESSION", "${FORCE_FAST_COMPRESSION:-}")"
   if [[ "$(Get-OS-Platform)" == Windows ]]; then
-      COMPRESSOR_EXT=7z
-      if [[ "$force_gzip_priority" == True ]]; then COMPRESSOR_EXT=zip; fi
-      COMPRESSOR_EXTRACT="{ echo $COMPRESSOR_EXT on windows does not support pipeline; exit 1 }"
-      return;
-  fi
-  COMPRESSOR_EXT=""
-  COMPRESSOR_EXTRACT=""
-  if [[ "$force_gzip_priority" == True ]]; then
-    if [[ "$(command -v gzip)" != "" ]]; then
-      COMPRESSOR_EXT=gz
-      COMPRESSOR_EXTRACT="gzip -f -d"
-    elif [[ "$(command -v xz)" != "" ]]; then
-      COMPRESSOR_EXT=xz
-      COMPRESSOR_EXTRACT="xz -f -d"
-    fi
+      if [[ "$force_fast_compression" == True ]]; then
+        COMPRESSOR_EXT=zip
+      else
+        COMPRESSOR_EXT=7z
+      fi
+      COMPRESSOR_EXTRACT="{ echo $COMPRESSOR_EXT on Windows does not support pipeline; exit 1; }"
   else
-    if [[ "$(command -v xz)" != "" ]]; then
-      COMPRESSOR_EXT=xz
-      COMPRESSOR_EXTRACT="xz -f -d"
-    elif [[ "$(command -v gzip)" != "" ]]; then
-      COMPRESSOR_EXT=gz
-      COMPRESSOR_EXTRACT="gzip -f -d"
-    fi
+     if [[ "$force_fast_compression" == True ]]; then
+       if [[ "$(command -v gzip)" != "" ]]; then
+         COMPRESSOR_EXT=gz
+         COMPRESSOR_EXTRACT="gzip -f -d"
+       elif [[ "$(command -v xz)" != "" ]]; then
+         COMPRESSOR_EXT=xz
+         COMPRESSOR_EXTRACT="xz -f -d"
+       fi
+     else
+       if [[ "$(command -v xz)" != "" ]]; then
+         COMPRESSOR_EXT=xz
+         COMPRESSOR_EXTRACT="xz -f -d"
+       elif [[ "$(command -v gzip)" != "" ]]; then
+         COMPRESSOR_EXT=gz
+         COMPRESSOR_EXTRACT="gzip -f -d"
+       fi
+     fi
   fi
+  printf "COMPRESSOR_EXT='%s'; COMPRESSOR_EXTRACT='%s';" "$COMPRESSOR_EXT" "$COMPRESSOR_EXTRACT"
 }
 
 # Include File: [\Includes\Find-Hash-Algorithm.sh]
@@ -384,8 +388,10 @@ function Format-Size() {
       y=n/1024.0/1024.0; s="M";
     } else if (n<1999999999999) {
       y=n/1024.0/1024.0/1024.0; s="G";
-    } else {
+    } else if (n<1999999999999999) {
       y=n/1024.0/1024.0/1024.0/1024.0; s="T";
+    } else {
+      y=n/1024.0/1024.0/1024.0/1024.0/1024.0; s="P";
     }
     format="%." fractionalDigits "f";
     yFormatted=sprintf(format, y);
@@ -428,13 +434,13 @@ EOF_SHOW_GLIBC_VERSION
 
 # Include File: [\Includes\Get-Global-Seconds.sh]
 function Get-Global-Seconds() {
-  theSYSTEM="${theSYSTEM:-$(uname -s)}"
-  if [[ ${theSYSTEM} != "Darwin" ]]; then
+  the_SYSTEM2="${the_SYSTEM2:-$(uname -s)}"
+  if [[ ${the_SYSTEM2} != "Darwin" ]]; then
       # uptime=$(</proc/uptime);                                # 42645.93 240538.58
-      uptime="$(cat /proc/uptime 2>/dev/null)";                 # 42645.93 240538.58
+      uptime="$(cat /proc/uptime 2>/dev/null || true)";                 # 42645.93 240538.58
       if [[ -z "${uptime:-}" ]]; then
         # secured, use number of seconds since 1970
-        echo "$(date +%s)"
+        echo "$(date +%s || true)"
         return
       fi
       IFS=' ' read -ra uptime <<< "$uptime";                    # 42645.93 240538.58
@@ -653,7 +659,7 @@ function Test-Is-MacOS() {
   if [[ "$(Get-OS-Platform)" == "MacOS" ]]; then return 0; else return 1; fi
 }
 
-function Is_MacOS() {
+function Is-MacOS() {
   if Test-Is-MacOS; then echo "True"; else echo "False"; fi
 }
 
@@ -787,8 +793,9 @@ Test-Is-Musl-Linux() {
 }
 
 Is-Musl-Linux() {
-  if Test_Is_Musl_Linux; then echo "True"; else echo "False"; fi
+  if Test-Is-Musl-Linux; then echo "True"; else echo "False"; fi
 }
+
 # Include File: [\Includes\To-Boolean.sh]
 # return True|False
 function To-Boolean() {
@@ -895,14 +902,14 @@ Say-Definition "MkTemp-File-Smarty(file.json, store) =" "'"$(MkTemp-File-Smarty 
 Say-Definition "MkTemp-File-Smarty(file.json, $HOME/.cache/store) =" "'"$(MkTemp-File-Smarty "file.json" "$HOME/.cache/store")"'"
 
 
-FORCE_GZIP_PRIORITY=
-Colorize Cyan "Invoke Find_Decompressor (FORCE_GZIP_PRIORITY is False)"
-Find-Decompressor
-Colorize Yellow "find_decompressor() returns: COMPRESSOR_EXT = '${COMPRESSOR_EXT}', COMPRESSOR_EXTRACT = '${COMPRESSOR_EXTRACT}'"
-FORCE_GZIP_PRIORITY=True
-Colorize Cyan "Invoke Find_Decompressor (FORCE_GZIP_PRIORITY is True)"
-Find-Decompressor
-Colorize Yellow "find_decompressor() returns: COMPRESSOR_EXT = '${COMPRESSOR_EXT}', COMPRESSOR_EXTRACT = '${COMPRESSOR_EXTRACT}'"
+
+Colorize Cyan "Invoke Find-Decompressor (FORCE_FAST_COMPRESSION is False)"
+eval $(FORCE_FAST_COMPRESSION=False Find-Decompressor)
+Colorize Yellow "Find-Decompressor() returns: COMPRESSOR_EXT = '${COMPRESSOR_EXT}', COMPRESSOR_EXTRACT = '${COMPRESSOR_EXTRACT}'"
+
+Colorize Cyan "Invoke Find-Decompressor (FORCE_FAST_COMPRESSION is True)"
+eval $(FORCE_FAST_COMPRESSION=True Find-Decompressor)
+Colorize Yellow "Find-Decompressor() returns: COMPRESSOR_EXT = '${COMPRESSOR_EXT}', COMPRESSOR_EXTRACT = '${COMPRESSOR_EXTRACT}'"
 
 for ea in "" "md5 sha1 sha224 sha256 sha384 sha512"; do
   EXISTING_HASH_ALGORITHMS="$ea"
@@ -919,9 +926,9 @@ for alg in sha512 sha384 sha256 sha224 sha1 md5; do
 done 
 rm -f "$file"
 
-for a in '123 1 " bytes"' '456 1 " bytes"' '123456 1 " bytes"' '456789 1 " bytes"' '5555555555 1 " bytes"' '3456354345345 2 " words"'; do
+for a in '123 1 " bytes"' '456 1 " bytes"' '123456 1 " bytes"' '456789 1 " bytes"' '5555555555 1 " bytes"' '3456354345345 2 " words"' '345635434534523232 2 " words"'; do
   formatted="$(eval "Format-Size $a")"
-  col_arg=$(printf "%25s" "$a")
+  col_arg=$(printf "%30s" "$a")
   col_value="$(printf "%s" "$(My-Quote "${formatted}")")"
   echo -e "$col_arg: $col_value"
 done
