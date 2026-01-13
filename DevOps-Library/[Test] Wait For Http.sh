@@ -869,7 +869,7 @@ Wait-For-HTTP() {
 
   local infoSeconds=seconds;
   [[ "$t" == "1" ]] && infoSeconds="second"
-  printf "Waiting for [$u] during $t $infoSeconds ..."
+  printf "Waiting for [$u] during $t $infoSeconds ... "
 
   if [[ -z "$(command -v curl)" ]] && [[ -z "$(command -v wget)" ]]; then
     Colorize Red "MISSING curl|wget. 'Wait For $u' aborted.";
@@ -888,14 +888,14 @@ Wait-For-HTTP() {
       errHttp=0
       if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null 2>&1 || errHttp=$?; fi
     fi
-    if [ "$errHttp" -eq 0 ]; then Colorize Green " OK"; return; fi; 
+    if [ "$errHttp" -eq 0 ]; then Colorize Green "OK"; return; fi; 
     printf ".";
     sleep 1;
     now="$(Get-Global-Seconds)"; now="${now:-}";
     local seconds=$((now-startAt))
     if [ "$seconds" -lt 0 ]; then break; fi
   done
-  Colorize Red " FAIL";
+  Colorize Red "FAIL";
   now="$(Get-Global-Seconds)"; now="${now:-}";
   local seconds2=$((now-startAt))
   Colorize Red "The service at '$u' is not responding during $seconds2 seconds"
@@ -913,6 +913,6 @@ for url in http://google.com aaa://bbb.ccc; do
   Wait-For-HTTP "$url" $timeout && echo "[TEST DEBUG] Success" || echo "[TEST DEBUG] ERROR"
 done
 
-Wait-For-HTTP "https://google.com" 1
+Wait-For-HTTP "https://google.com" 7
 
 Colorize LightGreen FINISH

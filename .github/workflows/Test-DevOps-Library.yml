@@ -75,11 +75,11 @@ jobs:
       run: 'cd DevOps-Library; bash Test-On-Image.sh debian:latest'
 
     - name: 'Tests on Bash Matrix'
-      if: ${{ runner.os == 'Linux' }}
+      if: ${{ runner.os == 'Linux' && (success() || failure()) }}
       run: 'cd DevOps-Library; bash Test-On-Bash-Matrix.sh | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"Test-On-Bash-Matrix.log" '
 
     - name: 'Tests on ZSH (mac)'
-      if: ${{ runner.os == 'macOS' }}
+      if: ${{ runner.os == 'macOS' && (success() || failure()) }}
       run: 'cd DevOps-Library; zsh -e "[Test] ALL.sh"; zsh -e "[Test] Fetch S5 Dashboard API.sh"; zsh -e "[Test] Wait For Http.sh" '
 
 
