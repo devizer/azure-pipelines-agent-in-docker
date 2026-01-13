@@ -16,10 +16,11 @@ Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServe
 Download https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh
 docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
   if [ -n "$(command -v apk)" ]; then apk update; apk add bash; fi
-  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq | { grep Setting || true; }; fi
+  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq | { grep Setting || true; }; apt-get purge curl -y -qq; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
   bash install-dotnet-dependencies.sh;
+  if [ -n "$(command -v apt-get)" ]; then apt-get purge curl -y -qq; fi
   Wait-For-HTTP https://google-777.com 1 || echo "ERROR AS EXPECTED: https://google-777.com"; 
   Wait-For-HTTP https://google.com 1;
   for test in "[Test] ALL.sh" "[Test] Download.sh" "[Test] Fetch S5 Dashboard API.sh" "[Test] Retry.sh" "[Test] Run-Remote-Script.sh" "[Test] Validate File Is Not Empty.sh" "[Test] Wait For Http.sh" ; do
