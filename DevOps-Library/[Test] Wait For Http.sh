@@ -872,7 +872,7 @@ Wait-For-HTTP() {
   printf "Waiting for [$u] during $t $infoSeconds ..."
 
   if [[ -z "$(command -v curl)" ]] && [[ -z "$(command -v wget)" ]]; then
-    Colorize Red " MISSING curl|wget. 'Wait For $u' aborted.";
+    Colorize Red "MISSING curl|wget. 'Wait For $u' aborted.";
     return 1;
   fi
 
@@ -880,15 +880,14 @@ Wait-For-HTTP() {
 
   local startAt="$(Get-Global-Seconds)"
   local now;
-  while [ $t -ge 0 ]; do
+  while [ $t -ge 0 ]; do 
     t=$((t-1)); 
-    local errHttp="";
-    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=err; else errHttp=404; fi
-    if [[ -n "$errHttp" ]]; then
-      errHttp=""
-      if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" || errHttp="err"; fi
+    errHttp=0;
+    if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=$?; else errHttp=13; fi
+    if [ "$errHttp" -ne 0 ]; then
+      if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null 2>&1 || errHttp=$?; else errHttp=13; fi
     fi
-    if [[ -z "$errHttp" ]]; then Colorize Green " OK"; return; fi; 
+    if [ "$errHttp" -eq 0 ]; then Colorize Green " OK"; return; fi; 
     printf ".";
     sleep 1;
     now="$(Get-Global-Seconds)"; now="${now:-}";
@@ -909,7 +908,7 @@ Colorize Yellow "Get_Global_Seconds() = '$(Get-Global-Seconds)'"
 timeout=12
 # skip http://192.168.2.1
 for url in http://google.com aaa://bbb.ccc; do
-  Colorize Cyan ">> Wait_For_HTTP $url $timeout"
+  Colorize Cyan ">> Wait-For-HTTP $url $timeout"
   Wait-For-HTTP "$url" $timeout && echo "[TEST DEBUG] Success" || echo "[TEST DEBUG] ERROR"
 done
 
