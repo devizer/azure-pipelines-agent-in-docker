@@ -493,6 +493,25 @@ function Get-OS-Platform() {
   echo "$ret"
 }
 
+# Include File: [\Includes\Get-Sudo-Command.sh]
+# 1) Linux, MacOs
+#    return "sudo" if sudo is installed
+# 2) Windows
+#    If Run as Administrator then empty string
+#    If sudo is not installed then empty string
+Get-Sudo-Command() {
+  # if sudo is missing then empty string
+  if [[ -z "$(command -v sudo)" ]]; then return; fi
+  # if non-windows and sudo is present then "sudo"
+  if [[ "$(Get-OS-Platform)" != Windows ]]; then echo "sudo"; return; fi
+  # workaround - avoid microsoft sudo
+  return;
+  # the last case: windows and sudo is present
+  if net session >/dev/null 2>&1; then return; fi
+  # is sudo turned on?
+  if sudo config >/dev/null 2>&1; then echo "sudo --inline"; return; fi
+}
+
 # Include File: [\Includes\Get-Tmp-Folder.sh]
 Get-Tmp-Folder() {
   # pretty perfect on termux and routers
@@ -886,25 +905,29 @@ Tests-Run-Remote-Script() {
   echo
   Run-Remote-Script "https://domain.com/xxx.yyy.zzz" || Colorize LightRed "ERROR ON PURPOSE AS EXPECTED (Run-Remote-Script https://domain.com/xxx.yyy.zzz)"
 
-  echo
-  export PSVER=7.4.12 PSDIR=/opt/pwsh
-  Run-Remote-Script "https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh"
-  # /opt/pwsh/pwsh -c '$HOST'
+  if [[ "$(Is-Musl-Linux)" == False ]]; then
+    echo
+    export PSVER=7.4.12 PSDIR=/opt/pwsh
+    Run-Remote-Script "https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh"
+    # /opt/pwsh/pwsh -c '$HOST'
+  fi 
 
   if [[ "$(Get-OS-Platform)" != Windows ]]; then
-    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 6.0  -i "/var/tmp/dot net" --runtime aspnetcore
-    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 8.0  -i "/var/tmp/dot net" --runtime aspnetcore
-    Run-Remote-Script --runner "sudo bash" https://dot.net/v1/dotnet-install.sh --channel 10.0 -i "/var/tmp/dot net"
+    Run-Remote-Script --runner "$(Get-Sudo-Command) bash" https://dot.net/v1/dotnet-install.sh --channel 6.0  -i "/var/tmp/dot net" --runtime aspnetcore
+    Run-Remote-Script --runner "$(Get-Sudo-Command) bash" https://dot.net/v1/dotnet-install.sh --channel 8.0  -i "/var/tmp/dot net" --runtime aspnetcore
+    Run-Remote-Script --runner "$(Get-Sudo-Command) bash" https://dot.net/v1/dotnet-install.sh --channel 10.0 -i "/var/tmp/dot net"
     "/var/tmp/dot net"/dotnet --info
   fi
 
-  echo
-  Run-Remote-Script "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
-  
-  # avoid sudo on windows
-  if [[ "$(Get-OS-Platform)" != Windows ]]; then
+  if [[ "$(Is-Musl-Linux)" == False ]]; then
     echo
-    Run-Remote-Script --runner "sudo pwsh" "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+    Run-Remote-Script "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+    
+    # avoid sudo on windows
+    if [[ "$(Get-OS-Platform)" != Windows ]]; then
+      echo
+      Run-Remote-Script --runner "$(Get-Sudo-Command) pwsh" "https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+    fi
   fi
   
 }

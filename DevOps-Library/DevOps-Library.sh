@@ -495,6 +495,25 @@ function Get-OS-Platform() {
   echo "$ret"
 }
 
+# Include File: [\Includes\Get-Sudo-Command.sh]
+# 1) Linux, MacOs
+#    return "sudo" if sudo is installed
+# 2) Windows
+#    If Run as Administrator then empty string
+#    If sudo is not installed then empty string
+Get-Sudo-Command() {
+  # if sudo is missing then empty string
+  if [[ -z "$(command -v sudo)" ]]; then return; fi
+  # if non-windows and sudo is present then "sudo"
+  if [[ "$(Get-OS-Platform)" != Windows ]]; then echo "sudo"; return; fi
+  # workaround - avoid microsoft sudo
+  return;
+  # the last case: windows and sudo is present
+  if net session >/dev/null 2>&1; then return; fi
+  # is sudo turned on?
+  if sudo config >/dev/null 2>&1; then echo "sudo --inline"; return; fi
+}
+
 # Include File: [\Includes\Get-Tmp-Folder.sh]
 Get-Tmp-Folder() {
   # pretty perfect on termux and routers
