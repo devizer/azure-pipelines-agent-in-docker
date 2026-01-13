@@ -15,7 +15,7 @@ Download https://raw.githubusercontent.com/devizer/test-and-build/master/install
 Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1
 docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
   if [ -n "$(command -v apk)" ]; then apk update; apk add bash; fi
-  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq; fi
+  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq | { grep Setting || true; }; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
   Wait-For-HTTP https://google-777.com 1 || echo "ERROR AS EXPECTED: https://google-777.com"; 
