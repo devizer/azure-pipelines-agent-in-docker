@@ -919,7 +919,7 @@ Wait-For-HTTP() {
     if [[ -n "$(command -v curl)" ]]; then curl --connect-timeout "$httpConnectTimeout" -skf "$u" >/dev/null 2>&1 || errHttp=$?; else errHttp=13; fi
     if [ "$errHttp" -ne 0 ]; then
       errHttp=0;
-      if [[ -n "$(command -v wget)" ]]; then wget -q --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" >/dev/null 2>&1 || errHttp=$?; else errHttp=13; fi
+      if [[ -n "$(command -v wget)" ]]; then echo "PROBE ["$u"] BY WGET"; wget --no-check-certificate -t 1 -T "$httpConnectTimeout" "$u" || errHttp=$?; else errHttp=13; fi
     fi
     if [ "$errHttp" -eq 0 ]; then Colorize Green " OK"; return; fi; 
     printf ".";
