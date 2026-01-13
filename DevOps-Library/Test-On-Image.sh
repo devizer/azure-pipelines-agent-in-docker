@@ -17,7 +17,7 @@ Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServe
 Download https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh
 docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
   if [ -n "$(command -v apk)" ]; then apk update; apk add bash; apk del curl wget; apk add '$package'; fi
-  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get curl wget-y -qq; apt-get install '$package' -y -qq | { grep Setting || true; }; fi
+  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get purge curl wget -y -qq; apt-get install '$package' -y -qq | { grep Setting || true; }; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
   bash install-dotnet-dependencies.sh;
