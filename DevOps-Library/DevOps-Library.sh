@@ -319,6 +319,38 @@ function Format-Thousand() {
   awk -v n="$num" 'BEGIN { len=length(n); res=""; for (i=0;i<=len;i++) { res=substr(n,len-i+1,1) res; if (i > 0 && i < len && i % 3 == 0) { res = "," res } }; print res }' 2>/dev/null || echo "$num"
 }
 
+# Include File: [\Includes\Get-GitHub-Latest-Release.sh]
+# output the TAG of the latest release of null 
+function get_github_latest_release() {
+    local owner="$1";
+    local repo="$2";
+    local query="https://api.github.com/repos/$owner/$repo/releases/latest"
+    if [[ "$(To-Lower-Case "${3:-}")" == "--pre"* ]]; then query="https://api.github.com/repos/$owner/$repo/releases"; fi
+    local header_Accept="Accept: application/vnd.github+json"
+    local header_Version="X-GitHub-Api-Version: 2022-11-28"
+    local json=$(wget -q --header="$header_Accept" --header="$header_Version" -nv --no-check-certificate -O - $query 2>/dev/null || curl -ksSL $query -H "$header_Accept" -H "$header_Version")
+    local tag
+    if [[ -n "$(command -v jq)" ]]; then
+      tag=$(echo "$json" | jq -r ".tag_name" 2>/dev/null)
+    fi
+    if [[ -z "${tag:-}" ]]; then
+       # V1: OK
+       # tag=$(echo "$json" | grep -E '"tag_name": "[a-zA-Z0-9_.-]+"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
+       # V2
+       # json="$(echo $json | tr '\n' ' ' | tr '\r' ' ')"
+       # echo -e "$json\n\n" >&2
+       tag=$(echo "$json" | grep -oE '"tag_name": *"[a-zA-Z0-9_.-]+"' | sed 's/.*"tag_name": *"//;s/"//' | head -1)
+    fi
+    if [[ -n "${tag:-}" && "$tag" != "null" ]]; then 
+        echo "${tag:-}" 
+    fi;
+}
+# echo "Tag devizer/Universe.SqlInsights: [$(get_github_latest_release devizer Universe.SqlInsights)]"
+# echo "Tag devizer/Universe.SqlInsights (beta): [$(get_github_latest_release devizer Universe.SqlInsights --pre)]"
+# echo "Tag powershell/powershell: [$(get_github_latest_release powershell powershell)]"
+# echo "Tag powershell/powershell (beta): [$(get_github_latest_release powershell powershell --pre)]"
+
+
 # Include File: [\Includes\Get-Glibc-Version.sh]
 # returns 21900 for debian 8
 function Get-Glibc-Version() {

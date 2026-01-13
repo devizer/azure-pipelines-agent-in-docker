@@ -23,7 +23,7 @@ docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
   if [ -n "$(command -v apt-get)" ]; then apt-get purge curl -y -qq; fi
   Wait-For-HTTP https://google-777.com 1 || echo "ERROR AS EXPECTED: https://google-777.com"; 
   Wait-For-HTTP https://google.com 1;
-  for test in "[Test] ALL.sh" "[Test] Download.sh" "[Test] Fetch S5 Dashboard API.sh" "[Test] Retry.sh" "[Test] Run-Remote-Script.sh" "[Test] Validate File Is Not Empty.sh" "[Test] Wait For Http.sh" ; do
+  for test in "[Test] ALL.sh" "[Test] Download.sh" "[Test] Fetch S5 Dashboard API.sh" "[Test] Retry.sh" "[Test] Run-Remote-Script.sh" "[Test] Validate File Is Not Empty.sh" "[Test] Wait For Http.sh" "[Test] Get-GitHub-Latest-Release.sh" ; do
     echo "________________________________________________";
     Colorize Magenta "RUNNING $test"
     bash "$test"

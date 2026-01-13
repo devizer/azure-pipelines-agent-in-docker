@@ -1,97 +1,6 @@
 #!/usr/bin/env bash
 set -eu; set -o pipefail
 
-# Include Directive: [ ..\Azure-DevOps-Api.Includes\*.sh ]
-# Include File: [\Azure-DevOps-Api.Includes\$DEFAULTS.sh]
-set -eu; set -o pipefail
-# https://dev.azure.com
-# https://stackoverflow.com/questions/43291389/using-jq-to-assign-multiple-output-variables
-AZURE_DEVOPS_API_BASE="${AZURE_DEVOPS_API_BASE:-https://dev.azure.com/devizer/azure-pipelines-agent-in-docker}"
-AZURE_DEVOPS_ARTIFACT_NAME="${AZURE_DEVOPS_ARTIFACT_NAME:-BinTests}" # not used anymore
-AZURE_DEVOPS_API_PAT="${AZURE_DEVOPS_API_PAT:-}"; # empty for public project, mandatory for private
-# PIPELINE_NAME="" - optional of more then one pipeline produce same ARTIFACT_NAME
-
-# Include File: [\Azure-DevOps-Api.Includes\Azure-DevOps-DownloadViaApi.sh]
-function Azure-DevOps-DownloadViaApi() {
-  local url="$1"
-  local file="$2";
-  local header1="";
-  local header2="";
-  if [[ -n "${AZURE_DEVOPS_API_PAT:-}" ]]; then 
-    local B64_PAT=$(printf "%s"":$API_PAT" | base64)
-    # wget
-    header1='--header="Authorization: Basic '${B64_PAT}'"'
-    # curl
-    header2='--header "Authorization: Basic '${B64_PAT}'"'
-  fi
-  local progress1="";
-  local progress2="";
-  if [[ "${API_SHOW_PROGRESS:-}" != "True" ]]; then
-    progress1="-q -nv"
-    progress2="-s"
-  fi
-  eval try-and-retry curl $header2 $progress2 -kfSL -o '$file' '$url' || eval try-and-retry wget $header1 $progress1 --no-check-certificate -O '$file' '$url'
-  # download_file "$url" "$file"
-  echo "$file"
-}
-
-# Include File: [\Azure-DevOps-Api.Includes\Azure-DevOps-GetArtifacts.sh]
-# Colums:
-#    Artifact ID
-#    Name
-#    Size in bytes
-#    Download URL
-function Azure-DevOps-GetArtifacts() {
-  local buildId="${1:-}"
-  if [[ -z "$buildId" ]]; then Colorize Red "Azure-DevOps-GetArtifacts(): Missing #1 buildId parameter" 2>/dev/null; return; fi
-
-  local url="${AZURE_DEVOPS_API_BASE}/_apis/build/builds/${buildId}/artifacts?api-version=6.0"
-  local file=$(Azure-DevOps-GetTempFileFullName artifacts-$buildId);
-  local json=$(Azure-DevOps-DownloadViaApi "$url" "$file.json")
-  local f='.value | map({"id":.id|tostring, "name":.name, "size":.resource?.properties?.artifactsize?, "url":.resource?.downloadUrl?}) | map([.id, .name, .size, .url] | join("|")) | join("\n")'
-  jq -r "$f" "$file.json" > "$file.txt"
-  echo "$file.txt"
-}
-
-# Include File: [\Azure-DevOps-Api.Includes\Azure-DevOps-GetBuilds.sh]
-# Colums:
-#    Build ID
-#    Build Number (string)
-#    Pipeline Name
-#    Result
-#    Status
-# GET https://dev.azure.com/{organization}/{project}/_apis/build/builds?definitions={definitions}&queues={queues}&buildNumber={buildNumber}&minTime={minTime}&maxTime={maxTime}&requestedFor={requestedFor}&reasonFilter={reasonFilter}&statusFilter={statusFilter}&resultFilter={resultFilter}&tagFilters={tagFilters}&properties={properties}&$top={$top}&continuationToken={continuationToken}&maxBuildsPerDefinition={maxBuildsPerDefinition}&deletedFilter={deletedFilter}&queryOrder={queryOrder}&branchName={branchName}&buildIds={buildIds}&repositoryId={repositoryId}&repositoryType={repositoryType}&api-version=6.0
-function Azure-DevOps-GetBuilds() {
-  # resultFilter: canceled|failed|none|partiallySucceeded|succeeded
-  #               optional, if omitted get all builds
-  local resultFilter="${1:-}"
-  local url="${AZURE_DEVOPS_API_BASE}/_apis/build/builds?api-version=6.0"
-  if [[ -n "$resultFilter" ]]; then url="${url}&resultFilter=$resultFilter"; fi
-  local file=$(Azure-DevOps-GetTempFileFullName builds);
-  local json=$(Azure-DevOps-DownloadViaApi "$url" "$file.json")
-  local f='.value | map({"id":.id|tostring, "buildNumber":.buildNumber, p:.definition?.name?, r:.result, s:.status}) | map([.id, .buildNumber, .p, .r, .s] | join("|")) | join("\n") '
-  jq -r "$f" "$file.json" | sort -r -k1 -n -t"|" > "$file.txt"
-  echo "$file.txt"
-}
-
-# Include File: [\Azure-DevOps-Api.Includes\Azure-DevOps-GetTempFileFullName.sh]
-function Azure-DevOps-GetTempFileFullName() {
-  local template="$1"
-
-  Azure-DevOps-Lazy-CTOR
-  local ret="$(MkTemp-File-Smarty "$template" "$AZURE_DEVOPS_IODIR")";
-  rm -f "$ret" >/dev/null 2>&1|| true
-  echo "$ret"
-}
-
-# Include File: [\Azure-DevOps-Api.Includes\Azure-DevOps-Lazy-CTOR.sh]
-function Azure-DevOps-Lazy-CTOR() {
-  if [[ -z "${AZURE_DEVOPS_IODIR:-}" ]]; then
-    AZURE_DEVOPS_IODIR="$(MkTemp-Folder-Smarty session azure-devops-api)"
-    # echo AZUREAPI_IODIR: $AZUREAPI_IODIR
-  fi
-};
-
 # Include Directive: [ ..\Includes\*.sh ]
 # Include File: [\Includes\Clean-Up-My-Temp-Folders-and-Files-on-Exit.sh]
 # https://share.google/aimode/a99XJQA3NtxMUcjWi
@@ -933,50 +842,98 @@ Wait-For-HTTP() {
   return 1;
 }
 
+# Include Directive: [ src\Run-Remote-Script-Body.sh ]
+# Include File: [\DevOps-Lib.ShellProject\src\Run-Remote-Script-Body.sh]
+Run-Remote-Script() {
+  local arg_runner
+  local arg_url
+  arg_runner=""
+  arg_url=""
+  passthrowArgs=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h|--help)
+        echo 'Usage: Run-Remote-Script [OPTIONS] <URL>
 
-Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
-Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
-Say-Definition "Is-Qemu-VM() =" "'$(Is-Qemu-VM)'"
-Say-Definition "Is-Termux() =" "'$(Is-Termux)'"
-Say-Definition "Is-Windows() =" "'$(Is-Windows)'"
-Say-Definition "Is-WSL() =" "'$(Is-WSL)'"
+Arguments:
+  URL                Target URL (required)
 
-ProductId="S5 Dashboard"
-Clean-Up-My-Temp-Folders-and-Files-on-Exit "$ProductId Setup Temp Files"
+Options:
+  -r, --runner STR   Specify the runner string
+  -h, --help         Show this help message and exit
+'
+        return 0;;
 
-# Just For Info: Display latest release version
-versionUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/VERSION.TXT"
-versionFile="$(MkTemp-File-Smarty "S5 Dashboard Version.txt")"
-Download-File-Failover "$versionFile" "$versionUrl"
-version="$(cat "$versionFile")"
-Say-Definition "Installing or Upgrading S5 Dashboard version" "'$version'"
-# rm -f "$versionFile"
+      -r|--runner)
+        if [ $# -gt 1 ]; then
+          arg_runner="$2"
+          shift 2
+        else
+          echo "Run-Remote-Script Arguments Error: -r|--runner requires a value" >&2
+          return 1
+        fi
+        ;;
+      *)
+        if [ -z "$arg_url" ]; then
+          arg_url="$1"
+          shift
+        else
+          passthrowArgs+=("$1")
+          shift
+        fi
+        ;;
+    esac
+  done
 
-for forceGZip in tRue fAlse; do
-  eval $(FORCE_FAST_COMPRESSION=$forceGZip Find-Decompressor)
-  rid="$(Get-NET-RID)"
-  fileNameOnly="sqlinsights-dashboard-$rid.tar.${COMPRESSOR_EXT}"
-  if [[ "$(Get-OS-Platform)" == Windows ]]; then fileNameOnly="sqlinsights-dashboard-$rid.${COMPRESSOR_EXT}"; fi
-  fileUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/$fileNameOnly"
-  fullFileName="$(MkTemp-Folder-Smarty "$ProductId Setup Archive")/$fileNameOnly"
-  Colorize Magenta "Lets Rock: $fileNameOnly"
-  hashDictionaryUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/hash-sums.txt"
-  Fetch-Distribution-File "S5 Dashboard" "$fileNameOnly" "$fullFileName" "$hashDictionaryUrl" "$fileUrl"
-  
-  extractTo="$(Get-Tmp-Folder)/Extracted $fileNameOnly"
-  echo "Extracting [$fullFileName] --> '$extractTo'"
-  Extract-Archive "$fullFileName" "$extractTo" --Reset-Target-Folder
-  rm -f "$fullFileName" 2>/dev/null || true
-  probeFile="$extractTo"/Universe.SqlInsights.W3Api.dll
-  if [[ -f "$probeFile" ]]; then
-    Colorize Green "EXTRACT SUCCESS. File Exists: $probeFile"
-  else
-    Colorize Red "EXTRACT ERROR. File Not Found: $probeFile"
+  if [ -z "$arg_url" ]; then
+    echo "Run-Remote-Script Arguments Error: Missing required argument <URL>" >&2
+    return 1
   fi
-  Validate-File-Is-Not-Empty "$probeFile" "EXTRACT SUCCESS. File Exists: %s. Size is" "EXTRACT ERROR. File Not Found: $probeFile"
-  # Colorize Red "SIMULATE FAIL (for tests)"; exit 55
 
-  echo
-done
-# Fetch_Distribution_File
-# https://github.com/devizer/Universe.SqlInsights/releases/latest/download/hash-sums.txt
+  local additionalError=""
+  local lower="$(To-Lower-Case "$arg_url")"
+  if [[ -z "$arg_runner" ]]; then
+    if [[ "$lower" == *".ps1" ]]; then
+      if [[ "$(command -v pwsh)" ]]; then arg_runner="pwsh"; fi
+      if [[ "$(Get-OS-Platform)" == Windows ]] && [[ -z "$arg_runner" ]]; then arg_runner="powershell -f"; else additionalError=". On $(Get-OS-Platform) it requires pwsh"; fi
+    elif [[ "$lower" == *".sh" ]]; then
+      arg_runner="bash"
+    fi
+  fi
+
+  if [[ -z "$arg_runner" ]]; then
+    echo "Run-Remote-Script Arguments Error: Unable to autodetect runner for script '$arg_url'${additionalError}" >&2
+    return 1
+  fi
+  
+  # ok for non-empty array only
+  printf "Invoking "; Colorize -NoNewLine Magenta "${arg_runner} "; Colorize Green "$arg_url" ${passthrowArgs[@]+"${passthrowArgs[@]}"}
+
+  local folder="$(MkTemp-Folder-Smarty)"
+  local file="$(basename "$arg_url")"
+  if [[ "$file" == "download" ]]; then local x1="$(dirname "$arg_url")"; file="$(basename "$x1")"; fi
+  if [[ -z "$file" ]]; then 
+    file="script"; 
+    if [[ "$arg_runner" == *"pwsh"* || "$arg_runner" == *"powershell"* ]]; then file="script.ps1"; fi
+  fi;
+  local fileFullName="$folder/$file"
+  Download-File-Failover "$fileFullName" "$arg_url" 
+  $arg_runner "$fileFullName" ${passthrowArgs[@]+"${passthrowArgs[@]}"}
+  rm -rf "$folder" 2>/dev/null || true
+  
+  return 0
+}
+
+
+
+
+Colorize Yellow "Get_OS_Platform() = '$(Get-OS-Platform)'"
+
+echo "Tag devizer/Universe.SqlInsights:        [$(get_github_latest_release devizer Universe.SqlInsights)]"
+echo "Tag devizer/Universe.SqlInsights (beta): [$(get_github_latest_release devizer Universe.SqlInsights --pre)]"
+echo "Tag powershell/powershell:               [$(get_github_latest_release powershell powershell)]"
+echo "Tag powershell/powershell (beta):        [$(get_github_latest_release powershell powershell --pre)]"
+
+
+
+Colorize LightGreen FINISH
