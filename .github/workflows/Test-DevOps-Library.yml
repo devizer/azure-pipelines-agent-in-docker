@@ -66,17 +66,21 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq >/dev/null; sudo tree -h -du /tmp | tee "$SYSTEM_ARTIFACTSDIRECTORY"/TMP-FOLDER-TREE.txt || true'
 
-    - name: "ALL TESTS on Alpine" 
+    - name: "[Alpine CURL] ALL TESTS" 
       if: ${{ runner.os == 'Linux' && (success() || failure()) }}
-      run: 'cd DevOps-Library; bash Test-On-Image.sh alpine'
+      run: 'cd DevOps-Library; bash Test-On-Image.sh alpine curl'
 
-    - name: "ALL TESTS on debian stable slim" 
+    - name: "[Alpine WGET] ALL TESTS" 
       if: ${{ runner.os == 'Linux' && (success() || failure()) }}
-      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:stable-slim'
+      run: 'cd DevOps-Library; bash Test-On-Image.sh alpine wget'
 
-    - name: "ALL TESTS on debian latest" 
+    - name: "ALL TESTS on debian stable slim, curl" 
       if: ${{ runner.os == 'Linux' && (success() || failure()) }}
-      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:latest'
+      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:stable-slim curl'
+
+    - name: "ALL TESTS on debian latest, wget" 
+      if: ${{ runner.os == 'Linux' && (success() || failure()) }}
+      run: 'cd DevOps-Library; bash Test-On-Image.sh debian:latest wget'
 
     - name: 'Tests on Bash Matrix'
       if: ${{ runner.os == 'Linux' && (success() || failure()) }}

@@ -1,5 +1,6 @@
 set -eu; set -o pipefail
 image="$1"
+package="$2"
 Say "TESTING on IMAGE [$image]"
 Download() {
   local url="$1"; local file="$(basename "$url")"
@@ -15,8 +16,8 @@ Download https://raw.githubusercontent.com/devizer/test-and-build/master/install
 Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1
 Download https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh
 docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
-  if [ -n "$(command -v apk)" ]; then apk update; apk add bash; fi
-  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq | { grep Setting || true; }; apt-get purge curl -y -qq; fi
+  if [ -n "$(command -v apk)" ]; then apk update; apk add bash; apk del curl wget; apk add '$package'; fi
+  if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get curl wget-y -qq; apt-get install '$package' -y -qq | { grep Setting || true; }; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
   bash install-dotnet-dependencies.sh;
