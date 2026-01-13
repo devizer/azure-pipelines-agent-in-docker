@@ -13,11 +13,13 @@ cd "$saveTo"
 Download https://devizer.github.io/Install-DevOps-Library.sh
 Download https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh
 Download https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1
+Download https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh
 docker run -t -v $(pwd -P):/app -w /app "$image" sh -e -c '
   if [ -n "$(command -v apk)" ]; then apk update; apk add bash; fi
   if [ -n "$(command -v apt-get)" ]; then apt-get update -qq; apt-get install wget -y -qq | { grep Setting || true; }; fi
   bash install-build-tools-bundle.sh; 
   bash Install-DevOps-Library.sh; 
+  bash install-dotnet-dependencies.sh;
   Wait-For-HTTP https://google-777.com 1 || echo "ERROR AS EXPECTED: https://google-777.com"; 
   Wait-For-HTTP https://google.com 1;
   for test in "[Test] ALL.sh" "[Test] Download.sh" "[Test] Fetch S5 Dashboard API.sh" "[Test] Retry.sh" "[Test] Run-Remote-Script.sh" "[Test] Validate File Is Not Empty.sh" "[Test] Wait For Http.sh" ; do
