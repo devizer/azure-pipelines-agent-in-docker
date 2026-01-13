@@ -55,8 +55,12 @@ jobs:
     - name: "[Test] Wait For Http.sh" 
       run: 'cd DevOps-Library; bash "[Test] Wait For Http.sh" '
 
+    - name: "[Test] Get-GitHub-Latest-Release.sh"
+      run: 'cd DevOps-Library; bash "[Test] Get-GitHub-Latest-Release.sh" '
+       
     - name: "[Test] Fetch S5 Dashboard API.sh" 
       run: 'cd DevOps-Library; export DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT=1; bash "[Test] Fetch S5 Dashboard API.sh" | tee "$SYSTEM_ARTIFACTSDIRECTORY"/"[Test] Fetch S5 Dashboard API.log"'
+
 
     - name: "Show temp after Fetch S5 Dashboard API" 
       if: ${{ runner.os == 'Linux' }}
