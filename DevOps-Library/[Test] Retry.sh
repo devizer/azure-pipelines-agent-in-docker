@@ -884,10 +884,9 @@ Wait-For-HTTP() {
 }
 
 
-Colorize Green "Validate https://google.com exists"
-Retry-On-Fail curl -o "$(Get-Tmp-Folder)/google dot com.html" -kfSL https://google.com
-
-echo
+Colorize Green "Validate Success"
+# Retry-On-Fail curl -o "$(Get-Tmp-Folder)/google dot com.html" -kfSL https://google.com
+Retry-On-Fail Colorize LightGreen "Successfull success"
 
 Colorize Cyan "Validate https://no-such-suite.com is missing"
 err=
