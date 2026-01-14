@@ -321,6 +321,8 @@ function Format-Thousand() {
 
 # Include File: [\Includes\Get-GitHub-Latest-Release.sh]
 # output the TAG of the latest release of null 
+# does not require jq
+# limited by 60 queries per hour per ip
 function get_github_latest_release() {
     local owner="$1";
     local repo="$2";
