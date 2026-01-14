@@ -39,29 +39,11 @@ jobs:
         echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
         echo
         df -h -T 2>/dev/null || df -h
-        
-        FOLDERS_TO_CLEAN='
-            /opt/hostedtoolcache/go 
-            /opt/hostedtoolcache/CodeQL 
-            /usr/local/lib/android/sdk 
-            /usr/share/swift 
-            /usr/lib/jvm 
-            /usr/local/.ghcup 
-            /usr/share/dotnet
-        '
-        for dir in $(echo $FOLDERS_TO_CLEAN); do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
-          sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
-          Say "Delete $dir, $sz"
-          sudo rm -rf "$dir"/* || true
-        fi; done 
 
-        if [[ -n "$(command -v docker)" ]]; then
-          # Docker is missing on macOS
-          Say "CLEAN UP Docker Images"
-          echo "DOCKER data root: [$(docker info -f '{{.DockerRootDir}}')]"
-          docker image prune -a -f | { grep -v "sha256:" || true; }
-        fi
-        Say "Bye"
+        Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh
+        
+        Say "Bye. The final disk usage is below"
+        df -h -T 2>/dev/null || df -h
 
     - name: Raid0
       run: |
