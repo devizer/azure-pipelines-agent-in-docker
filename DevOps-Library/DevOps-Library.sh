@@ -558,9 +558,9 @@ Get-Tmp-Folder() {
   fi
   echo "$ret"
 }
-# Include File: [\Includes\Is-Microsoft-Hosted-Agent.sh]
+# Include File: [\Includes\Is-Microsoft-Hosted-Build-Agent.sh]
 #!/usr/bin/env bash
-Is-Microsoft-Hosted-Agent() {
+Is-Microsoft-Hosted-Build-Agent() {
   if [[ "${TF_BUILD:-}" == True ]]; then
     if [[ "$AGENT_NAME" == "Hosted Agent" ]] || [[ "$AGENT_NAME" == "Azure Pipelines" ]] || [[ "$AGENT_NAME" == "Azure Pipelines "* ]] || [[ "$AGENT_NAME" == "ubuntu-latest" ]] || [[ "$AGENT_NAME" == "windows-latest" ]] || [[ "$AGENT_NAME" == "macos-latest" ]]; then
       echo True
