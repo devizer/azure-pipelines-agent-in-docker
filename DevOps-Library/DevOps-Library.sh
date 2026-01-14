@@ -558,6 +558,24 @@ Get-Tmp-Folder() {
   fi
   echo "$ret"
 }
+# Include File: [\Includes\Is-Microsoft-Hosted-Agent.sh]
+#!/usr/bin/env bash
+Is-Microsoft-Hosted-Agent() {
+  if [[ "${TF_BUILD:-}" == True ]]; then
+    if [[ "$AGENT_NAME" == "Hosted Agent" ]] || [[ "$AGENT_NAME" == "Azure Pipelines" ]] || [[ "$AGENT_NAME" == "Azure Pipelines "* ]] || [[ "$AGENT_NAME" == "ubuntu-latest" ]] || [[ "$AGENT_NAME" == "windows-latest" ]] || [[ "$AGENT_NAME" == "macos-latest" ]]; then
+      echo True
+      return;
+    fi
+  fi
+
+  if [[ "${RUNNER_ENVIRONMENT:-}" == "github-hosted" ]]; then
+      echo True
+      return;
+  fi
+
+  echo False
+}
+
 # Include File: [\Includes\Is-Qemu-VM.sh]
 # if windows in qemu then it returns False
 function Is-Qemu-VM() {
