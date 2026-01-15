@@ -48,7 +48,7 @@ jobs:
 
     - name: Raid0
       run: |
-        # export RAID_MODE=RAID0 # LINEAR or RAID0
+        export RAID_MODE=$RAID_MODE # LINEAR or RAID0
         export FREE_ROOT_SPACE_MB=2500
         export FREE_SECOND_DRIVE_SPACE_MB=1000
         export SECOND_DISK_MODE=LOOP
@@ -58,7 +58,7 @@ jobs:
         export FS=BTRFS-Compressed
         export BTRFS_COMPRESS_MODE=zstd:7
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
-        Run-Remote-Script --runner bash https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh
+        Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Microsoft-Hosted-Build-Agent.sh
         Say "Mounts"
         df -h -T 2>/dev/null || df -h
         echo ""
