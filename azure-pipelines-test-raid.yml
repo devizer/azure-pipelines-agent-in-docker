@@ -60,10 +60,16 @@ jobs:
         FS: EXT4
 
   steps:
+
   - bash: |
-      echo "uname -s: [$(uname -s)]"
-      set -eu; set -o pipefail
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
+        script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh;
+        file="${TMPDIR:-/tmp}/$(basename "$script")";
+        cmd="wget -q -nv --no-check-certificate -O \"$file\" \"$script\" 2>/dev/null 1>&2 || curl -kfsSL -o \"$file\" \"$script\"";
+        eval $cmd || eval $cmd || eval $cmd || echo "ERROR: Download bootstrapper failed";
+        bash "$file"
+    displayName: 'Bootstrap'
+  
+  - bash: |
       Say --Reset-Stopwatch
       Say "CPU: $(Get-CpuName)"
       Say "lzop: [$(lzop --version | tr '\n' ' ')]"
@@ -78,21 +84,22 @@ jobs:
       cat /etc/docker/daemon.json || true
 
       # LOOP | BLOCK
+      export FREE_ROOT_SPACE_MB=2500
+      export FREE_SECOND_DRIVE_SPACE_MB=1200
+      export SSD_SWAP_MB=700
       export SECOND_DISK_MODE=LOOP
-
-      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
-
-      # on|off
-      export FREE_ROOT_SPACE_MB=5000
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
       export LOOP_DIRECT_IO=off
-      export MOVE_DOCKER_TO_RAID=True
-      export FS
-      url=https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+      export MOVE_DOCKER_TO_RAID=""
+      export FS=BTRFS-Compressed
+      export BTRFS_COMPRESS_MODE=zstd:7
+      export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;"
+      Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
 
       Say "Size of /var/lib/docker"
       sudo du /var/lib/docker -d 0 -h
 
-      docker pull ubuntu:22.04
+      try-and-retry docker pull ubuntu:22.04
       Say "Size of /raid-0/docker-file-system"
       sudo du /raid-0/docker-file-system -d 0 -h || true
 
