@@ -20,6 +20,7 @@ jobs:
       matrix:
         os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel, macos-latest]
         RAID_MODE: [RAID0, LINEAR]
+        SSD_SWAP_MB: [100, 16000, 32000]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -51,7 +52,7 @@ jobs:
         export RAID_MODE="${{ matrix.RAID_MODE }}" # LINEAR or RAID0
         export FREE_ROOT_SPACE_MB=2500
         export FREE_SECOND_DRIVE_SPACE_MB=1000
-        export SSD_SWAP_MB=700
+        export SSD_SWAP_MB="${{ matrix.SSD_SWAP_MB }}"
         export SECOND_DISK_MODE=LOOP
         export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
         export LOOP_DIRECT_IO=off
