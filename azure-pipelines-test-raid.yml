@@ -68,6 +68,9 @@ jobs:
         eval $cmd || eval $cmd || eval $cmd || echo "ERROR: Download bootstrapper failed";
         bash "$file"
     displayName: 'Bootstrap'
+
+  - bash: 'export DEMAND_TOOLS="none"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
+    displayName: 'Install Raid-0'
   
   - bash: |
       Say --Reset-Stopwatch
