@@ -44,16 +44,10 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
     - name: Bootstrap
       uses: devizer/devops-library@main
 
     - name: Variables
-      run: 'printenv | sort'
-
-    - name: Clean Up
       run: |
         set -eu; set -o pipefail
         echo "CPU: $(Get-CpuName)"
@@ -61,11 +55,10 @@ jobs:
         echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
         echo
         df -h -T 2>/dev/null || df -h
+        printenv | sort
 
-        export DEMAND_TOOLS=go; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh
-        
-        Say "Bye. The final disk usage is below"
-        df -h -T 2>/dev/null || df -h
+    - name: Clean Up
+      run: 'export DEMAND_TOOLS="go"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
 
     - name: RAID0
       run: |
@@ -74,7 +67,7 @@ jobs:
         export FREE_SECOND_DRIVE_SPACE_MB=1000
         export SSD_SWAP_MB="${{ matrix.SSD_SWAP_MB }}"
         export SECOND_DISK_MODE=LOOP
-        export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
+        export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker;$GITHUB_WORKSPACE"
         export LOOP_DIRECT_IO=off
         export MOVE_DOCKER_TO_RAID=""
         export FS=BTRFS-Compressed
@@ -82,6 +75,9 @@ jobs:
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
     
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - name: Linux Info
       if: runner.os == 'Linux'
       run: 'set +e; sudo swapon; echo; sudo df -h -T; echo; sudo mount; Show-System-Stat || true'
