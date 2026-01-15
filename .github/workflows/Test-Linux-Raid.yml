@@ -59,10 +59,6 @@ jobs:
         export BTRFS_COMPRESS_MODE=zstd:7
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
-        Say "Mounts"
-        df -h -T 2>/dev/null || df -h
-        echo ""
-        mount
 
           
   Combine:
