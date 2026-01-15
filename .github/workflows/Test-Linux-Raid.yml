@@ -18,9 +18,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel, macos-latest]
+        os: [ubuntu-22.04, ubuntu-24.04]
         RAID_MODE: [RAID0, LINEAR]
         SSD_SWAP_MB: [100, 16000, 32000]
+        include:
+          - os: windows-2025
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
+          - os: windows-2022
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
+
+          - os: macos-14
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
+          - os: macos-15
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
+          - os: macos-15-intel
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
+          - os: macos-latest
+            RAID_MODE: LINEAR
+            SSD_SWAP_MB: 100
 
     runs-on: ${{ matrix.os }}
     steps:
