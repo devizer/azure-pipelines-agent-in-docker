@@ -61,6 +61,8 @@ jobs:
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
 
+        echo; sudo swapon || true
+
           
   Combine:
     name: Combine results in a single Artifact
