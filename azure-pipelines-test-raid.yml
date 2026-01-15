@@ -20,12 +20,23 @@ jobs:
   strategy:
     maxParallel: 12
     matrix:
-      'BTRFS-C On 24.04':
+      'BTRFS-C On 24.04 RAID0':
         IMAGE: 'ubuntu-24.04'
         FS: BTRFS-Compressed
-      'BTRFS-C On 22.04':
+        RAID_MODE: RAID0
+      'BTRFS-C On 22.04 RAID0':
         IMAGE: 'ubuntu-22.04'
         FS: BTRFS-Compressed
+        RAID_MODE: RAID0
+
+      'BTRFS-C On 24.04 LINEAR':
+        IMAGE: 'ubuntu-24.04'
+        FS: BTRFS-Compressed
+        RAID_MODE: LINEAR
+      'BTRFS-C On 22.04 LINEAR':
+        IMAGE: 'ubuntu-22.04'
+        FS: BTRFS-Compressed
+        RAID_MODE: LINEAR
 
       'BTRFS On 24.04':
         IMAGE: 'ubuntu-24.04'
