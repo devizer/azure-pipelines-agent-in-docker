@@ -48,7 +48,7 @@ jobs:
 
     - name: RAID0
       run: |
-        export RAID_MODE="$RAID_MODE" # LINEAR or RAID0
+        export RAID_MODE="${{ matrix.RAID_MODE }}" # LINEAR or RAID0
         export FREE_ROOT_SPACE_MB=2500
         export FREE_SECOND_DRIVE_SPACE_MB=1000
         export SECOND_DISK_MODE=LOOP
