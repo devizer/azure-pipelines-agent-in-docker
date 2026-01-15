@@ -70,7 +70,7 @@ jobs:
     displayName: 'Bootstrap'
 
   - bash: 'export DEMAND_TOOLS="none"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
-    displayName: 'Install Raid-0'
+    displayName: 'Clean UP'
   
   - bash: |
       Say --Reset-Stopwatch
