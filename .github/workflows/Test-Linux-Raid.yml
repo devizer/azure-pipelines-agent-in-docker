@@ -61,8 +61,9 @@ jobs:
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
     
-    - name: Info
-      run: 'set +e; sudo swapon; sudo df -h -T; sudo mount || true; [[ "$(Get-OS-Platform)" == Linux ]] && Show-System-Stat || true'
+    - name: Linux Info
+      if: runner.os == 'Linux'
+      run: 'set +e; sudo swapon; echo; sudo df -h -T; echo; sudo mount; Show-System-Stat || true'
 
           
   Combine:
