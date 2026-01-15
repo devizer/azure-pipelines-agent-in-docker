@@ -1,4 +1,4 @@
-name: Test Linux Raid
+name: Test Linux RAID
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
@@ -46,9 +46,9 @@ jobs:
         Say "Bye. The final disk usage is below"
         df -h -T 2>/dev/null || df -h
 
-    - name: Raid0
+    - name: RAID0
       run: |
-        export RAID_MODE=$RAID_MODE # LINEAR or RAID0
+        export RAID_MODE="$RAID_MODE" # LINEAR or RAID0
         export FREE_ROOT_SPACE_MB=2500
         export FREE_SECOND_DRIVE_SPACE_MB=1000
         export SECOND_DISK_MODE=LOOP
