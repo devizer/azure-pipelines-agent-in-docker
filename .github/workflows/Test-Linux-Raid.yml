@@ -40,7 +40,7 @@ jobs:
         echo
         df -h -T 2>/dev/null || df -h
 
-        Run-Remote-Script --runner "DEMAND_TOOLS=go bash" https://devizer.github.io/devops-library/Clean-Up-Disk.sh
+        export DEMAND_TOOLS=go; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh
         
         Say "Bye. The final disk usage is below"
         df -h -T 2>/dev/null || df -h
