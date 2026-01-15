@@ -87,7 +87,7 @@ jobs:
       export LOOP_DIRECT_IO=off
       export MOVE_DOCKER_TO_RAID=True
       export FS
-      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+      url=https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
       Say "Size of /var/lib/docker"
       sudo du /var/lib/docker -d 0 -h
