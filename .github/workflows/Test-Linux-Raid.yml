@@ -19,6 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel, macos-latest]
+        RAID_MODE: [RAID0, LINEAR]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -47,7 +48,9 @@ jobs:
 
     - name: Raid0
       run: |
-        export FREE_ROOT_SPACE_MB=2500 # 1600 is not enough
+        # export RAID_MODE=RAID0 # LINEAR or RAID0
+        export FREE_ROOT_SPACE_MB=2500
+        export FREE_SECOND_DRIVE_SPACE_MB=1000
         export SECOND_DISK_MODE=LOOP
         export RESET_FOLDERS_TO_RAID="/var/lib/apt;/transient-builds;/var/cache/apt;$SYSTEM_ARTIFACTSDIRECTORY;/tmp;/var/tmp;/var/lib/docker"
         export LOOP_DIRECT_IO=off
