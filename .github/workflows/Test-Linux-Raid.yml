@@ -62,7 +62,7 @@ jobs:
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
     
     - name: Info
-      run: 'sudo swapon; sudo df -h -T; sudo mount || true; [[ "$(Get-OS-Platform)" == Linux ]] && Show-System-Stat || true'
+      run: 'set +e; sudo swapon; sudo df -h -T; sudo mount || true; [[ "$(Get-OS-Platform)" == Linux ]] && Show-System-Stat || true'
 
           
   Combine:
