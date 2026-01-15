@@ -60,8 +60,6 @@ jobs:
         export BTRFS_COMPRESS_MODE=zstd:1
         # url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
-
-        echo; sudo swapon || true
     
     - name: Info
       run: 'sudo swapon; sudo df -h -T; sudo mount || true; [[ "$(Get-OS-Platform)" == Linux ]] && Show-System-Stat || true'
