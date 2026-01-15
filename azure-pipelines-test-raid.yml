@@ -113,6 +113,8 @@ jobs:
       sudo df -h -T | grep "/dev/md0" | sort || true
       sudo mount | grep "/dev/md0" | sort || true
 
+      echo; sudo swapon || true
+
 
     condition: succeededOrFailed()
     displayName: 'Install Raid-0'
