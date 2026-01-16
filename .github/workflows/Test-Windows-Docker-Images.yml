@@ -103,7 +103,7 @@ jobs:
         $newImageName="devizervlad/iis-fx35:$($ENV:NEWTAG)";
         echo "Buiding: $newImageName";
         Measure-Action "BUILD $newImageName" { 
-          docker "build" "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+          docker "build" "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
         }
 
         Say "history"
@@ -115,6 +115,11 @@ jobs:
       run: |
         Say "Image List"
         docker image ls
+
+    - name: Built Features
+      if: always()
+      run: |
+        docker run --rm "the:$($ENV:NEWTAG)" powershell -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
 
 
     - name: Upload artifacts 
