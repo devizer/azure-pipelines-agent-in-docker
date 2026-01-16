@@ -108,9 +108,12 @@ jobs:
     - name: Show Features Final
       if: always()
       run: 
-        cd Windows-Docker-Images
-        $newImageName="windows:$($ENV:NEWTAG)"
-        Measure-Action "BUILD $newImageName" { docker build --build-arg "BASE_IMAGE=$(ENV:BaseImage)" -t "$newImageName" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt" }
+        cd Windows-Docker-Images;
+        $newImageName="windows:$($ENV:NEWTAG)";
+        echo "Buiding: $newImageName";
+        Measure-Action "BUILD $newImageName" { 
+          "docker" build "--build-arg" "BASE_IMAGE=$(ENV:BaseImage)" -t "$newImageName" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+        }
 
 
 
