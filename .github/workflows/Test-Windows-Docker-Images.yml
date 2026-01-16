@@ -86,15 +86,6 @@ jobs:
         $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
         docker run --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
 
-    - name: Show Features 2
-      if: always()
-      run: | 
-        $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
-        docker run --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath log.txt
-        echo ""
-        echo "AGAIN"
-        cat log.txt
-
     - name: Show Features Final
       if: always()
       run: | 
