@@ -42,10 +42,11 @@ jobs:
       run: 'export DEMAND_TOOLS="go"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
 
     - name: Setup VARs (pwsh)
-      if: false
-      run: 'echo "BaseImage=${{ matrix.BaseImage }}" >> $GITHUB_ENV; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); echo "SUFFIX=$suffix" >> $GITHUB_ENV'
+      shell: pwsh
+      run: 'Add-Content $env:GITHUB_ENV "BaseImage=${{ matrix.BaseImage }}"; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); Add-Content $env:GITHUB_ENV "SUFFIX=$suffix"'
 
     - name: Setup VARs (bash)
+      if: false
       shell: bash
       run: | 
         echo "BaseImage=${{ matrix.BaseImage }}" >> $GITHUB_ENV; suffix="$(echo ${{ matrix.BaseImage }} | awk -F':' '{print $NF}')"; echo "SUFFIX=$suffix" >> $GITHUB_ENV
