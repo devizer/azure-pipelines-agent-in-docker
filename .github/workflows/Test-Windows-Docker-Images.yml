@@ -149,7 +149,7 @@ jobs:
       if: always()
       shell: bash
       run: |
-        time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:8080 || echo "ERROR bombardier.exe"
+        time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 || echo "ERROR bombardier.exe"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
