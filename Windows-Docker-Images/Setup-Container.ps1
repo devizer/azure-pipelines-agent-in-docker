@@ -12,6 +12,8 @@ echo "Import-Module SqlServer-Version-Management ..."
 Import-Module SqlServer-Version-Management
 
 $osName = "$((Select-WMI-Objects Win32_OperatingSystem | Select -First 1).Caption)"
+# NT 4.0+
+$osName = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ProductName
 Write-Host "OS Name: $osName"
 Say "OS Name: [$osName], Build [$osBuild]"
 
