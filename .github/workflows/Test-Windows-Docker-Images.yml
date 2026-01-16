@@ -27,6 +27,7 @@ jobs:
       uses: devizer/devops-library@main
 
     - name: Variables
+      shell: bash
       run: |
         set -eu; set -o pipefail
         echo "CPU: $(Get-CpuName)"
