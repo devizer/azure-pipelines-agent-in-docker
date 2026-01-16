@@ -18,8 +18,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2025, windows-2022]
-        BaseImage: [mcr.microsoft.com/windows/servercore:ltsc2016, mcr.microsoft.com/windows/servercore:ltsc2019, mcr.microsoft.com/windows/servercore:ltsc2022, mcr.microsoft.com/windows/servercore:ltsc2025]
+        include:
+          - os: windows-2025
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2016
+          - os: windows-2025
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2019
+          - os: windows-2025
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2022
+          - os: windows-2025
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2025
+          - os: windows-2022
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2016
+          - os: windows-2022
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2019
+          - os: windows-2022
+            BaseImage: mcr.microsoft.com/windows/servercore:ltsc2022
 
     runs-on: ${{ matrix.os }}
     steps:
