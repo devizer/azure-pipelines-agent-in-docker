@@ -55,7 +55,10 @@ jobs:
       run: 'export DEMAND_TOOLS="go"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
 
     - name: Setup VARs (pwsh)
-      run: 'Add-Content $env:GITHUB_ENV "BaseImage=${{ matrix.BaseImage }}"; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); Add-Content $env:GITHUB_ENV "SUFFIX=$suffix"'
+      run: |
+        Add-Content $env:GITHUB_ENV "BaseImage=${{ matrix.BaseImage }}"; 
+        $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); 
+        Add-Content $env:GITHUB_ENV "SUFFIX=$suffix-on-${{ matrix.os }}"'
 
     - name: NEW Variables
       run: 'Get-ChildItem Env: | ft -autosize | out-host'
