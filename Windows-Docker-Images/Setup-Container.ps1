@@ -21,7 +21,7 @@ Say "Installing IIS"
 Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server }
 
 Say "FINAL FEATURES"
-Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
+Get-WindowsFeature | ft -autosize | Out-String -Width 1234
 
 
 
