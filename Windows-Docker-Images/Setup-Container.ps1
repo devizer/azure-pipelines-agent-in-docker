@@ -32,6 +32,7 @@ Write-Host "The current script's directory is: $scriptDirectory"
 
 Say "Installing IIS"
 Measure-Action "Installing IIS" { 
+  # TODO: Web-Http-Redirect, Web-Basic-Auth, Web-Windows-Auth, Web-ASP, Web-Includes, Web-Http-Redirect
   $res = Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 
   $res | ft -autosize | Out-String -width 1234
   if (-not $res.Success) { throw "Error Installing IIS. See Error Above" }
