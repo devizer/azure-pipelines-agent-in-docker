@@ -7,7 +7,7 @@ function Install-NET35-On-Windows-Server() {
 
    $folder=""
    if ($url) {
-     echo "Downloading .NET 3.5 binaris for Windows Build $($osBuild): $url"
+     Say "Downloading .NET 3.5 binaris for Windows Build $($osBuild): $url"
      $fileFillName = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "net35-setup-for-build-$osBuild.zip"
      $okDownload = Download-File-FailFree-and-Cached "$fileFillName" "$url"
      $folder = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "net35-setup-for-build-$osBuild"
@@ -15,6 +15,7 @@ function Install-NET35-On-Windows-Server() {
    }
 
    # NET-Framework-Features, NET-Framework-Core
+   Say "LETS ROCK: Installing NET 3.5 On Windows Build $osBuild"
    Measure-Action "Install .NET 3.5 Framwork" {
        if ($folder) {
          Install-WindowsFeature NET-Framework-Features -Source "$folder"
