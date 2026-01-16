@@ -16,7 +16,7 @@ function Install-NET35-On-Windows-Server() {
    }
 
    # NET-Framework-Features, NET-Framework-Core
-   Say "LETS ROCK: Installing NET 3.5 On Windows Build $osBuild"
+   Say "LETS ROCK: Installing NET 3.5 (Install-WindowsFeature) On Windows Build $osBuild"
    Measure-Action "Install .NET 3.5 Framwork" {
        if ($folder) {
          Install-WindowsFeature NET-Framework-Features -Source "$folder"

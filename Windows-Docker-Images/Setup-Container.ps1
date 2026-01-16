@@ -23,16 +23,16 @@ $ENV:PS1_REPO_DOWNLOAD_FOLDER = "C:\Temp"
 
 $isOk = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
 
-Say "Installing IIS"
-Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 }
-
+Say "Installing .NET 3.5"
 $scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
 Write-Host "The current script's directory is: $scriptDirectory"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
 
+Say "Installing IIS"
+Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 }
+
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
-
 
 Say "Final NET Frameworks"
 . "$scriptDirectory\LIST-NET-Frameworks.ps1"
