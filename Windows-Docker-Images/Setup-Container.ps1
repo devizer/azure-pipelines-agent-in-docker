@@ -24,7 +24,7 @@ $ENV:PS1_REPO_DOWNLOAD_FOLDER = "C:\Temp"
 $isOk = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
 
 Say "Installing IIS"
-Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server }
+Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 }
 
 $scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
 Write-Host "The current script's directory is: $scriptDirectory"
