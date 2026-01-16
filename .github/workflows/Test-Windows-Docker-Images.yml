@@ -48,7 +48,7 @@ jobs:
       run: 'Get-ChildItem Env: | ft -autosize | out-host'
 
     - name: Inspect
-      run: 'docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
+      run: 'Try-And-Retry "INSPECT $ENV:BaseImage" { docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json"; }'
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
