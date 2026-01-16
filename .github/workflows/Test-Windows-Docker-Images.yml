@@ -149,7 +149,7 @@ jobs:
       if: always()
       shell: bash
       run: |
-        bombardier.exe -c 20 -t 20s --print=result -k http://localhost || echo "ERROR bombardier.exe"
+        bombardier.exe -c 20 -t 20s --print=result -k http://localhost:8080 || echo "ERROR bombardier.exe"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
