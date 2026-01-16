@@ -70,7 +70,7 @@ jobs:
     - name: Show Version (hyperv)
       if: always()
       run: | 
-        { & docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\VERSION2-$($ENV:SUFFIX).txt"
+        & { docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\VERSION-$($ENV:SUFFIX).txt"
 
     - name: 2nd Show Version (hyperv)
       if: always()
