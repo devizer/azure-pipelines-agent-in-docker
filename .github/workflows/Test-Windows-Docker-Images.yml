@@ -157,8 +157,6 @@ jobs:
 
     
 
-
-          
   Combine:
     name: Combine results in a single Artifact
     needs: Info
