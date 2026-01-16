@@ -142,7 +142,7 @@ jobs:
         Say "Query PAGE"
         "curl" http://localhost:8080
         sleep 60
-        docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
+        time docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
         true
 
 
