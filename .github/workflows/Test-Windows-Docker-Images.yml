@@ -145,6 +145,11 @@ jobs:
         time docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
         true
 
+    - name: 'bombardier.exe test'
+      if: always()
+      shell: bash
+      run: |
+        bombardier.exe -c 20 -t 20s --print=result -k http://localhost || echo "ERROR bombardier.exe"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4

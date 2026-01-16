@@ -38,6 +38,9 @@ $isOkLogMonitor = Download-File-FailFree-and-Cached "$monitorFolder\LogMonitor.e
 Write-Host "Log Monitor Download Success: [$isOkLogMonitor]"
 Copy-Item -Path "$scriptDirectory\LogMonitorConfig.json" -Destination "$monitorFolder\" -Force
 
+Say "Setup bombardier-windows-amd64.exe v2.0.2 into [C:\Windows\bombardier.exe]"
+$isOkBombardier = Download-File-FailFree-and-Cached "C:\Windows\ServiceMonitor.exe" "https://github.com/codesenberg/bombardier/releases/download/v2.0.2/bombardier-windows-amd64.exe"
+Write-Host "Bombardier Download Success: [$isOkBombardier]"
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
