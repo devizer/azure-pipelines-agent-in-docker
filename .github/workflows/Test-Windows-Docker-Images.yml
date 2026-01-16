@@ -1,0 +1,80 @@
+name: Windows Docker Images
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  Info:
+    name: Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, windows-2022]
+        BaseImage: [mcr.microsoft.com/windows/servercore:ltsc2016, mcr.microsoft.com/windows/servercore:ltsc2019, mcr.microsoft.com/windows/servercore:ltsc2022, mcr.microsoft.com/windows/servercore:ltsc2025]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Variables
+      run: |
+        set -eu; set -o pipefail
+        echo "CPU: $(Get-CpuName)"
+        echo "github.workspace = '${{ github.workspace }}'"
+        echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
+        echo
+        printenv | sort
+
+    - name: Clean Up
+      shell: bash
+      if: false
+      run: 'export DEMAND_TOOLS="go"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
+
+    - name: Setup VARs
+      run: 'echo "BaseImage=${{ matrix.BaseImage }}" >> $GITHUB_ENV; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); echo "SUFFIX=$suffix" >> $GITHUB_ENV'
+    - name: Inspect
+      run: 'docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
+
+    - name: Upload artifacts 
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'System Info ${{ matrix.os }}'
+        path: |
+           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}/${{ env.SUFFIX }}
+
+    
+
+
+          
+  Combine:
+    name: Combine results in a single Artifact
+    needs: Info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ runner.temp }}/Combined"
+        merge-multiple: false
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined'
+        path: "${{ runner.temp }}/Combined"
+
