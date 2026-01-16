@@ -70,12 +70,12 @@ jobs:
     - name: Show Version (hyperv)
       if: always()
       run: | 
-        & { docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\VERSION-$($ENV:SUFFIX).txt"
+        docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver
 
-    - name: 2nd Show Version (hyperv)
+    - name: 2nd Show Version (hyperv) Final
       if: always()
       run: | 
-        docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver
+        docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver 2>&1 | Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\VERSION-$($ENV:SUFFIX).txt"
 
     - name: Show Features 1
       if: always()
@@ -92,7 +92,7 @@ jobs:
         echo "AGAIN"
         cat log.txt
 
-    - name: Show Features 3
+    - name: Show Features Final
       if: always()
       run: | 
         $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
