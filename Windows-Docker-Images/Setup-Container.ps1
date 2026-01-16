@@ -28,14 +28,15 @@ $ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
 $ENV:PS1_REPO_DOWNLOAD_FOLDER = "C:\Temp"
 setx PS1_REPO_DOWNLOAD_FOLDER C:\Temp
 
-Say "Setup Log Monitor and Service Monitor"
-$isOkServiceMonitor = Download-File-FailFree-and-Cached "C:\Container-Monitor\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
+$monitorFolder="C:\LogMonitor"
+Say "Setup Log Monitor and Service Monitor into [$monitorFolder]"
+$isOkServiceMonitor = Download-File-FailFree-and-Cached "$monitorFolder\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
 Write-Host "Service Monitor Download Success: [$isOkServiceMonitor]"
 
 # https://github.com/microsoft/windows-container-tools/blob/main/LogMonitor/README.md
-$isOkLogMonitor = Download-File-FailFree-and-Cached "C:\Container-Monitor\LogMonitor.exe" "https://github.com/microsoft/windows-container-tools/releases/download/v2.1.3/LogMonitor.exe"
+$isOkLogMonitor = Download-File-FailFree-and-Cached "$monitorFolder\LogMonitor.exe" "https://github.com/microsoft/windows-container-tools/releases/download/v2.1.3/LogMonitor.exe"
 Write-Host "Log Monitor Download Success: [$isOkLogMonitor]"
-Copy-Item -Path "$scriptDirectory\LogMonitorConfig.json" -Destination "C:\Container-Monitor\" -Force
+Copy-Item -Path "$scriptDirectory\LogMonitorConfig.json" -Destination "$monitorFolder\" -Force
 
 
 Say "Installing .NET 3.5"

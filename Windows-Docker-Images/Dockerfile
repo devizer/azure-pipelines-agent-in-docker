@@ -15,5 +15,5 @@ WORKDIR /path/to/dir
 EXPOSE 80
 
 # ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc", "DefaultAppPool", "-st", "100", "-at", "100"]
-ENTRYPOINT ["C:\\Container-Monitor\\LogMonitor.exe", "--config", "C:\\Container-Monitor\\LogMonitorConfig.json", "C:\\Container-Monitor\\ServiceMonitor.exe", "w3svc", "DefaultAppPool", "-st", "100", "-at", "100"]
+ENTRYPOINT ["C:\\LogMonitor\\LogMonitor.exe", "C:\\LogMonitor\\ServiceMonitor.exe", "w3svc", "DefaultAppPool", "-st", "100", "-at", "100"]
 
