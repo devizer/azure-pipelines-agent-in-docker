@@ -121,12 +121,19 @@ jobs:
       run: |
         docker run "--isolation=hyperv" --rm --entrypoint powershell "the:$($ENV:NEWTAG)" -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
 
-    - name: RUN IIS (60 secs)
+    - name: RUN IIS (120 secs), background
       if: always()
       shell: bash
       run: |
         docker run -d --name iis "--isolation=hyperv" "the:$NEWTAG" 
         docker logs -f iis &
+        sleep 120
+
+    - name: RUN IIS (120 secs), foreground
+      if: always()
+      shell: bash
+      run: |
+        docker run --name iis "--isolation=hyperv" "the:$NEWTAG" &
         sleep 120
 
 
