@@ -2,8 +2,9 @@ $osBuild=[Environment]::OsVersion.Version.Build
 Write-Host "OS-Build: $($osBuild)"
 
 echo "Setup SqlServer-Version-Management ..."
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 $urlSource = 'https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'; 
-foreach($attempt in 1..3) { try { iex ((New-Object System.Net.WebClient).DownloadString($urlSource)); break; } catch {sleep 0.1;} }
+foreach($attempt in 1..3) { try { iex ((New-Object System.Net.WebClient).DownloadString($urlSource)); break; } catch {Write-Host "Error downloading $urlSource"; sleep 0.1;} }
 
 echo "Import-Module SqlServer-Version-Management ..."
 Import-Module SqlServer-Version-Management
