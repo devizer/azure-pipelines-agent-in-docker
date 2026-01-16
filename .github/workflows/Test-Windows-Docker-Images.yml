@@ -121,6 +121,14 @@ jobs:
       run: |
         docker run "--isolation=hyperv" --rm --entrypoint powershell "the:$($ENV:NEWTAG)" -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
 
+    - name: RUN IIS (60 secs)
+      if: always()
+      shell: bash
+      run: |
+        docker run -d --name iis "--isolation=hyperv" "the:$NEWTAG" 
+        docker logs -f iis &
+        sleep 60
+
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
