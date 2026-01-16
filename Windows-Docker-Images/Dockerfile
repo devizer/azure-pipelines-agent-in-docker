@@ -2,7 +2,10 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
-ENV COMPLUS_NGenProtectedProcess_FeatureEnabled=0
+ENV `
+  COMPLUS_NGenProtectedProcess_FeatureEnabled=0 `
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED=true `
+  DOTNET_RUNNING_IN_CONTAINER=true
 
 COPY . C:\Windows\Temp\
 
