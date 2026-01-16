@@ -131,17 +131,17 @@ jobs:
         docker rm -f iis
 
 
-    - name: RUN IIS (90 secs), foreground
+    - name: RUN IIS (30 secs), foreground
       if: always()
       shell: bash
       run: |
         docker run --name iis "--isolation=hyperv" -p 8080:80 "the:$NEWTAG" &
-        sleep 30
+        sleep 20
         Say "Query HEADERS"
         "curl" -I http://localhost:8080
         Say "Query PAGE"
         "curl" http://localhost:8080
-        sleep 60
+        sleep 10
         time docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
         true
 
@@ -149,7 +149,7 @@ jobs:
       if: always()
       shell: bash
       run: |
-        bombardier.exe -c 20 -t 20s --print=result -k http://localhost:8080 || echo "ERROR bombardier.exe"
+        time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:8080 || echo "ERROR bombardier.exe"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
