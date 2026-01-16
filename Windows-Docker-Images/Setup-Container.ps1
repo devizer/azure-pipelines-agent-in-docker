@@ -32,3 +32,7 @@ Write-Host "The current script's directory is: $scriptDirectory"
 
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
+
+
+Say "Final NET Frameworks"
+. "$scriptDirectory\LIST-NET-Frameworks.ps1"
