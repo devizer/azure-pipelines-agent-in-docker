@@ -1,9 +1,12 @@
 $osBuild=[Environment]::OsVersion.Version.Build
 Write-Host "OS-Build: $($osBuild)"
 
-# Setup SqlServer-Version-Management.ps1
-$urlSource = 'https://devizer.github.io/SqlServer-Version-Management/SqlServer-Version-Management.ps1'; 
+echo "Setup SqlServer-Version-Management ..."
+$urlSource = 'https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'; 
 foreach($attempt in 1..3) { try { iex ((New-Object System.Net.WebClient).DownloadString($urlSource)); break; } catch {sleep 0.1;} }
+
+echo "Import-Module SqlServer-Version-Management ..."
+Import-Module SqlServer-Version-Management
 
 $osName = "$((Select-WMI-Objects Win32_OperatingSystem | Select -First 1).Caption)"
 Write-Host "OS Name: $osName"
