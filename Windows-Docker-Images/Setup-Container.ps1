@@ -24,7 +24,9 @@ $isOk = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://githu
 Say "Installing IIS"
 Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server }
 
-. .\Setup-Net35-On-Windows-Server.ps1
+$scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
+Write-Host "The current script's directory is: $scriptDirectory"
+. "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
 
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
