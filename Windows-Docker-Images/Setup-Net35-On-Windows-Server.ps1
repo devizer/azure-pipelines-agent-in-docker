@@ -1,6 +1,7 @@
 function Install-NET35-On-Windows-Server() {
    $url=$null
    $osBuild=[Environment]::OsVersion.Version.Build
+   if ($osBuild -eq 14393) { $url = @("https://archive.org/download/net35-ltsc2019/net35-ltsc2016.zip") }
    if ($osBuild -eq 17763) { $url = @("https://archive.org/download/net35-ltsc2019/net35-ltsc2019.zip", "https://sourceforge.net/projects/net35-bin/files/net35-ltsc2019.zip/download") }
    if ($osBuild -eq 20348) { $url = @("https://archive.org/download/net35-ltsc2019/net35-ltsc2022.zip", "https://sourceforge.net/projects/net35-bin/files/net35-ltsc2022.zip/download") }
    if ($osBuild -eq 26100) { $url = @("https://archive.org/download/net35-ltsc2019/net35-ltsc2025.zip", "https://sourceforge.net/projects/net35-bin/files/net35-ltsc2025.zip/download") }
