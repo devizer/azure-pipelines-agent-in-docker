@@ -51,3 +51,8 @@ Say "Final NET Frameworks"
 . "$scriptDirectory\LIST-NET-Frameworks.ps1"
 
 Remove-Item -Path "C:\Temp" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$ENV:TEMP" -Recurse -Force -ErrorAction SilentlyContinue
+New-Item -Path "$ENV:TEMP" -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+
+
+
