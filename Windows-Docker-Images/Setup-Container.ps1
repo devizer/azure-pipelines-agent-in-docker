@@ -1,7 +1,9 @@
 $ErrorActionPreference = 'Stop'
 
 $osBuild=[Environment]::OsVersion.Version.Build
-Write-Host "OS-Build: $($osBuild)"
+Write-Host "OS-Build: [$($osBuild)]"
+$scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
+Write-Host "The current Setup-Container.ps1 script's directory is: [$scriptDirectory]"
 
 echo "Setup SqlServer-Version-Management ..."
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
@@ -23,11 +25,18 @@ $ENV:SQLSERVERS_MEDIA_FOLDER = "C:\SQL-SETUP\Media"
 $ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
 $ENV:PS1_REPO_DOWNLOAD_FOLDER = "C:\Temp"
 
-$isOk = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
+Say "Setup Log Monitor and Service Monitor"
+$isOkServiceMonitor = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
+Write-Host "Service Monitor Download Success: [$$isOkServiceMonitor]"
+
+# https://github.com/microsoft/windows-container-tools/blob/main/LogMonitor/README.md
+
+$isOkLogMonitor = Download-File-FailFree-and-Cached "C:\LogMonitor\LogMonitor.exe" "https://github.com/microsoft/windows-container-tools/releases/download/v2.1.3/LogMonitor.exe"
+Write-Host "Log Monitor Download Success: [$isOkLogMonitor]"
+Copy-Item -Path "$scriptDirectory\LogMonitorConfig.json" -Destination "C:\LogMonitor\" -Force
+
 
 Say "Installing .NET 3.5"
-$scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
-Write-Host "The current script's directory is: $scriptDirectory"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
 
 Say "Installing IIS"
@@ -44,9 +53,11 @@ Say "Assign [v4.0] version for [DefaultAppPool]"
 # Import-Module WebAdministration; Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name managedRuntimeVersion -Value "v4.0"
 
 
+
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
 
+Write-Host ""
 Say "Final NET Frameworks"
 . "$scriptDirectory\LIST-NET-Frameworks.ps1"
 

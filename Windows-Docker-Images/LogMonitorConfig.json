@@ -1,0 +1,43 @@
+{
+  "LogConfig": {
+    "sources": [
+      {
+        "type": "EventLog",
+        "startAtOldestRecord": true,
+        "channels": [
+          {
+            "name": "Application",
+            "level": "Warning"
+          },
+          {
+            "name": "Application",
+            "level": "Error"
+          }
+        ]
+      },
+      {
+        "type": "File",
+        "directory": "C:\\inetpub\\logs\\LogFiles",
+        "filter": "*.log",
+        "includeSubdirectories": true
+      },
+      {
+        "type": "ETW",
+        "eventSources": [
+          {
+            "name": "Microsoft-Windows-IIS",
+            "level": "Information"
+          },
+          {
+            "name": "Microsoft-AspNetCore-Server-Kestrel",
+            "level": "Information"
+          },
+          {
+            "name": "Microsoft-Windows-ASPNETCore",
+            "level": "Information"
+          }
+        ]
+      }
+    ]
+  }
+}
