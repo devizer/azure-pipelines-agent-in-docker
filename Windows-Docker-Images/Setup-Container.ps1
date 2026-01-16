@@ -29,7 +29,11 @@ Write-Host "The current script's directory is: $scriptDirectory"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
 
 Say "Installing IIS"
-Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 }
+Measure-Action "Installing IIS" { 
+  $res = Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 
+  $res | ft -autosize | Out-String -width 1234
+  if (-not $res.Success) { throw "Error Installing IIS. See Error Above" }
+}
 
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
