@@ -135,7 +135,7 @@ jobs:
       if: always()
       shell: bash
       run: |
-        docker run --name iis" --isolation=hyperv" -p 8080:80 "the:$NEWTAG" &
+        docker run --name iis "--isolation=hyperv" -p 8080:80 "the:$NEWTAG" &
         sleep 30
         Say "Query HEADERS"
         & "curl" -I http://localhost:8080
