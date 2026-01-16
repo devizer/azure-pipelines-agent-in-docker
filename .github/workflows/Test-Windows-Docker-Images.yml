@@ -105,9 +105,9 @@ jobs:
         cat "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt"
 
 
-    - name: Show Features Final
+    - name: Build (draft)
       if: always()
-      run: 
+      run: |
         cd Windows-Docker-Images;
         $newImageName="windows:$($ENV:NEWTAG)";
         echo "Buiding: $newImageName";
