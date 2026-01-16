@@ -80,7 +80,8 @@ jobs:
     - name: Show Features
       if: always()
       run: | 
-        docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "$ProgressPreference = "SilentlyContinue"; Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
+        $code='$Buffer = $Host.UI.RawUI.BufferSize; $Buffer.Width = 120; $Host.UI.RawUI.BufferSize = $Buffer; $Window = $Host.UI.RawUI.WindowSize; $Window.Width = 120; $Host.UI.RawUI.WindowSize = $Window; $ProgressPreference = "SilentlyContinue";'
+        docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
@@ -89,6 +90,7 @@ jobs:
         name: 'Image ${{ env.SUFFIX }}'
         path: |
            ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+
 
     
 
