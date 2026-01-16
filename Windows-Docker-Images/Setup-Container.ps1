@@ -20,5 +20,9 @@ $isOk = Download-File-FailFree-and-Cached "C:\ServiceMonitor.exe" "https://githu
 Say "Installing IIS"
 Measure-Action "Installing IIS" { Add-WindowsFeature Web-Server }
 
+Say "FINAL FEATURES"
+Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
+
+
 
 
