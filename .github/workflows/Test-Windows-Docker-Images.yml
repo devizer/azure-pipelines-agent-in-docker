@@ -53,8 +53,11 @@ jobs:
     - name: Pull
       run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker pull $ENV:BaseImage } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Pull-$($ENV:SUFFIX).txt"; }'
 
-    - name: Show Version
-      run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker run -t --rm $ENV:BaseImage cmd /c ver } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Version-$($ENV:SUFFIX).txt"; }'
+    - name: Show Version (process)
+      run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker run -t --isolation=process --rm $ENV:BaseImage cmd /c ver } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Version1-$($ENV:SUFFIX).txt"; }'
+
+    - name: Show Version (hyperv)
+      run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker run -t --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Version2-$($ENV:SUFFIX).txt"; }'
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
