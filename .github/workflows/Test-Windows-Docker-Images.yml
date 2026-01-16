@@ -68,7 +68,15 @@ jobs:
 
     - name: Show Version (process)
       if: always()
-      run: 'SqlServer-Version-Management\Try-And-Retry "Show Version (process) $ENV:BaseImage" { & { docker run -t --isolation=process --rm $ENV:BaseImage cmd /c ver } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Version1-$($ENV:SUFFIX).txt"; }'
+      run: 
+        function GetV([string] $v) { return $v.SubString($v.Length - 4, 4) }
+        if ( (GetV "${{ matix.os }}") -eq (GetV "$ENV:SUFFIX") {
+           SqlServer-Version-Management\Try-And-Retry "Show Version (process) $ENV:BaseImage" { & { docker run -t --isolation=process --rm $ENV:BaseImage cmd /c ver } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Version1-$($ENV:SUFFIX).txt"; }
+        }
+        else {
+          Write-Host "Version is not match"
+        }
+
 
     - name: Show Version (hyperv)
       if: always()
