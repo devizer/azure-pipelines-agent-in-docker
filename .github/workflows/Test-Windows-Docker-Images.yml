@@ -127,7 +127,7 @@ jobs:
       run: |
         docker run -d --name iis "--isolation=hyperv" "the:$NEWTAG" 
         docker logs -f iis &
-        sleep 60
+        sleep 120
 
 
     - name: Upload artifacts 

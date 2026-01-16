@@ -10,4 +10,4 @@ RUN powershell -f C:\Windows\Temp\Setup-Container.ps1
 
 EXPOSE 80
 
-ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"]
+ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc", "DefaultAppPool", "-st", "100", "-at", "100"]
