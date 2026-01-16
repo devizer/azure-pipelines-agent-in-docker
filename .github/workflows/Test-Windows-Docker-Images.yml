@@ -72,10 +72,15 @@ jobs:
       run: | 
         { & docker run -t --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\VERSION2-$($ENV:SUFFIX).txt"
 
-    - name: Show Version (hyperv)
+    - name: 2nd Show Version (hyperv)
       if: always()
       run: | 
-        { & docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "Get-WindowsFeature | ft -autosize" } 2>&1 | Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt";
+        docker run -t --isolation=hyperv --rm $ENV:BaseImage cmd /c ver
+
+    - name: Show Features
+      if: always()
+      run: | 
+        docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "Get-WindowsFeature | ft -autosize"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
