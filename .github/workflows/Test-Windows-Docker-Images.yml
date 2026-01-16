@@ -61,27 +61,46 @@ jobs:
       run: 'Get-ChildItem Env: | ft -autosize | out-host'
 
     - name: Inspect
-      run: 'SqlServer-Version-Management\Try-And-Retry "INSPECT $ENV:BaseImage" { & { docker manifest inspect $ENV:BaseImage } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json"; }'
+      run: 'SqlServer-Version-Management\Try-And-Retry "INSPECT $ENV:BaseImage" { & { docker manifest inspect $ENV:BaseImage } *| Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json"; }'
 
     - name: Pull
-      run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker pull $ENV:BaseImage } *| Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\Pull-$($ENV:SUFFIX).txt"; }'
+      run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker pull $ENV:BaseImage } *| Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Pull-$($ENV:SUFFIX).txt"; }'
 
 
     - name: Show Version (hyperv)
       if: always()
       run: | 
-        { & docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$SYSTEM_ARTIFACTSDIRECTORY\VERSION2-$($ENV:SUFFIX).txt"
+        { & docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver } 2>&1 | Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\VERSION2-$($ENV:SUFFIX).txt"
 
     - name: 2nd Show Version (hyperv)
       if: always()
       run: | 
         docker run --isolation=hyperv --rm $ENV:BaseImage cmd /c ver
 
-    - name: Show Features
+    - name: Show Features 1
       if: always()
       run: | 
-        $code = '$Buffer = $Host.UI.RawUI.BufferSize; $Buffer.Width = 120; $Host.UI.RawUI.BufferSize = $Buffer; $Window = $Host.UI.RawUI.WindowSize; $Window.Width = 120; $Host.UI.RawUI.WindowSize = $Window; $ProgressPreference = "SilentlyContinue";'
+        $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
         docker run --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
+
+    - name: Show Features 2
+      if: always()
+      run: | 
+        $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
+        docker run --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath log.txt
+        echo ""
+        echo "AGAIN"
+        cat log.txt
+
+    - name: Show Features 3
+      if: always()
+      run: | 
+        $code = '$ErrorActionPreference = "Continue"; $ProgressPreference = "SilentlyContinue";'
+        docker run --isolation=hyperv --rm $ENV:BaseImage powershell -c "$code; Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt"
+        echo ""
+        echo "AGAIN"
+        cat "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt"
+
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
