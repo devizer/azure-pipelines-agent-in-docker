@@ -100,14 +100,21 @@ jobs:
       if: always()
       run: |
         cd Windows-Docker-Images;
-        $newImageName="windows:$($ENV:NEWTAG)";
+        $newImageName="devizervlad/iis-fx35:$($ENV:NEWTAG)";
         echo "Buiding: $newImageName";
         Measure-Action "BUILD $newImageName" { 
           docker "build" "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
         }
 
-        docker image ls
+        Say "history"
+        docker history "$newImageName"
 
+
+    - name: List Docker Images
+      if: always()
+      run: |
+        Say "Image List"
+        docker image ls
 
 
     - name: Upload artifacts 

@@ -8,8 +8,8 @@ echo "Setup SqlServer-Version-Management ..."
 $urlSource = 'https://devizer.github.io/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'; 
 foreach($attempt in 1..3) { try { iex ((New-Object System.Net.WebClient).DownloadString($urlSource)); break; } catch {Write-Host "Error downloading $urlSource"; sleep 0.1;} }
 
-echo "Import-Module SqlServer-Version-Management ..."
-Import-Module SqlServer-Version-Management
+# echo "Import-Module SqlServer-Version-Management ..."
+# Import-Module SqlServer-Version-Management
 
 $osName = "$((Select-WMI-Objects Win32_OperatingSystem | Select -First 1).Caption)"
 # NT 4.0+
@@ -42,3 +42,5 @@ Get-WindowsFeature | ft -autosize | Out-String -Width 1234
 
 Say "Final NET Frameworks"
 . "$scriptDirectory\LIST-NET-Frameworks.ps1"
+
+Remove-Item -Path "C:\Temp" -Recurse -Force -ErrorAction SilentlyContinue
