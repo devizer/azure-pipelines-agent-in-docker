@@ -43,8 +43,9 @@ jobs:
 
     - name: Setup VARs
       run: 'echo "BaseImage=${{ matrix.BaseImage }}" >> $GITHUB_ENV; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); echo "SUFFIX=$suffix" >> $GITHUB_ENV'
+
     - name: Inspect
-      run: 'docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
+      run: 'Get-ChildItem Env: | ft -autosize | out-host; docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
