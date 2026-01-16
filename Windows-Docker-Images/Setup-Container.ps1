@@ -33,10 +33,16 @@ Write-Host "The current script's directory is: $scriptDirectory"
 Say "Installing IIS"
 Measure-Action "Installing IIS" { 
   # TODO: Web-Http-Redirect, Web-Basic-Auth, Web-Windows-Auth, Web-ASP, Web-Includes, Web-Http-Redirect
-  $res = Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45 
+  $res = Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45, Web-Scripting-Tools
   $res | ft -autosize | Out-String -width 1234
   if (-not $res.Success) { throw "Error Installing IIS. See Error Above" }
 }
+
+Say "Assign [v4.0] version for [DefaultAppPool]"
+& "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v4.0
+# the same
+# Import-Module WebAdministration; Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name managedRuntimeVersion -Value "v4.0"
+
 
 Say "FINAL FEATURES"
 Get-WindowsFeature | ft -autosize | Out-String -Width 1234
