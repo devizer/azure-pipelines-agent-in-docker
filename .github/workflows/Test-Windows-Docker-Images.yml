@@ -42,25 +42,21 @@ jobs:
       run: 'export DEMAND_TOOLS="go"; Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh'
 
     - name: Setup VARs (pwsh)
-      shell: pwsh
       run: 'Add-Content $env:GITHUB_ENV "BaseImage=${{ matrix.BaseImage }}"; $suffix=("${{ matrix.BaseImage }}".Split(":") | Select -Last 1); Add-Content $env:GITHUB_ENV "SUFFIX=$suffix"'
 
-    - name: Setup VARs (bash)
-      if: false
-      shell: bash
-      run: | 
-        echo "BaseImage=${{ matrix.BaseImage }}" >> $GITHUB_ENV; suffix="$(echo ${{ matrix.BaseImage }} | awk -F':' '{print $NF}')"; echo "SUFFIX=$suffix" >> $GITHUB_ENV
+    - name: NEW Variables
+      run: 'Get-ChildItem Env: | ft -autosize | out-host'
 
     - name: Inspect
-      run: 'Get-ChildItem Env: | ft -autosize | out-host; docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
+      run: 'docker manifest inspect $ENV:BaseImage | tee "$SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json";'
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'System Info ${{ matrix.os }}'
+        name: 'Image ${{ env.SUFFIX }}'
         path: |
-           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}/${{ env.SUFFIX }}
+           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
 
     
 
