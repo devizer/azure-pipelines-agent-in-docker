@@ -119,7 +119,7 @@ jobs:
     - name: Built Features
       if: always()
       run: |
-        docker run --rm "the:$($ENV:NEWTAG)" --entrypoint powershell -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
+        docker run --rm --entrypoint powershell "the:$($ENV:NEWTAG)" -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
 
 
     - name: Upload artifacts 
