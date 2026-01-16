@@ -80,7 +80,7 @@ jobs:
     - name: Show Features
       if: always()
       run: | 
-        docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
+        docker run -t --isolation=hyperv --rm $ENV:BaseImage powershell -c "$ProgressPreference = "SilentlyContinue"; Get-WindowsFeature | ft -autosize | Out-String -Width 1234"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
