@@ -1,3 +1,5 @@
+$ErrorActionPreference = 'Stop'
+
 $osBuild=[Environment]::OsVersion.Version.Build
 Write-Host "OS-Build: $($osBuild)"
 
