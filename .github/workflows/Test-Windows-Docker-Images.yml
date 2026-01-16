@@ -63,12 +63,11 @@ jobs:
     - name: NEW Variables
       run: 'Get-ChildItem Env: | ft -autosize | out-host'
 
-    - name: Inspect
+    - name: "Inspect ${{ matrix.BaseImage }}"
       run: 'SqlServer-Version-Management\Try-And-Retry "INSPECT $ENV:BaseImage" { & { docker manifest inspect $ENV:BaseImage } *| Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Inspect-$($ENV:SUFFIX).json"; }'
 
-    - name: Pull
+    - name: "Pull ${{ matrix.BaseImage }}"
       run: 'SqlServer-Version-Management\Try-And-Retry "Pull $ENV:BaseImage" { & { docker pull $ENV:BaseImage } *| Tee-Object "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Pull-$($ENV:SUFFIX).txt"; }'
-
 
     - name: Show Version (hyperv)
       if: always()
@@ -145,7 +144,6 @@ jobs:
         sleep 60
         time docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
         true
-
 
 
     - name: Upload artifacts 
