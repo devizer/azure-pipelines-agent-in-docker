@@ -208,7 +208,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         pattern: '**'
-        path: "${{ runner.temp }}\Combined"
+        path: "${{ runner.temp }}\\Combined"
         merge-multiple: false
 
     - name: Show Download Structure
@@ -218,7 +218,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: 'Combined'
-        path: "${{ runner.temp }}\Combined"
+        path: "${{ runner.temp }}\\Combined"
 
     - name: Bootstrap
       uses: devizer/devops-library@main
