@@ -156,6 +156,11 @@ jobs:
         set -o pipefail
         time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY/BOMBARDIER-BENCHMARK-$SUFFIX.txt" || echo "ERROR bombardier.exe"
 
+    - name: 'choco install imagemagick'
+      if: always()
+      run: | 
+        docker run --rm "--isolation=hyperv" --entrypoint powershell "the:$($ENV:NEWTAG)" -c "choco install imagemagick; magick -version"
+
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
       if: always()
