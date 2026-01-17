@@ -213,7 +213,7 @@ jobs:
         merge-multiple: false
 
     - name: Show Download Structure
-      run: 'dir /b /s $RUNNER_TEMP'
+      run: 'cmd /c dir /b /s $($ENV:RUNNER_TEMP)\Combined'
 
     - name: Upload Combined Info
       uses: actions/upload-artifact@v4
