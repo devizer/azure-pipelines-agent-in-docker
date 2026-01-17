@@ -43,14 +43,14 @@ $isOkBombardier = Download-File-FailFree-and-Cached "C:\Apps\bombardier.exe" "ht
 Write-Host "Bombardier Download Success: [$isOkBombardier]"
 
 Say "Deploy Entry Point as C:\Config-Private"
-New-Item -Path "C:\Private-Config" -ItemType Directory | out-null
+New-Item -Path "C:\Private-Config" -ItemType Directory -Force | out-null
 Copy-Item -Path "$scriptDirectory\Private-Config\*" -Destination "C:\Private-Config" -Recurse -Force
 ls "C:\Private-Config" | ft -autosize | out-host
 
 ############ C:\Apps? ############
 Say "Setup C:\Apps"
 $appsFolder = "C:\Apps"
-New-Item -Path "C:\Apps" -ItemType Directory | out-null
+New-Item -Path "C:\Apps" -ItemType Directory -Force | out-null
 Add-Folder-To-System-Path "C:\Apps"
 foreach($exe in (Get-Mini7z-Exe-FullPath-for-Windows), (Get-Aria2c-Exe-FullPath-for-Windows), (Get-Full7z-Exe-FullPath-for-Windows)) {
  $dir = [System.IO.Path]::GetDirectoryName($exe)
