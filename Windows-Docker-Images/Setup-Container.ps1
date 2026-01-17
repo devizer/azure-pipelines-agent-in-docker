@@ -55,7 +55,7 @@ Add-Folder-To-System-Path "C:\Apps"
 foreach($exe in (Get-Mini7z-Exe-FullPath-for-Windows), (Get-Aria2c-Exe-FullPath-for-Windows), (Get-Full7z-Exe-FullPath-for-Windows)) {
  $dir = [System.IO.Path]::GetDirectoryName($exe)
  echo "Copy $dir to C:\Apps ..."
- Copy-Item -Path "$($dir)\*" -Destination "C:\" -Recurse -Force
+ Copy-Item -Path "$($dir)\*" -Destination "C:\Apps\" -Recurse -Force
 }
 ls "C:\Apps" | ft -autosize | out-host
 
