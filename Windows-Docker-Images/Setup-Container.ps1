@@ -42,6 +42,10 @@ Say "Setup bombardier-windows-amd64.exe v2.0.2 into [C:\Windows\bombardier.exe]"
 $isOkBombardier = Download-File-FailFree-and-Cached "C:\Windows\bombardier.exe" "https://github.com/codesenberg/bombardier/releases/download/v2.0.2/bombardier-windows-amd64.exe"
 Write-Host "Bombardier Download Success: [$isOkBombardier]"
 
+Say "Deploy Entry Point as C:\Config-Private"
+Copy-Item -Path "$scriptDirectory\Config-Private" -Destination "C:\" -Recurse -Force
+ls C:\Config-Private | ft -autosize | out-host
+
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
 
@@ -57,7 +61,7 @@ Remove-Item -Path "C:\Inetpub\wwwroot\*" -Force -Recurse -EA SilentlyContinue
 Copy-Item -Path "$scriptDirectory\wwwroot\*" -Destination "C:\Inetpub\wwwroot\" -Recurse -Force
 
 Say "Assign [v4.0] version for [DefaultAppPool]"
-& "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v2.0
+& "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v4.0
 # the same
 # Import-Module WebAdministration; Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name managedRuntimeVersion -Value "v4.0"
 
