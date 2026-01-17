@@ -33,11 +33,6 @@ Say "Setup Log Monitor and Service Monitor into [$monitorFolder]"
 $isOkServiceMonitor = Download-File-FailFree-and-Cached "$monitorFolder\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
 Write-Host "Service Monitor Download Success: [$isOkServiceMonitor]"
 
-$appsFolder = "C:\Apps"
-New-Item -Path "C:\Apps" -ItemType Directory | out-null
-Add-Folder-To-System-Path "C:\Apps"
-
-
 # https://github.com/microsoft/windows-container-tools/blob/main/LogMonitor/README.md
 $isOkLogMonitor = Download-File-FailFree-and-Cached "$monitorFolder\LogMonitor.exe" "https://github.com/microsoft/windows-container-tools/releases/download/v2.1.3/LogMonitor.exe"
 Write-Host "Log Monitor Download Success: [$isOkLogMonitor]"
@@ -52,6 +47,17 @@ New-Item -Path "C:\Private-Config" -ItemType Directory | out-null
 Copy-Item -Path "$scriptDirectory\Private-Config\*" -Destination "C:\Private-Config" -Recurse -Force
 ls "C:\Private-Config" | ft -autosize | out-host
 
+############ C:\Apps? ############
+Say "Setup C:\Apps"
+$appsFolder = "C:\Apps"
+New-Item -Path "C:\Apps" -ItemType Directory | out-null
+Add-Folder-To-System-Path "C:\Apps"
+foreach($exe in (Get-Mini7z-Exe-FullPath-for-Windows), (Get-Aria2c-Exe-FullPath-for-Windows), (Get-Full7z-Exe-FullPath-for-Windows)) {
+ $dir = [System.IO.Path]::GetDirectoryName($exe)
+ echo "Copy $dir to C:\Apps ..."
+ Copy-Item -Path "$($dir)\*" -Destination "C:\" -Recurse -Force
+}
+ls "C:\Apps" | ft -autosize | out-host
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
