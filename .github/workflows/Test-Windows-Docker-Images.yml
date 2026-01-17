@@ -2,6 +2,8 @@ name: Windows Docker Images
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+  THEIMAGE: 'devizervlad/iis-net4x-net35'
+
 
 on:
   workflow_dispatch:
@@ -99,7 +101,7 @@ jobs:
       if: always()
       run: |
         cd Windows-Docker-Images;
-        $newImageName="devizervlad/iis-fx35:$($ENV:NEWTAG)";
+        $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         echo "Buiding: $newImageName";
         Measure-Action "BUILD $newImageName" { 
           docker "build" "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
@@ -174,6 +176,18 @@ jobs:
         docker exec beast ffmpeg -version | tee "$SYSTEM_ARTIFACTSDIRECTORY/FFMPEG-STATUS-$SUFFIX.txt" || echo "ERROR ffmpeg --version"
         docker rm -f beast
 
+    - name: PUSH THE TAG ${{ env.THEIMAGE }}:${{ env.NEWTAG }}
+      shell: bash
+      run: |
+        img="${{ env.THEIMAGE }}"
+        set -eu; set -o pipefail
+
+        Say "Docker Login"
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_LOGIN }}" --password-stdin || echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_LOGIN }}" --password-stdin
+
+        Say "Docker PUSH ${{ env.THEIMAGE }}:${{ env.NEWTAG }}"
+        try-and-retry docker push "${{ env.THEIMAGE }}:${{ env.NEWTAG }}"
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       if: always()
@@ -188,21 +202,71 @@ jobs:
   Combine:
     name: Combine results in a single Artifact
     needs: Info
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
     steps:
     - name: Download All Artifacts
       uses: actions/download-artifact@v4
       with:
         pattern: '**'
-        path: "${{ runner.temp }}/Combined"
+        path: "${{ runner.temp }}\Combined"
         merge-multiple: false
 
     - name: Show Download Structure
-      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+      run: 'dir /b /s $RUNNER_TEMP'
 
     - name: Upload Combined Info
       uses: actions/upload-artifact@v4
       with:
         name: 'Combined'
-        path: "${{ runner.temp }}/Combined"
+        path: "${{ runner.temp }}\Combined"
 
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Variables
+      shell: bash
+      run: |
+        set -eu; set -o pipefail
+        echo "CPU: $(Get-CpuName)"
+        echo "github.workspace = '${{ github.workspace }}'"
+        echo "SYSTEM_ARTIFACTSDIRECTORY = '$SYSTEM_ARTIFACTSDIRECTORY'"
+        echo
+        printenv | sort
+
+    - name: PUSH Multi arch
+      shell: bash
+      run: |
+        img="${{ env.THEIMAGE }}"
+        set -eu; set -o pipefail
+
+        Say "Docker Login"
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_LOGIN }}" --password-stdin || echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_LOGIN }}" --password-stdin
+
+        for tag in ltsc2016 ltsc2019 ltsc2022 ltsc2025; do
+          Say "PULL $tag"
+          try-and-retry docker pull $img:$tag
+        done
+
+        cmd_create="docker manifest create $img:latest --amend $img:ltsc2016 --amend $img:ltsc2019 --amend $img:ltsc2022 --amend $img:ltsc2025"
+        Say "Create Manifest: [$cmd_create]"
+        eval $cmd_create
+
+        cmd_inspect="docker manifest inspect $img:latest"
+        Say "Inspect manifest: [$cmd_inspect]"
+        eval $cmd_inspect
+
+        Say "Push manifest"
+        # --purge - delete local manifest
+        try-and-retry docker manifest push "$img:latest"
+
+    - name: Run and Curl
+      shell: bash
+      run: |
+         set -eu; set -o pipefail
+         docker run -d --name iis -p 8080:80 ${{ env.THEIMAGE }}
+         Wait_For_HTTP http://localhost:8080 30
+         try-and-retry curl -I http://localhost:8080
+         try-and-retry curl http://localhost:8080
