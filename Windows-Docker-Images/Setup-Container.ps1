@@ -59,12 +59,6 @@ foreach($exe in (Get-Mini7z-Exe-FullPath-for-Windows), (Get-Aria2c-Exe-FullPath-
 }
 ls "C:\Apps" | ft -autosize | out-host
 
-Say "Installing Choco"
-$fileInstallChoco = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "Install-Choco.ps1"
-$isOkDownloadChoco = Download-File-FailFree-and-Cached "$fileInstallChoco" "https://chocolatey.org/install.ps1"
-. "$fileInstallChoco"
-& choco feature enable -n allowGlobalConfirmation
-
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
@@ -92,6 +86,16 @@ Get-WindowsFeature | ft -autosize | Out-String -Width 1234
 Write-Host " "
 Say "Final NET Frameworks"
 . "$scriptDirectory\LIST-NET-Frameworks.ps1"
+
+Say "Installing Choco"
+$fileInstallChoco = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "Install-Choco.ps1"
+$isOkDownloadChoco = Download-File-FailFree-and-Cached "$fileInstallChoco" "https://chocolatey.org/install.ps1"
+. "$fileInstallChoco"
+Say "Choco features: Enable allowGlobalConfirmation, and Disable showDownloadProgress"
+& choco feature enable -n allowGlobalConfirmation
+& choco feature disable -n showDownloadProgress
+
+
 
 Remove-Item -Path "C:\Temp" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$ENV:TEMP" -Recurse -Force -ErrorAction SilentlyContinue
