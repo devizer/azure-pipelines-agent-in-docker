@@ -159,7 +159,11 @@ jobs:
     - name: 'choco install imagemagick'
       if: always()
       run: | 
-        docker run --rm "--isolation=hyperv" --entrypoint powershell "the:$($ENV:NEWTAG)" -c "choco install imagemagick; echo ' '; `$ErrorActionPreference = 'Continue'; & magick -version; echo"
+        docker run -d --name beast --isolation=hyperv "the:$NEWTAG"
+        # it will add image magick to path
+        docker exec beast choco install imagemagick
+        docker exec beast magick --version
+        docker rm -f beast
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
