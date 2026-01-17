@@ -165,6 +165,7 @@ jobs:
         # it will add image magick to path
         docker exec beast choco install imagemagick
         echo " "
+        echo "PATH is BELOW"
         docker exec beast powershell -c '$ENV:PATH' | tee "$SYSTEM_ARTIFACTSDIRECTORY/PATH-IMAGEMAGICK-$SUFFIX.txt" || echo "ERROR echo PATH"
         echo " "
         docker exec beast magick --version || echo "ERROR magick --version"
