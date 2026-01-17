@@ -124,6 +124,7 @@ jobs:
       if: always()
       shell: bash
       run: |
+        set -o pipefail
         docker run -d --name iis -e IIS_NET_VERSION=v2.0 -p 9090:80 "--isolation=hyperv" "the:$NEWTAG" 
         # actually output is empty if no errors
         docker logs -f iis &
@@ -137,6 +138,7 @@ jobs:
       if: always()
       shell: bash
       run: |
+        set -o pipefail
         docker run --name iis "--isolation=hyperv" -e IIS_NET_VERSION=v4.0  -p 8080:80 "the:$NEWTAG" &
         sleep 20
         Say "Query HEADERS"
@@ -151,7 +153,8 @@ jobs:
       if: always()
       shell: bash
       run: |
-        time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 || echo "ERROR bombardier.exe"
+        set -o pipefail
+        time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY/BOMBARDIER-BENCHMARK-$SUFFIX.txt" || echo "ERROR bombardier.exe"
 
     - name: Upload artifacts 
       uses: actions/upload-artifact@v4
