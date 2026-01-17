@@ -194,8 +194,8 @@ jobs:
       if: always()
       with:
         name: 'Image ${{ env.SUFFIX }}'
-        path: |
-           ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        path: "${{ env.SYSTEM_ARTIFACTSDIRECTORY }}"
+        overwrite: true
 
 
     
@@ -220,6 +220,7 @@ jobs:
       with:
         name: 'Combined'
         path: "${{ runner.temp }}\\Combined"
+        overwrite: true
 
     - name: Bootstrap
       uses: devizer/devops-library@main
@@ -268,6 +269,7 @@ jobs:
       run: |
          set -eu; set -o pipefail
          docker run -d --name iis -p 8080:80 ${{ env.THEIMAGE }}
-         Wait_For_HTTP http://localhost:8080 30
+         Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
          try-and-retry curl -I http://localhost:8080
          try-and-retry curl http://localhost:8080
+         time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 || echo "ERROR bombardier.exe"
