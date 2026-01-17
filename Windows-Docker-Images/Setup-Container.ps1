@@ -90,7 +90,7 @@ Say "Final NET Frameworks"
 Say "Installing Choco"
 $fileInstallChoco = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "Install-Choco.ps1"
 $isOkDownloadChoco = Download-File-FailFree-and-Cached "$fileInstallChoco" "https://chocolatey.org/install.ps1"
-. "$fileInstallChoco"
+. "$fileInstallChoco" -ChocolateyVersion "1.4.4"
 Say "Choco features: Enable allowGlobalConfirmation, and Disable showDownloadProgress"
 & choco feature enable -n allowGlobalConfirmation
 & choco feature disable -n showDownloadProgress
