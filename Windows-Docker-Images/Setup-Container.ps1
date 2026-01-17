@@ -33,19 +33,25 @@ Say "Setup Log Monitor and Service Monitor into [$monitorFolder]"
 $isOkServiceMonitor = Download-File-FailFree-and-Cached "$monitorFolder\ServiceMonitor.exe" "https://github.com/microsoft/IIS.ServiceMonitor/releases/download/v2.0.1.10/ServiceMonitor.exe"
 Write-Host "Service Monitor Download Success: [$isOkServiceMonitor]"
 
+$appsFolder = "C:\Apps"
+New-Item -Path "C:\Apps" -ItemType Directory | out-null
+Add-Folder-To-System-Path "C:\Apps"
+
+
 # https://github.com/microsoft/windows-container-tools/blob/main/LogMonitor/README.md
 $isOkLogMonitor = Download-File-FailFree-and-Cached "$monitorFolder\LogMonitor.exe" "https://github.com/microsoft/windows-container-tools/releases/download/v2.1.3/LogMonitor.exe"
 Write-Host "Log Monitor Download Success: [$isOkLogMonitor]"
 Copy-Item -Path "$scriptDirectory\LogMonitorConfig.json" -Destination "$monitorFolder\" -Force
 
-Say "Setup bombardier-windows-amd64.exe v2.0.2 into [C:\Windows\bombardier.exe]"
-$isOkBombardier = Download-File-FailFree-and-Cached "C:\Windows\bombardier.exe" "https://github.com/codesenberg/bombardier/releases/download/v2.0.2/bombardier-windows-amd64.exe"
+Say "Setup bombardier-windows-amd64.exe v2.0.2 into [C:\Apps\bombardier.exe]"
+$isOkBombardier = Download-File-FailFree-and-Cached "C:\Apps\bombardier.exe" "https://github.com/codesenberg/bombardier/releases/download/v2.0.2/bombardier-windows-amd64.exe"
 Write-Host "Bombardier Download Success: [$isOkBombardier]"
 
 Say "Deploy Entry Point as C:\Config-Private"
 New-Item -Path "C:\Private-Config" -ItemType Directory | out-null
 Copy-Item -Path "$scriptDirectory\Private-Config\*" -Destination "C:\Private-Config" -Recurse -Force
 ls "C:\Private-Config" | ft -autosize | out-host
+
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
