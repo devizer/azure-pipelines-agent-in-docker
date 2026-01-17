@@ -57,7 +57,7 @@ Remove-Item -Path "C:\Inetpub\wwwroot\*" -Force -Recurse -EA SilentlyContinue
 Copy-Item -Path "$scriptDirectory\wwwroot\*" -Destination "C:\Inetpub\wwwroot\" -Recurse -Force
 
 Say "Assign [v4.0] version for [DefaultAppPool]"
-& "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v4.0
+& "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v2.0
 # the same
 # Import-Module WebAdministration; Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name managedRuntimeVersion -Value "v4.0"
 
