@@ -16,7 +16,7 @@ defaults:
 
 jobs:
   Info:
-    name: Tests
+    name: Build
     strategy:
       fail-fast: false
       matrix:
@@ -201,7 +201,7 @@ jobs:
     
 
   Combine:
-    name: Combine results in a single Artifact
+    name: PUSH Multi-Arch and Combine logs
     needs: Info
     runs-on: windows-2025
     steps:
