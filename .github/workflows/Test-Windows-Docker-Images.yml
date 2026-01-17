@@ -124,10 +124,12 @@ jobs:
       if: always()
       shell: bash
       run: |
-        docker run -d --name iis "--isolation=hyperv" "the:$NEWTAG" 
+        docker run -d --name iis -e IIS_NET_VERSION=v2.0 -p 9090:80 "--isolation=hyperv" "the:$NEWTAG" 
         # actually output is empty if no errors
         docker logs -f iis &
         sleep 15
+        Say "EXPECTING RUNTIME v2.0"
+        curl http://localhost:9090
         docker rm -f iis
 
 
@@ -135,11 +137,11 @@ jobs:
       if: always()
       shell: bash
       run: |
-        docker run --name iis "--isolation=hyperv" -p 8080:80 "the:$NEWTAG" &
+        docker run --name iis "--isolation=hyperv" -e IIS_NET_VERSION=v4.0  -p 8080:80 "the:$NEWTAG" &
         sleep 20
         Say "Query HEADERS"
         "curl" -I http://localhost:8080
-        Say "Query PAGE"
+        Say "Query PAGE. EXPECTING RUNTIME v4.0"
         "curl" http://localhost:8080
         sleep 10
         time docker exec iis powershell -f 'C:\Windows\Temp\Show-IIS-Events.ps1' | tee "$SYSTEM_ARTIFACTSDIRECTORY/IIS-Events-$SUFFIX.txt"
