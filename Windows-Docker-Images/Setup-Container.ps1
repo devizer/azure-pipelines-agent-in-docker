@@ -43,7 +43,7 @@ $isOkBombardier = Download-File-FailFree-and-Cached "C:\Windows\bombardier.exe" 
 Write-Host "Bombardier Download Success: [$isOkBombardier]"
 
 Say "Deploy Entry Point as C:\Config-Private"
-Copy-Item -Path "$scriptDirectory\Config-Private" -Destination "C:\" -Recurse -Force
+Copy-Item -Path "$scriptDirectory\Private-Config" -Destination "C:\" -Recurse -Force
 ls C:\Config-Private | ft -autosize | out-host
 
 Say "Installing .NET 3.5"
