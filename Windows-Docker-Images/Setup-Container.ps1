@@ -23,10 +23,12 @@ Say "OS Name: [$osName], Build [$osBuild]"
 
 $ENV:PS1_TROUBLE_SHOOT = "On"
 & setx PS1_TROUBLE_SHOOT On
-$ENV:SQLSERVERS_MEDIA_FOLDER = "C:\SQL-SETUP\Media"
-$ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
+$ENV:SQLSERVERS_MEDIA_FOLDER = "C:\Temp\SQL-SETUP\Media"
+& setx SQLSERVERS_MEDIA_FOLDER C:\Temp\SQL-SETUP\Media
+$ENV:SQLSERVERS_SETUP_FOLDER = "C:\Temp\SQL-SETUP\Installer"
+& setx SQLSERVERS_SETUP_FOLDER C:\Temp\SQL-SETUP\Installer
 $ENV:PS1_REPO_DOWNLOAD_FOLDER = "C:\Temp"
-setx PS1_REPO_DOWNLOAD_FOLDER C:\Temp
+& setx PS1_REPO_DOWNLOAD_FOLDER C:\Temp
 
 $monitorFolder="C:\LogMonitor"
 Say "Setup Log Monitor and Service Monitor into [$monitorFolder]"
