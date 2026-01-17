@@ -177,6 +177,7 @@ jobs:
         docker rm -f beast
 
     - name: PUSH THE TAG ${{ env.THEIMAGE }}:${{ env.NEWTAG }}
+      if: ${{ matrix.os != 'windows-2022' }}
       shell: bash
       run: |
         img="${{ env.THEIMAGE }}"
