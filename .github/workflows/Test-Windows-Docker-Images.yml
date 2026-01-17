@@ -157,12 +157,15 @@ jobs:
         time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY/BOMBARDIER-BENCHMARK-$SUFFIX.txt" || echo "ERROR bombardier.exe"
 
     - name: 'choco install imagemagick'
+      shell: bash
       if: always()
       run: | 
+        set -o pipefail
         docker run -d --name beast --isolation=hyperv "the:$NEWTAG"
         # it will add image magick to path
         docker exec beast choco install imagemagick
-        docker exec beast magick --version
+        docker exec beast cmd /c echo %PATH% | tee "$SYSTEM_ARTIFACTSDIRECTORY/PATH-IMAGEMAGICK-$SUFFIX.txt" || echo "ERROR echo PATH"
+        docker exec beast magick --version || echo "ERROR magick --version"
         docker rm -f beast
 
     - name: Upload artifacts 
