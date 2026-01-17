@@ -94,9 +94,11 @@ $isOkDownloadChoco = Download-File-FailFree-and-Cached "$fileInstallChoco" "http
 Say "Choco features: Enable allowGlobalConfirmation, and Disable showDownloadProgress"
 & choco feature enable -n allowGlobalConfirmation
 & choco feature disable -n showDownloadProgress
-
+Say "Finish: Installed Choco"
 
 
 Remove-Item -Path "C:\Temp" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$ENV:TEMP" -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -Path "$ENV:TEMP" -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+
+Say "Bye. Dockerfile done"
