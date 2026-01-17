@@ -52,6 +52,9 @@ Measure-Action "Installing IIS" {
   $res | ft -autosize | Out-String -width 1234
   if (-not $res.Success) { throw "Error Installing IIS. See Error Above" }
 }
+Say "Replacing default landing page"
+Remove-Item -Path "C:\Inetpub\wwwroot\*" -Force -Recurse -EA SilentlyContinue
+Copy-Item -Path "$scriptDirectory\wwwroot\*" -Destination "C:\Inetpub\wwwroot\" -Recurse -Force
 
 Say "Assign [v4.0] version for [DefaultAppPool]"
 & "$env:windir\system32\inetsrv\appcmd.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v4.0
