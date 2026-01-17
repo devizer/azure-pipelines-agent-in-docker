@@ -156,23 +156,24 @@ jobs:
         set -o pipefail
         time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY/BOMBARDIER-BENCHMARK-$SUFFIX.txt" || echo "ERROR bombardier.exe"
 
-    - name: 'choco install imagemagick'
+    - name: 'choco install ffmpeg'
       shell: bash
       if: always()
-      run: | 
+      run: |
         set -o pipefail
         docker run -d --name beast --isolation=hyperv "the:$NEWTAG"
         # it will add image magick to path
         # 7.0.10.16: Jan 2021
-        docker exec beast choco install imagemagick --version 7.0.10.61
+        docker exec beast choco install ffmpeg
+        docker exec beast powershell -c 'Add-Folder-To-System-Path "C:\MY New Folder"'
         echo " "
         echo "PATH is BELOW"
-        docker exec beast powershell -c '$ENV:PATH' | tee "$SYSTEM_ARTIFACTSDIRECTORY/PATH-IMAGEMAGICK-$SUFFIX.txt" || echo "ERROR echo PATH"
+        docker exec beast powershell -c '$ENV:PATH' | tee "$SYSTEM_ARTIFACTSDIRECTORY/PATH-FFMPEG-$SUFFIX.txt" || echo "ERROR echo PATH"
         echo " "
-        docker exec beast magick --version | tee "$SYSTEM_ARTIFACTSDIRECTORY/IMAGEMAGICK-STATUS-$SUFFIX.txt" || echo "ERROR magick --version"
+        docker exec beast ffmpeg --version | tee "$SYSTEM_ARTIFACTSDIRECTORY/FFMPEG-STATUS-$SUFFIX.txt" || echo "ERROR ffmpeg --version"
         docker rm -f beast
 
-    - name: Upload artifacts 
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       if: always()
       with:
