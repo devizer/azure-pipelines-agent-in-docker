@@ -45,7 +45,7 @@ Write-Host "Bombardier Download Success: [$isOkBombardier]"
 Say "Deploy Entry Point as C:\Config-Private"
 New-Item -Path "C:\Private-Config" -ItemType Directory | out-null
 Copy-Item -Path "$scriptDirectory\Private-Config" -Destination "C:\Private-Config" -Recurse -Force
-ls C:\Config-Private | ft -autosize | out-host
+ls "C:\Private-Config" | ft -autosize | out-host
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
