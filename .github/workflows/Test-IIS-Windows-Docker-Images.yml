@@ -109,7 +109,10 @@ jobs:
          time powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
          # Is not supported for hyperv
          # docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         Say "Overwrite C:\\Inetpub\\wwwroot\\"
+         rm -rf C:\\Inetpub\\wwwroot\\*
          cp -v Windows-Docker-Images\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         ls -la C:\\Inetpub\\wwwroot\\
 
          Wait-For-HTTP http://localhost:80 30 || echo "ERROR"
          curl http://localhost:80
