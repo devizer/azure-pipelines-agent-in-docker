@@ -18,9 +18,13 @@ jobs:
   timeoutInMinutes: 35
   strategy:
     matrix:
+      '2025-latest':
+        SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2025-latest"
+        TAGS: "-t devizervlad/mssql-server-tuned:latest -t devizervlad/mssql-server-tuned:2025"
+        LOCAL_TAG: "mssql-server-tuned:2025"
       '2022-latest':
         SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2022-latest"
-        TAGS: "-t devizervlad/mssql-server-tuned:latest -t devizervlad/mssql-server-tuned:2022"
+        TAGS: "-t devizervlad/mssql-server-tuned:2022"
         LOCAL_TAG: "mssql-server-tuned:2022"
       '2019-latest':
         SQL_BASE_IMAGE: "mcr.microsoft.com/mssql/server:2019-latest"
