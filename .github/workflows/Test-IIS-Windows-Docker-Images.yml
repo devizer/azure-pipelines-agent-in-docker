@@ -60,8 +60,6 @@ jobs:
         echo " "
         printenv | sort
 
-
-        docker info --format '{{.DockerRootDir}}'
     - name: Setup Docker for Performance
       shell: pwsh
       run: |
@@ -97,7 +95,9 @@ jobs:
       if: always()
       run: |
          set -eu; set -o pipefail
-         docker cp iis:C:\\Apps\\Bombardier.exe C:\\Windows\\
+         # docker cp iis:C:\\Apps\\Bombardier.exe C:\\Windows\\
+         Say "Download bombardier.exe"
+         curl -kfsSL -o C:\\Windows\\bombardier.exe https://github.com/codesenberg/bombardier/releases/download/v2.0.2/bombardier-windows-amd64.exe
 
          Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
          try-and-retry curl -I http://localhost:8080
@@ -107,8 +107,12 @@ jobs:
 
          Say "SETUP IIS"
          time powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
-         docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         # Is not supported for hyperv
+         # docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         cp -v Windows-Docker-Images\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+
          Wait-For-HTTP http://localhost:80 30 || echo "ERROR"
+         curl http://localhost:80
          
          Say "STRESS HOST"
          bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
