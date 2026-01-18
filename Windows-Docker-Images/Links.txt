@@ -1,0 +1,10 @@
+https://github.com/microsoft/Windows-Containers/tree/Main/helpful_tools
+https://mcr.microsoft.com/v2/windows/servercore/tags/list
+
+
+# SET ALT LANGUAGE
+Install-Language -LanguageTag uk-UA
+Install-LanguagePack -LanguageTag uk-UA -PackageType Handwriting, Speech, TextToSpeech
+Set-SystemPreferredUILanguage -LanguageTag uk-UA
+Set-SystemPreferredUILanguage -LanguageTag uk-UA -AllUsers
+Reboot

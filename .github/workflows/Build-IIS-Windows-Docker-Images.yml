@@ -21,14 +21,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          
+          # 1607
           - os: windows-2025
             BaseImage: mcr.microsoft.com/windows/servercore:ltsc2016
+          # 1809
           - os: windows-2025
             BaseImage: mcr.microsoft.com/windows/servercore:ltsc2019
+          # 21H2
           - os: windows-2025
             BaseImage: mcr.microsoft.com/windows/servercore:ltsc2022
+          # 24H2
           - os: windows-2025
             BaseImage: mcr.microsoft.com/windows/servercore:ltsc2025
+
           - os: windows-2022
             BaseImage: mcr.microsoft.com/windows/servercore:ltsc2016
           - os: windows-2022
@@ -273,3 +279,6 @@ jobs:
          try-and-retry curl -I http://localhost:8080
          try-and-retry curl http://localhost:8080
          time docker exec iis bombardier.exe -c 20 -t 20s --print=result -k http://localhost:80 || echo "ERROR bombardier.exe"
+
+         echo " "; echo "IIS CONTAINER LOGS"
+         docker logs --since 0 iis
