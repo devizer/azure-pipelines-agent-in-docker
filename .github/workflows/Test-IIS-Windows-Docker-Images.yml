@@ -77,7 +77,24 @@ jobs:
           cat $jsonFile
         } Else { 
           Write-Host "Docker configuration is MISSING: [$jsonFile]"
+          [System.IO.File]::WriteAllText($old_dir, "{}", (New-Object System.Text.UTF8Encoding($false)))
         }
+
+        $new_data_root = "D:\Docker-Data"
+        $config = Get-Content -Raw -Path $old_dir | ConvertFrom-Json
+        $config | Add-Member -MemberType NoteProperty -Name "data-root" -Value $new_data_root -Force
+        $new_json = $config | ConvertTo-Json -Depth 10
+        [System.IO.File]::WriteAllText($old_dir, $new_json, (New-Object System.Text.UTF8Encoding($false)))
+
+        Write-Host "Docker configuration successflly updated [$old_dir]"
+        cat $jsonFile
+
+        Write-Line -TextGreen "Restarting docker"
+        restart-service docker
+        Write-Line -TextGreen "Status of Docker Service"
+        get-service docker | ft -autosize
+
+
 
 
     - name: 'PULL ${{ matrix.TAG }}'
