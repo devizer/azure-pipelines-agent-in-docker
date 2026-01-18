@@ -1,0 +1,107 @@
+name: 'IIS + .Net 3.5 & 4.x Docker Images'
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+  THEIMAGE: 'devizervlad/iis-net4x-net35'
+  ISOLATION: process
+
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  Info:
+    name: Build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          
+          - os: windows-2025
+            TAG: ltsc2025
+            ISOLATION: process
+          - os: windows-2022
+            TAG: ltsc2022
+            ISOLATION: process
+
+          - os: windows-2025
+            TAG: ltsc2025
+            ISOLATION: hyperv
+          - os: windows-2025
+            TAG: ltsc2022
+            ISOLATION: hyperv
+          - os: windows-2025
+            TAG: ltsc2019
+            ISOLATION: hyperv
+          - os: windows-2025
+            TAG: ltsc2016
+            ISOLATION: hyperv
+
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Variables
+      shell: bash
+      run: |
+        set -eu; set -o pipefail
+        echo "CPU: $(Get-CpuName)"
+        echo " "
+        printenv | sort
+
+
+    - name: 'PULL ${{ matrix.TAG }}'
+      shell: bash
+      run: |
+         set -e; try-and-retry docker pull ${{ env.THEIMAGE }}:${{ matrix.TAG }}
+
+    - name: 'Container: Run and Curl'
+      shell: bash
+      run: |
+         set -e; docker run -d --name iis -p 8080:80 --isolation=${{ matrix.ISOLATION }} ${{ env.THEIMAGE }}:${{ matrix.TAG }}
+         set -eu; set -o pipefail
+         Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
+         try-and-retry curl -I http://localhost:8080
+         try-and-retry curl http://localhost:8080
+         time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe"
+
+         echo " "; echo "IIS CONTAINER LOGS"
+         docker logs --since 0 iis
+
+    - name: 'HOST: Run and Curl'
+      shell: bash
+      run: |
+         set -eu; set -o pipefail
+         cp iis:C:\\Apps\\Bombardier.exe C:\\Windows\\
+
+         Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
+         try-and-retry curl -I http://localhost:8080
+         try-and-retry curl http://localhost:8080
+         Say "STRESS CONTAINER"
+         bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:8080 || echo "ERROR bombardier.exe against container"
+
+         Say "SETUP IIS"
+         powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
+         cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         Wait-For-HTTP http://localhost:80 30 || echo "ERROR"
+         bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
+
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'IIS TESTS ${{ matrix.TAG }} on ${{ matrix.ISOLATION }}'
+        path: "${{ env.SYSTEM_ARTIFACTSDIRECTORY }}"
+        overwrite: true
