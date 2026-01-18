@@ -61,6 +61,19 @@ jobs:
         printenv | sort
 
 
+        docker info --format '{{.DockerRootDir}}'
+    - name: Setup Docker for Performance
+      shell: pwsh
+      run: |
+        $old_dir = "$(& docker info --format "{{.DockerRootDir}}")"
+        Write-Line Docker Existing Storage -TextGreen "$old_dir"
+
+        Select-WMI-Objects Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
+              ? { $_.FreeSpace -or $_.Size } | 
+              % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
+              ft -autosize | Out-String -Width 1234
+
+
     - name: 'PULL ${{ matrix.TAG }}'
       shell: bash
       run: |
@@ -93,9 +106,11 @@ jobs:
          bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:8080 || echo "ERROR bombardier.exe against container"
 
          Say "SETUP IIS"
-         powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
+         time powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
          docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
          Wait-For-HTTP http://localhost:80 30 || echo "ERROR"
+         
+         Say "STRESS HOST"
          bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
 
 
