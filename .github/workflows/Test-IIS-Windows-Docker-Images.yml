@@ -74,7 +74,7 @@ jobs:
          Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
          try-and-retry curl -I http://localhost:8080
          try-and-retry curl http://localhost:8080
-         time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe"
+         time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY\Stress Container ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt"; || echo "ERROR bombardier.exe"
 
          echo " "; echo "IIS CONTAINER LOGS"
          docker logs --since 0 iis
@@ -83,7 +83,7 @@ jobs:
       shell: bash
       run: |
          set -eu; set -o pipefail
-         cp iis:C:\\Apps\\Bombardier.exe C:\\Windows\\
+         docker cp iis:C:\\Apps\\Bombardier.exe C:\\Windows\\
 
          Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
          try-and-retry curl -I http://localhost:8080
@@ -93,7 +93,7 @@ jobs:
 
          Say "SETUP IIS"
          powershell -c "Add-WindowsFeature Web-Server, Web-Asp-Net45, Web-Scripting-Tools"
-         cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
+         docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
          Wait-For-HTTP http://localhost:80 30 || echo "ERROR"
          bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
 
@@ -102,6 +102,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'IIS TESTS ${{ matrix.TAG }} on ${{ matrix.ISOLATION }}'
+        name: 'IIS TESTS ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}'
         path: "${{ env.SYSTEM_ARTIFACTSDIRECTORY }}"
         overwrite: true
