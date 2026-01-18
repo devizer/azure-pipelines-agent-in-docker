@@ -68,10 +68,15 @@ Say "Installing .NET 3.5"
 Say "Installing IIS"
 Measure-Action "Installing IIS" { 
   # TODO: Web-Http-Redirect, Web-Basic-Auth, Web-Windows-Auth, Web-ASP, Web-Includes
+  # For MMC: Web-Mgmt-Service
   $res = Add-WindowsFeature Web-Server, Web-Asp-Net, Web-Asp-Net45, Web-Scripting-Tools
   $res | ft -autosize | Out-String -width 1234
   if (-not $res.Success) { throw "Error Installing IIS. See Error Above" }
 }
+
+echo "Invoking Enable-Remote-IIS-Management.ps1"
+. "$scriptDirectory\Enable-Remote-IIS-Management.ps1"
+
 Say "Replacing default landing page"
 Remove-Item -Path "C:\Inetpub\wwwroot\*" -Force -Recurse -EA SilentlyContinue
 Copy-Item -Path "$scriptDirectory\wwwroot\*" -Destination "C:\Inetpub\wwwroot\" -Recurse -Force

@@ -23,4 +23,15 @@ if Exist C:\Config\On-Start.cmd (
     call On-Start.cmd
 )
 
+reg query "HKLM\SYSTEM\CurrentControlSet\Services\vmsvc" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo Starting VMSVC Service.
+    net start wmsvc
+) else (
+    echo Starting VMSVC Service is not installed.
+)
+net start w3svc
+
+REM REMINDER docker run -p 80:80 -p 8172:8172 ...
+
 "C:\LogMonitor\LogMonitor.exe" "C:\LogMonitor\ServiceMonitor.exe" "w3svc" "DefaultAppPool" "-st" "100" "-at" "100"
