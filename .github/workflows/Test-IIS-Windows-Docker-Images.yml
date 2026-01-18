@@ -116,6 +116,7 @@ jobs:
          # docker cp iis:C:\\Inetpub\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
          Say "Overwrite C:\\Inetpub\\wwwroot\\"
          rm -rf C:\\Inetpub\\wwwroot\\*
+         rm -rf /c/Inetpub/wwwroot/*
          cp -v Windows-Docker-Images\\wwwroot\\default.aspx C:\\Inetpub\\wwwroot\\
          ls -la C:\\Inetpub\\wwwroot\\
 
