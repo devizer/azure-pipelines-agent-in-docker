@@ -64,12 +64,20 @@ jobs:
       shell: pwsh
       run: |
         $old_dir = "$(& docker info --format "{{.DockerRootDir}}")"
-        Write-Line Docker Existing Storage -TextGreen "$old_dir"
+        Write-Line "Docker Existing Storage " -TextGreen "[$old_dir]"
 
         Select-WMI-Objects Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
               ? { $_.FreeSpace -or $_.Size } | 
               % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
               ft -autosize | Out-String -Width 1234
+
+        $jsonFile="C:\ProgramData\Docker\config\daemon.json"
+        if (Test-Path $jsonFile) { 
+          Write-Host "Docker configuration exists: [$jsonFile]"
+          cat $jsonFile
+        } Else { 
+          Write-Host "Docker configuration is MISSING: [$jsonFile]"
+        }
 
 
     - name: 'PULL ${{ matrix.TAG }}'
