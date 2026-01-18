@@ -87,9 +87,6 @@ jobs:
          try-and-retry curl http://localhost:8080
          time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY\Stress Container ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt" || echo "ERROR bombardier.exe"
 
-         echo " "; echo "IIS CONTAINER LOGS"
-         docker logs --since 0 iis
-
     - name: 'HOST: Run and Curl'
       shell: bash
       if: always()
@@ -119,6 +116,15 @@ jobs:
          
          Say "STRESS HOST"
          bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
+
+    - name: 'IIS Container logs'
+      shell: bash
+      if: always()
+      run: |
+         echo " "; echo "IIS CONTAINER LOGS"
+         docker logs --since 0 iis > /tmp/logs 
+         cp -v /tmp/logs "$SYSTEM_ARTIFACTSDIRECTORY\IIS Container Logs ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt" >/dev/null
+         Say "Total Log Lines: $(cat /tmp/logs | wc -l)"
 
 
     - name: Upload artifacts
