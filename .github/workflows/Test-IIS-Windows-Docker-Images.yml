@@ -97,6 +97,8 @@ jobs:
            restart-service docker
            Write-Line -TextGreen "Status of Docker Service"
            get-service docker | ft -autosize
+        } Else {
+          Write-Line -TextMagenta "Skipping Update of Docker Configuration. Missing Volume D:\"
         }
 
 
@@ -115,7 +117,7 @@ jobs:
          Wait-For-HTTP http://localhost:8080 30 || echo "ERROR: Wait-For-HTTP http://localhost:8080"
          try-and-retry curl -I http://localhost:8080
          try-and-retry curl http://localhost:8080
-         time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY\Stress Container ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt" || echo "ERROR bombardier.exe"
+         time docker exec iis bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY\Stress CONTAINER ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt" || echo "ERROR bombardier.exe"
 
     - name: 'HOST: Run and Curl'
       shell: bash
@@ -146,7 +148,7 @@ jobs:
          curl http://localhost:80
          
          Say "STRESS HOST"
-         bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 || echo "ERROR bombardier.exe against host"
+         bombardier.exe -c 20 -d 20s --print=result -k -s http://localhost:80 | tee "$SYSTEM_ARTIFACTSDIRECTORY\Stress HOST ${{ matrix.TAG }} as ${{ matrix.ISOLATION }}.txt" || echo "ERROR bombardier.exe against host"
 
     - name: 'IIS Container logs'
       shell: bash
