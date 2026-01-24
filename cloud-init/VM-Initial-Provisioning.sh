@@ -11,6 +11,14 @@ echo $PATH |& tee /root/_logs/PATH.txt
 Say "BUILD_SOURCEVERSION = [$BUILD_SOURCEVERSION]"
 Say "FORTY_TWO = [$FORTY_TWO]"
 
+Say "Installing https://devizer.github.io/devops-library/Standalone-Bootstrap.sh"
+script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh;
+file="${TMPDIR:-/tmp}/$(basename "$script")";
+cmd="wget -q -nv --no-check-certificate -O \"$file\" \"$script\" 2>/dev/null 1>&2 || curl -kfsSL -o \"$file\" \"$script\"";
+eval $cmd || eval $cmd || eval $cmd || echo "ERROR: Download bootstrapper failed";
+bash "$file"
+
+
 set +e
 Say "Adjusting os repo"
 cat /etc/apt/sources.list
