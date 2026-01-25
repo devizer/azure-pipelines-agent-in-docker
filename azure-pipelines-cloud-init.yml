@@ -394,6 +394,7 @@ jobs:
 
       try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
 
+      Say "Final Free space and Swap"
       sudo swapon
       df -h -T
     displayName: 'Provisioning'
@@ -405,24 +406,6 @@ jobs:
       artifactName: 'Universe.CpuUsage.Tests.Binaries'
       downloadPath: '$(HOME)'
     
-  - script: |
-      set -eu; set -o pipefail
-      echo "CPU: $(Get-CpuName)"
-      Say --Reset-Stopwatch
-      mkdir -p ~/FS.Usage
-      for d in 2 3 4 5; do
-        Say "max-depth = $d"
-        sudo du / -h --max-depth=$d | { grep -v -E '[[:space:]]/(proc|sys|run|dev)/' || true; } | tee ~/FS.Usage/du.$d.txt || true
-      done 
-      printenv | sort | tee ~/FS.Usage/Environment.txt
-    displayName: 'FS Usage'
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish FS Usage'
-    inputs:
-      pathtoPublish: '$(HOME)/FS.Usage'
-      artifactName: 'FS.Usage $(Agent.JobName)'
-
-  
   - script: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
