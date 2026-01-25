@@ -352,7 +352,7 @@ Get-Folder-Size() {
        if [[ "$(uname -s)" == Darwin ]]; then
          sz="$(unset POSIXLY_CORRECT; $(Get-Sudo-Command) du -k -d 0 "$dir" 2>/dev/null | awk '{print 1024 * $1}' | tail -1 || true)"
        else
-         sz="$(unset POSIXLY_CORRECT; $(Get-Sudo-Command) du -k --max-depth=0 "$dir" 2>/dev/null | awk '{print 1024 * $1}' || true)"
+         sz="$(unset POSIXLY_CORRECT; ($(Get-Sudo-Command) du -k --max-depth=0 "$dir" 2>/dev/null || $(Get-Sudo-Command) du -k -d 0 "$dir" 2>/dev/null || true) | awk '{print 1024 * $1}' || true)"
        fi
        echo "$sz"
     else
