@@ -1,6 +1,6 @@
 variables:
   THEWORKDIR: /transient-builds
-  DEFAULT_NEWSIZE: 16G
+  DEFAULT_NEWSIZE: 20G
   XZ_COMPRESSION_LEVEL: 9
   AGENT_IMAGE: 'ubuntu-22.04' # 
 # debian 13 qcow2 files needs new e2fsck (libguests tool)
@@ -26,7 +26,7 @@ jobs:
   # todo: replace by some shared script? or zip?
   pool:
     vmImage: ubuntu-22.04
-  timeoutInMinutes: 150
+  timeoutInMinutes: 120
   steps:
   - script: |
       set -eu; set -o pipefail
@@ -35,10 +35,11 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
-      cd build-tools
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
-      Say --Reset-Stopwatch
-      echo "CPU: $(Get-CpuName)"
+      script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh;
+      file="${TMPDIR:-/tmp}/$(basename "$script")";
+      cmd="wget -q -nv --no-check-certificate -O \"$file\" \"$script\" 2>/dev/null 1>&2 || curl -kfsSL -o \"$file\" \"$script\"";
+      eval $cmd || eval $cmd || eval $cmd || echo "ERROR: Download bootstrapper failed";
+      bash "$file"
     displayName: 'Bootstrap'
 
   - script: |
@@ -343,39 +344,18 @@ jobs:
 
   - script: |
       set -eu; set -o pipefail
-      cd build-tools
-      script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null
-      Say --Reset-Stopwatch
+      script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh;
+      file="${TMPDIR:-/tmp}/$(basename "$script")";
+      cmd="wget -q -nv --no-check-certificate -O \"$file\" \"$script\" 2>/dev/null 1>&2 || curl -kfsSL -o \"$file\" \"$script\"";
+      eval $cmd || eval $cmd || eval $cmd || echo "ERROR: Download bootstrapper failed";
+      bash "$file"
+    displayName: 'Bootstrap'
+
+  - script: |
+      set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
-
-      
-      CLEANUP_PREINSTALLED_TOOLS="-* +dotnet"
-      remove_Key_go=/opt/hostedtoolcache/go;
-      remove_Key_codeql=/opt/hostedtoolcache/CodeQL
-      remove_Key_android=/usr/local/lib/android/sdk
-      remove_Key_swift=/usr/share/swift
-      remove_Key_jvm=/usr/lib/jvm
-      remove_Key_haskell=/usr/local/.ghcup
-      remove_Key_dotnet=/usr/share/dotnet
-
-
-
-      FOLDERS_TO_CLEAN='
-          /opt/hostedtoolcache/go 
-          /opt/hostedtoolcache/CodeQL 
-          /usr/local/lib/android/sdk 
-          /usr/share/swift 
-          /usr/lib/jvm 
-          /usr/local/.ghcup 
-          /usr/share/dotnet
-      '
-      for dir in $FOLDERS_TO_CLEAN; do if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
-        sz="$(sudo du -h "$dir" --max-depth=0 | awk '{print $1}' || true)"
-        Say "Delete $dir, $sz"
-        sudo rm -rf "$dir"/* || true
-      fi; done 
-      Say "CLEAN UP Docker Images"
-      docker image prune -a -f | { grep -v "sha256:"; } || true
+      cd build-tools
+      Run-Remote-Script https://devizer.github.io/devops-library/Clean-Up-Disk.sh
 
       Say "Reset swap to 100M"
       echo "SWAP BEFORE"
@@ -384,13 +364,6 @@ jobs:
         sudo swapoff $f 2>/dev/null || true
         rm -f $f 2>/dev/null || true
       done
-      file=/newswap
-      sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=100 status=progress
-      sudo chmod 600 $file
-      sudo mkswap $file
-      sudo swapon $file
-      echo "SWAP AFTER"
-      sudo swapon
 
       
       export FREE_ROOT_SPACE_MB=3000 # 1600 is not enough
@@ -400,7 +373,7 @@ jobs:
       export MOVE_DOCKER_TO_RAID=""
       export FS=BTRFS-Compressed
       export BTRFS_COMPRESS_MODE=zstd:1
-      url=https://raw.githubusercontent.com/devizer/glist/master/Raid0-on-Azure-Pipelines-Linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+      Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/RAID0-on-Microsoft-Hosted-Build-Agent.sh
       Say "Mounts"
       df -h -T
       echo ""
