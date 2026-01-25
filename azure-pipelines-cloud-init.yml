@@ -351,7 +351,7 @@ jobs:
       bash "$file"
     displayName: 'Bootstrap'
 
-  - script: |
+  - bash: |
       set -eu; set -o pipefail
       echo "CPU: $(Get-CpuName)"
       cd build-tools
@@ -382,7 +382,9 @@ jobs:
       Say "/proc/sys/kernel/randomize_va_space"
       sudo cat /proc/sys/kernel/randomize_va_space
       echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+    displayName: 'Tune Free Space'
       
+  - bash: |
       Say "Install libguestfs-tools"
       # qemu-efi is missing on 24.04
       time (sudo apt-get update -qq; sudo apt-get install bsdutils qemu-system-arm qemu-system-x86 sshpass sshfs cloud-image-utils qemu-system-arm qemu-system-i386 aria2 libguestfs-tools tree -y -qq | grep "Unpack\|Setting"; )
@@ -392,12 +394,10 @@ jobs:
       # fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf
       printf "\nuser_allow_other\n" | sudo tee -a /etc/fuse.conf
 
-      try-and-retry curl -kfsSL -o /tmp/build-gcc-utilities.sh "https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh"
-
       Say "Final Free space and Swap"
       sudo swapon
       df -h -T
-    displayName: 'Provisioning'
+    displayName: 'Install libguestfs-tools'
 
   - task: DownloadBuildArtifacts@0
     displayName: 'Download Universe.CpuUsage.Tests.Binaries'
