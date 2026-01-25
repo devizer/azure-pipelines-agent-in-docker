@@ -407,10 +407,13 @@ function Shutdown-VM-and-CleapUP() {
   source "$lauch_options/variables"
   echo '
      set +eu; set -o pipefail
+     Say CLEAN UP journal;
      journalctl --flush --rotate --vacuum-time=1s || journalctl --vacuum-time=1s
      journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --vacuum-time=1s
      journalctl --vacuum-size=4K
+     Say CLEAN UP folders;
      try-and-retry rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build
+     Say FINALLY SHUTDOWN;
      if [[ "$(dpkg --print-architecture)" = armel ]]; then
        shutdown -r now
      else
