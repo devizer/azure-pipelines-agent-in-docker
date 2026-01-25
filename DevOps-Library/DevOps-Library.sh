@@ -319,6 +319,48 @@ function Format-Thousand() {
   awk -v n="$num" 'BEGIN { len=length(n); res=""; for (i=0;i<=len;i++) { res=substr(n,len-i+1,1) res; if (i > 0 && i < len && i % 3 == 0) { res = "," res } }; print res }' 2>/dev/null || echo "$num"
 }
 
+# Include File: [\Includes\Get-File-Size.sh]
+# returns size in bytes
+Get-File-Size() {
+    local file="${1:-}"
+    if [[ -n "$file" ]] && [[ -f "$file" ]]; then
+       local sz
+       # Ver 1
+       if [ "$(uname)" = "Darwin" ]; then
+           sz="$(stat -f %z "$file" 2>/dev/null)"
+       else
+           sz="$(stat -c %s "$file" 2>/dev/null)"
+       fi
+
+       # Ver 2
+       if [[ -z "$sz" ]]; then
+         sz=$(NO_COLOR=1 ls -1aln "$file" 2>/dev/null | awk '{print $5}')
+       fi
+       echo "$sz"
+    else
+      if [[ -n "$file" ]]; then
+        echo "Get-File-Size Warning! Missing file '$file'" >&2
+      fi
+    fi
+}
+# Include File: [\Includes\Get-Folder-Size.sh]
+# returns size in bytes
+Get-Folder-Size() {
+    local dir="${1:-}"
+    if [[ -n "$dir" ]] && [[ -d "$dir" ]]; then
+       local sz
+       if [[ "$(uname -s)" == Darwin ]]; then
+         sz="$(unset POSIXLY_CORRECT; $(Get-Sudo-Command) du -k -d 0 "$dir" 2>/dev/null | awk '{print 1024 * $1}' | tail -1 || true)"
+       else
+         sz="$(unset POSIXLY_CORRECT; $(Get-Sudo-Command) du -k --max-depth=0 "$dir" 2>/dev/null | awk '{print 1024 * $1}' || true)"
+       fi
+       echo "$sz"
+    else
+      if [[ -n "$dir" ]]; then
+        echo "Get-Folder-Size Warning! Missing folder '$dir'" >&2
+      fi
+    fi
+}
 # Include File: [\Includes\Get-GitHub-Latest-Release.sh]
 # output the TAG of the latest release of null 
 # does not require jq
