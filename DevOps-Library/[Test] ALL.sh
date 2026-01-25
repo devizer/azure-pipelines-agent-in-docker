@@ -896,7 +896,7 @@ Test-Has-Command() {
 # Include File: [\Includes\Test-Is-Musl-Linux.sh]
 Test-Is-Musl-Linux() {
   if [[ "$(Is-Termux)" == True ]]; then
-    return 0;
+    return 1;
   elif Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
     return 1;
   elif ldd --version 2>&1 | grep -iq "glibc"; then
@@ -1004,9 +1004,10 @@ My-Quote() {
 
 Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
 Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
+Say-Definition "Is-Termux() =" "'$(Is-Termux)'"
+Say-Definition "Is-Musl-Linux() =" "'$(Is-Musl-Linux)'"
 Say-Definition "Get-Global-Seconds() =" "'$(Get-Global-Seconds)'"
 Say-Definition "Is-Qemu-VM() =" "'$(Is-Qemu-VM)'"
-Say-Definition "Is-Termux() =" "'$(Is-Termux)'"
 Say-Definition "Is-Windows() =" "'$(Is-Windows)'"
 Say-Definition "Is-WSL() =" "'$(Is-WSL)'"
 

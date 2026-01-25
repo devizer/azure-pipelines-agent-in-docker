@@ -807,7 +807,7 @@ Test-Has-Command() {
 # Include File: [\Includes\Test-Is-Musl-Linux.sh]
 Test-Is-Musl-Linux() {
   if [[ "$(Is-Termux)" == True ]]; then
-    return 0;
+    return 1;
   elif Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
     return 1;
   elif ldd --version 2>&1 | grep -iq "glibc"; then
