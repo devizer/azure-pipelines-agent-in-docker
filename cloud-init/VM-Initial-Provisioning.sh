@@ -93,7 +93,7 @@ function Disbale-Unattended() {
 Disbale-Unattended
 
 # open-vm-tools?
-export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync gcc make"
+export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync gcc make libc6-dev"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
 (time (apt-get install -y --force-yes $APT_PACKAGES | { grep -v "(Reading database" || true; } || { for pack in $APT_PACKAGES; do Say "Installing one-by-one: $pack"; apt-get install -y -q $pack | { grep -v "(Reading database" || true; }; done; } )) |& tee /root/_logs/apt.install.txt # missing on old distros

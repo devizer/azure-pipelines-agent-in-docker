@@ -119,6 +119,11 @@ jobs:
       #  THEARCH: x64
       #  NEWSIZE: "16G" # 44G
       
+      'arm64-debian-10':
+        IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
+        KEY: 10-generic-arm64
+        THEARCH: arm64
+
       'arm64-ubuntu-24.04':
         # can't mount root during boot: https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img
         # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
@@ -284,10 +289,6 @@ jobs:
         THEARCH: arm
         NEWSIZE: "SKIP" # 44G
 
-      'arm64-debian-10':
-        IMAGEURL: "https://cloud.debian.org/images/cloud/buster-backports/latest/debian-10-backports-genericcloud-arm64.qcow2"
-        KEY: 10-generic-arm64
-        THEARCH: arm64
       'arm64-debian-12':
         IMAGEURL: "https://cloud.debian.org/images/cloud/bookworm-backports/latest/debian-12-backports-genericcloud-arm64.qcow2"
         KEY: 12-generic-arm64
