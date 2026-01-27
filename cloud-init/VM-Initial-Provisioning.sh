@@ -97,10 +97,14 @@ export APT_PACKAGES="debconf-utils jq gawk git sshpass sshfs rsync gcc make"
 Say "Invloke apt-get install [$APT_PACKAGES]"
 # --force-yes is deprecated, but works on Debian 13 and Ubuntu 24.04
 (time (apt-get install -y --force-yes $APT_PACKAGES | { grep -v "(Reading database" || true; } || { for pack in $APT_PACKAGES; do Say "Installing one-by-one: $pack"; apt-get install -y -q $pack | { grep -v "(Reading database" || true; }; done; } )) |& tee /root/_logs/apt.install.txt # missing on old distros
+Disbale-Unattended
+
+Say "Configure SSH for non-interactive accept"
 mkdir -p ~/.ssh; printf "Host *\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" > ~/.ssh/config
 
 Say "Try bzip2 from repo ..."
 sudo apt-get install bzip2 -y -qq | { grep -v "(Reading database" || true; } || (Say "Installing bzip2 from source"; Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/bin/Install-bzip2.sh)
+Disbale-Unattended
 
 Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;
 parallel --version
