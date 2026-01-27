@@ -633,7 +633,7 @@ Get-Tmp-Folder() {
 #!/usr/bin/env bash
 Is-Microsoft-Hosted-Build-Agent() {
   if [[ "${TF_BUILD:-}" == True ]]; then
-    if [[ "$AGENT_NAME" == "Hosted Agent" ]] || [[ "$AGENT_NAME" == "Azure Pipelines" ]] || [[ "$AGENT_NAME" == "Azure Pipelines "* ]] || [[ "$AGENT_NAME" == "ubuntu-latest" ]] || [[ "$AGENT_NAME" == "windows-latest" ]] || [[ "$AGENT_NAME" == "macos-latest" ]]; then
+    if [[ "${AGENT_ISSELFHOSTED:-}" == "0" ]] || [[ "$(To-Lower-Case "${AGENT_ISSELFHOSTED:-}")" == "false" ]] || [[ "${AGENT_NAME:-}" == "Hosted Agent" ]] || [[ "${AGENT_NAME:-}" == "Azure Pipelines" ]] || [[ "${AGENT_NAME:-}" == "Azure Pipelines "* ]] || [[ "${AGENT_NAME:-}" == "ubuntu-latest" ]] || [[ "${AGENT_NAME:-}" == "windows-latest" ]] || [[ "${AGENT_NAME:-}" == "macos-latest" ]]; then
       echo True
       return;
     fi

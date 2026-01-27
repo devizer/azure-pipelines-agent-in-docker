@@ -722,7 +722,7 @@ Get-Tmp-Folder() {
 #!/usr/bin/env bash
 Is-Microsoft-Hosted-Build-Agent() {
   if [[ "${TF_BUILD:-}" == True ]]; then
-    if [[ "$AGENT_NAME" == "Hosted Agent" ]] || [[ "$AGENT_NAME" == "Azure Pipelines" ]] || [[ "$AGENT_NAME" == "Azure Pipelines "* ]] || [[ "$AGENT_NAME" == "ubuntu-latest" ]] || [[ "$AGENT_NAME" == "windows-latest" ]] || [[ "$AGENT_NAME" == "macos-latest" ]]; then
+    if [[ "${AGENT_ISSELFHOSTED:-}" == "0" ]] || [[ "$(To-Lower-Case "${AGENT_ISSELFHOSTED:-}")" == "false" ]] || [[ "${AGENT_NAME:-}" == "Hosted Agent" ]] || [[ "${AGENT_NAME:-}" == "Azure Pipelines" ]] || [[ "${AGENT_NAME:-}" == "Azure Pipelines "* ]] || [[ "${AGENT_NAME:-}" == "ubuntu-latest" ]] || [[ "${AGENT_NAME:-}" == "windows-latest" ]] || [[ "${AGENT_NAME:-}" == "macos-latest" ]]; then
       echo True
       return;
     fi
@@ -1039,6 +1039,7 @@ Say-Definition "Get-Global-Seconds() =" "'$(Get-Global-Seconds)'"
 Say-Definition "Is-Qemu-VM() =" "'$(Is-Qemu-VM)'"
 Say-Definition "Is-Windows() =" "'$(Is-Windows)'"
 Say-Definition "Is-WSL() =" "'$(Is-WSL)'"
+Say-Definition "Is-Microsoft-Hosted-Build-Agent() = " "$(Is-Microsoft-Hosted-Build-Agent)"
 
 Say-Definition "MkTemp-Folder-Smarty(template1) =" "'$(MkTemp-Folder-Smarty "template1")'"
 Say-Definition "MkTemp-Folder-Smarty(template2, prefix2) =" "'$(MkTemp-Folder-Smarty "template2" "prefix2")'"
