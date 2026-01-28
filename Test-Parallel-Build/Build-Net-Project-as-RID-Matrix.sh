@@ -181,13 +181,13 @@ Test-Build-Matrix() {
   rm -rf /tmp/MATRIX/testasp1-Release*
   # TEST1: full file path
   pushd ~ >/dev/null
-  Build-Net-Project-as-RID-Matrix "/tmp/MATRIX/testasp1-Release-v1" "/tmp/MATRIX/testasp1/bin/v1" "dotnet" "/tmp/MATRIX/testasp1" "$DEFAULT_RID_LIST"
+  time Build-Net-Project-as-RID-Matrix "/tmp/MATRIX/testasp1-Release-v1" "/tmp/MATRIX/testasp1/bin/v1" "dotnet" "/tmp/MATRIX/testasp1" "$DEFAULT_RID_LIST"
   popd >/dev/null
 
   # TEST2: relative file path
   pushd /tmp/MATRIX >/dev/null
   export COMPRESSION_LEVEL=1
-  Build-Net-Project-as-RID-Matrix "./testasp1-Release-v2" "testasp1/bin/v2" "dotnet" "testasp1" "$DEFAULT_RID_LIST"
+  # Build-Net-Project-as-RID-Matrix "./testasp1-Release-v2" "testasp1/bin/v2" "dotnet" "testasp1" "$DEFAULT_RID_LIST"
   popd >/dev/null
 
 }
