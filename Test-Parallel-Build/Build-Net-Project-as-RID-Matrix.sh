@@ -134,7 +134,9 @@ Build-Net-Project-as-RID-Matrix() {
       local job_log=$(mktemp)
       # --halt soon,fail=1 means do not start new jobs if one failed
       export IN_PARALLEL=True
-      parallel --joblog "$job_log" --jobs 0 Build-Net-Project-Single-RID \
+      local nproc=$(nproc)
+      nproc=$((nproc+1))
+      parallel --joblog "$job_log" --jobs $nproc Build-Net-Project-Single-RID \
           "$target_dir" \
           "$plain_dir" \
           "$dotnet_exe" \
@@ -170,7 +172,7 @@ Test-Build-Matrix() {
   mkdir -p /tmp/MATRIX/testasp1
   rm -rf /tmp/MATRIX/testasp1/*
   dotnet new mvc -o /tmp/MATRIX/testasp1/
-  export COMPRESSION_LEVEL=1
+  export COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-9}"
   export THE_PROJECT_HOOK_AFTER_PUBLISH='x=77; echo Hello from hook for rid=$THE_PROJECT_RID\; binaries are located at "$THE_PROJECT_BINARIES"; df -h -T'
 
   rm -rf /tmp/MATRIX/testasp1-Release*
