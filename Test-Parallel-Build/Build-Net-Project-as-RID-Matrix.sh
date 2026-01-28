@@ -51,7 +51,7 @@ Build-Net-Project-Single-RID() {
           Colorize LightCyan "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
           eval "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
         fi
-        local nice=""; [[ "$(command -v nice)" ]] && nice="nice -n 10" && echo "ACTIVATING LOW PRIORITY COMPRESSION"
+        local nice=""; [[ "$(command -v nice)" ]] && nice="nice -n 1" && echo "LOW PRIORITY COMPRESSION is ACTIVE"
         if [[ "$rid" == "win"* ]]; then
           # zip
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.zip ... "
