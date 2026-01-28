@@ -54,6 +54,7 @@ Build-Net-Project-Single-RID() {
     printf "Self Contained binaries built by "; Colorize Green "by $seconds seconds"
 
     printf $THE_PROJECT_VERSION > "$target_dir_full/VERSION.txt"
+    printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
     local plain_size="$(Format-Thousand "$(Get-Folder-Size "$tmp")") bytes"
     local packed_size=""
     pushd "$tmp" >/dev/null
@@ -137,6 +138,9 @@ Build-Net-Project-as-RID-Matrix() {
   local project="${4}"
   local rid_list="${5:-$DEFAULT_RID_LIST}"
   
+  mkdir -p "$target_dir" 
+  local target_dir_full="$(cd "$target_dir" && pwd -P)"
+
   local project_file=""; local project_folder="";
   if [[ -d "$project" ]]; then
     project_folder="$project"
@@ -152,8 +156,32 @@ Build-Net-Project-as-RID-Matrix() {
     return 1;
   fi
   project_folder_full="$(cd "$project_folder" && pwd -P)"
-  Say "Exclusive Restore for $project_folder_full/$project_file"
+
+  Say "Exclusive Restore for $project_folder_full/$project_file ..."
   try-and-retry dotnet restore "$project_folder_full/$project_file"
+
+  Say "Publish FX-Dependent binaries ..."
+  mkdir -p "$plain_dir"
+  local plain_dir_full="$(cd "$plain_dir" && pwd -P)"
+  local archive_name_only=$(printf "$THE_PROJECT_BINARY_FILE_PATTERN" "fxdependent")
+  startAt=$(Get-Global-Seconds)
+  tmp="$plain_dir_full"/"$archive_name_only"
+  try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" -o "$tmp" -v:q -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
+  seconds=$(( $(Get-Global-Seconds) - startAt ))
+  printf "FX-Dependent binaries built by "; Colorize Green "by $seconds seconds"
+  printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
+  pushd "$tmp" >/dev/null
+    rm -f "$target_dir_full/${archive_name_only}."{zip,7z}
+    startAt=$(Get-Global-Seconds)
+    tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"; 
+    7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }; 
+    7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
+    tar cf - . | 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"; 
+    # wait
+    seconds=$(( $(Get-Global-Seconds) - startAt ))
+  popd
+  echo "FX-Dependent binaries compressed by $seconds seconds"
+
   local index=0
   local count=$(echo $rid_list | wc -w)
   export IN_PARALLEL=False
@@ -185,6 +213,8 @@ Build-Net-Project-as-RID-Matrix() {
       done
   fi
   build_all_known_hash_sums "$target_dir"
+  Say "Final Release folder '$target_dir_full'"
+  ls -lah "$target_dir_full"
 }
 
 Test-Build-Matrix() {
