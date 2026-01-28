@@ -103,6 +103,7 @@ Build-Net-Project-Single-RID() {
 }
 
 if [[ -z "${ZSH_VERSION:-}" ]]; then
+  # parallel mode is available for bash only
   export -f Build-Net-Project-Single-RID
 else
   # require zsh 4.3.10 Jun 2009
