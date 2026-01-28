@@ -490,6 +490,11 @@ jobs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: 'Succeeded $(Agent.JobName)'
 
+  - bash: |
+       find $(System.ArtifactsDirectory) -name "*.qcow2" -type f -delete
+    condition: failed()
+    displayName: 'Get rid of *.qcow2 if fail'
+
   - task: PublishBuildArtifacts@1
     condition: failed()
     displayName: 'Publish Errors'
