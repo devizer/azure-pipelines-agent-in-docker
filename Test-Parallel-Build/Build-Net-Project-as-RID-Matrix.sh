@@ -30,11 +30,15 @@ Build-Net-Project-Single-RID() {
   COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-9}"
   local tmp="${plain_dir_full}/$archive_name_only"
   mkdir -p "$tmp"
+  local startAt; local seconds;
   pushd $project_folder_full >/dev/null
     # try-and-retry dotnet restore
     Colorize LightCyan "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
     local sem=""; [[ "${IN_PARALLEL:-}" == True ]] && sem="parallel --semaphore --fg --jobs 1 --id PUBLISH_LOCK"
+    startAt=$(Get-Global-Seconds)
     $sem try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -p:Version=$project_version -p:AssemblyVersion=$project_version -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
+    seconds=$(( $(Get-Global-Seconds) - startAt ))
+    printf "Self Contained binaries built by "; Colorize Green "by $seconds seconds"
 
     printf $THE_PROJECT_VERSION > "$target_dir_full/VERSION.txt"
     local plain_size="$(Format-Thousand "$(Get-Folder-Size "$tmp")") bytes"
@@ -52,22 +56,30 @@ Build-Net-Project-Single-RID() {
           # zip
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.zip ... "
           rm -f "$target_dir_full/${archive_name_only}.zip"
+          startAt=$(Get-Global-Seconds)
           $nice 7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.zip")") bytes"
+          seconds=$(( $(Get-Global-Seconds) - startAt ))
+          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.zip")") bytes (took $seconds seconds)"
           # 7z
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.7z ... "
           rm -f "$target_dir_full/${archive_name_only}.7z"
+          startAt=$(Get-Global-Seconds)
           $nice 7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.7z")") bytes"
+          seconds=$(( $(Get-Global-Seconds) - startAt ))
+          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.7z")") bytes (took $seconds seconds)"
         else
           # .tar.gz
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.gz ... "
+          startAt=$(Get-Global-Seconds)
           tar cf - . | $nice pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.gz")") bytes"
+          seconds=$(( $(Get-Global-Seconds) - startAt ))
+          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.gz")") bytes (took $seconds seconds)"
           # .tar.xz
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.xz ... "
+          startAt=$(Get-Global-Seconds)
           tar cf - . | $nice 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes"
+          seconds=$(( $(Get-Global-Seconds) - startAt ))
+          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes (took $seconds seconds)"
         fi
     popd >/dev/null
 
