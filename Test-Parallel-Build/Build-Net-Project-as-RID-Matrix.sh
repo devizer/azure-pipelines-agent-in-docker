@@ -3,6 +3,7 @@ set -eu; set -o pipefail;
 
 if false; then
   [[ -z "$(command -v parallel)" ]] && Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh
+  # linux-bionic-arm64, linux-bionic-x64: are not supported for asp.net core
   export DEFAULT_RID_LIST="osx-x64 osx-arm64 win-x64 win-x86 win-arm64 linux-x64 linux-arm linux-arm64 linux-musl-x64 linux-musl-arm linux-musl-arm64"
   export DISABLE_PARALLEL_PUBLISH=false
   export KEEP_PLAIN_BINARIES=false
@@ -49,7 +50,7 @@ Build-Net-Project-Single-RID() {
     Colorize LightCyan "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
     local sem=""; [[ "${IN_PARALLEL:-}" == True ]] && sem="parallel --semaphore --fg --jobs 1 --id PUBLISH_LOCK"
     startAt=$(Get-Global-Seconds)
-    $sem try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -p:Version=$project_version -p:AssemblyVersion=$project_version -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
+    $sem try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -p:Version=$project_version -p:AssemblyVersion=$project_version -c Release $(echo ${THE_PROJECT_BUILD_PARAMETERS:-})
     seconds=$(( $(Get-Global-Seconds) - startAt ))
     printf "Self Contained binaries built by "; Colorize Green "by $seconds seconds"
 
@@ -100,8 +101,17 @@ Build-Net-Project-Single-RID() {
 
   popd >/dev/null
 }
-export -f Build-Net-Project-Single-RID
-# linux-bionic-arm64, linux-bionic-x64: are not supported for asp.net core
+
+if [[ -z "${ZSH_VERSION:-}" ]]; then
+  export -f Build-Net-Project-Single-RID
+else
+  # require zsh 4.3.10 Jun 2009
+  setopt SH_WORD_SPLIT # avoid $(echo $var)
+  setopt KSH_ARRAYS # base index is 0
+  emulate bash
+  export DISABLE_PARALLEL_PUBLISH=true
+fi
+
 export DEFAULT_RID_LIST="osx-x64 osx-arm64 win-x64 win-x86 win-arm64 linux-x64 linux-arm linux-arm64 linux-musl-x64 linux-musl-arm linux-musl-arm64"
 
 # HASH SUMS
@@ -166,7 +176,7 @@ Build-Net-Project-as-RID-Matrix() {
   local archive_name_only=$(printf "$THE_PROJECT_BINARY_FILE_PATTERN" "fxdependent")
   startAt=$(Get-Global-Seconds)
   tmp="$plain_dir_full"/"$archive_name_only"
-  try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" -o "$tmp" -v:q -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
+  try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" -o "$tmp" -v:q -c Release $(echo ${THE_PROJECT_BUILD_PARAMETERS:-})
   seconds=$(( $(Get-Global-Seconds) - startAt ))
   printf "FX-Dependent binaries built by "; Colorize Green "$seconds seconds"
   printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
@@ -218,8 +228,8 @@ Build-Net-Project-as-RID-Matrix() {
 }
 
 Test-Build-Matrix() {
-  rm -rf ~/.nuget/packages/*
-  rm -rf ~/.local/share/NuGet/http-cache
+  rm -rf ~/.nuget/packages/* || true # zsh workaround
+  rm -rf ~/.local/share/NuGet/http-cache || true
   Run-Remote-Script --runner "$(Get-Sudo-Command) bash" https://dot.net/v1/dotnet-install.sh --channel 10.0 -i "/tmp/dotnet10"
   Say --Reset-Stopwatch;
   export PATH="/tmp/dotnet10:$PATH"

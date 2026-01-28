@@ -69,14 +69,18 @@ jobs:
     - name: "Install-GNU-Parallel.sh" 
       run: Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh
 
+    - name: "[ZSH] Build and Measure" 
+      if: ${{ runner.os == 'macOS' }}
+      run: |
+        set -eu; 
+        export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; 
+        echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; 
+        cd Test-Parallel-Build; 
+        zsh -c ". ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix"
+  
     - name: "[BASH] Build and Measure" 
       run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; . ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix'
 
-    - name: "[ZSH] Build and Measure" 
-      if: ${{ runner.os == 'macOS' }}
-      shell: "zsh -c '{0}'"
-      run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; . ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix'
-  
     - name: "Linux System Stat"   
       if: ${{ runner.os == 'Linux' }}
       run: Show-System-Stat
