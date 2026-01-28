@@ -131,6 +131,7 @@ Build-Net-Project-as-RID-Matrix() {
   local count=$(echo $rid_list | wc -w)
   export IN_PARALLEL=False
   if [[ -n "$(command -v parallel)" ]] && [[ "$(To-Boolean "Env Var DISABLE_PARALLEL_PUBLISH" "${DISABLE_PARALLEL_PUBLISH:-}")" == False ]] ; then
+      echo "PARALLEL PUBLISH"
       local job_log=$(mktemp)
       # --halt soon,fail=1 means do not start new jobs if one failed
       export IN_PARALLEL=True
@@ -150,6 +151,7 @@ Build-Net-Project-as-RID-Matrix() {
             return 1; 
          }
   else
+      echo "SERIALIZED PUBLISH"
       for rid in $(echo $rid_list); do
         index=$((index+1))
         Build-Net-Project-Single-RID "$target_dir" "$plain_dir" "$dotnet_exe" "$project_folder_full" "$project_file" "$rid" $index $count
