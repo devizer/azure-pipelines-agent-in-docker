@@ -63,8 +63,8 @@ jobs:
       run: 'set -eu; Run-Remote-Script https://devizer.github.io/DevOps-Library.sh'
 
     - name: Prepare macOS
-      if: ${{ false && runner.os == 'macOS' }}
-      run: brew install gawk make
+      if: ${{ runner.os == 'macOS' }}
+      run: brew install pigz
   
     - name: "Install-GNU-Parallel.sh" 
       run: Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh
