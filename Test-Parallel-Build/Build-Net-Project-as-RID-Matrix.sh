@@ -168,7 +168,7 @@ Build-Net-Project-as-RID-Matrix() {
   tmp="$plain_dir_full"/"$archive_name_only"
   try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" -o "$tmp" -v:q -c Release ${THE_PROJECT_BUILD_PARAMETERS:-}
   seconds=$(( $(Get-Global-Seconds) - startAt ))
-  printf "FX-Dependent binaries built by "; Colorize Green "by $seconds seconds"
+  printf "FX-Dependent binaries built by "; Colorize Green "$seconds seconds"
   printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
   pushd "$tmp" >/dev/null
     rm -f "$target_dir_full/${archive_name_only}."{zip,7z}
@@ -179,8 +179,8 @@ Build-Net-Project-as-RID-Matrix() {
     tar cf - . | 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"; 
     # wait
     seconds=$(( $(Get-Global-Seconds) - startAt ))
-  popd
-  echo "FX-Dependent binaries compressed by $seconds seconds"
+  popd >/dev/null
+  printf "FX-Dependent binaries compressed by"; Colorize Green "$seconds seconds"
 
   local index=0
   local count=$(echo $rid_list | wc -w)
