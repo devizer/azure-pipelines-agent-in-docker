@@ -69,4 +69,4 @@ jobs:
       run: 'Run-Remote-Script Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;'
 
     - name: "Build and Measure" 
-      run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; bash Build-Net-Project-as-RID-Matrix.sh'
+      run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; . ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix'
