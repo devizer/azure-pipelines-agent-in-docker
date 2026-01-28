@@ -180,7 +180,7 @@ Build-Net-Project-as-RID-Matrix() {
     # wait
     seconds=$(( $(Get-Global-Seconds) - startAt ))
   popd >/dev/null
-  printf "FX-Dependent binaries compressed by"; Colorize Green "$seconds seconds"
+  printf "FX-Dependent binaries compressed by "; Colorize Green "$seconds seconds"
 
   local index=0
   local count=$(echo $rid_list | wc -w)
