@@ -19,7 +19,7 @@ get_heavy_compression_level() {
   # for 32-bit OS compression level for XZ and 7Z maximum is 6, about 34 Mb ram for extract
   local rid="$1"
   local max_compression_level=9
-  if [[ $rid == "win-x86" || $rid == "linux-arm" || $rid == "win-arm" ]]; then max_compression_level=6; fi
+  if [[ "$rid" == "win-x86" || "$rid" == "linux-arm" || "$rid" == "win-arm" || "$rid" == "a 32-bit" ]]; then max_compression_level=6; fi
   local heavy_compression_level=$COMPRESSION_LEVEL
   if [ "$max_compression_level" -lt "$heavy_compression_level" ]; then
       heavy_compression_level=$max_compression_level
