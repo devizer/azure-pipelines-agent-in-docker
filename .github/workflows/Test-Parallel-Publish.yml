@@ -74,7 +74,7 @@ jobs:
 
     - name: "[ZSH] Build and Measure" 
       if: ${{ runner.os == 'macOS' }}
-      shell: zsh
+      shell: "zsh -c '{0}'"
       run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; . ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix'
   
     - name: "Linux System Stat"   
