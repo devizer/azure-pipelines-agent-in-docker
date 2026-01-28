@@ -43,7 +43,7 @@ Build-Net-Project-Single-RID() {
         if [[ -n "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}" ]]; then
           export THE_PROJECT_BINARIES="$tmp"
           export THE_PROJECT_RID="$rid"
-          echo "Invoking after-publish hook (THE_PROJECT_BINARIES='$rid'; THE_PROJECT_BINARIES='$THE_PROJECT_BINARIES')"
+          echo "Invoking after-publish hook (RID='$rid'; THE_PROJECT_BINARIES='$THE_PROJECT_BINARIES')"
           Colorize LightCyan "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
           eval "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
         fi
