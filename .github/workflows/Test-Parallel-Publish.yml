@@ -1,0 +1,72 @@
+name: TEST Parallel Publish
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Info:
+    name: Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # - os: windows-2025
+          # - os: windows-2022
+          - os: ubuntu-22.04
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: ubuntu-24.04
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: macos-14
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: macos-15
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: macos-15-intel
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: macos-latest
+            DISABLE_PARALLEL_PUBLISH: True
+          - os: ubuntu-22.04
+            DISABLE_PARALLEL_PUBLISH: False
+          - os: ubuntu-24.04
+            DISABLE_PARALLEL_PUBLISH: False
+          - os: macos-14
+            DISABLE_PARALLEL_PUBLISH: False
+          - os: macos-15
+            DISABLE_PARALLEL_PUBLISH: False
+          - os: macos-15-intel
+            DISABLE_PARALLEL_PUBLISH: False
+          - os: macos-latest
+            DISABLE_PARALLEL_PUBLISH: False
+
+
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Environment
+      run: 'echo "ZSH: [$(zsh --version 2>/dev/null)]"; printenv | sort;'
+    
+    - name: "Install-DevOps-Library.sh" 
+      run: 'set -eu; Run-Remote-Script https://devizer.github.io/Install-DevOps-Library.sh; Say-Definition Hello World. RID is $(Get-NET-RID)'
+
+    - name: "DevOps-Library.sh" 
+      run: 'set -eu; Run-Remote-Script https://devizer.github.io/DevOps-Library.sh'
+
+    - name: "Install-GNU-Parallel.sh" 
+      run: 'Run-Remote-Script Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;'
+
+    - name: "Build and Measure" 
+      run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; bash Build-Net-Project-as-RID-Matrix.sh'
