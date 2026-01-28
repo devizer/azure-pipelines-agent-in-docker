@@ -31,8 +31,7 @@ jobs:
             DISABLE_PARALLEL_PUBLISH: True
           - os: macos-15-intel
             DISABLE_PARALLEL_PUBLISH: True
-          - os: macos-latest
-            DISABLE_PARALLEL_PUBLISH: True
+          
           - os: ubuntu-22.04
             DISABLE_PARALLEL_PUBLISH: False
           - os: ubuntu-24.04
@@ -42,8 +41,6 @@ jobs:
           - os: macos-15
             DISABLE_PARALLEL_PUBLISH: False
           - os: macos-15-intel
-            DISABLE_PARALLEL_PUBLISH: False
-          - os: macos-latest
             DISABLE_PARALLEL_PUBLISH: False
 
 
