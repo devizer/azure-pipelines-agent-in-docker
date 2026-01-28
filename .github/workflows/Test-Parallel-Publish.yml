@@ -74,7 +74,7 @@ jobs:
         if [[ "$(Get-OS-Platform)" == Linux ]]; then
           Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;
         else
-          brew install parallel
+          brew install parallel pigz
         fi
 
 
