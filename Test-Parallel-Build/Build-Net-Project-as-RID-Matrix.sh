@@ -213,7 +213,7 @@ Build-Net-Project-as-RID-Matrix() {
       done
   fi
   build_all_known_hash_sums "$target_dir"
-  Say "Final Release folder '$target_dir_full'"
+  Say "Final Release folder '$target_dir_full', $(Format-Thousand "$(Get-Folder-Size "$target_dir_full")") bytes"
   ls -lah "$target_dir_full"
 }
 
