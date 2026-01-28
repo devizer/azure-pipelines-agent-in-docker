@@ -1,5 +1,18 @@
 set -eu; set -o pipefail;
 
+
+if false; then
+  [[ -z "$(command -v parallel)" ]] && Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh
+  export DEFAULT_RID_LIST="osx-x64 osx-arm64 win-x64 win-x86 win-arm64 linux-x64 linux-arm linux-arm64 linux-musl-x64 linux-musl-arm linux-musl-arm64"
+  export DISABLE_PARALLEL_PUBLISH=false
+  export KEEP_PLAIN_BINARIES=false
+  export THE_PROJECT_VERSION="42.7"
+  export THE_PROJECT_BINARY_FILE_PATTERN="app1-%s-daily"
+  export THE_PROJECT_BUILD_PARAMETERS="-f NET10.0 -p:Version=${THE_PROJECT_VERSION} -p:AssemblyVersion=${THE_PROJECT_VERSION}"
+  export THE_PROJECT_HOOK_AFTER_PUBLISH='cp -v ~/licence.txt $THE_PROJECT_BINARIES/'
+  export COMPRESSION_LEVEL=9
+fi
+
 Build-Net-Project-Single-RID() {
   set -eu; set -o pipefail;
   local target_dir="$1"
@@ -82,6 +95,7 @@ Build-Net-Project-Single-RID() {
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes (took $seconds seconds)"
         fi
     popd >/dev/null
+    if [[ "$(Is-Microsoft-Hosted-Build-Agent)" == True ]] && [[ "$(To-Boolean "Env Var KEEP_PLAIN_BINARIES" "${KEEP_PLAIN_BINARIES:-}")" == False ]]; then rm -rf "$tmp"; fi
 
   popd >/dev/null
 }
@@ -144,7 +158,7 @@ Build-Net-Project-as-RID-Matrix() {
   local count=$(echo $rid_list | wc -w)
   export IN_PARALLEL=False
   if [[ -n "$(command -v parallel)" ]] && [[ "$(To-Boolean "Env Var DISABLE_PARALLEL_PUBLISH" "${DISABLE_PARALLEL_PUBLISH:-}")" == False ]] ; then
-      echo "PARALLEL PUBLISH"
+      echo "Starting PARALLEL PUBLISH .."
       local job_log=$(mktemp)
       # --halt soon,fail=1 means do not start new jobs if one failed
       export IN_PARALLEL=True
@@ -164,7 +178,7 @@ Build-Net-Project-as-RID-Matrix() {
             return 1; 
          }
   else
-      echo "SERIALIZED PUBLISH"
+      echo "Starting SERIALIZED PUBLISH ..."
       for rid in $(echo $rid_list); do
         index=$((index+1))
         Build-Net-Project-Single-RID "$target_dir" "$plain_dir" "$dotnet_exe" "$project_folder_full" "$project_file" "$rid" $index $count
