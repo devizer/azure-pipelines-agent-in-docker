@@ -47,25 +47,26 @@ Build-Net-Project-Single-RID() {
           Colorize LightCyan "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
           eval "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
         fi
+        local nice=""; [[ "$(command -v nice)" ]] && nice="nice -n 10" && echo "ACTIVATING LOW PRIORITY COMPRESSION"
         if [[ "$rid" == "win"* ]]; then
           # zip
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.zip ... "
           rm -f "$target_dir_full/${archive_name_only}.zip"
-          7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }
+          $nice 7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.zip")") bytes"
           # 7z
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.7z ... "
           rm -f "$target_dir_full/${archive_name_only}.7z"
-          7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
+          $nice 7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.7z")") bytes"
         else
           # .tar.gz
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.gz ... "
-          tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"
+          tar cf - . | $nice pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.gz")") bytes"
           # .tar.xz
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.xz ... "
-          tar cf - . | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
+          tar cf - . | $nice 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes"
         fi
     popd >/dev/null
