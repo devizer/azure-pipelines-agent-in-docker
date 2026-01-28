@@ -70,7 +70,13 @@ jobs:
       run: brew install gawk make
   
     - name: "Install-GNU-Parallel.sh" 
-      run: 'Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;'
+      run: | 
+        if [[ "$(Get-OS-Platform)" == Linux ]]; then
+          Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;
+        else
+          brew install parallel
+        fi
+
 
     - name: "Build and Measure" 
       run: 'set -eu; export DISABLE_PARALLEL_PUBLISH="${{ matrix.DISABLE_PARALLEL_PUBLISH }}"; echo DISABLE_PARALLEL_PUBLISH=$DISABLE_PARALLEL_PUBLISH; cd Test-Parallel-Build; . ./Build-Net-Project-as-RID-Matrix.sh; Test-Build-Matrix'
