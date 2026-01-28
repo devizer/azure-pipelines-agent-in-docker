@@ -176,7 +176,7 @@ Test-Build-Matrix() {
   rm -rf /tmp/MATRIX/testasp1/*
   dotnet new mvc -o /tmp/MATRIX/testasp1/
   export COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-9}"
-  export THE_PROJECT_HOOK_AFTER_PUBLISH='x=77; echo Hello from hook for rid=$THE_PROJECT_RID\; binaries are located at "$THE_PROJECT_BINARIES"; df -h -T'
+  export THE_PROJECT_HOOK_AFTER_PUBLISH='x=77; echo Hello from hook for rid=$THE_PROJECT_RID\; binaries are located at "$THE_PROJECT_BINARIES"; df -h -T 2>/dev/null || df -h'
 
   rm -rf /tmp/MATRIX/testasp1-Release*
   # TEST1: full file path
