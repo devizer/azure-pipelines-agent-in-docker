@@ -14,6 +14,20 @@ if false; then
   export COMPRESSION_LEVEL=9
 fi
 
+
+get_heavy_compression_level() {
+  # for 32-bit OS compression level for XZ and 7Z maximum is 6, about 34 Mb ram for extract
+  local rid="$1"
+  local max_compression_level=9
+  if [[ $rid == "win-x86" || $rid == "linux-arm" || $rid == "win-arm" ]]; then max_compression_level=6; fi
+  local heavy_compression_level=$COMPRESSION_LEVEL
+  if [ "$max_compression_level" -lt "$heavy_compression_level" ]; then
+      heavy_compression_level=$max_compression_level
+      echo "[Info] Compression Level for RID = '$rid' is reduced from $COMPRESSION_LEVEL to $heavy_compression_level in case of 7z and xz archives" >&2
+  fi
+  echo "$heavy_compression_level"
+}
+
 Build-Net-Project-Single-RID() {
   set -eu; set -o pipefail;
   local target_dir="$1"
@@ -32,8 +46,10 @@ Build-Net-Project-Single-RID() {
   mkdir -p "$plain_dir"
   local plain_dir_full="$(cd "$plain_dir" && pwd -P)"
 
-  Say "#${index}/${count}: Building $archive_name_only binaries [$project_file at '$project_folder_full'] RID=$rid Ver '$project_version' --> [$target_dir_full/${archive_name_only}.*]"
   COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-9}"
+  local heavy_compression_level=$(get_heavy_compression_level "$rid")
+
+  Say "#${index}/${count}: Building $archive_name_only binaries [$project_file at '$project_folder_full'] RID=$rid Ver '$project_version' --> [$target_dir_full/${archive_name_only}.*]"
   echo "   project file:          '$project_file'"
   echo "   project folder (full): '$project_folder_full'"
   echo "   plain dir:             '$plain_dir'"
@@ -79,7 +95,7 @@ Build-Net-Project-Single-RID() {
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.7z ... "
           rm -f "$target_dir_full/${archive_name_only}.7z"
           startAt=$(Get-Global-Seconds)
-          $nice 7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
+          $nice 7z a -bso0 -bsp0 -t7z -mx=${heavy_compression_level} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
           seconds=$(( $(Get-Global-Seconds) - startAt ))
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.7z")") bytes (took $seconds seconds)"
         else
@@ -92,7 +108,7 @@ Build-Net-Project-Single-RID() {
           # .tar.xz
           printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.xz ... "
           startAt=$(Get-Global-Seconds)
-          tar cf - . | $nice 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
+          tar cf - . | $nice 7z a dummy -txz -mx=${heavy_compression_level} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
           seconds=$(( $(Get-Global-Seconds) - startAt ))
           Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes (took $seconds seconds)"
         fi
@@ -186,8 +202,8 @@ Build-Net-Project-as-RID-Matrix() {
     startAt=$(Get-Global-Seconds)
     tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"; 
     7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }; 
-    7z a -bso0 -bsp0 -t7z -mx=${COMPRESSION_LEVEL} -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
-    tar cf - . | 7z a dummy -txz -mx=${COMPRESSION_LEVEL} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"; 
+    7z a -bso0 -bsp0 -t7z -mx=$(get_heavy_compression_level "a 32-bit") -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
+    tar cf - . | 7z a dummy -txz -mx=$(get_heavy_compression_level "a 32-bit") -si -so > "$target_dir_full/${archive_name_only}.tar.xz";
     # wait
     seconds=$(( $(Get-Global-Seconds) - startAt ))
   popd >/dev/null
