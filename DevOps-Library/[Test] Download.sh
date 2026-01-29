@@ -178,7 +178,7 @@ Compress-Distribution-Folder() {
       # echo "[DEBUG] target_file_full = '$target_file_full'"
       printf "Packing $source_folder ($plain_size) as ${target_file_full}${nice_title} ... "
       [[ -f "$target_file_full" ]] && rm -f "$target_file_full" || true
-      startAt=$(Get-Global-Seconds)
+      local startAt=$(Get-Global-Seconds)
       if [[ "$type" == "zip" ]]; then
         $nice 7z a -bso0 -bsp0 -tzip -mx=${compression_level} "$target_file_full" * | { grep "archive\|bytes" || true; }
       elif [[ "$type" == "7z" ]]; then
@@ -194,8 +194,10 @@ Compress-Distribution-Folder() {
       else
         Say --Display-As=Error "Abort. Unknown archive type '$type' for folder '$source_folder'"
       fi
-      seconds=$(( $(Get-Global-Seconds) - startAt ))
-      Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_file_full")") bytes (took $seconds seconds)"
+      local seconds=$(( $(Get-Global-Seconds) - startAt ))
+      local seconds_string="$seconds seconds"; [[ "$seconds" == "1" ]] && seconds_string="1 second"
+
+      Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_file_full")") bytes (took $seconds_string)"
   popd >/dev/null
 }
 
