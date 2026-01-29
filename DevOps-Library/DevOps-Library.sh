@@ -476,30 +476,32 @@ function Get-GitHub-Latest-Release() {
 
 # Include File: [\Includes\Get-Glibc-Version.sh]
 # returns 21900 for debian 8
-function Get-Glibc-Version() {
+Get-Glibc-Version() {
   local GLIBC_VERSION=""
   local GLIBC_VERSION_STRING=""
-  if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v getconf)" ]]; then
-    GLIBC_VERSION_STRING="$(getconf GNU_LIBC_VERSION 2>/dev/null | awk '{print $NF}')"
-  fi
-  if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v ldd)" ]]; then
-    GLIBC_VERSION_STRING="$(ldd --version 2>/dev/null| awk 'NR==1 {print $NF}')"
-  fi
-  # '{a=$1; gsub("[^0-9]", "", a); b=$2; gsub("[^0-9]", "", b); if ((a ~ /^[0-9]+$/) && (b ~ /^[0-9]+$/)) {print a*10000 + b*100}}'
-  local toNumber='{if ($1 ~ /^[0-9]+$/ && $2 ~ /^[0-9]+$/) { print $1 * 10000 + $2 * 100 }}'
-  GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
+  if [[ "$(Get-OS-Platform)" == Linux ]]; then
+      if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v getconf)" ]]; then
+        GLIBC_VERSION_STRING="$(getconf GNU_LIBC_VERSION 2>/dev/null | awk '{print $NF}')"
+      fi
+      if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v ldd)" ]]; then
+        GLIBC_VERSION_STRING="$(ldd --version 2>/dev/null| awk 'NR==1 {print $NF}')"
+      fi
+      # '{a=$1; gsub("[^0-9]", "", a); b=$2; gsub("[^0-9]", "", b); if ((a ~ /^[0-9]+$/) && (b ~ /^[0-9]+$/)) {print a*10000 + b*100}}'
+      local toNumber='{if ($1 ~ /^[0-9]+$/ && $2 ~ /^[0-9]+$/) { print $1 * 10000 + $2 * 100 }}'
+      GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
 
-  if [[ -z "${GLIBC_VERSION:-}" ]] && [[ -n "$(command -v gcc)" ]]; then
-    local cfile="$HOME/temp_show_glibc_version"
-    rm -f "$cfile"
-    cat <<-'EOF_SHOW_GLIBC_VERSION' > "$cfile.c"
+      if [[ -z "${GLIBC_VERSION:-}" ]] && [[ -n "$(command -v gcc)" ]]; then
+        local cfile="$HOME/temp_show_glibc_version"
+        rm -f "$cfile"
+        cat <<-'EOF_SHOW_GLIBC_VERSION' > "$cfile.c"
 #include <gnu/libc-version.h>
 #include <stdio.h>
 int main() { printf("%s\n", gnu_get_libc_version()); }
 EOF_SHOW_GLIBC_VERSION
-    GLIBC_VERSION_STRING="$(gcc $cfile.c -o $cfile 2>/dev/null && $cfile)"
-    rm -f "$cfile"; rm -f "$cfile.c" 
-    GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
+        GLIBC_VERSION_STRING="$(gcc $cfile.c -o $cfile 2>/dev/null 1>&2 && $cfile 2>/dev/null)"
+        rm -f "$cfile"; rm -f "$cfile.c" 
+        GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
+      fi
   fi
   printf "GLIBC_VERSION='%s'; GLIBC_VERSION_STRING='%s';" "$GLIBC_VERSION" "$GLIBC_VERSION_STRING"
 }
