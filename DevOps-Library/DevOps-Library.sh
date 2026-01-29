@@ -63,7 +63,7 @@ Colorize() {
 # say ZZZ the-incorrect-color
 
 # Include File: [\Includes\Compress-Distribution-Folder.sh]
-# 1) 7z v9.20 is not supported
+# 1) 7z v9.20 is not supported for Compress-Distribution-Folder, but it is ok to extract
 # 2) type is 7z|gz|xz|zip
 Compress-Distribution-Folder() {
   local type="$1"
