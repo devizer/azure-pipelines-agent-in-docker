@@ -1082,20 +1082,35 @@ My-Quote() {
 Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
 Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
 
-mkdir -p /usr/local/bin
-rm -f ~/usr-local-bin.*
+
+
+Create-Fake-Distribution() {
+  mkdir -p /tmp/building/fake-distribution
+  cd /tmp/building/fake-distribution
+  for f in app1 app1.so readme.txt version.txt; do
+    echo $RANDOM > $f
+    for i in {1..10}; do
+       (cat $f; cat $f; cat $f) > $f.tmp
+       mv -f $f.tmp $f
+    done
+  done
+}
+
+Create-Fake-Distribution
+
+rm -f ~/fake-distribution.*
 
 cd ~
 for archive_type in 7z tar.gz tar.xz zip; do
   Colorize Cyan "A) Trying pack as archive.${archive_type} ... "
-  Compress-Distribution-Folder "$archive_type" 9 /usr/local/bin ./usr-local-bin.v1.${archive_type} --low-priority
+  Compress-Distribution-Folder "$archive_type" 9 /tmp/building/fake-distribution ./fake-distribution.v1.${archive_type} --low-priority
 done
 
-cd /usr/local
+cd /tmp/building
 for archive_type in 7z tar.gz tar.xz zip; do
   Colorize Cyan "2) Trying pack as archive.${archive_type} ... "
-  Compress-Distribution-Folder "$archive_type" 9 ./bin ~/usr-local-bin.v2.${archive_type} --low-priority
+  Compress-Distribution-Folder "$archive_type" 9 ./fake-distribution ~/fake-distribution.v2.${archive_type} --low-priority
 done
 
 Say "Final archives"
-ls -la ~/usr-local-bin.*
+ls -la ~/fake-distribution.*
