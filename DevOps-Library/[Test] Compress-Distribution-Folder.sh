@@ -1074,13 +1074,28 @@ Wait-For-HTTP() {
   return 1;
 }
 
+My-Quote() {
+  # echo $'\u00ab'"$*"$'\u00bb'
+  echo "«$*»"
+}
 
-Colorize Green "Validate Success"
-# Retry-On-Fail curl -o "$(Get-Tmp-Folder)/google dot com.html" -kfSL https://google.com
-Retry-On-Fail Colorize LightGreen "Successfull success"
+Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
+Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
 
-Colorize Cyan "Validate https://no-such-suite.com is missing"
-err=
-Retry-On-Fail curl -o "$(Get-Tmp-Folder)/no such site.html" -kfSL https://no-such-suite.com || err=err
-if [[ $err == err ]]; then Colorize Default "[Assert] Passed (Retry for missing url)"; else Colorize Red "[Assert] FAIL (Retry for missing url)"; exit 1; fi
+mkdir -p /usr/local/bin
+rm -f ~/usr-local-bin.*
 
+cd ~
+for archive_type in 7z tar.gz tar.xz zip; do
+  Colorize Cyan "A) Trying pack as archive.${archive_type} ... "
+  Compress-Distribution-Folder "$archive_type" 9 /usr/local/bin ./usr-local-bin.v1.${archive_type} --low-priority
+done
+
+cd /usr/local
+for archive_type in 7z tar.gz tar.xz zip; do
+  Colorize Cyan "2) Trying pack as archive.${archive_type} ... "
+  Compress-Distribution-Folder "$archive_type" 9 ./bin ~/usr-local-bin.v2.${archive_type} --low-priority
+done
+
+Say "Final archives"
+ls -la ~/usr-local-bin.*

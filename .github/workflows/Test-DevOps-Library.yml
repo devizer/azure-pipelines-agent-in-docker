@@ -52,6 +52,9 @@ jobs:
     - name: "[Test] Validate File Is Not Empty.sh"
       run: 'cd DevOps-Library; bash "[Test] Validate File Is Not Empty.sh"'
 
+    - name: "[Test] Compress-Distribution-Folder.sh"
+      run: 'cd DevOps-Library; bash "[Test] Compress-Distribution-Folder.sh"'
+
     - name: "[Test] Wait For Http.sh" 
       run: 'cd DevOps-Library; bash "[Test] Wait For Http.sh" '
 

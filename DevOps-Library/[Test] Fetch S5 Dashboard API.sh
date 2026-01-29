@@ -151,6 +151,54 @@ Colorize() {
 }
 # say ZZZ the-incorrect-color
 
+# Include File: [\Includes\Compress-Distribution-Folder.sh]
+# 1) 7z v9.20 is not supported
+# 2) type is 7z|gz|xz|zip
+Compress-Distribution-Folder() {
+  local type="$1"
+  local compression_level="$2"
+  local source_folder="$3"
+  local target_file="$4"
+  local arg_low_priority="$(To-Lower-Case "${5:-}")"
+  local is_low_priority=False; [[ "$arg_low_priority" == "--low"* ]] && is_low_priority=True;
+
+  local plain_size="$(Format-Thousand "$(Get-Folder-Size "$source_folder")") bytes"
+  local nice_title="";
+  local nice=""; [[ "$is_low_priority" == True && "$(command -v nice)" ]] && nice="nice -n 1" && nice_title=" (low priority)"
+
+  if [[ ! -d "$source_folder" ]]; then 
+    Say --Display-As=Error "[Compress-Folder] Abort. Source folder '$source_folder' is missing"
+    return 1;
+  fi
+
+  mkdir -p "$(dirname "$target_file" 2>/dev/null)" 2>/dev/null
+  local target_file_full="$(cd "$(dirname "$target_file")"; pwd -P)/$(basename "$target_file")"
+
+  pushd "$source_folder" >/dev/null
+      # echo "[DEBUG] target_file_full = '$target_file_full'"
+      printf "Packing $source_folder ($plain_size) as ${target_file_full}${nice_title} ... "
+      [[ -f "$target_file_full" ]] && rm -f "$target_file_full" || true
+      startAt=$(Get-Global-Seconds)
+      if [[ "$type" == "zip" ]]; then
+        $nice 7z a -bso0 -bsp0 -tzip -mx=${compression_level} "$target_file_full" * | { grep "archive\|bytes" || true; }
+      elif [[ "$type" == "7z" ]]; then
+        $nice 7z a -bso0 -bsp0 -t7z -mx=${compression_level} -m0=LZMA -ms=on -mqs=on "$target_file_full" * | { grep "archive\|bytes" || true; }
+      elif [[ "$type" == "gzip" || "$type" == "tgz" || "$type" == "tar.gz" ]]; then
+        if [[ -n "$(command -v pigz)" ]]; then
+          tar cf - . | $nice pigz -p $(nproc) -b 128 -${compression_level} > "$target_file_full"
+        else
+          tar cf - . | $nice gzip -${compression_level} > "$target_file_full"
+        fi
+      elif [[ "$type" == "xz" || "$type" == "txz" || "$type" == "tar.xz" ]]; then
+        tar cf - . | $nice 7z a dummy -txz -mx=${compression_level} -si -so > "$target_file_full"
+      else
+        Say --Display-As=Error "Abort. Unknown archive type '$type' for folder '$source_folder'"
+      fi
+      seconds=$(( $(Get-Global-Seconds) - startAt ))
+      Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_file_full")") bytes (took $seconds seconds)"
+  popd >/dev/null
+}
+
 # Include File: [\Includes\Download-File.sh]
 Download-File() {
   local url="$1"
