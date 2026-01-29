@@ -68,7 +68,7 @@ Build-Net-Project-Single-RID() {
     startAt=$(Get-Global-Seconds)
     $sem try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -p:Version=$project_version -p:AssemblyVersion=$project_version -c Release $(echo ${THE_PROJECT_BUILD_PARAMETERS:-})
     seconds=$(( $(Get-Global-Seconds) - startAt ))
-    printf "Self Contained '$rid' binaries are built"; Colorize Green "by $seconds seconds"
+    printf "Self Contained '$rid' binaries are built "; Colorize Green "by $seconds seconds"
 
     printf $THE_PROJECT_VERSION > "$target_dir_full/VERSION.txt"
     printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
