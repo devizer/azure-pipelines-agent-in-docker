@@ -539,6 +539,8 @@ function Get-NET-RID() {
      local linux_arm linux_arm64 linux_x64
      if Test-Is-Musl-Linux; then
          linux_arm="linux-musl-arm"; linux_arm64="linux-musl-arm64"; linux_x64="linux-musl-x64"; 
+     elif Test-Is-Bionic-Linux; then
+         linux_arm="linux-bionic-arm"; linux_arm64="linux-bionic-arm64"; linux_x64="linux-bionic-x64";
      else
          linux_arm="linux-arm"; linux_arm64="linux-arm64"; linux_x64="linux-x64"
      fi
@@ -549,7 +551,7 @@ function Get-NET-RID() {
        if [[ "$(Get-Linux-OS-Bits)" == "32" ]]; then 
          rid=$linux_arm; 
        fi
-     elif [[ "$machine" == x86_64 ]] || [[ "$machine" == amd64 ]] || [[ "$machine" == i?86 ]]; then
+     elif [[ "$machine" == x86_64 ]] || [[ "$machine" == amd64 ]] || [[ "$machine" == i?86 ]] || [[ "$machine" == x86 ]]; then
        rid=$linux_x64;
        if [[ "$(Get-Linux-OS-Bits)" == "32" ]]; then 
          rid=linux-i386;
@@ -587,13 +589,11 @@ function Get-NET-RID() {
        [[ "$win_arch" == x86_64 ]] && rid="win-x64" 
        [[ "$win_arch" == arm64* || "$win_arch" == aarch64* ]] && rid="win-arm64"
   fi
+  [[ "$rid" == "linux-bionic-arm" ]] && echo "Warning! Bionic Linux (android) 32-bit arm is not supported by .NET Core. arm64 and x64 android are supported." >&2
   echo "$rid"
 }
 
-# x86|x64|arm|arm64
-# Alternative: 
-# cmd: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE
-# bash: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" //v PROCESSOR_ARCHITECTURE | grep PROCESSOR_ARCHITECTURE | awk '{print $3}'
+# x86|x64|arm|arm64|ia64
 Get-Windows-OS-Architecture() {
     if [[ -n "$(command -v reg)" ]]; then
       local raw_arch=$(reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" //v PROCESSOR_ARCHITECTURE 2>/dev/null | awk '/PROCESSOR_ARCHITECTURE/ {print $3}')
@@ -691,6 +691,39 @@ Get-Tmp-Folder() {
   fi
   echo "$ret"
 }
+# Include File: [\Includes\Is-Bionic-Linux.sh]
+Is-Bionic-Linux() {
+  [[ -z "${_LIB_Is_Bionic_Linux:-}" ]] && _LIB_Is_Bionic_Linux="$(Is-Bionic-Linux-Implementation)"
+  echo "${_LIB_Is_Bionic_Linux}"
+}
+
+Test-Is-Bionic-Linux() {
+  if [[ "$(Is-Bionic-Linux)" == True ]]; then return 0; else return 1; fi
+}
+
+Is-Bionic-Linux-Implementation() {
+  # this test is optional, other tests below are self-sufficient
+  # if [[ "$(Is-Termux)" == True ]]; then echo True; return; fi
+  
+  if command -v getconf >/dev/null 2>&1; then
+    if getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
+      echo False; return
+    fi
+  fi
+
+  if [[ -f "/system/bin/linker" ]] || [[ -f "/system/bin/linker64" ]]; then
+    echo True; return
+  fi
+
+  # the slowest check
+  local dependencies=$(ldd "$(command -v bash)" 2>/dev/null);
+  if [[ "$dependencies" == *"libandroid-support.so"* || "$dependencies" == *"ld-android.so"* || "$dependencies" == *"ld-android64.so"* ]]; then
+    echo True; return;
+  fi
+
+  echo False;
+}
+
 # Include File: [\Includes\Is-Microsoft-Hosted-Build-Agent.sh]
 #!/usr/bin/env bash
 Is-Microsoft-Hosted-Build-Agent() {
