@@ -477,8 +477,14 @@ function Get-GitHub-Latest-Release() {
 # Include File: [\Includes\Get-Glibc-Version.sh]
 # returns 21900 for debian 8
 function Get-Glibc-Version() {
-  GLIBC_VERSION=""
-  GLIBC_VERSION_STRING="$(ldd --version 2>/dev/null| awk 'NR==1 {print $NF}')"
+  local GLIBC_VERSION=""
+  local GLIBC_VERSION_STRING=""
+  if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v getconf)" ]]; then
+    GLIBC_VERSION_STRING="$(getconf GNU_LIBC_VERSION 2>/dev/null | awk '{print $NF}')"
+  fi
+  if [[ -z "${GLIBC_VERSION_STRING:-}" ]] && [[ -n "$(command -v ldd)" ]]; then
+    GLIBC_VERSION_STRING="$(ldd --version 2>/dev/null| awk 'NR==1 {print $NF}')"
+  fi
   # '{a=$1; gsub("[^0-9]", "", a); b=$2; gsub("[^0-9]", "", b); if ((a ~ /^[0-9]+$/) && (b ~ /^[0-9]+$/)) {print a*10000 + b*100}}'
   local toNumber='{if ($1 ~ /^[0-9]+$/ && $2 ~ /^[0-9]+$/) { print $1 * 10000 + $2 * 100 }}'
   GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
@@ -495,7 +501,7 @@ EOF_SHOW_GLIBC_VERSION
     rm -f "$cfile"; rm -f "$cfile.c" 
     GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber")"
   fi
-  echo "${GLIBC_VERSION:-}"
+  printf "GLIBC_VERSION='%s'; GLIBC_VERSION_STRING='%s';" "$GLIBC_VERSION" "$GLIBC_VERSION_STRING"
 }
 
 # Include File: [\Includes\Get-Global-Seconds.sh]
@@ -666,6 +672,7 @@ function Get-OS-Platform() {
 # 1) Linux, MacOs
 #    return "sudo" if sudo is installed
 # 2) Windows
+#    Uncoditionally empty string
 #    If Run as Administrator then empty string
 #    If sudo is not installed then empty string
 Get-Sudo-Command() {
@@ -702,6 +709,7 @@ Test-Is-Bionic-Linux() {
 }
 
 Is-Bionic-Linux-Implementation() {
+  if [[ "$(Get-OS-Platform)" != Linux ]]; then echo False; return; fi
   # this test is optional, other tests below are self-sufficient
   # if [[ "$(Is-Termux)" == True ]]; then echo True; return; fi
   
@@ -770,6 +778,7 @@ function Is-Qemu-VM-Implementation() {
 
 # Include File: [\Includes\Is-Termux.sh]
 function Is-Termux() {
+  if [[ "$(Get-OS-Platform)" != Linux ]]; then echo False; return; fi
   if [[ -n "${TERMUX_VERSION:-}" ]] && [[ -n "${PREFIX:-}" ]] && [[ -d "${PREFIX}" ]]; then
     echo True
   else
