@@ -591,12 +591,24 @@ function Get-NET-RID() {
 }
 
 # x86|x64|arm|arm64
-function Get-Windows-OS-Architecture() {
-if [[ -z "$(command -v powershell)" ]]; then
-  echo "$(uname -m)"
-  return;
-fi
-local ps_script=$(cat <<'EOFWINARCH'
+# Alternative: 
+# cmd: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE
+# bash: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" //v PROCESSOR_ARCHITECTURE | grep PROCESSOR_ARCHITECTURE | awk '{print $3}'
+Get-Windows-OS-Architecture() {
+    if [[ -n "$(command -v reg)" ]]; then
+      local raw_arch=$(reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" //v PROCESSOR_ARCHITECTURE 2>/dev/null | awk '/PROCESSOR_ARCHITECTURE/ {print $3}')
+      raw_arch="$(To-Lower-Case "$raw_arch")"
+      if [[ "$raw_arch" == "amd64" ]]; then echo "x64"; return; fi
+      if [[ "$raw_arch" == "arm64" ]]; then echo "arm64"; return; fi
+      if [[ "$raw_arch" == "x86" ]]; then echo "x86"; return; fi
+      if [[ "$raw_arch" == "arm" ]]; then echo "arm"; return; fi
+      if [[ "$raw_arch" == "ia64" ]]; then echo "ia64"; return; fi
+    fi
+    if [[ -z "$(command -v powershell)" ]]; then
+      echo "$(uname -m)"
+      return;
+    fi
+    local ps_script=$(cat <<'EOFWINARCH'
 function Has-Cmd {
   param([string] $arg)
   if ("$arg" -eq "") { return $false; }
@@ -635,8 +647,8 @@ function Get-CPU-Architecture-Suffix-for-Windows-Implementation() {
 Get-CPU-Architecture-Suffix-for-Windows-Implementation
 EOFWINARCH
 )
-local win_arch=$(echo "$ps_script" | powershell -c - 2>/dev/null)
-echo "$win_arch"
+    local win_arch=$(echo "$ps_script" | powershell -c - 2>/dev/null)
+    echo "$win_arch"
 }
 
 # Include File: [\Includes\Get-OS-Platform.sh]
