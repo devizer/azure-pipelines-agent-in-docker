@@ -47,7 +47,6 @@ Build-Net-Project-Single-RID() {
   local plain_dir_full="$(cd "$plain_dir" && pwd -P)"
 
   COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-9}"
-  local heavy_compression_level=$(get_heavy_compression_level "$rid")
 
   Say "#${index}/${count}: Building $archive_name_only binaries [$project_file at '$project_folder_full'] RID=$rid Ver '$project_version' --> [$target_dir_full/${archive_name_only}.*]"
   echo "   project file:          '$project_file'"
@@ -81,6 +80,7 @@ Build-Net-Project-Single-RID() {
           Colorize LightCyan "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
           eval "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
         fi
+        local heavy_compression_level=$(get_heavy_compression_level "$rid")
         if [[ "$rid" == "win"* ]]; then
           Compress-Distribution-Folder "zip" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.zip" --low-priority
           Compress-Distribution-Folder "7z" "${heavy_compression_level}" "$tmp" "$target_dir_full/${archive_name_only}.7z" --low-priority
