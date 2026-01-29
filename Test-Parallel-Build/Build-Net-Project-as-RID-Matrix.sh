@@ -97,6 +97,7 @@ Build-Net-Project-Single-RID() {
 if [[ -z "${ZSH_VERSION:-}" ]]; then
   # parallel mode is available for bash only
   export -f Build-Net-Project-Single-RID
+  export -f get_heavy_compression_level
 else
   # require zsh 4.3.10 Jun 2009
   setopt SH_WORD_SPLIT # avoid $(echo $var)
