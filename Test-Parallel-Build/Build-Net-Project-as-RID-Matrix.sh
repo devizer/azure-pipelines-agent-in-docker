@@ -180,11 +180,6 @@ Build-Net-Project-as-RID-Matrix() {
     Compress-Distribution-Folder "7z" "$(get_heavy_compression_level "a 32-bit")" "$tmp" "$target_dir_full/${archive_name_only}.7z" --normal-priority
     Compress-Distribution-Folder "tar.gz" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.tar.gz" --normal-priority
     Compress-Distribution-Folder "tar.xz" "$(get_heavy_compression_level "a 32-bit")" "$tmp" "$target_dir_full/${archive_name_only}.tar.xz" --normal-priority
-    # tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"; 
-    # 7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }; 
-    # 7z a -bso0 -bsp0 -t7z -mx=$(get_heavy_compression_level "a 32-bit") -m0=LZMA -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
-    # tar cf - . | 7z a dummy -txz -mx=$(get_heavy_compression_level "a 32-bit") -si -so > "$target_dir_full/${archive_name_only}.tar.xz";
-    # wait
     seconds=$(( $(Get-Global-Seconds) - startAt ))
   popd >/dev/null
   printf "FX-Dependent binaries compressed by "; Colorize Green "$seconds seconds"

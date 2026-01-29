@@ -1111,7 +1111,7 @@ done
 cd /tmp/building
 for archive_type in 7z tar.gz tar.xz zip; do
   Colorize Cyan "2) Trying pack as archive.${archive_type} ... "
-  Compress-Distribution-Folder "$archive_type" 9 ./fake-distribution ~/fake-distribution.v2.${archive_type} --low-priority
+  Compress-Distribution-Folder "$archive_type" 9 ./fake-distribution ~/fake-distribution.v2.${archive_type} --normal-priority
 done
 
 Say "Final archives"
