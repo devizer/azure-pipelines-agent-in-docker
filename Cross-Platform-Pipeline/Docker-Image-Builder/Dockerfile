@@ -31,7 +31,7 @@ RUN echo; \
  find . -name "*.sh" | xargs chmod +x; \
  apt-get update -qq; apt-get install -qq curl sudo -y | grep " curl"; \
  echo insecure >> ~/.curlrc; \
- script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash >/dev/null; \
+ script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksfSL $script) | bash >/dev/null; \
  Say --Reset-Stopwatch; \
  Say "$QEMU_IMAGE_ID Image is building"; \
  \

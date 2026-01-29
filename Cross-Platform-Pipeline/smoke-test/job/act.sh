@@ -9,8 +9,9 @@ Say "Perform smoke test job"
 ) | tee results.txt
 
 echo $(uname -r) > kernel.txt
+getconf GNU_LIBC_VERSION > GLIBC-Version.txt
 
-rm -rf /var/lib/apt/* /var/cacheb/apt/* || true
+rm -rf /var/lib/apt/* /var/cache/apt/* || true
 printf "\nONLINE APT\n";
 time apt-get update | grep -v "Reading" 2>/dev/null | tee -a results.txt
 

@@ -112,15 +112,17 @@ jobs:
       popd
 
       cp -f -v -r Cross-Platform-Pipeline/smoke-test/job/* $SYSTEM_ARTIFACTSDIRECTORY/
-      
-      Say "Push devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID}"
-      time try-and-retry docker push devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID}
-
-
     # condition: succeededOrFailed()
     displayName: 'Build & Test'
     env:
        DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+      
+  - bash: |
+      Say "Push devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID}"
+      time try-and-retry docker push devizervlad/crossplatform-pipeline:${QEMU_IMAGE_ID}
+    displayName: 'Push'
+
+
 
   - task: PublishBuildArtifacts@1
     condition: succeeded()
