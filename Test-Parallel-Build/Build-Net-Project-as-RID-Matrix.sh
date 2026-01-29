@@ -68,12 +68,11 @@ Build-Net-Project-Single-RID() {
     startAt=$(Get-Global-Seconds)
     $sem try-and-retry "$dotnet_exe" publish "$project_folder_full/$project_file" --self-contained -r $rid -o "$tmp" -v:q -p:Version=$project_version -p:AssemblyVersion=$project_version -c Release $(echo ${THE_PROJECT_BUILD_PARAMETERS:-})
     seconds=$(( $(Get-Global-Seconds) - startAt ))
-    printf "Self Contained binaries built by "; Colorize Green "by $seconds seconds"
+    printf "Self Contained '$rid' binaries are built"; Colorize Green "by $seconds seconds"
 
     printf $THE_PROJECT_VERSION > "$target_dir_full/VERSION.txt"
     printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
     local plain_size="$(Format-Thousand "$(Get-Folder-Size "$tmp")") bytes"
-    local packed_size=""
     pushd "$tmp" >/dev/null
         if [[ -n "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}" ]]; then
           export THE_PROJECT_BINARIES="$tmp"
@@ -82,35 +81,12 @@ Build-Net-Project-Single-RID() {
           Colorize LightCyan "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
           eval "${THE_PROJECT_HOOK_AFTER_PUBLISH:-}"
         fi
-        local nice=""; [[ "$(command -v nice)" ]] && nice="nice -n 1" && echo "LOW PRIORITY COMPRESSION is ACTIVE"
         if [[ "$rid" == "win"* ]]; then
-          # zip
-          printf "Packing $plain_size as $target_dir_full/${archive_name_only}.zip ... "
-          rm -f "$target_dir_full/${archive_name_only}.zip"
-          startAt=$(Get-Global-Seconds)
-          $nice 7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }
-          seconds=$(( $(Get-Global-Seconds) - startAt ))
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.zip")") bytes (took $seconds seconds)"
-          # 7z
-          printf "Packing $plain_size as $target_dir_full/${archive_name_only}.7z ... "
-          rm -f "$target_dir_full/${archive_name_only}.7z"
-          startAt=$(Get-Global-Seconds)
-          $nice 7z a -bso0 -bsp0 -t7z -mx=${heavy_compression_level} -m0=LZMA -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }
-          seconds=$(( $(Get-Global-Seconds) - startAt ))
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.7z")") bytes (took $seconds seconds)"
+          Compress-Distribution-Folder "zip" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.zip" --low-priority
+          Compress-Distribution-Folder "7z" "${heavy_compression_level}" "$tmp" "$target_dir_full/${archive_name_only}.7z" --low-priority
         else
-          # .tar.gz
-          printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.gz ... "
-          startAt=$(Get-Global-Seconds)
-          tar cf - . | $nice pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"
-          seconds=$(( $(Get-Global-Seconds) - startAt ))
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.gz")") bytes (took $seconds seconds)"
-          # .tar.xz
-          printf "Packing $plain_size as $target_dir_full/${archive_name_only}.tar.xz ... "
-          startAt=$(Get-Global-Seconds)
-          tar cf - . | $nice 7z a dummy -txz -mx=${heavy_compression_level} -si -so > "$target_dir_full/${archive_name_only}.tar.xz"
-          seconds=$(( $(Get-Global-Seconds) - startAt ))
-          Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "$target_dir_full/${archive_name_only}.tar.xz")") bytes (took $seconds seconds)"
+          Compress-Distribution-Folder "tar.gz" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.tar.gz" --low-priority
+          Compress-Distribution-Folder "tar.xz" "${heavy_compression_level}" "$tmp" "$target_dir_full/${archive_name_only}.tar.xz" --low-priority
         fi
     popd >/dev/null
     if [[ "$(Is-Microsoft-Hosted-Build-Agent)" == True ]] && [[ "$(To-Boolean "Env Var KEEP_PLAIN_BINARIES" "${KEEP_PLAIN_BINARIES:-}")" == False ]]; then rm -rf "$tmp"; fi
@@ -198,12 +174,16 @@ Build-Net-Project-as-RID-Matrix() {
   printf "FX-Dependent binaries built by "; Colorize Green "$seconds seconds"
   printf $THE_PROJECT_VERSION > "$tmp/VERSION.txt"
   pushd "$tmp" >/dev/null
-    rm -f "$target_dir_full/${archive_name_only}."{zip,7z}
+    # rm -f "$target_dir_full/${archive_name_only}."{zip,7z}
     startAt=$(Get-Global-Seconds)
-    tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"; 
-    7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }; 
-    7z a -bso0 -bsp0 -t7z -mx=$(get_heavy_compression_level "a 32-bit") -m0=LZMA -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
-    tar cf - . | 7z a dummy -txz -mx=$(get_heavy_compression_level "a 32-bit") -si -so > "$target_dir_full/${archive_name_only}.tar.xz";
+    Compress-Distribution-Folder "zip" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.zip" --normal-priority
+    Compress-Distribution-Folder "7z" "$(get_heavy_compression_level "a 32-bit")" "$tmp" "$target_dir_full/${archive_name_only}.7z" --normal-priority
+    Compress-Distribution-Folder "tar.gz" "${COMPRESSION_LEVEL}" "$tmp" "$target_dir_full/${archive_name_only}.tar.gz" --normal-priority
+    Compress-Distribution-Folder "tar.xz" "$(get_heavy_compression_level "a 32-bit")" "$tmp" "$target_dir_full/${archive_name_only}.tar.xz" --normal-priority
+    # tar cf - . | pigz -p $(nproc) -b 128 -${COMPRESSION_LEVEL}  > "$target_dir_full/${archive_name_only}.tar.gz"; 
+    # 7z a -bso0 -bsp0 -tzip -mx=${COMPRESSION_LEVEL} "$target_dir_full/${archive_name_only}.zip" * | { grep "archive\|bytes" || true; }; 
+    # 7z a -bso0 -bsp0 -t7z -mx=$(get_heavy_compression_level "a 32-bit") -m0=LZMA -ms=on -mqs=on "$target_dir_full/${archive_name_only}.7z" * | { grep "archive\|bytes" || true; }; 
+    # tar cf - . | 7z a dummy -txz -mx=$(get_heavy_compression_level "a 32-bit") -si -so > "$target_dir_full/${archive_name_only}.tar.xz";
     # wait
     seconds=$(( $(Get-Global-Seconds) - startAt ))
   popd >/dev/null
