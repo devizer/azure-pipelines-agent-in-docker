@@ -498,7 +498,7 @@ Get-Glibc-Version() {
 #include <stdio.h>
 int main() { printf("%s\n", gnu_get_libc_version()); }
 EOF_SHOW_GLIBC_VERSION
-        GLIBC_VERSION_STRING="$(gcc $cfile.c -o $cfile 2>/dev/null 1>&2 && $cfile 2>/dev/null)"
+        GLIBC_VERSION_STRING="$(gcc $cfile.c -o $cfile 2>/dev/null 1>&2 && $cfile 2>/dev/null || true)"
         rm -f "$cfile"; rm -f "$cfile.c" 
         GLIBC_VERSION="$(echo "${GLIBC_VERSION_STRING:-}" | awk -F'.' "$toNumber" || true)"
       fi
