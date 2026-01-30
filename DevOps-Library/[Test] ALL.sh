@@ -823,6 +823,17 @@ Is-Bionic-Linux-Implementation() {
   echo False;
 }
 
+# Include File: [\Includes\Is-BusyBox.sh]
+Is-BusyBox() {
+  if [[ "$(Get-OS-Platform)" != Linux ]]; then echo Fasle; return; fi
+  if [[ "$(ls --help 2>&1)" == *"BusyBox "* ]]; then echo True; return; fi
+  echo False
+}
+
+Test-Is-BusyBox() {
+  if [[ "$(Is-BusyBox)" == True ]]; then return 0; else return 1; fi
+}
+
 # Include File: [\Includes\Is-Microsoft-Hosted-Build-Agent.sh]
 #!/usr/bin/env bash
 Is-Microsoft-Hosted-Build-Agent() {
@@ -1146,6 +1157,7 @@ Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
 Say-Definition "Is-Termux() =" "'$(Is-Termux)'"
 Say-Definition "Is-Musl-Linux() =" "'$(Is-Musl-Linux)'"
 Say-Definition "Is-Bionic-Linux() =" "'$(Is-Bionic-Linux)'"
+Say-Definition "Is-BusyBox() =" "'$(Is-BusyBox)'"
 Say-Definition "Get-Global-Seconds() =" "'$(Get-Global-Seconds)'"
 Say-Definition "Is-Qemu-VM() =" "'$(Is-Qemu-VM)'"
 Say-Definition "Is-Windows() =" "'$(Is-Windows)'"
