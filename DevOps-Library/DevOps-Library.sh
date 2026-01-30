@@ -598,6 +598,7 @@ function Get-NET-RID() {
        [[ "$win_arch" == arm64* || "$win_arch" == aarch64* ]] && rid="win-arm64"
   fi
   [[ "$rid" == "linux-bionic-arm" ]] && echo "Warning! Bionic Linux (android) 32-bit arm is not supported by .NET Core. arm64 and x64 android are supported." >&2
+  [[ "$(Is-BusyBox)" == True ]] && [[ ! -f /etc/os-release ]] && echo "Warning! BusyBox outside of a full Linux distro may require manual dependency compilation." >&2
   echo "$rid"
 }
 
