@@ -580,7 +580,7 @@ function Get-NET-RID() {
        if [[ -z "$osx_machine" ]]; then osx_machine="$machine"; fi
        [[ "$osx_machine" == x86_64 ]] && rid="osx-x64"
        [[ "$osx_machine" == arm64 ]] && rid="osx-arm64"
-       [[ "$osx_machine" == i?86 ]] && rid="osx-i386" && echo "Warning! OSX 32-bit i386 is not supported by .NET Core" >&2
+       [[ "$osx_machine" == i?86 || "$osx_machine" == x86 ]] && rid="osx-i386" && echo "Warning! OSX 32-bit i386 is not supported by .NET Core" >&2
        local osx_version="$(SYSTEM_VERSION_COMPAT=0 sw_vers -productVersion)"
        [[ "$osx_version" == 10.10.* ]] && rid="osx.10.10-x64"
        [[ "$osx_version" == 10.11.* ]] && rid="osx.10.11-x64"
