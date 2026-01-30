@@ -941,6 +941,7 @@ Test-Has-Command() {
 
 # Include File: [\Includes\Test-Is-Musl-Linux.sh]
 Test-Is-Musl-Linux() {
+  if [[ "$(Get-OS-Platform)" != Linux ]]; then return 1; fi
   if [[ "$(Is-Termux)" == True ]]; then
     return 1;
   elif Test-Has-Command getconf && getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
@@ -950,7 +951,10 @@ Test-Is-Musl-Linux() {
   elif ldd /bin/ls 2>&1 | grep -q "musl"; then
     return 0;
   fi
-  return 1; # by default GNU
+  eval "$(Get-Glibc-Version)"
+  if [[ -n "${GLIBC_VERSION:-}" ]]; then return 1; fi
+  if [[ "$(Is-Bionic-Linux)" == True ]]; then return 1; fi
+  return 0;
 }
 
 Is-Musl-Linux() {
