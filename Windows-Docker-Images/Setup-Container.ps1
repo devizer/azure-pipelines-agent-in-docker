@@ -2,6 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $osBuild=[Environment]::OsVersion.Version.Build
 Write-Host "OS-Build: [$($osBuild)]"
+Write-Host "CPU COUNT: [$([Environment]::ProcessorCount)]"
 $scriptDirectory = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
 Write-Host "The current Setup-Container.ps1 script's directory is: [$scriptDirectory]"
 

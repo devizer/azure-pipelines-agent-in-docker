@@ -48,7 +48,7 @@ jobs:
       uses: devizer/devops-library@main
 
     - name: Tune Docker
-      run: | 
+      run: |
         Import-DevOps; Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
 
     - name: Checkout
@@ -115,7 +115,7 @@ jobs:
         $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         Say "Buiding: $newImageName";
         $cpuCount="$([Environment]::ProcessorCount)"
-        docker "build" "--isolation=hyperv" "--memory=4g" "--cpus" "$cpuCount" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+        docker "build" "--isolation=hyperv" "--memory=4g" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
 
         Say "history"
         docker history "$newImageName"
