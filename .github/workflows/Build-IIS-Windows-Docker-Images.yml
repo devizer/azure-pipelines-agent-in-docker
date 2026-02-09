@@ -1,4 +1,4 @@
-name: 'IIS + .Net 3.5 & 4.x Docker Images'
+name: 'Build IIS + .Net 3.5 & 4.x Docker Images'
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
@@ -103,7 +103,7 @@ jobs:
         cat "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt"
 
 
-    - name: Build (draft)
+    - name: Build
       if: always()
       run: |
         cd Windows-Docker-Images;
