@@ -61,6 +61,10 @@ foreach($exe in (Get-Mini7z-Exe-FullPath-for-Windows), (Get-Aria2c-Exe-FullPath-
 }
 ls "C:\Apps" | ft -autosize | out-host
 
+Say "Installing PowerShell Core"
+Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Setup-PowerShell-Core-on-Windows.ps1 -Version 7.4.13 # -InstallTo "C:\Apps\PowerShell.Core"
+Say "Powershell Core Version: $(pwsh --version)"
+
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
