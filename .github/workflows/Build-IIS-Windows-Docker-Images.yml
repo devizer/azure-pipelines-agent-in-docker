@@ -47,12 +47,12 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
-    - name: Checkout
-      uses: actions/checkout@v4
-
     - name: Tune Docker
       run: | 
         Import-DevOps; Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
+
+    - name: Checkout
+      uses: actions/checkout@v4
 
     - name: Variables
       shell: bash
@@ -214,6 +214,7 @@ jobs:
     needs: Info
     runs-on: windows-2025
     steps:
+
     - name: Download All Artifacts
       uses: actions/download-artifact@v4
       with:
@@ -233,6 +234,10 @@ jobs:
 
     - name: Bootstrap
       uses: devizer/devops-library@main
+
+    - name: Tune Docker
+      run: | 
+        Import-DevOps; Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
 
     - name: Checkout
       uses: actions/checkout@v4
