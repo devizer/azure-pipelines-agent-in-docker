@@ -116,7 +116,6 @@ jobs:
         Say "Buiding: $newImageName";
         $cpuCount="$([Environment]::ProcessorCount)"
         & docker "build" "--isolation=hyperv" --memory 3200M --cpus "$cpuCount" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
-        
 
         Say "history"
         docker history "$newImageName"
@@ -131,6 +130,13 @@ jobs:
       if: always()
       run: |
         docker run "--isolation=hyperv" --rm --entrypoint powershell "the:$($ENV:NEWTAG)" -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
+
+    - name: Test Install .NET Core (TLS 1.2)
+      if: always()
+      shell: bash
+      run: |
+        set -o pipefail
+        docker run --rm --entrypoint powershell "--isolation=hyperv" "the:$NEWTAG" -Command "Run-Remote-Script https://dot.net/v1/dotnet-install.ps1 -Channel 8.0"
 
     - name: RUN IIS NET 2.0 (15 secs), background
       if: always()
