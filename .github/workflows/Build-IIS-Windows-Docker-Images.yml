@@ -136,7 +136,7 @@ jobs:
       shell: bash
       run: |
         set -o pipefail
-        docker run --rm --entrypoint powershell "--isolation=hyperv" "the:$NEWTAG" -Command "Run-Remote-Script https://dot.net/v1/dotnet-install.ps1 -Channel 8.0"
+        docker run --rm --entrypoint powershell "--isolation=hyperv" "the:$NEWTAG" -Command "Run-Remote-Script https://dot.net/v1/dotnet-install.ps1 -Channel 8.0 -Runtime dotnet"
 
     - name: RUN IIS NET 2.0 (15 secs), background
       if: always()
