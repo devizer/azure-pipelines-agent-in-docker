@@ -65,6 +65,12 @@ Say "Installing PowerShell Core"
 Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Setup-PowerShell-Core-on-Windows.ps1 -Version 7.4.13 -InstallTo "C:\Apps\PowerShell.Core"
 Say "Powershell Core Version: $(C:\Apps\PowerShell.Core\pwsh --version)"
 
+if ($osName -match 2016) {
+  Say "Activating Default TLS 1.2 for Windows Server 2016"
+  Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value 1 -Type DWord
+  Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value 1 -Type DWord
+}
+
 
 Say "Installing .NET 3.5"
 . "$scriptDirectory\Setup-Net35-On-Windows-Server.ps1"
