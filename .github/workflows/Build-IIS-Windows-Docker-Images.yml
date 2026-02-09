@@ -110,6 +110,7 @@ jobs:
     - name: Build
       if: always()
       run: |
+        Import-DevOps;
         cd Windows-Docker-Images;
         $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         Say "Buiding: $newImageName";
@@ -129,7 +130,7 @@ jobs:
       run: |
         docker run "--isolation=hyperv" --rm --entrypoint powershell "the:$($ENV:NEWTAG)" -c "Get-WindowsFeature | ft -autosize | Out-String -Width 1234" 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\BUILT-FEATURES-$($ENV:SUFFIX).txt"
 
-    - name: RUN IIS (15 secs), background
+    - name: RUN IIS NET 2.0 (15 secs), background
       if: always()
       shell: bash
       run: |
@@ -143,7 +144,7 @@ jobs:
         docker rm -f iis
 
 
-    - name: RUN IIS (30 secs), foreground
+    - name: RUN IIS NET 4.0 (30 secs), foreground
       if: always()
       shell: bash
       run: |
