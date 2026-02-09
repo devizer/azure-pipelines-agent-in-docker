@@ -115,7 +115,7 @@ jobs:
         $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         Say "Buiding: $newImageName";
         $cpuCount="$([Environment]::ProcessorCount)"
-        & docker "build" --memory 3200M --cpus 2 "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+        & docker "build" --memory 3200M "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
 
         Say "history"
         docker history "$newImageName"
