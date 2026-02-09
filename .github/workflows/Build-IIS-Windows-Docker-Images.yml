@@ -52,7 +52,7 @@ jobs:
 
     - name: Tune Docker
       run: | 
-        Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
+        Import-DevOps; Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
 
     - name: Variables
       shell: bash
