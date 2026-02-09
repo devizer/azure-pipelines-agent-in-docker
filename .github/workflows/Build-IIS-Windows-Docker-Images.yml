@@ -107,14 +107,15 @@ jobs:
         cat "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Features-$($ENV:SUFFIX).txt"
 
 
-    - name: Build
+    - name: BUILD
       if: always()
       run: |
         Import-DevOps;
         cd Windows-Docker-Images;
         $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         Say "Buiding: $newImageName";
-        docker "build" "--isolation=hyperv" "--memory=4g" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+        $cpuCount="$([Environment]::ProcessorCount)"
+        docker "build" "--isolation=hyperv" "--memory=4g" "--cpu-count=$cpuCount" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
 
         Say "history"
         docker history "$newImageName"
