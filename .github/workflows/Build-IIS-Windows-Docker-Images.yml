@@ -109,7 +109,7 @@ jobs:
         cd Windows-Docker-Images;
         $newImageName="$($ENV:THEIMAGE):$($ENV:NEWTAG)";
         Say "Buiding: $newImageName";
-        docker "build" "--isolation=hyperv" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
+        docker "build" "--isolation=hyperv" "--memory=4g" "--build-arg" "BASE_IMAGE=$($ENV:BaseImage)" "-t" "the:$($ENV:NEWTAG)" "-t" "$newImageName" "." 2>&1 | Tee-Object -FilePath "$ENV:SYSTEM_ARTIFACTSDIRECTORY\Build-$($ENV:SUFFIX).txt"
 
         Say "history"
         docker history "$newImageName"
