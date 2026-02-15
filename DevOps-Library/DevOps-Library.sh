@@ -54,11 +54,17 @@ Colorize() {
    # local color=""; [[ -n ${!var+x} ]] && color="${!var}"
    local color="$(eval "printf '%s' \"\$Color_${1:-}\"" 2>/dev/null)"
    shift || true
+   # if [[ "$(To-Boolean "Env Var DISABLE_COLOR_OUTPUT" "${DISABLE_COLOR_OUTPUT:-}")" == True ]]; then
+   #   printf "$*${newLine}";
+   # else
+   #   printf "${color:-}$*${NC}${newLine}";
+   # fi
    if [[ "$(To-Boolean "Env Var DISABLE_COLOR_OUTPUT" "${DISABLE_COLOR_OUTPUT:-}")" == True ]]; then
-     printf "$*${newLine}";
+     printf "%s%b" "$*" "${newLine}"
    else
-     printf "${color:-}$*${NC}${newLine}";
+     printf "%b%s%b%b" "${color:-}" "$*" "${NC}" "${newLine}"
    fi
+
 }
 # say ZZZ the-incorrect-color
 
