@@ -37,7 +37,7 @@ Benchmark-OpenSSL()
     summary_file="${LOG_NAME}.Benchmark.Summary.txt"
     printf "" > "$summary_file"
     printf "%-8s" "$openssl_version" >> "$summary_file"
-    printf "%-12s" "$rid" >> "$summary_file"
+    printf "%-12s" "$(Get-NET-RID)" >> "$summary_file"
     for var_name in handshake_rsa2048 handshake_ecdsa256 transfer_aes128_128b transfer_aes128_16k transfer_aes256_128b transfer_aes256_16k; do
       var="${!var_name}";
       printf "%-16s" $var >> "$summary_file"
