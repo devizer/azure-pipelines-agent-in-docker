@@ -18,6 +18,7 @@
           -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
           -e IMAGE="$IMAGE" \
           -e SSL_VERSION="$SSL_VERSION" \
+          -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
           "$IMAGE" sh -c "tail -f /dev/null"
 
       for cmd in install-build-tools-bundle.sh Install-DevOps-Library.sh build-utilities.sh; do
@@ -29,8 +30,8 @@
       docker exec gcc-container bash /Install-DevOps-Library.sh
       docker exec gcc-container bash -c ". /build-utilities.sh; adjust_os_repo"
 
-      Say "Test GCC $(GCC)"
-      docker exec -t -e GCC="$(GCC)" -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" gcc-container bash -c "
+      Say "RUN Building '$ARTIFACT_NAME' ... "
+      docker exec -t -e GCC="$(GCC)" gcc-container bash -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
       "
