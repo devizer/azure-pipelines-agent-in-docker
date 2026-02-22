@@ -37,7 +37,7 @@
       docker exec gcc-container bash -c "cat /etc/apt/sources.list"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
-      docker exec gcc-container bash -eu -o pipefail -c "
+      exec docker exec gcc-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
         bash /Build-Local.sh
