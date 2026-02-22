@@ -11,4 +11,15 @@ Arm-Build-OpenSSL3() {
   bash -eu OpenSSL3/STEP-Run-Container.sh
 }
 
-Arm-Build-OpenSSL3 3.0.19 "multiarch/debian-debootstrap:arm64-jessie"
+
+index=0;
+for ssl_version in "3.0.19" "3.3.6" "3.4.4" "3.5.5" "3.6.1"; do
+for image in "multiarch/debian-debootstrap:armhf-jessie" "multiarch/debian-debootstrap:arm64-jessie"; do
+  index=$((index+1))
+  title="[$index of 10] Building $ssl_version on $image"
+  printf "\033]0;%s\007" "$title"
+  Say "$title"
+  time Arm-Build-OpenSSL3 $ssl_version "$image"
+done 
+done
+
