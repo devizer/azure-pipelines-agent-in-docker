@@ -68,7 +68,16 @@ time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; 
 # time make test
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
 
-Say "PACK"
+Say "PACK FULL"
 cd $prefix
 cd ..
-time tar czf $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).tar.gz "$(basename $prefix)"
+time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
+
+
+Say "PACK BINARIES-ONLY"
+cd $prefix
+mkdir -p ~/only-so
+find -name '*.so.3' | while IFD= read -r file; do cp -v "$file" ~/only-so/; done
+cd ~/only-so
+printf $(Get-NET-RID) | tee rid.txt
+time tar czf ${LOG_NAME}.binaries-only.tar.gz *
