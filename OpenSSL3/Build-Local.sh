@@ -18,6 +18,7 @@ Download-File "$url" "$file"
 tar xzf "$file"
 cd openssl*
 prefix=/usr/local/openssl-$suffix
+Say "OpenSSL3 Prefix: [$prefix]"
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
 if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
@@ -29,6 +30,7 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2
 else
+    Say "Default shared Configuration"
    ./Configure shared --prefix=/usr/local/openssl-$suffix
 fi
 
