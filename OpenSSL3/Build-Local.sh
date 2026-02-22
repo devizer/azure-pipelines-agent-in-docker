@@ -39,3 +39,8 @@ time make -j
 # time make test
 time $sudo make install
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version
+
+Say "PACK"
+cd $prefix
+cd ..
+time tar czf $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).tar.gz "$(basename $prefix)"
