@@ -4,6 +4,7 @@ Arm-Build-OpenSSL3() {
   export SSL_VERSION="$1"
   export IMAGE="$2"
   tag=$(echo "$IMAGE" | awk -F":" '{print $2}')
+  export ARTIFACT_NAME="$SSL_VERSION on $tag"
   export SYSTEM_ARTIFACTSDIRECTORY="/OpenSSL3/OpenSSL3-$SSL_VERSION-$tag"
   mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
   Say "STORE TO [$SYSTEM_ARTIFACTSDIRECTORY]"
