@@ -37,14 +37,16 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -march=x86-64 \
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
-        -mno-avx -mno-avx2
+        -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
-    ./Configure linux-aarch64 no-shared no-asm -O2
+    ./Configure linux-aarch64 no-shared no-asm -O2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 else
     Say "Default shared Configuration"
-   ./Configure shared --prefix=/usr/local/openssl-$suffix
+   ./Configure shared --prefix=/usr/local/openssl-$suffix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+   perl configdata.pm --dump 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).config.data.log
 fi
+perl configdata.pm --dump 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).config.data.log || true
 
 time (make -j >/dev/null && $sudo make install >/dev/null)
 # time make test
