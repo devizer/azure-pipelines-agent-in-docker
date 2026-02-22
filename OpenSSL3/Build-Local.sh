@@ -33,6 +33,9 @@ Benchmark-OpenSSL()
     transfer_aes128_16k="$transfer_AES128_16384bytes"
     transfer_aes256_128b="$transfer_AES256_16384bytes"
     transfer_aes256_16k="$transfer_AES256_16384bytes"
+
+    mkdir -p "${LOG_NAME}.RAW.Benchmarks"
+    cp -v "$report."*".report" "${LOG_NAME}.RAW.Benchmarks"/
     
     summary_file="${LOG_NAME}.Benchmark.Summary.txt"
     printf "" > "$summary_file"
