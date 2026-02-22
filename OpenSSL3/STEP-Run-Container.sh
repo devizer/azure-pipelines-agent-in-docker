@@ -1,4 +1,4 @@
-
+set -eu; set -o pipefail
   
   Download-File https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh build-utilities.sh
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
@@ -16,6 +16,7 @@
       
       Say "Starting image $IMAGE"
       echo "SYSTEM_ARTIFACTSDIRECTORY = [$SYSTEM_ARTIFACTSDIRECTORY]"
+      docker rm -f openssl3-container 2>/dev/null 1>&2
       docker run --privileged --rm -d --hostname openssl3-container --name openssl3-container \
           -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
           -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
