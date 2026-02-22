@@ -30,6 +30,8 @@ prefix=/usr/local/openssl-$suffix
 Say "OpenSSL3 $ver Prefix: [$prefix]"
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
 c99=""; [[ "$ver" == "3.6"* ]] && c99="-std=c99"
+LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m)"
+echo "LOG_NAME (a prefix) = [$LOG_NAME]"
 if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
     ./Configure linux-x86_64 \
@@ -39,10 +41,10 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2 \
-        --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+        --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
-    ./Configure linux-aarch64 shared no-asm no-tests -O2 $c99 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+    ./Configure linux-aarch64 shared no-asm no-tests -O2 $c99 --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
@@ -54,16 +56,16 @@ elif [[ "$(uname -m)" == "armv7"* ]]; then
          no-tests \
          -mfloat-abi=hard \
          no-afalgeng \
-         --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+         --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 else
     Say "Default shared Configuration"
-   ./Configure shared --prefix=/usr/local/openssl-$suffix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+   ./Configure shared --prefix=/usr/local/openssl-$suffix 2>&1 | tee ${LOG_NAME}.Configure.txt
 fi
-perl configdata.pm --dump 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).config.data.log || true
+perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
 
-time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).make.install.txt
+time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 | tee ${LOG_NAME}.make.install.txt
 # time make test
-LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).SHOW.VERSION.txt
+LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
 
 Say "PACK"
 cd $prefix
