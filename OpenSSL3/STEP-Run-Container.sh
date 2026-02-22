@@ -1,3 +1,4 @@
+
   
   Download-File https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh build-utilities.sh
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
@@ -29,6 +30,9 @@
       docker exec gcc-container bash /install-build-tools-bundle.sh
       docker exec gcc-container bash /Install-DevOps-Library.sh
       docker exec gcc-container bash -c ". /build-utilities.sh; adjust_os_repo"
+
+      Say "Container repo"
+      docker exec gcc-container bash -c "cat /etc/apt/sources.list"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
       docker exec gcc-container bash -eu -o pipefail -c "
