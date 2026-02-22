@@ -12,7 +12,7 @@
       
 
       
-      Say "Start image $(IMAGE)"
+      Say "Starting image $IMAGE"
       docker run --privileged -t --rm -d --hostname gcc-container --name gcc-container \
           -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
           -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
