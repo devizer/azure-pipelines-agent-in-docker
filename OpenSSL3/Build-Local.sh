@@ -33,7 +33,7 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
     ./Configure linux-x86_64 \
         shared \
-        --prefix=/usr/local/openssl-$suffix \
+        --prefix=$prefix --openssldir=$prefix \
         -march=x86-64 \
          -std=c99 no-docs \
         -mtune=generic \
@@ -41,24 +41,24 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
-    ./Configure linux-aarch64 shared no-asm -std=c99 no-docs -O2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+    ./Configure linux-aarch64 shared no-asm -std=c99 -O2 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
     # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
     ./Configure linux-armv4 shared \
          -marm \
-         -std=c99 no-docs \
+         -std=c99 \
          -mfloat-abi=hard \
          no-afalgeng \
-         --prefix=/usr/local/openssl-$suffix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+         --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 else
     Say "Default shared Configuration"
    ./Configure shared --prefix=/usr/local/openssl-$suffix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 fi
 perl configdata.pm --dump 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).config.data.log || true
 
-time (make -j >/dev/null && $sudo make install >/dev/null)
+time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null)
 # time make test
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version
 
