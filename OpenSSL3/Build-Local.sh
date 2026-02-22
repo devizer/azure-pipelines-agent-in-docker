@@ -34,12 +34,12 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
     ./Configure linux-x86_64 \
         shared \
-        --prefix=$prefix --openssldir=$prefix \
         -march=x86-64 \
         $c99 \
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
-        -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+        -mno-avx -mno-avx2 \
+        --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
     ./Configure linux-aarch64 shared no-asm no-tests -O2 $c99 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
