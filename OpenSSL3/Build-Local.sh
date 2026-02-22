@@ -11,16 +11,18 @@ Benchmark-OpenSSL()
     openssl_version="$("$openssl_executable" version | head -1 | awk '{print $2}')"
     report="openssl-$openssl_version"
     # 7th column on last line
+    Say "Benchmark Handshake: $report"
     (echo "$openssl_version Handshake RSA2048 Benchmark"; "$openssl_executable" speed -seconds 3 rsa2048 2>&1) | tee "$report.handshake.RSA2048.report"
     (echo "$openssl_version Handshake ECDSA256 Benchmark"; "$openssl_executable" speed -seconds 3 ecdsap256 2>&1) | tee "$report.handshake.ECDSA256.report"
     for bytes in 128 16384; do
     for key_size in 128 256; do
+        Say "Benchmark transfer AES-${key_size} ${bytes} bytes: $report"
         # 2nd column on last line
         (echo "$openssl_version Transfer rate AES$key_size $bytes bytes Benchmark"; "$openssl_executable" speed -evp aes-$key_size-gcm -aead -bytes $bytes 2>&1 | tee "$report.transfer.AES$key_size.${bytes}bytes.report")
         transfer=$(cat "$report.transfer.AES${key_size}.${bytes}bytes.report" | awk '{print $2}')
         var_transfer="transfer_AES${key_size}_${bytes}bytes"
-        echo "[Debug] Set variable '$var_transfer': [$var_transfer=$transfer]"
-        eval "$var_transfer=$transfer"
+        echo "[Debug] Set variable '$var_transfer': [$var_transfer='$transfer']"
+        eval "$var_transfer='$transfer'"
     done
     done
 
