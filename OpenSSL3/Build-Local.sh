@@ -68,11 +68,11 @@ time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; 
 # time make test
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
 
+export GZIP="-9"
 Say "PACK FULL"
 cd $prefix
 cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
-
 
 Say "PACK BINARIES-ONLY"
 cd $prefix
