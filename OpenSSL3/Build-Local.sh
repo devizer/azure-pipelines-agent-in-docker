@@ -11,6 +11,7 @@ ver=3.5.5
 ver=3.3.6
 ver=3.4.4
 ver=3.6.1
+ver="${SSL_VERSION:-$ver}"
 suffix="${ver%.*}"
 url="https://github.com/openssl/openssl/releases/download/openssl-$ver/openssl-$ver.tar.gz"
 file="_$(basename "$url")"
@@ -18,7 +19,7 @@ Download-File "$url" "$file"
 tar xzf "$file"
 cd openssl*
 prefix=/usr/local/openssl-$suffix
-Say "OpenSSL3 Prefix: [$prefix]"
+Say "OpenSSL3 $ver Prefix: [$prefix]"
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
 if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
