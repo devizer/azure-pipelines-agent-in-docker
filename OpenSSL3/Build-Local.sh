@@ -5,6 +5,45 @@ time $sudo apt-get update -qq
 Say "apt-get install build-essential perl"
 time $sudo apt-get install sudo build-essential perl wget -y -qq | { grep --line-buffered "Setting\|Prepar" || true; }
 
+Benchmark-OpenSSL()
+{
+    local openssl_executable="$1"
+    openssl_version="$("$openssl_executable" version | head -1 | awk '{print $2}')"
+    report="openssl-$openssl_version"
+    # 7th column on last line
+    (echo "$openssl_version Handshake RSA2048 Benchmark"; "$openssl_executable" speed -seconds 3 rsa2048 2>&1) | tee "$report.handshake.RSA2048.report"
+    (echo "$openssl_version Handshake ECDSA256 Benchmark"; "$openssl_executable" speed -seconds 3 ecdsap256 2>&1) | tee "$report.handshake.ECDSA256.report"
+    for bytes in 128 16384; do
+    for key_size in 128 256; do
+        # 2nd column on last line
+        (echo "$openssl_version Transfer rate AES$key_size $bytes bytes Benchmark"; "$openssl_executable" speed -evp aes-$key_size-gcm -aead -bytes $bytes 2>&1 | tee "$report.transfer.AES$key_size.${bytes}bytes.report")
+        transfer=$(cat "$report.transfer.AES${key_size}.${bytes}bytes.report" | awk '{print $2}')
+        var_transfer="transfer_AES${key_size}_${bytes}bytes"
+        eval "$var_transfer=$transfer"
+    done
+    done
+
+    ls -1 "$report"*"report" | sort
+    handshake_rsa2048=$(tail -1 "$report.handshake.RSA2048.report" | awk '{print $7}')
+    handshake_ecdsa256=$(tail -1 "$report.handshake.ECDSA256.report" | awk '{print $7}')
+    transfer_aes128_128b="$transfer_AES128_128bytes"
+    transfer_aes128_16k="$transfer_AES128_16384bytes"
+    transfer_aes256_128b="$transfer_AES256_16384bytes"
+    transfer_aes256_16k="$transfer_AES256_16384bytes"
+    
+    summary_file="${LOG_NAME}.Benchmark.Summary.txt"
+    printf "" > "$summary_file"
+    printf "%-8s" "$openssl_version" >> "$summary_file"
+    printf "%-12s" "$rid" >> "$summary_file"
+    for var_name in handshake_rsa2048 handshake_ecdsa256 transfer_aes128_128b transfer_aes128_16k transfer_aes256_128b transfer_aes256_16k; do
+      var="${!var_name}";
+      printf "%-16s" $var >> "$summary_file"
+    done
+    echo "" >> "$summary_file"
+    Say "BENCHMARK SUMMARY"
+    cat "$summary_file"
+}
+
 if [[ "$(hostname)" == *"container"* ]]; then
   url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
   Say "Final UNAME MACHINE: $(uname -m)"
@@ -66,7 +105,9 @@ perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
 
 time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 && printf "%s" $prefix > $prefix/prefix.txt && printf $ver > $prefix/version.txt | tee ${LOG_NAME}.make.install.txt
 # time make test
-LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
+export LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 
+$prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
+Benchmark-OpenSSL "$prefix/bin/openssl"
 
 export GZIP="-9"
 Say "PACK FULL"
@@ -86,3 +127,5 @@ time tar czf ${LOG_NAME}.binaries-only.tar.gz *
 Say "PACK BINARIES-ONLY STRIPPED"
 strip *.so*
 time tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
+
+
