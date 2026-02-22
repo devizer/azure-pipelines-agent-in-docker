@@ -29,7 +29,7 @@ cd openssl*
 prefix=/usr/local/openssl-$suffix
 Say "OpenSSL3 $ver Prefix: [$prefix]"
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
-c99=""; [[ "$ver" == "3.6"* ]] && c99="-std=c99"
+c99=""; [[ "$ver" == "3.6"* ]] && c99="-std=gnu99"
 no_module="no-module" # get rid of ossl-modules/legacy.so
 LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m)"
 echo "LOG_NAME (a prefix) = [$LOG_NAME]"
