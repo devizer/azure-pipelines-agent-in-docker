@@ -29,25 +29,27 @@ cd openssl*
 prefix=/usr/local/openssl-$suffix
 Say "OpenSSL3 $ver Prefix: [$prefix]"
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
+c99=""; [[ "$ver" == "3.6"* ]] && c99="-std=c99"
 if [[ "$(uname -m)" == "x86_64" ]]; then
     Say "Tune for SSE2 only with assembler on x64"
     ./Configure linux-x86_64 \
         shared \
         --prefix=$prefix --openssldir=$prefix \
         -march=x86-64 \
-         \
+        $c99 \
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
-    ./Configure linux-aarch64 shared no-asm no-tests -O2 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+    ./Configure linux-aarch64 shared no-asm no-tests -O2 $c99 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
     # for 3.6 tests: -std=c99
     # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
     ./Configure linux-armv4 shared \
+         $c99 \
          -marm \
          no-tests \
          -mfloat-abi=hard \
