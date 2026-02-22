@@ -1,0 +1,44 @@
+name: Bash DevOps Library Tests
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Build:
+    name: Build ${{ matrix.SSL_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        SSL_VERSION: ["3.0.19", "3.3.6", "3.4.4", "3.5.5", "3.6.1"]
+        IMAGE: ["multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-jessie", "debian:8"]
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Setup Variables
+      run: |
+         echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" >> $GITHUB_ENV
+         echo "IMAGE=${{ matrix.IMAGE }}" >> $GITHUB_ENV
+
+    - name: Setup Variables
+      run: |
+         echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" >> $GITHUB_ENV
+         echo "IMAGE=${{ matrix.IMAGE }}" >> $GITHUB_ENV
+
+    - name: STEP-Run-Container.sh
+      run: bash -eu -o pipefail OpenSSL3/STEP-Run-Container.sh
+
