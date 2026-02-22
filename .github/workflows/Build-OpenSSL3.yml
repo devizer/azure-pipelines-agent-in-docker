@@ -31,14 +31,14 @@ jobs:
 
     - name: Setup Variables
       run: |
-         echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" >> $GITHUB_ENV
-         echo "IMAGE=${{ matrix.IMAGE }}" >> $GITHUB_ENV
+         echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" | tee -a $GITHUB_ENV
+         echo "IMAGE=${{ matrix.IMAGE }}" | tee -a $GITHUB_ENV
 
-    - name: Setup Variables
-      run: |
-         echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" >> $GITHUB_ENV
-         echo "IMAGE=${{ matrix.IMAGE }}" >> $GITHUB_ENV
+         tag=$(echo "${{ matrix.IMAGE }}" | awk -F":" '{print $2}')
+         ARTIFACT_NAME="${{ matrix.SSL_VERSION }} on $tag"
+         echo "ARTIFACT_NAME=$ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    - name: STEP-Run-Container.sh
+
+    - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
       run: bash -eu -o pipefail OpenSSL3/STEP-Run-Container.sh
 

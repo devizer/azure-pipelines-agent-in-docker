@@ -13,7 +13,13 @@
 
       
       Say "Start image $(IMAGE)"
-      docker run --privileged -t --rm -d --hostname gcc-container --name gcc-container -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "$IMAGE" sh -c "tail -f /dev/null"
+      docker run --privileged -t --rm -d --hostname gcc-container --name gcc-container \
+          -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
+          -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
+          -e IMAGE="$IMAGE" \
+          -e SSL_VERSION="$SSL_VERSION" \
+          "$IMAGE" sh -c "tail -f /dev/null"
+
       for cmd in install-build-tools-bundle.sh Install-DevOps-Library.sh build-utilities.sh; do
         docker cp $(pwd -P)/$cmd gcc-container:/$cmd
       done
