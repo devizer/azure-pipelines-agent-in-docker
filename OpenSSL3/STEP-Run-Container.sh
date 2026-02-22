@@ -9,7 +9,8 @@
       sudo try-and-retry apt-get update -qq
       sudo try-and-retry apt-get install qemu-user-static -y -qq >/dev/null
       Say "Register qemu user static"
-      docker run --rm --privileged multiarch/qemu-user-static:register --reset >/dev/null
+      docker pull -q multiarch/qemu-user-static:register
+      docker run --rm --privileged multiarch/qemu-user-static:register --reset
       
 
       
