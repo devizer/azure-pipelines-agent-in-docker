@@ -64,7 +64,7 @@ else
 fi
 perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
 
-time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 && printf "%s" $prefix > $prefix/prefix.txt | tee ${LOG_NAME}.make.install.txt
+time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 && printf "%s" $prefix > $prefix/prefix.txt && printf $ver > $prefix/version.txt | tee ${LOG_NAME}.make.install.txt
 # time make test
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
 
@@ -80,6 +80,7 @@ mkdir -p ~/only-so
 find -name '*.so.3' | while IFD= read -r file; do cp -v "$file" ~/only-so/; done
 cd ~/only-so
 printf $(Get-NET-RID) | tee rid.txt
+printf $ver | tee version.txt
 time tar czf ${LOG_NAME}.binaries-only.tar.gz *
 
 Say "PACK BINARIES-ONLY STRIPPED"
