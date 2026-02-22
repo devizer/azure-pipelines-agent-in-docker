@@ -31,7 +31,7 @@
       docker exec gcc-container bash -c ". /build-utilities.sh; adjust_os_repo"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
-      docker exec gcc-container bash -c "
+      docker exec gcc-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
       "
