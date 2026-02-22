@@ -7,7 +7,7 @@ Arm-Build-OpenSSL3() {
   export SYSTEM_ARTIFACTSDIRECTORY="/OpenSSL3/OpenSSL3-$SSL_VERSION-$tag"
   mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY"
   Say "STORE TO [$SYSTEM_ARTIFACTSDIRECTORY]"
-  bash -eu STEP-Run-Container.sh
+  bash -eu OpenSSL3/STEP-Run-Container.sh
 }
 
 Arm-Build-OpenSSL3 3.0.19 "multiarch/debian-debootstrap:arm64-jessie"
