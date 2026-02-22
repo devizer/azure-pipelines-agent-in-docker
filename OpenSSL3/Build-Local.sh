@@ -41,11 +41,11 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
-    ./Configure linux-aarch64 shared no-asm -std=c99 -O2 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
+    ./Configure linux-aarch64 shared no-asm no-tests -O2 --prefix=$prefix --openssldir=$prefix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
-    # for tests: -std=c99
+    # for 3.6 tests: -std=c99
     # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
     ./Configure linux-armv4 shared \
          -marm \
