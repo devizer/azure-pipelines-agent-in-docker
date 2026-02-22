@@ -25,6 +25,7 @@
       for cmd in install-build-tools-bundle.sh Install-DevOps-Library.sh build-utilities.sh; do
         docker cp $(pwd -P)/$cmd gcc-container:/$cmd
       done
+      docker cp OpenSSL3/Build-Local.sh gcc-container:/Build-Local.sh
       if [[ "$IMAGE" == alpine* ]]; then docker exec -t gcc-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
 
       docker exec gcc-container bash /install-build-tools-bundle.sh
@@ -38,4 +39,5 @@
       docker exec gcc-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
+        bash /Build-Local.sh
       "
