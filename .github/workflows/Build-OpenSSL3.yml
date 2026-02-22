@@ -36,7 +36,10 @@ jobs:
          echo "SSL_VERSION=${{ matrix.SSL_VERSION }}" | tee -a $GITHUB_ENV
          echo "IMAGE=${{ matrix.IMAGE }}" | tee -a $GITHUB_ENV
 
-         tag=$(echo "${{ matrix.IMAGE }}" | awk -F":" '{print $2}')
+         # tag=$(echo "${{ matrix.IMAGE }}" | awk -F":" '{print $2}')
+         tag="${{ matrix.IMAGE }}"
+         tag="${tag//:/-}"
+         tag="${tag//\//-}"
          ARTIFACT_NAME="${{ matrix.SSL_VERSION }} on $tag"
          echo "ARTIFACT_NAME=$ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
