@@ -32,10 +32,5 @@
       Say "Test GCC $(GCC)"
       docker exec -t -e GCC="$(GCC)" -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" gcc-container bash -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
-        Say 'Starting container (taget gcc ver is [$(GCC)]) ... '
-        cd /
-        source build-gcc-utilities.sh
-        prepare_os
-        install_precompiled_gcc "$(GCC)" | cat
-        source test-gcc.sh
+        Say 'Starting container for $ARTIFACT_NAME ... '
       "
