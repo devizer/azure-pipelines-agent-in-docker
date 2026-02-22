@@ -5,12 +5,14 @@ set -eu; set -o pipefail
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
       
+  if [[ "$(uname -m)" == x86_64 ]]; then
       Say "Check if [qemu-user-static] is installed"
       sudo try-and-retry apt-get update -qq
       sudo try-and-retry apt-get install qemu-user-static -y -qq >/dev/null
       Say "Register qemu user static"
       docker pull -q multiarch/qemu-user-static:register
       docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  fi
       
 
       
