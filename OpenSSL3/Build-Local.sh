@@ -59,9 +59,9 @@ else
 fi
 perl configdata.pm --dump 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).config.data.log || true
 
-time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null)
+time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).make.install.txt
 # time make test
-LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version
+LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).SHOW.VERSION.txt
 
 Say "PACK"
 cd $prefix
