@@ -19,13 +19,18 @@ tar xzf "$file"
 cd openssl*
 prefix=/usr/local/openssl-$suffix
 # ./Configure shared --prefix=/usr/local/openssl-$suffix
-./Configure linux-x86_64 \
-    shared \
-    --prefix=/usr/local/openssl-$suffix \
-    -march=x86-64 \
-    -mtune=generic \
-    -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
-    -mno-avx -mno-avx2
+if [[ "$(uname -m)" == "x86_64" ]]; then
+    Say "Tune for SSE2 only with assembler on x64"
+    ./Configure linux-x86_64 \
+        shared \
+        --prefix=/usr/local/openssl-$suffix \
+        -march=x86-64 \
+        -mtune=generic \
+        -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
+        -mno-avx -mno-avx2
+else
+   ./Configure shared --prefix=/usr/local/openssl-$suffix
+fi
 
 time make -j
 # time make test
