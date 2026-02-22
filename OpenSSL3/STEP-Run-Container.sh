@@ -16,7 +16,7 @@
       
       Say "Starting image $IMAGE"
       echo "SYSTEM_ARTIFACTSDIRECTORY = [$SYSTEM_ARTIFACTSDIRECTORY]"
-      docker run --privileged --rm -d --hostname gcc-container --name gcc-container \
+      docker run --privileged --rm -d --hostname openssl3-container --name openssl3-container \
           -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
           -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
           -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
@@ -26,20 +26,20 @@
           "$IMAGE" sh -c "tail -f /dev/null"
 
       for cmd in install-build-tools-bundle.sh Install-DevOps-Library.sh build-utilities.sh; do
-        docker cp $(pwd -P)/$cmd gcc-container:/$cmd
+        docker cp $(pwd -P)/$cmd openssl3-container:/$cmd
       done
-      docker cp OpenSSL3/Build-Local.sh gcc-container:/Build-Local.sh
-      if [[ "$IMAGE" == alpine* ]]; then docker exec -t gcc-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
+      docker cp OpenSSL3/Build-Local.sh openssl3-container:/Build-Local.sh
+      if [[ "$IMAGE" == alpine* ]]; then docker exec -t openssl3-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
 
-      docker exec gcc-container bash /install-build-tools-bundle.sh
-      docker exec gcc-container bash /Install-DevOps-Library.sh
-      docker exec gcc-container bash -c ". /build-utilities.sh; adjust_os_repo"
+      docker exec openssl3-container bash /install-build-tools-bundle.sh
+      docker exec openssl3-container bash /Install-DevOps-Library.sh
+      docker exec openssl3-container bash -c ". /build-utilities.sh; adjust_os_repo"
 
       Say "Container repo"
-      docker exec gcc-container bash -c "cat /etc/apt/sources.list"
+      docker exec openssl3-container bash -c "cat /etc/apt/sources.list"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
-      docker exec gcc-container bash -eu -o pipefail -c "
+      docker exec openssl3-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
         bash /Build-Local.sh

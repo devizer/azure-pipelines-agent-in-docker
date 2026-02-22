@@ -3,7 +3,15 @@ sudo="$(command -v sudo || true)"
 Say "apt-get update"
 time $sudo apt-get update -qq 
 Say "apt-get install build-essential perl"
-time $sudo apt-get install build-essential perl wget -y -qq
+time $sudo apt-get install build-essential perl wget -y -qq | { grep "Setting\|Prepar" || true; }
+
+if [[ "$(hostname)" == *"container"* ]]; then
+  url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+  Say "Final UNAME MACHINE: $(uname -m)"
+else
+  Say " Install-Fake-UName.sh skipped. HOSTNAME '$(hostname)' does not contain 'container'."
+fi
+
 work=$HOME/build/openssl-3.0; mkdir -p "$work"; cd "$work" && rm -rf *
 # https://openssl-library.org/source/
 ver=3.0.19
