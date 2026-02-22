@@ -44,9 +44,11 @@ elif [[ "$(uname -m)" == "aarch64" ]]; then
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
+    # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
     ./Configure linux-armv4 shared \
          -marm \
          -mfloat-abi=hard \
+         no-afalgeng \
          --prefix=/usr/local/openssl-$suffix 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
 else
     Say "Default shared Configuration"
