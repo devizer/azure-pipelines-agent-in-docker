@@ -19,7 +19,7 @@ Benchmark-OpenSSL()
         Say "Benchmark transfer AES-${key_size} ${bytes} bytes: $report"
         # 2nd column on last line
         (echo "$openssl_version Transfer rate AES$key_size $bytes bytes Benchmark"; "$openssl_executable" speed -evp aes-$key_size-gcm -aead -bytes $bytes 2>&1 | tee "$report.transfer.AES$key_size.${bytes}bytes.report")
-        transfer=$(cat "$report.transfer.AES${key_size}.${bytes}bytes.report" | awk '{print $2}')
+        transfer=$(tail -1 "$report.transfer.AES${key_size}.${bytes}bytes.report" | awk '{print $2}')
         var_transfer="transfer_AES${key_size}_${bytes}bytes"
         echo "[Debug] Set variable '$var_transfer': [$var_transfer='$transfer']"
         eval "$var_transfer='$transfer'"
