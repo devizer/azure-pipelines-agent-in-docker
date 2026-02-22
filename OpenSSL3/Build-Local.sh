@@ -3,7 +3,7 @@ sudo="$(command -v sudo || true)"
 Say "apt-get update"
 time $sudo apt-get update -qq 
 Say "apt-get install build-essential perl"
-time $sudo apt-get install sudo build-essential perl wget -y -qq | { grep "Setting\|Prepar" || true; }
+time $sudo apt-get install sudo build-essential perl wget -y -qq | { grep --line-buffered "Setting\|Prepar" || true; }
 
 if [[ "$(hostname)" == *"container"* ]]; then
   url=https://raw.githubusercontent.com/devizer/glist/master/Install-Fake-UName.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
