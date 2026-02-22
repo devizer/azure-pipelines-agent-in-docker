@@ -81,3 +81,7 @@ find -name '*.so.3' | while IFD= read -r file; do cp -v "$file" ~/only-so/; done
 cd ~/only-so
 printf $(Get-NET-RID) | tee rid.txt
 time tar czf ${LOG_NAME}.binaries-only.tar.gz *
+
+Say "PACK BINARIES-ONLY STRIPPED"
+strip *.so*
+time tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
