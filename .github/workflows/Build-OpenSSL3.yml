@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   Build:
-    name: Build ${{ matrix.SSL_VERSION }}
+    name: Build ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
     strategy:
       fail-fast: false
       matrix:
