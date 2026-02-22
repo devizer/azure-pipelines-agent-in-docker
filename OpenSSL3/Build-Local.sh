@@ -35,7 +35,7 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         shared \
         --prefix=$prefix --openssldir=$prefix \
         -march=x86-64 \
-         -std=c99 no-docs \
+         \
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2 2>&1 | tee $SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-for-$(uname -m).Configure.txt
