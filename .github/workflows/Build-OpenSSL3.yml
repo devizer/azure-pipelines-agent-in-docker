@@ -43,6 +43,15 @@ jobs:
     - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
       run: bash -eu -o pipefail OpenSSL3/STEP-Run-Container.sh
 
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 9
+
 
   Combine:
     runs-on: ubuntu-latest
