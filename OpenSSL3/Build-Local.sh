@@ -38,14 +38,16 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mtune=generic \
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2
+elif [[ "$(uname -m)" == "aarch64" ]]; then
+    Say "TUNE ARM64"
+    ./Configure linux-aarch64 no-shared no-asm -O2
 else
     Say "Default shared Configuration"
    ./Configure shared --prefix=/usr/local/openssl-$suffix
 fi
 
-time make -j
+time (make -j >/dev/null && $sudo make install >/dev/null)
 # time make test
-time $sudo make install
 LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 $prefix/bin/openssl version
 
 Say "PACK"
