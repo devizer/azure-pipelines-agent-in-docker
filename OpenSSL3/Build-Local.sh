@@ -125,7 +125,7 @@ Say "PACK FULL"
 cd $prefix
 cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
-tar cf - "$(basename $prefix)" | xz -9 -T0 > ${LOG_NAME}.full.tar.xz
+tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 
 Say "PACK BINARIES-ONLY"
 cd $prefix
