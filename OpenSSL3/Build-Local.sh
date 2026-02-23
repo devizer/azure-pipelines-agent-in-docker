@@ -37,6 +37,8 @@ try-and-retry bash -e -c 'Download-File "$url" "$file"; gzip -t "$file"'
 tar xzf "$file"
 cd openssl*
 prefix=/usr/local/openssl-$suffix
+mkdir -p "$prefix"
+rm -rf "$prefix"/*
 config_options="shared no-tests -O3 no-module no-afalgeng"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
 [[ "$(Get-NET-RID)" == *musl* ]] && config_options="$config_options -static-libgcc"
