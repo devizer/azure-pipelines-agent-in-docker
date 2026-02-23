@@ -29,10 +29,6 @@ Benchmark-OpenSSL()
     ls -1 "$report"*"report" | sort
     handshake_rsa2048=$(tail -1 "$report.handshake.RSA2048.report" | awk '{print $(NF-1)}')
     handshake_ecdsa256=$(tail -1 "$report.handshake.ECDSA256.report" | awk '{print $(NF-1)}')
-    transfer_aes128_128b="$transfer_AES128_128bytes"
-    transfer_aes128_16k="$transfer_AES128_16384bytes"
-    transfer_aes256_128b="$transfer_AES256_16384bytes"
-    transfer_aes256_16k="$transfer_AES256_16384bytes"
 
     mkdir -p "${LOG_NAME}.RAW.Benchmarks"
     cp -v "$report."*".report" "${LOG_NAME}.RAW.Benchmarks"/
@@ -41,10 +37,11 @@ Benchmark-OpenSSL()
     printf "" > "$summary_file"
     printf "%-8s" "$openssl_version" >> "$summary_file"
     printf "%-12s" "$(Get-NET-RID)" >> "$summary_file"
-    for var_name in handshake_rsa2048 handshake_ecdsa256 transfer_aes128_128b transfer_aes128_16k transfer_aes256_128b transfer_aes256_16k; do
+    for var_name in handshake_rsa2048 handshake_ecdsa256 transfer_AES128_128bytes transfer_AES128_16384bytes transfer_AES256_128bytes transfer_AES256_16384bytes; do
       var="${!var_name}";
       var_formatted="$(Format-Thousand "$var")"
-      printf "%16s" $var_formatted >> "$summary_file"
+      format="%16s"; [[ "$var_name" == *"handshake"* ]] && format="%12s"
+      printf "$format" $var_formatted >> "$summary_file"
     done
     echo "" >> "$summary_file"
     Say "BENCHMARK SUMMARY"
