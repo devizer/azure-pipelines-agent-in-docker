@@ -27,8 +27,8 @@ Benchmark-OpenSSL()
     done
 
     ls -1 "$report"*"report" | sort
-    handshake_rsa2048=$(tail -1 "$report.handshake.RSA2048.report" | awk '{print $7}')
-    handshake_ecdsa256=$(tail -1 "$report.handshake.ECDSA256.report" | awk '{print $7}')
+    handshake_rsa2048=$(tail -1 "$report.handshake.RSA2048.report" | awk '{print $(NF-1)}')
+    handshake_ecdsa256=$(tail -1 "$report.handshake.ECDSA256.report" | awk '{print $(NF-1)}')
     transfer_aes128_128b="$transfer_AES128_128bytes"
     transfer_aes128_16k="$transfer_AES128_16384bytes"
     transfer_aes256_128b="$transfer_AES256_16384bytes"
