@@ -15,7 +15,6 @@ set -eu; set -o pipefail
   fi
       
 
-      
       Say "Starting image $IMAGE"
       echo "SYSTEM_ARTIFACTSDIRECTORY = [$SYSTEM_ARTIFACTSDIRECTORY]"
       docker rm -f openssl3-container 2>/dev/null 1>&2
@@ -26,17 +25,12 @@ set -eu; set -o pipefail
           -e IMAGE="$IMAGE" \
           -e SSL_VERSION="$SSL_VERSION" \
           -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
+          -w /App -v "$(pwd -P)":/App \
           "$IMAGE" sh -c "tail -f /dev/null"
 
-      for cmd in install-build-tools-bundle.sh Install-DevOps-Library.sh build-utilities.sh; do
-        docker cp $(pwd -P)/$cmd openssl3-container:/$cmd
-      done
-      docker cp OpenSSL3/Build-Local.sh openssl3-container:/Build-Local.sh
       if [[ "$IMAGE" == alpine* ]]; then docker exec -t openssl3-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
 
-      docker exec openssl3-container bash /install-build-tools-bundle.sh
-      docker exec openssl3-container bash /Install-DevOps-Library.sh
-      docker exec openssl3-container bash -c ". /build-utilities.sh; adjust_os_repo"
+      docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; /Install-DevOps-Library.sh; . /build-utilities.sh; adjust_os_repo"
 
       Say "Container repo"
       docker exec openssl3-container bash -c "cat /etc/apt/sources.list"
@@ -45,5 +39,5 @@ set -eu; set -o pipefail
       docker exec openssl3-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
-        bash /Build-Local.sh
+        bash OpenSSL3/Build-Local.sh
       "
