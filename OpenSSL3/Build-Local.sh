@@ -33,6 +33,7 @@ cd openssl*
 prefix=/usr/local/openssl-$suffix
 config_options="shared no-tests -O3 no-module no-afalgeng"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
+[[ "$(Get-NET-RID)" == *musl* ]] && config_options="$config_options -static-libgcc"
 Say "OpenSSL3 $ver Prefix: [$prefix], Configure Options: [$config_options]"
 LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-$(Get-NET-RID)"
 echo "LOG_NAME (a prefix) = [$LOG_NAME]"

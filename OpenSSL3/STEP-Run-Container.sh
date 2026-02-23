@@ -28,7 +28,7 @@ set -eu; set -o pipefail
           -w /App -v "$(pwd -P)":/App \
           "$IMAGE" sh -c "tail -f /dev/null"
 
-      if [[ "$IMAGE" == alpine* ]]; then docker exec -t openssl3-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
+      if [[ "$IMAGE" == alpine* ]]; then docker exec -t openssl3-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib; echo"; fi
 
       docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; . ./build-utilities.sh; adjust_os_repo"
 
