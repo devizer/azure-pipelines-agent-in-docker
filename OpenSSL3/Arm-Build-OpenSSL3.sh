@@ -15,7 +15,9 @@ Arm-Build-OpenSSL3() {
 
 index=0;
 for ssl_version in "3.5.5" "3.0.19" "3.3.6" "3.4.4" "3.6.1"; do
-for image in "multiarch/debian-debootstrap:arm64-jessie" "multiarch/debian-debootstrap:armhf-jessie"; do
+images="multiarch/debian-debootstrap:arm64-jessie multiarch/debian-debootstrap:armhf-jessie"
+images="multiarch/alpine:aarch64-v3.7 multiarch/alpine:armhf-v3.7"
+for image in $images; do
   index=$((index+1))
   title="[$index of 10] Building $ssl_version on $image"
   printf "\033]0;%s\007" "$title"

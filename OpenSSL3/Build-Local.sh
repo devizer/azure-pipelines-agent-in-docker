@@ -93,10 +93,16 @@ tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 Say "PACK BINARIES-ONLY"
 cd $prefix
 mkdir -p ~/only-so
-find -name '*.so.3' | while IFD= read -r file; do cp -v "$file" ~/only-so/; done
+dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
+rm -f "$dependencies_info_file"
+find -name '*.so.3' | while IFD= read -r file; do 
+  cp -v "$file" ~/only-so/; 
+  Say "DEPENDENCIES for '$file'"
+  (echo "DEPENDENCIES for $file:"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
+done
 cd ~/only-so
-printf $(Get-NET-RID) | tee rid.txt
-printf $ver | tee version.txt
+printf $(Get-NET-RID) | tee openssl-rid.txt
+printf $ver | tee openssl-version.txt
 tar czf ${LOG_NAME}.binaries-only.tar.gz *
 tar cJf ${LOG_NAME}.binaries-only.tar.xz *
 
