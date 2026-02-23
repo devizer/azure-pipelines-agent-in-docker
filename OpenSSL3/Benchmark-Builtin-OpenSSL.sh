@@ -21,10 +21,10 @@ for debian_ver in 11 12 13; do
       Say "RUN BENCHMARK for $IMAGE ... "
       docker exec openssl3-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
-        Say 'Starting container for $ARTIFACT_NAME ... '
+        Say 'Starting container for $IMAGE ... '
         . ./OpenSSL3/Functions.sh
         try-and-retry apt-get install openssl sudo xz-utils -y --force-yes
-        LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-$(Get-NET-RID)"
+        LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-DEBIAN-$debian_ver-$(Get-NET-RID)"
         Benchmark-OpenSSL openssl
       "
 
