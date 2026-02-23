@@ -84,16 +84,16 @@ if [[ "$(uname -m)" == "x86_64" ]]; then
         -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2 \
         -mno-avx -mno-avx2 \
         --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
+elif [[ "$(uname -m)" == i?86 ]]; then
+    Say "TUNE i686"
+    # -march=pentium3 | -march=i686
+    ./Configure linux-elf $config_options \
+         -march=pentium3 -m32 -mno-sse2 \
+         --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 elif [[ "$(uname -m)" == "aarch64" ]]; then
     Say "TUNE ARM64"
     # TODO: -mavx2
     ./Configure linux-aarch64 $config_options \
-         --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
-elif [[ "$(uname -m)" == i?86 ]]; then
-    Say "TUNE i686"
-    # -march=pentium3 | -march=i686
-    ./Configure linux-elf $config_options 
-         -march=pentium3 -m32 -mno-sse2 \
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
