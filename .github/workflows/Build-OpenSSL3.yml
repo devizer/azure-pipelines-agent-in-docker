@@ -56,10 +56,31 @@ jobs:
         overwrite: true
         compression-level: 9
 
+  Builtin:
+    name: Benchmark Builtin
+    timeout-minutes: 120
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+    - name: OpenSSL3/Benchmark-Builtin-OpenSSL.sh
+      run: bash -eu -o pipefail OpenSSL3/Benchmark-Builtin-OpenSSL.sh
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: Builtin-Benchmarks.zip
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 9
 
   Combine:
     runs-on: ubuntu-latest
-    needs: [Build]
+    needs: [Build, Builtin]
     if: always()
     timeout-minutes: 45
     steps:
