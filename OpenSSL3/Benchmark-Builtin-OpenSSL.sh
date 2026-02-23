@@ -6,6 +6,7 @@ set -eu; set -o pipefail
 
 for debian_ver in 11 12 13; do
       IMAGE="debian:$debian_ver"
+      docker rm -f openssl3-container >/dev/null 2>&1
       docker run --privileged --rm -d --hostname openssl3-container --name openssl3-container \
           -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
           -e IMAGE="$IMAGE" \
