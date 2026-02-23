@@ -79,6 +79,7 @@ jobs:
         find -name "OpenSSL"*".Benchmark.Summary.txt" | sort | while IFS= read -r file; do
           cat "$file" >> TOTAL.BENCHMARK.TXT
         done 
+        cat TOTAL.BENCHMARK.TXT
         time 7z a -sdel -mx=9 -ms=on -mqs=on "Combined OpenSSL 3 Matrix.7z";
 
     - name: Upload artifacts
