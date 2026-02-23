@@ -1,9 +1,15 @@
 set -eu; set -o pipefail
 sudo="$(command -v sudo || true)"
-Say "apt-get update"
-time $sudo apt-get update -qq 
-Say "apt-get install build-essential perl"
-time $sudo apt-get install sudo build-essential perl wget -y -qq | { grep --line-buffered "Setting\|Prepar" || true; }
+if [[ -n "$(command -v apt-get)" ]]; then
+    Say "apt-get update"
+    time $sudo apt-get update -qq 
+    Say "apt-get install build-essential perl"
+    time $sudo apt-get install sudo build-essential perl wget -y -qq | { grep --line-buffered "Setting\|Prepar" || true; }
+elif [[ -n "$(command -v apk)" ]]; then
+    Say "apk update and add"
+    time $sudo apk update
+    time $sudo apk add build-base perl-utils
+fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$SCRIPT_DIR/Functions.sh"
