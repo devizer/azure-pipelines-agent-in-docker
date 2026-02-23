@@ -18,7 +18,7 @@ for debian_ver in 11 12 13; do
       Say "Container repo"
       docker exec openssl3-container bash -c "cat /etc/apt/sources.list"
 
-      Say "RUN Building '$ARTIFACT_NAME' ... "
+      Say "RUN BENCHMARK for $image ... "
       docker exec openssl3-container bash -eu -o pipefail -c "
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $ARTIFACT_NAME ... '
