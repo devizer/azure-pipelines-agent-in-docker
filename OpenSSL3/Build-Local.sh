@@ -64,10 +64,10 @@ ver=3.4.4
 ver=3.6.1
 ver="${SSL_VERSION:-$ver}"
 suffix="${ver%.*}"
-url="https://github.com/openssl/openssl/releases/download/openssl-$ver/openssl-$ver.tar.gz"
-file="_$(basename "$url")"
+export url="https://github.com/openssl/openssl/releases/download/openssl-$ver/openssl-$ver.tar.gz"
+export file="_$(basename "$url")"
 echo "Download-File '$url' '$file' is starting ..."
-Download-File "$url" "$file"
+try-and-retry bash -e -c 'Download-File "$url" "$file"; gzip -t "$file"'
 tar xzf "$file"
 cd openssl*
 prefix=/usr/local/openssl-$suffix
