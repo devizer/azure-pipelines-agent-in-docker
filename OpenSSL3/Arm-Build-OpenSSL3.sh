@@ -17,7 +17,7 @@ index=0;
 for ssl_version in "3.5.5" "3.0.19" "3.3.6" "3.4.4" "3.6.1"; do
 images_debian="multiarch/debian-debootstrap:arm64-jessie multiarch/debian-debootstrap:armhf-jessie"
 images_alpine="multiarch/alpine:aarch64-v3.7 multiarch/alpine:armhf-v3.7"
-iamges="$images_debian $images_alpine"
+images="$images_alpine $images_debian"
 for image in $images; do
   index=$((index+1))
   title="[$index of 10] Building $ssl_version on $image"
