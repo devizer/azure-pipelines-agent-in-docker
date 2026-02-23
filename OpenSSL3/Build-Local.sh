@@ -8,7 +8,7 @@ if [[ -n "$(command -v apt-get)" ]]; then
 elif [[ -n "$(command -v apk)" ]]; then
     Say "apk update and add"
     time $sudo apk update
-    time $sudo apk add build-base perl-utils
+    time $sudo apk add build-base perl-utils linux-headers
 fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
