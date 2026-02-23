@@ -411,12 +411,59 @@ function Format-Size() {
 }
 
 # Include File: [\Includes\Format-Thousand.sh]
-function Format-Thousand() {
+Format-Thousand() {
   local num="$1"
   # LC_NUMERIC=en_US.UTF-8 printf "%'.0f\n" "$num" # but it is locale dependent
   # Next is locale independent version for positive integers
   awk -v n="$num" 'BEGIN { len=length(n); res=""; for (i=0;i<=len;i++) { res=substr(n,len-i+1,1) res; if (i > 0 && i < len && i % 3 == 0) { res = "," res } }; print res }' 2>/dev/null || echo "$num"
 }
+
+Format-Thousand() {
+  local input="$1"
+  [ -z "$input" ] && return
+
+  echo "$input" | awk '{
+    if (match($0, /^-?[0-9]+/)) {
+        pfx = substr($0, RSTART, RLENGTH);
+        rest = substr($0, RSTART + RLENGTH);
+        
+        sign = "";
+        n = pfx;
+        if (substr(pfx, 1, 1) == "-") {
+            sign = "-";
+            n = substr(pfx, 2);
+        }
+
+        len = length(n);
+        res = "";
+        for (i = 1; i <= len; i++) {
+            char = substr(n, len - i + 1, 1);
+            res = char res;
+            if (i % 3 == 0 && i < len) {
+                res = "," res;
+            }
+        }
+        print sign res rest;
+    } else {
+        print $0;
+    }
+  }'
+}
+
+
+Test-New-Format-Thousand() {
+  for sign in "" "-"; do
+    for a in "" 1 12 123 1234 12345 123456 12313123123123123123123123123123123123; do
+      for suffix in "" "." ".1" ".2K"; do
+        val="$sign$a$suffix"
+        # Using printf with brackets to match your required test output style
+        printf "Format_Thousand(%s): [%s]\n" "$val" "$(Format-Thousand "$val")"
+      done
+    done
+  done
+}
+
+# Test-New-Format-Thousand
 
 # Include File: [\Includes\Get-Files-In-Optimal-Order-For-Solid-Archive.sh]
 Get-Files-In-Optimal-Order-For-Solid-Archive() {
@@ -1099,8 +1146,14 @@ Validate-File-Is-Not-Empty() {
 # Include File: [\Includes\Wait-For-HTTP.sh]
 # Wait-For-HTTP http://localhost:55555 30
 Wait-For-HTTP() {
-  local u="$1"; 
-  local t="${2:-30}"; 
+  local t=""
+  if [[ "$(To-Lower-Case "${1:-}")" == "--wait"* ]]; then
+    t="${2:-30}"
+    shift; shift;
+  fi
+  local u="$1";
+  if [[ -z "$t" ]] && [[ -n "${2:-}" ]]; then t="$2"; fi
+  t="${t:-30}"
 
   local infoSeconds=seconds;
   [[ "$t" == "1" ]] && infoSeconds="second"
