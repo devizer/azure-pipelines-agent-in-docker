@@ -24,7 +24,7 @@ for debian_ver in 10 11 12 13; do
         set -e; set -u; set -o pipefail; Say --Reset-Stopwatch
         Say 'Starting container for $IMAGE ... '
         . ./OpenSSL3/Functions.sh
-        try-and-retry apt-get install openssl sudo xz-utils -y --force-yes
+        try-and-retry apt-get install openssl sudo xz-utils -y --force-yes -qq
         LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-DEBIAN-$debian_ver-$(Get-NET-RID)"
         export COLUMN_TYPE=system
         Benchmark-OpenSSL openssl
