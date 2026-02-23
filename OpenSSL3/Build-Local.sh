@@ -55,7 +55,7 @@ else
   Say " Install-Fake-UName.sh skipped. HOSTNAME '$(hostname)' does not contain 'container'."
 fi
 
-work=$HOME/build/openssl-3.0; mkdir -p "$work"; cd "$work" && rm -rf *
+work=$HOME/build/openssl-3.0; mkdir -p "$work"; cd "$work" && rm -rf * || true
 # https://openssl-library.org/source/
 ver=3.0.19
 ver=3.5.5
@@ -66,6 +66,7 @@ ver="${SSL_VERSION:-$ver}"
 suffix="${ver%.*}"
 url="https://github.com/openssl/openssl/releases/download/openssl-$ver/openssl-$ver.tar.gz"
 file="_$(basename "$url")"
+echo "Download-File '$url' '$file' is starting ..."
 Download-File "$url" "$file"
 tar xzf "$file"
 cd openssl*
