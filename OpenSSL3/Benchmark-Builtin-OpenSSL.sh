@@ -4,7 +4,7 @@ set -eu; set -o pipefail
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
-for debian_ver in 11 12 13; do
+for debian_ver in 8 9 10 11 12 13; do
       IMAGE="debian:$debian_ver"
       docker rm -f openssl3-container >/dev/null 2>&1
       docker run --privileged --rm -d --hostname openssl3-container --name openssl3-container \

@@ -1,4 +1,5 @@
 # work=$HOME/build/openssl3; mkdir -p $work; cd $work; git clone https://github.com:/devizer/azure-pipelines-agent-in-docker; cd azure-pipelines-agent-in-docker; git pull; time bash OpenSSL3/Arm-Build-OpenSSL3.sh
+# export SYSTEM_ARTIFACTSDIRECTORY="/OpenSSL3/Current/System"; bash -eu -o pipefail OpenSSL3/Benchmark-Builtin-OpenSSL.sh
 set -eu; set -o pipefail
 Arm-Build-OpenSSL3() {
   export SSL_VERSION="$1"
