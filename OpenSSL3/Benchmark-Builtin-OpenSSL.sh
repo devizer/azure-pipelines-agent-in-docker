@@ -17,7 +17,7 @@ for debian_ver in 11 12 13; do
       docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; . ./build-utilities.sh; adjust_os_repo"
 
       Say "Container repo"
-      docker exec openssl3-container bash -c "cat /etc/apt/sources.list"
+      docker exec openssl3-container bash -c "test -e /etc/apt/sources.list && cat /etc/apt/sources.list || echo ABSENT"
 
       Say "RUN BENCHMARK for $IMAGE ... "
       docker exec openssl3-container bash -eu -o pipefail -c "
