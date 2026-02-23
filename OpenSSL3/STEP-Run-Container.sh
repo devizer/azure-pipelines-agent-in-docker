@@ -30,7 +30,7 @@ set -eu; set -o pipefail
 
       if [[ "$IMAGE" == alpine* ]]; then docker exec -t openssl3-container sh -c "apk update --no-progress; apk add --no-progress curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl libstdc++ tzdata userspace-rcu zlib openssl; echo"; fi
 
-      docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh | head -1; bash Install-DevOps-Library.sh | head -1; . ./build-utilities.sh; adjust_os_repo"
+      docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; . ./build-utilities.sh; adjust_os_repo"
 
       Say "Container repo"
       docker exec openssl3-container bash -c "cat /etc/apt/sources.list"
