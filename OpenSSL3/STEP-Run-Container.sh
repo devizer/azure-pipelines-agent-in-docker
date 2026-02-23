@@ -32,8 +32,8 @@ set -eu; set -o pipefail
 
       docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; . ./build-utilities.sh; adjust_os_repo"
 
-      Say "Container repo"
-      docker exec openssl3-container bash -c "test -e /etc/apt/sources.list && cat /etc/apt/sources.list"
+      Say "Container apt repo"
+      docker exec openssl3-container bash -c "cat /etc/apt/sources.list || true"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
       docker exec openssl3-container bash -eu -o pipefail -c "
