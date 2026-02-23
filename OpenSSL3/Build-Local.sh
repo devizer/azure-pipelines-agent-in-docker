@@ -43,7 +43,8 @@ Benchmark-OpenSSL()
     printf "%-12s" "$(Get-NET-RID)" >> "$summary_file"
     for var_name in handshake_rsa2048 handshake_ecdsa256 transfer_aes128_128b transfer_aes128_16k transfer_aes256_128b transfer_aes256_16k; do
       var="${!var_name}";
-      printf "%-16s" $var >> "$summary_file"
+      var_formatted="$(Format-Thousand "$var")"
+      printf "%-16s" $var_formatted >> "$summary_file"
     done
     echo "" >> "$summary_file"
     Say "BENCHMARK SUMMARY"
