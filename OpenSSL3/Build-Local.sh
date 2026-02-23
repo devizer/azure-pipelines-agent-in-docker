@@ -125,6 +125,7 @@ Say "PACK FULL"
 cd $prefix
 cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
+tar cf - "$(basename $prefix)" | xz -9 -T0 > ${LOG_NAME}.full.tar.xz
 
 Say "PACK BINARIES-ONLY"
 cd $prefix
@@ -133,10 +134,12 @@ find -name '*.so.3' | while IFD= read -r file; do cp -v "$file" ~/only-so/; done
 cd ~/only-so
 printf $(Get-NET-RID) | tee rid.txt
 printf $ver | tee version.txt
-time tar czf ${LOG_NAME}.binaries-only.tar.gz *
+tar czf ${LOG_NAME}.binaries-only.tar.gz *
+tar cJf ${LOG_NAME}.binaries-only.tar.xz *
 
 Say "PACK BINARIES-ONLY STRIPPED"
 strip *.so*
-time tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
+tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
+tar cJf ${LOG_NAME}.binaries-only.stripped.tar.xz *
 
 
