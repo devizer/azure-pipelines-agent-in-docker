@@ -26,6 +26,7 @@ for debian_ver in 11 12 13; do
         . ./OpenSSL3/Functions.sh
         try-and-retry apt-get install openssl sudo xz-utils -y --force-yes
         LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-DEBIAN-$debian_ver-$(Get-NET-RID)"
+        export COLUMN_TYPE=system
         Benchmark-OpenSSL openssl
       "
 

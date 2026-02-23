@@ -73,6 +73,7 @@ time (make -j >/dev/null && { Say "MAKE SUCCESS. Running make install" || true; 
 # time make test
 export LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 
 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
+export COLUMN_TYPE=custom
 Benchmark-OpenSSL "$prefix/bin/openssl"
 
 export GZIP="-9"
