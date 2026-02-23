@@ -95,7 +95,7 @@ elif [[ "$(uname -m)" == "aarch64" ]]; then
 elif [[ "$(uname -m)" == i?86 ]]; then
     Say "TUNE i686"
     # -march=pentium3
-    ./Configure linux-elf shared -march=686 -m32 no-asm no-tests no-sse2 -O2 $c99 $no_module --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
+    ./Configure linux-elf shared -march=i686 -m32 no-asm no-tests no-sse2 -O2 $c99 $no_module --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 elif [[ "$(uname -m)" == "armv7"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
