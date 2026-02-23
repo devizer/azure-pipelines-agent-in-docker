@@ -62,7 +62,7 @@ elif [[ "$(uname -m)" == "aarch64" ]]; then
     # TODO: -mavx2
     ./Configure linux-aarch64 $config_options \
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
-elif [[ "$(uname -m)" == "armv7"* ]]; then
+elif [[ "$(uname -m)" == "armv7"* || "$(uname -m)" == "armv6"* ]]; then
     Say "TUNE ARMv7l 32 bit"
     # -D__ARM_MAX_ARCH__=4 \
     # for 3.6 tests: -std=c99
@@ -72,7 +72,7 @@ elif [[ "$(uname -m)" == "armv7"* ]]; then
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 else
     Say "Default shared Configuration"
-   ./Configure shared $c99 $no_module --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
+   ./Configure shared $config_options --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 fi
 perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
 
