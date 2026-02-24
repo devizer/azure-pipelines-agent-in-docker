@@ -1,5 +1,6 @@
 set -eu; set -o pipefail
   
+  sudo swapon 2>/dev/null || true
   # Download-File https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh build-utilities.sh
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
