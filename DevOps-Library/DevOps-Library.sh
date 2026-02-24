@@ -663,16 +663,23 @@ Get-Linux-OS-Bits() {
   # getconf may be absent
   local ret="$(getconf LONG_BIT 2>/dev/null || true)"
   if [[ -z "$ret" ]]; then
-     local arch;
-     if [[ -n "$(command -v dpkg)" ]]; then arch="$(dpkg --print-architecture 2>/dev/null || true)"; fi
-     if [[ -n "$(command -v apk)" ]];  then arch="$(apk info --print-arch 2>/dev/null || true)"; fi
-
+     local arch="$(Get-Linux-OS-Architecture)";
      if [[ "$arch" == "x86_64" || "$arch" == amd64 ]]; then echo "64"; return; fi
      if [[ "$arch" == arm64 || "$arch" == aarch64 ]]; then echo "64"; return; fi
      if [[ "$arch" == armhf || "$arch" == armel ]]; then echo "32"; return; fi
      if [[ "$arch" == i?86 || "$arch" == x86 ]]; then echo "32"; return; fi
   fi
   echo $ret;
+}
+
+Get-Linux-OS-Architecture() {
+  local arch="";
+  if [[ -n "$(command -v dpkg)" ]]; then arch="$(dpkg --print-architecture 2>/dev/null || true)"; 
+  elif [[ -n "$(command -v apk)" ]]; then arch="$(apk info --print-arch 2>/dev/null || true)"; 
+  elif [[ -n "$(command -v arch)" ]]; then arch="$(arch 2>/dev/null || true)";
+  elif [[ -n "$(command -v rpm)" ]]; then arch="$(rpm --eval '%{_arch}' 2>/dev/null || true)";
+  fi
+  echo "$arch"
 }
 
 # Include File: [\Includes\Get-NET-RID.sh]
@@ -902,7 +909,10 @@ Is-Microsoft-Hosted-Build-Agent() {
 
 # Include File: [\Includes\Is-Qemu-Process.sh]
 Is-Qemu-Process() {
-  grep -q '^x86_Thread_features' /proc/self/status 2>/dev/null && echo True && return || true
+  if grep -q '^x86_Thread_features' /proc/self/status 2>/dev/null; then
+    local arch="$(Get-Linux-OS-Architecture)"
+    if [[ "$arch" == arm* || "$arch" == aarch* ]]; then echo "True"; return; fi
+  fi
   if grep -q "qemu" /proc/self/maps 2>/dev/null; then echo "True"; return; fi
   if grep -q "qemu" /proc/self/auxv 2>/dev/null; then echo "True"; return; fi
   echo "False"
