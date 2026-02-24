@@ -50,7 +50,7 @@ if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
   $sudo apt-get install libatomic-ops-dev -y -qq | { grep "Unpack\|Prepar" || true; } || true
   ATOMIC_A=$(find /usr -name "libatomic.a" | head -n 1 || true)
   if [[ -n "$ATOMIC_A" ]]; then
-     config_options="$config_options LDFLAGS=\"-Wl,--exclude-libs,libatomic.a\" \"$ATOMIC_A\""
+     config_options="$config_options LDFLAGS=\"-Wl,--exclude-libs,libatomic.a\" LIBS=\"$ATOMIC_A\""
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
