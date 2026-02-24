@@ -44,6 +44,19 @@ rm -rf "$prefix"/*
 config_options="shared no-tests -O3 no-module no-afalgeng"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
 if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; fi; # else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
+
+# Special case: libatomic on 32 bit debian
+if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
+  $sudo apt-get install libatomic-ops-dev -y -qq | { grep "Unpack\|Prepar" || true; } || true
+  ATOMIC_A=$(find /usr -name "libatomic.a" | head -n 1 || true)
+  if [[ -n "$ATOMIC_A" ]]; then
+     config_options="$config_options LDFLAGS=\"-Wl,--exclude-libs,libatomic.a\" \"$ATOMIC_A\""
+     Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit platform $(Get-NET-RID)"
+  else
+     Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
+  fi
+fi
+
 Say "OpenSSL3 $ver Prefix: [$prefix], Configure Options: [$config_options]"
 LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-$(Get-NET-RID)"
 echo "LOG_NAME (a prefix) = [$LOG_NAME]"
