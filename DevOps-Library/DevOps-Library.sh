@@ -661,12 +661,21 @@ function Get-Global-Seconds() {
 # return 32|64|<empty string>
 Get-Linux-OS-Bits() {
   # getconf may be absent
-  echo "$(getconf LONG_BIT 2>/dev/null)"
+  local ret="$(getconf LONG_BIT 2>/dev/null || true)"
+  if [[ -z "$ret" ]]; then
+     local arch;
+     if [[ -n "$(command -v dpkg)" ]]; then arch="$(dpkg --print-architecture 2>/dev/null || true)"; fi
+     if [[ -n "$(command -v apk)" ]];  then arch="$(apk info --print-arch 2>/dev/null || true)"; fi
+
+     if [[ "$arch" == "x86_64" || "$arch" == amd64 ]]; then echo "64"; return; fi
+     if [[ "$arch" == arm64 || "$arch" == aarch64 ]]; then echo "64"; return; fi
+     if [[ "$arch" == armhf || "$arch" == armel ]]; then echo "32"; return; fi
+     if [[ "$arch" == i?86 || "$arch" == x86 ]]; then echo "32"; return; fi
+  fi
 }
 
-
 # Include File: [\Includes\Get-NET-RID.sh]
-function Get-NET-RID() {
+Get-NET-RID() {
   local machine="$(uname -m)"; machine="${machine:-unknown}"
   local rid=unknown
   if [[ "$(Get-OS-Platform)" == Linux ]]; then
@@ -678,7 +687,7 @@ function Get-NET-RID() {
      else
          linux_arm="linux-arm"; linux_arm64="linux-arm64"; linux_x64="linux-x64"
      fi
-     if [[ "$machine" == armv7* ]]; then
+     if [[ "$machine" == armv7* || armv6* ]]; then
        rid=$linux_arm;
      elif [[ "$machine" == aarch64 || "$machine" == armv8* || "$machine" == arm64* ]]; then
        rid=$linux_arm64;
@@ -717,9 +726,9 @@ function Get-NET-RID() {
        [[ "$win_arch" == x64 ]] && rid="win-x64"
        [[ "$win_arch" == arm ]] && rid="win-arm"
        [[ "$win_arch" == arm64 ]] && rid="win-arm64"
-       [[ "$win_arch" == x86 ]] && rid="win"
+       [[ "$win_arch" == x86 ]] && rid="win-x86"
        # workaround if powershell.exe is missing
-       [[ "$win_arch" == i?86 ]] && rid="win" 
+       [[ "$win_arch" == i?86 ]] && rid="win-x86" 
        [[ "$win_arch" == x86_64 ]] && rid="win-x64" 
        [[ "$win_arch" == arm64* || "$win_arch" == aarch64* ]] && rid="win-arm64"
   fi
@@ -890,6 +899,17 @@ Is-Microsoft-Hosted-Build-Agent() {
   echo False
 }
 
+# Include File: [\Includes\Is-Qemu-Process.sh]
+Is-Qemu-Process() {
+  if grep -q "qemu" /proc/self/maps; then echo "True"; else echo "False"; fi
+  _LIB_Is_Qemu_VM_Cache="${_LIB_Is_Qemu_VM_Cache:-$(Is-Qemu-VM-Implementation)}"
+  echo "$_LIB_Is_Qemu_VM_Cache"
+}
+
+Test-Is-Qemu-Process() {
+  if [[ "$(Is-Qemu-Process)" == True ]]; then return 0; else return 1; fi
+}
+
 # Include File: [\Includes\Is-Qemu-VM.sh]
 # if windows in qemu then it returns False
 function Is-Qemu-VM() {
@@ -1033,6 +1053,289 @@ function MkTemp-File-Smarty() {
 
 
 
+
+# Include File: [\Includes\Repair-Legacy-OS-Sources.sh]
+Get-Linux-OS-ID() {
+  # RHEL: ID="rhel" VERSION_ID="7.5" PRETTY_NAME="Red Hat Enterprise Linux" (without version)
+  test -e /etc/os-release && source /etc/os-release
+  local ret="${ID:-}:${VERSION_ID:-}"
+  ret="${ret//[ ]/}"
+
+  if [ -e /etc/redhat-release ]; then
+    local redhatRelease=$(</etc/redhat-release)
+    if [[ $redhatRelease == "Red Hat Enterprise Linux Server release 6."* ]]; then
+      ret="rhel:6"
+    fi
+    if [[ $redhatRelease == "CentOS release 6."* ]]; then
+      ret="centos:6"
+    fi
+  fi
+  [[ "${ret:-}" == ":" ]] && ret="linux"
+  echo "${ret}"
+}
+
+Repair-Legacy-OS-Sources() {
+  if [[ "$(Get-OS-Platform)" != Linux ]]; then return; fi
+  local os_bits=$(Get-Linux-OS-Bits)
+  Say "Adjust os repo for [$(Get-Linux-OS-ID) $(uname -m) ${os_bits} bit]"
+  local os_ver="$(Get-Linux-OS-ID)"
+  if [[ -d "/etc/apt/apt.conf.d" ]]; then
+echo '
+Acquire::AllowReleaseInfoChange::Suite "true";
+Acquire::Check-Valid-Until "0";
+APT::Get::Assume-Yes "true";
+APT::Get::AllowUnauthenticated "true";
+Acquire::AllowInsecureRepositories "1";
+Acquire::AllowDowngradeToInsecureRepositories "1";
+
+APT::Get::AutomaticRemove "0";
+APT::Get::HideAutoRemove "1";
+
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+Acquire::CompressionTypes::Order { "gz"; };
+APT::NeverAutoRemove:: ".*";
+APT::Compressor::gzip::CompressArg:: "-1";
+APT::Compressor::xz::CompressArg:: "-1";
+APT::Compressor::bzip2::CompressArg:: "-1";
+APT::Compressor::lzma::CompressArg:: "-1";
+' > /etc/apt/apt.conf.d/99Z_Custom
+  fi
+
+  if [[ "${os_ver}" == "raspbian:7" ]] || [[ "${os_ver}" == "raspbian:8" ]]; then
+  Say "Applying sources.list patch for legacy raspbian [${os_ver}]"
+  local key=wheezy; if [[ "${os_ver}" == "raspbian:8" ]]; then key=jessie; fi
+echo '
+# deb http://archive.raspberrypi.org/debian/ '$key' main
+deb http://legacy.raspbian.org/raspbian/ '$key' main contrib non-free rpi
+' > /etc/apt/sources.list
+  rm -rf /etc/apt/sources.list.d/*
+  fi
+
+  if [[ "${os_ver}" == "debian:7" ]]; then
+echo '
+deb http://archive.debian.org/debian/ wheezy main non-free contrib
+deb http://archive.debian.org/debian-security wheezy/updates main non-free contrib
+deb http://archive.debian.org/debian wheezy-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:7" ]] && [[ "${os_bits}" == 32 ]] ; then
+echo '
+deb http://archive.debian.org/debian/ wheezy main non-free contrib
+deb http://archive.debian.org/debian-security wheezy/updates main non-free contrib
+deb http://archive.debian.org/debian wheezy-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+echo 'JESSIE x86_64:
+# deb http://snapshot.debian.org/archive/debian/20210326T030000Z jessie main
+deb http://deb.debian.org/debian jessie main
+# deb http://snapshot.debian.org/archive/debian-security/20210326T030000Z jessie/updates main
+deb http://security.debian.org/debian-security jessie/updates main
+# deb http://snapshot.debian.org/archive/debian/20210326T030000Z jessie-updates main
+deb http://deb.debian.org/debian jessie-updates main
+'>/dev/null
+
+  if [[ "${os_ver}" == "debian:8" ]] && [[ "${os_bits}" == "64" ]] && [[ "$(uname -m)" != x86_64 ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ jessie main non-free contrib
+# deb http://archive.debian.org/debian-security jessie/updates main non-free contrib
+deb http://archive.debian.org/debian jessie-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:8" ]] && [[ "${os_bits}" == "32" ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ jessie main non-free contrib
+# deb http://security.debian.org/ jessie/updates main contrib non-free
+deb http://archive.debian.org/debian-security jessie/updates main contrib non-free
+deb http://archive.debian.org/debian jessie-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:8" ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ jessie main non-free contrib
+deb http://archive.debian.org/debian-security jessie/updates main non-free contrib
+deb http://archive.debian.org/debian jessie-backports main non-free contrib
+
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:8" && "$(dpkg --print-architecture)" == arm64 ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ jessie main non-free contrib
+# Below was not moved to archive
+# deb http://archive.debian.org/debian-security jessie/updates main non-free contrib
+# deb http://archive.debian.org/debian jessie-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:9" ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ stretch main non-free contrib
+deb http://archive.debian.org/debian-security stretch/updates main non-free contrib
+deb http://archive.debian.org/debian stretch-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+  if [[ "${os_ver}" == "debian:9" ]] && [[ "$(uname -m)" == aarch64 ]] && [[ "${os_bits}" == 64 ]]; then
+echo '
+# sources.list customized at '"$(date)"'
+deb http://archive.debian.org/debian/ stretch main non-free contrib
+deb http://archive.debian.org/debian-security stretch/updates main non-free contrib
+deb http://archive.debian.org/debian stretch-backports main non-free contrib
+' > /etc/apt/sources.list
+  fi
+
+if [[ "$(dpkg --print-architecture)" == "armel" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+echo '
+deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster main
+deb http://snapshot.debian.org/archive/debian-security/20220801T000000Z buster/updates main
+deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster-updates main
+' >/etc/apt/sources.list
+echo "Fixed sources.list on [debian:10 armel]"
+fi
+
+# arm64 same as armel
+if [[ "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+echo '
+deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster main
+deb http://snapshot.debian.org/archive/debian-security/20220801T000000Z buster/updates main
+deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster-updates main
+' >/etc/apt/sources.list
+echo "Fixed sources.list on [debian:10 arm64]"
+fi
+
+# 2025: debian 10
+if [[ "$(dpkg --print-architecture)" == "amd64" || "$(dpkg --print-architecture)" == "i386" || "$(dpkg --print-architecture)" == "armhf" || "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+echo "DEBIAN 10 ARCHIVE REPO: Done"
+echo '
+deb http://archive.debian.org/debian/ buster main contrib non-free
+deb http://archive.debian.org/debian-security buster/updates main contrib non-free
+deb http://archive.debian.org/debian/ buster-updates main contrib non-free
+
+#deb-src http://archive.debian.org/debian/ buster main contrib non-free
+#deb-src http://archive.debian.org/debian-security buster/updates main contrib non-free
+#deb-src http://archive.debian.org/debian/ buster-updates main contrib non-free
+' >/etc/apt/sources.list
+fi
+
+# 2025: debian 11 arm64
+if [[ "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
+echo "DEBIAN 11 ARM64 ARCHIVE REPO: Done"
+echo '
+deb http://deb.debian.org/debian bullseye main
+# deb-src http://deb.debian.org/debian bullseye main
+deb http://security.debian.org/debian-security bullseye-security main
+# deb-src http://security.debian.org/debian-security bullseye-security main
+deb http://deb.debian.org/debian bullseye-updates main
+# deb-src http://deb.debian.org/debian bullseye-updates main
+# deb http://deb.debian.org/debian bullseye-backports main: 404 NOT FOUND
+# deb-src http://deb.debian.org/debian bullseye-backports main
+' >/etc/apt/sources.list
+fi
+# 2025: debian 11 armel
+if [[ "$(dpkg --print-architecture)" == "armel" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
+echo "DEBIAN 11 ARM v5 ARCHIVE REPO: Done"
+echo '
+# deb http://ftp.fi.debian.org/debian/ bullseye main contrib non-free
+deb http://archive.debian.org/debian/ bullseye main contrib non-free
+' >/etc/apt/sources.list
+fi
+
+  if [[ "$(Get-Linux-OS-ID)" == "centos:8" ]]; then
+    Say "Resetting CentOS 8 Repo"
+    sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+  fi
+
+
+  if [[ "$(Get-Linux-OS-ID)" == "centos:6" ]]; then
+  Say "Resetting CentOS 6 Repo"
+cat <<-'CENTOS6_REPO' > /etc/yum.repos.d/CentOS-Base.repo
+[C6.10-base]
+name=CentOS-6.10 - Base
+baseurl=http://vault.centos.org/6.10/os/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+enabled=1
+metadata_expire=never
+
+[C6.10-updates]
+name=CentOS-6.10 - Updates
+baseurl=http://vault.centos.org/6.10/updates/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+enabled=1
+metadata_expire=never
+
+[C6.10-extras]
+name=CentOS-6.10 - Extras
+baseurl=http://vault.centos.org/6.10/extras/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+enabled=1
+metadata_expire=never
+
+[C6.10-contrib]
+name=CentOS-6.10 - Contrib
+baseurl=http://vault.centos.org/6.10/contrib/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+enabled=0
+metadata_expire=never
+
+[C6.10-centosplus]
+name=CentOS-6.10 - CentOSPlus
+baseurl=http://vault.centos.org/6.10/centosplus/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+enabled=0
+metadata_expire=never
+CENTOS6_REPO
+  fi
+
+  if [[ "$(command -v dnf)" != "" ]] || [[ "$(command -v yum)" != "" ]]; then
+    # centos/redhat/fedora
+    if [[ -d /etc/yum.repos.d ]]; then
+      Say "Switch off gpgcheck for /etc/yum.repos.d/*.repo for [$(Get-Linux-OS-ID) $(uname -m)]"
+      sed -i "s/gpgcheck=1/gpgcheck=0/g" /etc/yum.repos.d/*.repo
+    fi
+
+    if [[ -e /etc/dnf/dnf.conf ]]; then
+      Say "Switch off gpgcheck for /etc/dnf/dnf.conf for [$(Get-Linux-OS-ID) $(uname -m)]"
+      sed -i "s/gpgcheck=1/gpgcheck=0/g" /etc/dnf/dnf.conf
+    fi
+  fi
+
+  if [[ "${SKIP_REPO_UPDATE:-}" != true ]]; then
+    if [[ "$(Get-Linux-OS-ID)" == "centos"* ]]; then
+      Say "Update yum cache for [$(Get-Linux-OS-ID) $(uname -m) ${os_bits} bit]"
+      try-and-retry yum makecache -q
+    fi
+
+    if [[ -n "$(command -v apt-get)" ]]; then
+      Say "Update apt cache for [$(Get-Linux-OS-ID) $(uname -m) ${os_bits} bit]"
+      if [[ "${os_ver}" == "debian:8" ]]; then
+        apt-get update -qq || true
+      else
+        try-and-retry apt-get update -qq
+      fi
+    fi
+  fi
+
+  echo '
+  export NCURSES_NO_UTF8_ACS=1 PS1="\[\033[01;35m\]\u@\h\[\033[00m\] \[\033[01;34m\]\w \$\[\033[00m\] "
+' | tee -a ~/.bashrc >/dev/null
+
+}
 
 # Include File: [\Includes\Retry-On-Fail.sh]
 function Echo-Red-Error() { 
