@@ -3,6 +3,8 @@ Say "/proc/self/maps"
 cat /proc/self/maps || true
 Say "/proc/self/auxv"
 cat /proc/self/auxv || true
+Say "/proc/self/status"
+cat /proc/self/status || true
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
