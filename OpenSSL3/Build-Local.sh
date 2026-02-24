@@ -94,23 +94,24 @@ tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 
 Say "PACK BINARIES-ONLY"
 cd $prefix
-mkdir -p ~/only-so
+only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
+mkdir -p $only_so_folder; rm -rf $only_so_folder/*
 dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
 rm -f "$dependencies_info_file"
 find -name '*.so.3' | while IFD= read -r file; do 
-  cp -v "$file" ~/only-so/; 
+  cp -v "$file" $only_so_folder/; 
   Say "DEPENDENCIES for '$file'"
   (echo "DEPENDENCIES for $file:"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
 done
-cd ~/only-so
+cd $only_so_folder
 printf $(Get-NET-RID) | tee openssl-rid.txt
 printf $ver | tee openssl-version.txt
 tar czf ${LOG_NAME}.binaries-only.tar.gz *
-tar cJf ${LOG_NAME}.binaries-only.tar.xz *
+tar cf - * | xz -9 > ${LOG_NAME}.binaries-only.tar.xz
 
 Say "PACK BINARIES-ONLY STRIPPED"
 strip *.so*
 tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
-tar cJf ${LOG_NAME}.binaries-only.stripped.tar.xz *
+tar cf - * | xz -9 > ${LOG_NAME}.binaries-only.stripped.tar.xz
 
 
