@@ -87,7 +87,13 @@ perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
 cores=$(nproc); stdout="/dev/null"; if [[ "$(Is-Qemu-Process)" == True ]]; then cores=1; stdout="/dev/stdout"; fi
 Colorize Magenta "CPU CORES FOR MAKE: $cores (Is-Qemu-Process = $(Is-Qemu-Process))"
 # | tee $stdout >/dev/null
-time (make -j $cores && { Say "MAKE SUCCESS. Running make install" || true; } && $sudo make install >/dev/null) 2>&1 && printf "%s" $prefix > $prefix/prefix.txt && printf $ver > $prefix/version.txt | tee ${LOG_NAME}.make.install.txt
+time (
+  if [[ "$(Is-Qemu-Process)" == True ]]; then make; else make -j >/dev/null; fi
+  Say "MAKE SUCCESS. Running make install"
+  $sudo make install >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
+
+printf "%s" $prefix > $prefix/prefix.txt
+printf $ver > $prefix/version.txt
 # time make test
 export LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 
 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
