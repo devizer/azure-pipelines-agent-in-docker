@@ -43,7 +43,7 @@ rm -rf "$prefix"/*
 # EXPERIMENTAL static libatomic (only debian)
 config_options="shared no-tests -O3 no-module no-afalgeng"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
-if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; else $sudo apt-get install libatomic1-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
+if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
 Say "OpenSSL3 $ver Prefix: [$prefix], Configure Options: [$config_options]"
 LOG_NAME="$SYSTEM_ARTIFACTSDIRECTORY/OpenSSL-$ver-$(Get-NET-RID)"
 echo "LOG_NAME (a prefix) = [$LOG_NAME]"
