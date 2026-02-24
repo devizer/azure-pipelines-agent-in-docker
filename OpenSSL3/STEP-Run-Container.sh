@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
   
-  Download-File https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh build-utilities.sh
+  # Download-File https://raw.githubusercontent.com/devizer/NetCore.CaValidationLab/master/4gcc/build-gcc-utilities.sh build-utilities.sh
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
@@ -30,10 +30,10 @@ set -eu; set -o pipefail
 
       if [[ "$IMAGE" == *alpine* ]]; then docker exec -t openssl3-container sh -c "echo installing bash on alpine; apk update --no-progress; apk add --no-progress xz curl tar sudo bzip2 bash; apk add --no-progress bash icu-libs ca-certificates libstdc++; echo apk done"; fi
 
-      docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; . ./build-utilities.sh; adjust_os_repo"
+      docker exec openssl3-container bash -e -c "bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-Legacy-OS-Sources --update-repo"
 
       Say "Container apt repo"
-      docker exec openssl3-container bash -c "cat /etc/apt/sources.list || true"
+      docker exec openssl3-container bash -c "cat /etc/apt/sources.list 2>/dev/null || true"
 
       Say "RUN Building '$ARTIFACT_NAME' ... "
       docker exec openssl3-container bash -eu -o pipefail -c "
