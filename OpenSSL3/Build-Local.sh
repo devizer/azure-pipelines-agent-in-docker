@@ -1,6 +1,8 @@
 set -eu; set -o pipefail
 Say "/proc/self/maps"
 cat /proc/self/maps || true
+Say "/proc/self/auxv"
+cat /proc/self/auxv || true
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
