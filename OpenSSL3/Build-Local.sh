@@ -1,4 +1,7 @@
 set -eu; set -o pipefail
+Say "/proc/self/maps"
+cat /proc/self/maps || true
+
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
     Say "apt-get update"
