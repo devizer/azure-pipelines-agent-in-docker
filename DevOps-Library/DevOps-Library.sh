@@ -672,6 +672,7 @@ Get-Linux-OS-Bits() {
      if [[ "$arch" == armhf || "$arch" == armel ]]; then echo "32"; return; fi
      if [[ "$arch" == i?86 || "$arch" == x86 ]]; then echo "32"; return; fi
   fi
+  echo $ret;
 }
 
 # Include File: [\Includes\Get-NET-RID.sh]
