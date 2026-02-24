@@ -902,7 +902,10 @@ Is-Microsoft-Hosted-Build-Agent() {
 
 # Include File: [\Includes\Is-Qemu-Process.sh]
 Is-Qemu-Process() {
-  if grep -q "qemu" /proc/self/maps; then echo "True"; else echo "False"; fi
+  grep -q '^x86_Thread_features' /proc/self/status 2>/dev/null && echo True && return || true
+  if grep -q "qemu" /proc/self/maps 2>/dev/null; then echo "True"; return; fi
+  if grep -q "qemu" /proc/self/auxv 2>/dev/null; then echo "True"; return; fi
+  echo "False"
 }
 
 Test-Is-Qemu-Process() {
