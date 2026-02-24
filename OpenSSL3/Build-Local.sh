@@ -46,17 +46,12 @@ config_options="shared no-tests -O3 no-module no-afalgeng"
 if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; fi; # else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
 
 # Special case: libatomic on 32 bit debian
-atomic_args=()
 if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
   $sudo apt-get install libatomic-ops-dev -y -qq | { grep "Unpack\|Prepar" || true; } || true
   ATOMIC_A=$(find /usr -name "libatomic.a" | head -n 1 || true)
   if [[ -n "$ATOMIC_A" ]]; then
-     atomic_args=(
-       "EX_LIBS=-Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive"
-       "LDFLAGS=-Wl,--exclude-libs,libatomic.a"
-     )     
-     # config_options="$config_options EX_LIBS=-Wl,--whole-archive,$ATOMIC_A,-Wl,--no-whole-archive LDFLAGS=-Wl,--exclude-libs,libatomic.a"
-     Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit platform $(Get-NET-RID)"
+     config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
+     Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
   fi
@@ -89,7 +84,7 @@ elif [[ "$(uname -m)" == "armv7"* || "$(uname -m)" == "armv6"* ]]; then
     # -D__ARM_MAX_ARCH__=4 \
     # for 3.6 tests: -std=c99
     # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
-    ./Configure linux-armv4 $config_options "${atomic_args[@]}" \
+    ./Configure linux-armv4 $config_options \
          -marm -mfloat-abi=hard \
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 else
