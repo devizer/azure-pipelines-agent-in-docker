@@ -1,10 +1,4 @@
 set -eu; set -o pipefail
-Say "/proc/self/maps"
-cat /proc/self/maps || true
-Say "/proc/self/auxv"
-cat /proc/self/auxv || true
-Say "/proc/self/status"
-cat /proc/self/status || true
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
@@ -97,26 +91,28 @@ printf $ver > $prefix/version.txt
 # time make test
 export LD_LIBRARY_PATH=$prefix/lib:$prefix/lib64 
 $prefix/bin/openssl version 2>&1 | tee ${LOG_NAME}.SHOW.VERSION.txt
-export COLUMN_TYPE=custom
+export 
+COLUMN_TYPE=custom; [[ "$(Is-Qemu-Process)" == True ]] && COLUMN_TYPE="$COLUMN_TYPE (qemu)"
+export COLUMN_TYPE
 Benchmark-OpenSSL "$prefix/bin/openssl"
 
 export GZIP="-9"
-Say "PACK FULL"
+Say "PACK FULL [$(Get-NET-RID)]"
 cd $prefix
 cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
 tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 
-Say "PACK BINARIES-ONLY"
+Say "PACK BINARIES-ONLY [$(Get-NET-RID)]"
 cd $prefix
 only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
 mkdir -p $only_so_folder; rm -rf $only_so_folder/*
 dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
 rm -f "$dependencies_info_file"
-find -name '*.so.3' | while IFD= read -r file; do 
+find -name '*.so.3' | sort | while IFS= read -r file; do
   cp -v "$file" $only_so_folder/; 
   Say "DEPENDENCIES for '$file'"
-  (echo "DEPENDENCIES for $file:"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
+  (echo "DEPENDENCIES for $(Get-NET-RID) $(basename "$file"):"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
 done
 cd $only_so_folder
 printf $(Get-NET-RID) | tee openssl-rid.txt
@@ -124,7 +120,7 @@ printf $ver | tee openssl-version.txt
 tar czf ${LOG_NAME}.binaries-only.tar.gz *
 tar cf - * | xz -9 > ${LOG_NAME}.binaries-only.tar.xz
 
-Say "PACK BINARIES-ONLY STRIPPED"
+Say "PACK BINARIES-ONLY STRIPPED [$(Get-NET-RID)]"
 strip *.so*
 tar czf ${LOG_NAME}.binaries-only.stripped.tar.gz *
 tar cf - * | xz -9 > ${LOG_NAME}.binaries-only.stripped.tar.xz
