@@ -88,7 +88,7 @@ cores=$(nproc); stdout="/dev/null"; if [[ "$(Is-Qemu-Process)" == True ]]; then 
 Colorize Magenta "CPU CORES FOR MAKE: $cores (Is-Qemu-Process = $(Is-Qemu-Process))"
 # | tee $stdout >/dev/null
 time (
-  if [[ "$(Is-Qemu-Process)" == True ]]; then make; else make -j >/dev/null; fi
+  if [[ "$(Is-Qemu-Process)" == True ]]; then make -j 2; else make -j; fi
   Say "MAKE SUCCESS. Running make install"
   $sudo make install >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
 
