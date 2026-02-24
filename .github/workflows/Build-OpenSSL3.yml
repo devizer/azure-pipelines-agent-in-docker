@@ -21,7 +21,7 @@ jobs:
       matrix:
         SSL_VERSION: ["3.5.5", "3.0.19", "3.3.6", "3.4.4", "3.6.1"]
         # IMAGE: ["debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-jessie"]
-        IMAGE: ["debian:jessie", "i386/debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "alpine:3.7", "multiarch/debian-debootstrap:armhf-jessie", "multiarch/alpine:armhf-v3.7", "multiarch/alpine:arm64-v3.7"]
+        IMAGE: ["debian:jessie", "i386/debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-jessie", "alpine:3.7", "multiarch/alpine:armhf-v3.7", "multiarch/alpine:arm64-v3.7"]
 
     runs-on: ubuntu-latest
     steps:
