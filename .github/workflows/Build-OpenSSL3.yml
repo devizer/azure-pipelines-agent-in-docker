@@ -15,7 +15,7 @@ defaults:
 jobs:
   Build:
     name: Build ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
