@@ -15,7 +15,6 @@ Arm-Build-OpenSSL3() {
 
 index=0;
 ssl_versions="3.5.5 3.0.19 3.3.6 3.4.4 3.6.1"
-ssl_versions="3.5.5"
 for ssl_version in $ssl_versions; do
 images_debian="multiarch/debian-debootstrap:arm64-jessie multiarch/debian-debootstrap:armhf-jessie"
 images_alpine="multiarch/alpine:armhf-v3.7 multiarch/alpine:aarch64-v3.7"
