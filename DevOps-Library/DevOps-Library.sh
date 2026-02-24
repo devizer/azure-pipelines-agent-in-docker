@@ -903,8 +903,6 @@ Is-Microsoft-Hosted-Build-Agent() {
 # Include File: [\Includes\Is-Qemu-Process.sh]
 Is-Qemu-Process() {
   if grep -q "qemu" /proc/self/maps; then echo "True"; else echo "False"; fi
-  _LIB_Is_Qemu_VM_Cache="${_LIB_Is_Qemu_VM_Cache:-$(Is-Qemu-VM-Implementation)}"
-  echo "$_LIB_Is_Qemu_VM_Cache"
 }
 
 Test-Is-Qemu-Process() {
@@ -1078,6 +1076,8 @@ Get-Linux-OS-ID() {
 Repair-Legacy-OS-Sources() {
   if [[ "$(Get-OS-Platform)" != Linux ]]; then return; fi
   local os_bits=$(Get-Linux-OS-Bits)
+  dpkg_arch="$(dpkg --print-architecture 2>/dev/null || true)"
+  apk_arch="$(apk info --print-arch 2>/dev/null || true)"
   Say "Adjust os repo for [$(Get-Linux-OS-ID) $(uname -m) ${os_bits} bit]"
   local os_ver="$(Get-Linux-OS-ID)"
   if [[ -d "/etc/apt/apt.conf.d" ]]; then
@@ -1167,7 +1167,7 @@ deb http://archive.debian.org/debian jessie-backports main non-free contrib
 ' > /etc/apt/sources.list
   fi
 
-  if [[ "${os_ver}" == "debian:8" && "$(dpkg --print-architecture)" == arm64 ]]; then
+  if [[ "${os_ver}" == "debian:8" && "$dpkg_arch" == arm64 ]]; then
 echo '
 # sources.list customized at '"$(date)"'
 deb http://archive.debian.org/debian/ jessie main non-free contrib
@@ -1195,7 +1195,7 @@ deb http://archive.debian.org/debian stretch-backports main non-free contrib
 ' > /etc/apt/sources.list
   fi
 
-if [[ "$(dpkg --print-architecture)" == "armel" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+if [[ "$dpkg_arch" == "armel" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
 echo '
 deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster main
 deb http://snapshot.debian.org/archive/debian-security/20220801T000000Z buster/updates main
@@ -1205,7 +1205,7 @@ echo "Fixed sources.list on [debian:10 armel]"
 fi
 
 # arm64 same as armel
-if [[ "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+if [[ "$dpkg_arch" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
 echo '
 deb http://snapshot.debian.org/archive/debian/20220801T000000Z buster main
 deb http://snapshot.debian.org/archive/debian-security/20220801T000000Z buster/updates main
@@ -1215,7 +1215,7 @@ echo "Fixed sources.list on [debian:10 arm64]"
 fi
 
 # 2025: debian 10
-if [[ "$(dpkg --print-architecture)" == "amd64" || "$(dpkg --print-architecture)" == "i386" || "$(dpkg --print-architecture)" == "armhf" || "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
+if [[ "$dpkg_arch" == "amd64" || "$dpkg_arch" == "i386" || "$dpkg_arch" == "armhf" || "$dpkg_arch" == "arm64" ]] && [[ "${os_ver}" == "debian:10" ]]; then 
 echo "DEBIAN 10 ARCHIVE REPO: Done"
 echo '
 deb http://archive.debian.org/debian/ buster main contrib non-free
@@ -1229,7 +1229,7 @@ deb http://archive.debian.org/debian/ buster-updates main contrib non-free
 fi
 
 # 2025: debian 11 arm64
-if [[ "$(dpkg --print-architecture)" == "arm64" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
+if [[ "$dpkg_arch" == "arm64" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
 echo "DEBIAN 11 ARM64 ARCHIVE REPO: Done"
 echo '
 deb http://deb.debian.org/debian bullseye main
@@ -1243,7 +1243,7 @@ deb http://deb.debian.org/debian bullseye-updates main
 ' >/etc/apt/sources.list
 fi
 # 2025: debian 11 armel
-if [[ "$(dpkg --print-architecture)" == "armel" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
+if [[ "$dpkg_arch" == "armel" ]] && [[ "${os_ver}" == "debian:11" ]]; then 
 echo "DEBIAN 11 ARM v5 ARCHIVE REPO: Done"
 echo '
 # deb http://ftp.fi.debian.org/debian/ bullseye main contrib non-free
