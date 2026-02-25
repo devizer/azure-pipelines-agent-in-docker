@@ -50,7 +50,8 @@ if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
   $sudo apt-get install libatomic-ops-dev -y -qq | { grep "Unpack\|Prepar" || true; } || true
   ATOMIC_A=$(find /usr -name "libatomic.a" | head -n 1 || true)
   if [[ -n "$ATOMIC_A" ]]; then
-     config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
+     # 
+     # config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
@@ -87,7 +88,7 @@ elif [[ "$(uname -m)" == "armv7"* || "$(uname -m)" == "armv6"* ]]; then
     # TODO: -march=armv6 or -march=armv7-a, but not a -marm
     #       -D__ARM_MAX_ARCH__=8 (limitation, not a requirement)
     ./Configure linux-armv4 $config_options \
-         -marmv7-a -mfloat-abi=hard \
+         -marm -march=armv7-a -mfloat-abi=hard \
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 else
     Say "Default shared Configuration"
