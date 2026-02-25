@@ -133,7 +133,10 @@ rm -f "$dependencies_info_file"
 find -name '*.so.3' | sort | while IFS= read -r file; do
   cp -v "$file" $only_so_folder/; 
   Say "DEPENDENCIES for '$file'"
-  (echo "DEPENDENCIES for $(Get-NET-RID) $(basename "$file"):"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
+  so_name_only="$(basename "$file")"
+  (echo "DEPENDENCIES for $(Get-NET-RID) $so_name_only:"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
+  (echo "'atomic' symbols for $(Get-NET-RID) $so_name_only"; nm -D $file | { grep "atomic" || true; }) | tee "${LOG_NAME}.symbols.atomic.txt"
+  (echo "'all' the symbols for $(Get-NET-RID) $so_name_only"; nm -D $file) | tee "${LOG_NAME}.symbols.all.txt"
 done
 cd $only_so_folder
 printf $(Get-NET-RID) | tee openssl-rid.txt
