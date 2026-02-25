@@ -42,6 +42,7 @@ Benchmark-OpenSSL()
     cat "$summary_file"
 }
 
+# 
 Build-LIB-Atomic() {
    $sudo apt-get install build-essential perl xz-utils -y -q --force-yes
    local work=$HOME/build/gcc
@@ -64,9 +65,22 @@ Build-LIB-Atomic() {
        ASFLAGS="-mfloat-abi=hard --fpic" \
        CPPFLAGS="-DPIC"
 
-   time make -j$(nproc) install V=0
+   time make -j$(nproc) V=0
    nm .libs/libatomic.a | grep "_GLOBAL_OFFSET_TABLE_" || true
    Say "MAKE INSTALL LIB ATOMIC COMPLETE. Below is "
    objdump -r .libs/libatomic.a | grep -E "ABS|GOT|REL" | head -n 25 || true
+
+   PREV_ATOMIC="$HOME/prev-lib-atomic"
+   Colorize "PREV_ATOMIC='$PREV_ATOMIC'"
+   find /usr -name "libatomic.so*" | while IFS= read -r line; do
+     cmd="mv $line $PREV_ATOMIC/"
+     Colorize Magenta "$cmd"
+     eval "$cmd"
+   done
+   export PROPER_LIBATOMIC_A=$(find /usr -name "libatomic.a" | head -1 || true)
+   cmd="cp -f .libs/libatomic.a $old_a"
+   Colorize Magenta "$cmd"
+   eval "$cmd"
+   export LD_LIBRARY_PATH="$PREV_ATOMIC"
    popd
 }

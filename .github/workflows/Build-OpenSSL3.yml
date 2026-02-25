@@ -23,7 +23,9 @@ jobs:
         SSL_VERSION: ["3.5.5", "3.0.19"]
         # IMAGE: ["debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-jessie"]
         # IMAGE: ["debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-stretch", "multiarch/debian-debootstrap:armhf-buster", "multiarch/debian-debootstrap:armhf-bullseye", "multiarch/debian-debootstrap:armhf-jessie", "alpine:3.7", "multiarch/alpine:arm64-v3.7", "multiarch/alpine:armhf-v3.7", "i386/debian:jessie"]
-        IMAGE: ["debian:jessie", "multiarch/debian-debootstrap:armhf-stretch", "multiarch/debian-debootstrap:armhf-buster", "multiarch/debian-debootstrap:armhf-bullseye", "i386/debian:jessie"]
+        # IMAGE: ["debian:jessie", "multiarch/debian-debootstrap:armhf-stretch", "multiarch/debian-debootstrap:armhf-buster", "multiarch/debian-debootstrap:armhf-bullseye", "i386/debian:jessie"]
+        IMAGE: ["multiarch/debian-debootstrap:arm64-jessie"]
+        
 
     runs-on: ubuntu-latest
     steps:

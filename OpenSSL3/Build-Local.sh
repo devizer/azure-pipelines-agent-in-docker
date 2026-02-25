@@ -47,17 +47,15 @@ if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -stati
 
 # Special case: libatomic on 32 bit debian
 Say "Building Environment: Get-NET-RID() = [$(Get-NET-RID)], Get-Linux-OS-ID() = [$(Get-Linux-OS-ID)]"
-if [[ "$(Get-NET-RID)" == "linux-arm" ]]; then
+if [[ "$(Get-NET-RID)" == "linux-arm" && "$(Get-Linux-OS-ID)" == "debian:8" ]]; then
   # config_options="$config_options no-thread"
   Build-LIB-Atomic
-  ATOMIC_A=$(find /usr/local -name "libatomic.a" | head -n 1 || true)
-  if [[ -n "$ATOMIC_A" ]]; then
-     # 
+  if [[ -n "$PROPER_LIBATOMIC_A" ]]; then
      # config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
      # SYSTEM: /usr/lib/gcc/arm-linux-gnueabihf/4.9/libatomic.a
-     Say "CUSTOM LIB ATOMIC: [$ATOMIC_A]"
+     Say "CUSTOM LIB ATOMIC: [$PROPER_LIBATOMIC_A]"
      # -latomic -Wl,-Bdynamic (at the end)
-     config_options="$config_options -L$(dirname "$ATOMIC_A") -Wl,--exclude-libs,libatomic.a -Wl,-Bstatic"
+     config_options="$config_options -L$(dirname "$PROPER_LIBATOMIC_A") -Wl,-Bstatic $PROPER_LIBATOMIC_A -Wl,--exclude-libs,libatomic.a -Wl,-Bdynamic"
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
