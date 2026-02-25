@@ -695,7 +695,7 @@ Get-NET-RID() {
      else
          linux_arm="linux-arm"; linux_arm64="linux-arm64"; linux_x64="linux-x64"
      fi
-     if [[ "$machine" == armv7* || armv6* ]]; then
+     if [[ "$machine" == armv7* || "$machine" == armv6* ]]; then
        rid=$linux_arm;
      elif [[ "$machine" == aarch64 || "$machine" == armv8* || "$machine" == arm64* ]]; then
        rid=$linux_arm64;
