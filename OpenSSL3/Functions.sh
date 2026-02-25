@@ -79,9 +79,10 @@ Build-LIB-Atomic() {
      eval "$cmd"
    done
    export PROPER_LIBATOMIC_A=$(find /usr -name "libatomic.a" | head -1 || true)
-   cmd="cp -f .libs/libatomic.a $old_a"
+   cmd="cp -f .libs/libatomic.a $PROPER_LIBATOMIC_A"
    Colorize Magenta "$cmd"
    eval "$cmd"
+   Colorize Magenta "LD_LIBRARY_PATH=$PREV_ATOMIC"
    export LD_LIBRARY_PATH="$PREV_ATOMIC"
    popd
 }
