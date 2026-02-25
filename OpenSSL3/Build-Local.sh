@@ -84,8 +84,10 @@ elif [[ "$(uname -m)" == "armv7"* || "$(uname -m)" == "armv6"* ]]; then
     # -D__ARM_MAX_ARCH__=4 \
     # for 3.6 tests: -std=c99
     # AFALG engine is a bridge that allows OpenSSL to offload cryptographic operations to the Linux Kernel Crypto API
+    # TODO: -march=armv6 or -march=armv7-a, but not a -marm
+    #       -D__ARM_MAX_ARCH__=8 (limitation, not a requirement)
     ./Configure linux-armv4 $config_options \
-         -marm -mfloat-abi=hard \
+         -marmv7-a -mfloat-abi=hard \
          --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 else
     Say "Default shared Configuration"
