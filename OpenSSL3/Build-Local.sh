@@ -46,6 +46,7 @@ config_options="shared no-tests -O3 no-module no-afalgeng"
 if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; fi; # else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
 
 # Special case: libatomic on 32 bit debian
+Say "Building Environment: Get-NET-RID() = [$(Get-NET-RID)], Get-Linux-OS-ID() = [$(Get-Linux-OS-ID)]"
 if [[ "$(Get-NET-RID)" == "linux-arm" ]]; then
   # config_options="$config_options no-thread"
   Build-LIB-Atomic
