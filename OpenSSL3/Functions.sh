@@ -49,7 +49,7 @@ Build-LIB-Atomic() {
    pushd $work
    local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-4.9.2/gcc-4.9.2.tar.gz"
    Say "Downloading $gcc_url for $(gcc --version | head -1)"
-   local cmd="curl -kfSL -o _gcc.tar.gz $gcc_url"
+   local cmd="wget -q -nv --no-check-certificate -O _gcc.tar.gz $gcc_url 2>/dev/null || curl -kfSL -o _gcc.tar.gz $gcc_url"
    eval $cmd || eval $cmd || eval $cmd
    cd $work; rm -rf gcc* || true
    tar xzf _gcc.tar.gz
