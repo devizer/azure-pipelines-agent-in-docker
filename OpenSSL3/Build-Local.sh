@@ -55,7 +55,8 @@ if [[ "$(Get-NET-RID)" == "linux-arm" ]]; then
      # config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
      # SYSTEM: /usr/lib/gcc/arm-linux-gnueabihf/4.9/libatomic.a
      Say "CUSTOM LIB ATOMIC: [$ATOMIC_A]"
-     config_options="$config_options -L$(dirname "$ATOMIC_A") -Wl,--exclude-libs,libatomic.a -Wl,-Bstatic -latomic -Wl,-Bdynamic"
+     # -latomic -Wl,-Bdynamic (at the end)
+     config_options="$config_options -L$(dirname "$ATOMIC_A") -Wl,--exclude-libs,libatomic.a -Wl,-Bstatic"
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
@@ -99,13 +100,12 @@ else
    ./Configure shared $config_options --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 fi
 perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
-cores=$(nproc); stdout="/dev/null"; if [[ "$(Is-Qemu-Process)" == True ]]; then cores=1; stdout="/dev/stdout"; fi
 Colorize Magenta "CPU CORES FOR MAKE: $cores (Is-Qemu-Process = $(Is-Qemu-Process))"
 # | tee $stdout >/dev/null
 time (
-  if [[ "$(Is-Qemu-Process)" == True ]]; then make EX_LIBS="/usr/local/lib/libatomic.a -ldl -pthread" -j 3; else make -j; fi
+  if [[ "$(Is-Qemu-Process)" == True ]]; then make -j 3; else make -j; fi
   Say "MAKE SUCCESS. Running make install"
-  $sudo make install >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
+  $sudo make install_sw >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
 Say "make and install sucessfully completed [$(Get-NET-RID)]"
 
 printf "%s" $prefix > $prefix/prefix.txt
