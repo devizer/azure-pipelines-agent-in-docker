@@ -56,7 +56,7 @@ if [[ "$(Get-NET-RID)" == "linux-arm" && "$(Get-Linux-OS-ID)" == "debian:8" ]]; 
      Say "CUSTOM LIB ATOMIC: [$PROPER_LIBATOMIC_A]"
      # -latomic -Wl,-Bdynamic (at the end)
      config_options="$config_options -L$(dirname "$PROPER_LIBATOMIC_A") -Wl,-Bstatic $PROPER_LIBATOMIC_A -Wl,--exclude-libs,libatomic.a -Wl,-Bdynamic"
-     Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
+     Colorize Green "Warning! libatomic.a found '$PROPER_LIBATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
   fi
