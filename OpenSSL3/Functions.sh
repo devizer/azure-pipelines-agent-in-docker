@@ -54,7 +54,8 @@ Build-LIB-Atomic() {
    cd $work; rm -rf gcc* || true
    tar xzf _gcc.tar.gz
    cd gcc-*/libatomic
-   make distclean
+   Say "gcc-*/libatomic folder: $(pwd -P)"
+   make distclean || true
    mkdir build-atomic && cd build-atomic
    # ../configure --host=arm-linux-gnueabihf --with-pic CFLAGS="-O2 -fPIC" --enable-dependency-tracking
    ../configure --host=arm-linux-gnueabihf \
