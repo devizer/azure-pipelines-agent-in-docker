@@ -53,6 +53,7 @@ if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
   if [[ -n "$ATOMIC_A" ]]; then
      # 
      # config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
+     # SYSTEM: /usr/lib/gcc/arm-linux-gnueabihf/4.9/libatomic.a
      Say "CUSTOM LIB ATOMIC: [$ATOMIC_A]"
      config_options="$config_options -L$(dirname "$ATOMIC_A") -Wl,--exclude-libs,libatomic.a -Wl,-Bstatic -latomic -Wl,-Bdynamic"
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
