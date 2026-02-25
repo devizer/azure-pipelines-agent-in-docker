@@ -41,3 +41,31 @@ Benchmark-OpenSSL()
     Say "BENCHMARK SUMMARY"
     cat "$summary_file"
 }
+
+Build-LIB-Atomic() {
+   $sudo apt-get install build-essential perl xz-utils -y -q --force-yes
+   local work=$HOME/build/gcc
+   mkdir -p $work
+   pushd $work
+   local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-4.9.2/gcc-4.9.2.tar.gz"
+   Say "Downloading $gcc_url for $(gcc --version | head -1)"
+   local cmd="curl -kfSL -o _gcc.tar.gz $gcc_url"
+   eval $cmd || eval $cmd || eval $cmd
+   cd $work; rm -rf gcc* || true
+   tar xzf _gcc.tar.gz
+   cd gcc-*/libatomic
+   make distclean
+   mkdir build-atomic && cd build-atomic
+   # ../configure --host=arm-linux-gnueabihf --with-pic CFLAGS="-O2 -fPIC" --enable-dependency-tracking
+   ../configure --host=arm-linux-gnueabihf \
+       --with-pic \
+       CFLAGS="-O2 -fPIC" \
+       ASFLAGS="-mfloat-abi=hard --fpic" \
+       CPPFLAGS="-DPIC"
+
+   time make -j$(nproc) install V=0
+   nm .libs/libatomic.a | grep "_GLOBAL_OFFSET_TABLE_" || true
+   Say "MAKE INSTALL LIB ATOMIC COMPLETE. Below is "
+   objdump -r .libs/libatomic.a | grep -E "ABS|GOT|REL" | head -n 25 || true
+   popd
+}

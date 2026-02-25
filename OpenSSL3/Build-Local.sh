@@ -47,11 +47,14 @@ if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -stati
 
 # Special case: libatomic on 32 bit debian
 if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
-  $sudo apt-get install libatomic-ops-dev -y -qq | { grep "Unpack\|Prepar" || true; } || true
-  ATOMIC_A=$(find /usr -name "libatomic.a" | head -n 1 || true)
+  # config_options="$config_options no-thread"
+  Build-LIB-Atomic
+  ATOMIC_A=$(find /usr/local -name "libatomic.a" | head -n 1 || true)
   if [[ -n "$ATOMIC_A" ]]; then
      # 
      # config_options="$config_options -Wl,--whole-archive $ATOMIC_A -Wl,--no-whole-archive -Wl,--exclude-libs,libatomic.a"
+     Say "CUSTOM LIB ATOMIC: [$ATOMIC_A]"
+     config_options="$config_options -L$(dirname "$ATOMIC_A") -Wl,--exclude-libs,libatomic.a -Wl,-Bstatic -latomic -Wl,-Bdynamic"
      Colorize Green "Warning! libatomic.a found '$ATOMIC_A', it will be STATICALLY linked on 32-bit NON-musl platform $(Get-NET-RID)"
   else
      Colorize Red "Warning! libatomic.a not found at /usr, it will be dynamically linked on 32-bit platform $(Get-NET-RID)"
