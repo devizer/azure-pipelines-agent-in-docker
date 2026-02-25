@@ -46,7 +46,7 @@ config_options="shared no-tests -O3 no-module no-afalgeng"
 if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; fi; # else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
 
 # Special case: libatomic on 32 bit debian
-if [[ "$(Get-Linux-OS-Bits)" == 32 && "$(Is-Musl-Linux)" == False ]]; then
+if [[ "$(Get-NET-RID)" == "linux-arm" ]]; then
   # config_options="$config_options no-thread"
   Build-LIB-Atomic
   ATOMIC_A=$(find /usr/local -name "libatomic.a" | head -n 1 || true)
@@ -103,7 +103,7 @@ cores=$(nproc); stdout="/dev/null"; if [[ "$(Is-Qemu-Process)" == True ]]; then 
 Colorize Magenta "CPU CORES FOR MAKE: $cores (Is-Qemu-Process = $(Is-Qemu-Process))"
 # | tee $stdout >/dev/null
 time (
-  if [[ "$(Is-Qemu-Process)" == True ]]; then make -j 3; else make -j; fi
+  if [[ "$(Is-Qemu-Process)" == True ]]; then make EX_LIBS="/usr/local/lib/libatomic.a -ldl -pthread" -j 3; else make -j; fi
   Say "MAKE SUCCESS. Running make install"
   $sudo make install >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
 Say "make and install sucessfully completed [$(Get-NET-RID)]"
