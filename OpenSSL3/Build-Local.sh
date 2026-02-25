@@ -101,7 +101,7 @@ else
    ./Configure shared $config_options --prefix=$prefix --openssldir=$prefix 2>&1 | tee ${LOG_NAME}.Configure.txt
 fi
 perl configdata.pm --dump 2>&1 | tee ${LOG_NAME}.config.data.log || true
-Colorize Magenta "CPU CORES FOR MAKE: $cores (Is-Qemu-Process = $(Is-Qemu-Process))"
+Colorize Magenta "Is-Qemu-Process = $(Is-Qemu-Process)"
 # | tee $stdout >/dev/null
 time (
   if [[ "$(Is-Qemu-Process)" == True ]]; then make -j 3; else make -j; fi
