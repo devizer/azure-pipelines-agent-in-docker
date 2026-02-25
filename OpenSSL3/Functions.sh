@@ -71,6 +71,7 @@ Build-LIB-Atomic() {
    objdump -r .libs/libatomic.a | grep -E "ABS|GOT|REL" | head -n 25 || true
 
    PREV_ATOMIC="$HOME/prev-lib-atomic"
+   mkdir -p "$PREV_ATOMIC"
    Colorize "PREV_ATOMIC='$PREV_ATOMIC'"
    find /usr -name "libatomic.so*" | while IFS= read -r line; do
      cmd="mv $line $PREV_ATOMIC/"
