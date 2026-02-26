@@ -13,6 +13,8 @@ Pre-Build-OpenSSL-Tests() {
   test_source_folder=$base_folder/source/$net_ver/Test-OpenSSL
   rm -rf "$test_source_folder"/* || true
   try-and-retry bash -e -c "rm -rf $test_source_folder/*; $dotnet_folder/dotnet new console -o $test_source_folder"
+  echo "PUSHD $test_source_folder"
+  ls -la $test_source_folder || true
   pushd $test_source_folder
   rm -f *.cs || true;
   cp -v $SCRIPT_DIR/Test-OpenSSL.cs ./
