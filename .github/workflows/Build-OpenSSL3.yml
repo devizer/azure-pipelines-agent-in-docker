@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        SSL_VERSION: ["3.5.5", "3.0.19", "3.3.6", "3.4.4", "3.6.1"]
+        SSL_VERSION: ["1.1.1w", "3.5.5", "3.0.19", "3.3.6", "3.4.4", "3.6.1"]
         # SSL_VERSION: ["3.5.5", "3.0.19"]
         IMAGE: [ "debian:jessie", "multiarch/debian-debootstrap:arm64-jessie", "multiarch/debian-debootstrap:armhf-jessie", "alpine:3.7", "multiarch/alpine:arm64-v3.7", "multiarch/alpine:armhf-v3.7", "i386/debian:jessie"]
         # "multiarch/debian-debootstrap:armhf-stretch", "multiarch/debian-debootstrap:armhf-buster", "multiarch/debian-debootstrap:armhf-bullseye"
