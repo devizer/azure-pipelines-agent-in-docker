@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$SCRIPT_DIR/Functions.sh"
 
 Run-Remote-Script https://devizer.github.io/devops-library/install-libssl-1.1.1.sh --target-folder /opt/libssl-1.1.1 --register --first
