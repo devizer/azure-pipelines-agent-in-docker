@@ -133,7 +133,7 @@ only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
 mkdir -p $only_so_folder; rm -rf $only_so_folder/*
 dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
 rm -f "$dependencies_info_file"
-find -name '*.so.3' | sort | while IFS= read -r file; do
+find -name '*.so.3' -or -name '*.so.1.1' | sort | while IFS= read -r file; do
   cp -v "$file" $only_so_folder/; 
   Say "DEPENDENCIES for '$file'"
   so_name_only="$(basename "$file")"
