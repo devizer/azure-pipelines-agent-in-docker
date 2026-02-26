@@ -86,3 +86,25 @@ Build-LIB-Atomic() {
    export LD_LIBRARY_PATH="$PREV_ATOMIC"
    popd
 }
+
+Pipe-With-Timer() {
+  if command -v perl >/dev/null 2>&1; then
+    perl -e '
+      use strict;
+      sub format_seconds {
+          my $s = shift;
+          return ($s >= 3600) 
+              ? sprintf("%02d:%02d:%02d", $s/3600, ($s%3600)/60, $s%60)
+              : sprintf("  %02d:%02d", ($s%3600)/60, $s%60);
+      }
+      $| = 1;
+      my $start = time();
+      while (<STDIN>) {
+          # print format_seconds(time() - $start) . " " . $_;
+          print "\e[36m" . format_seconds(time() - $start) . "\e[0m " . $_;
+      }
+    '
+  else
+    cat
+  fi
+}

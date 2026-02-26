@@ -114,7 +114,7 @@ time (
   Say "MAKE SUCCESS. Running make test ... "
   if [[ -z "${MAKE_TEST_COMMAND:-}" ]]; then echo SKIPPING TESTS;
   else 
-    time eval "${MAKE_TEST_COMMAND:-}"; 
+    time eval "${MAKE_TEST_COMMAND:-}" | Pipe-With-Timer; 
     Say "TEST SUCCESS. Running make install ... "
   fi
   $sudo make install_sw >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
