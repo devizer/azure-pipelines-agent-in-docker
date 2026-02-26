@@ -141,6 +141,8 @@ find -name '*.so.3' -or -name '*.so.1.1' | sort | while IFS= read -r file; do
   (echo "'atomic' symbols for $(Get-NET-RID) $so_name_only"; nm -D $file | { grep "atomic" || true; }) | tee "${LOG_NAME}.symbols.atomic.txt"
   (echo "'all' the symbols for $(Get-NET-RID) $so_name_only"; nm -D $file) | tee "${LOG_NAME}.symbols.all.txt"
 done
+cp -v "$dependencies_info_file" "$only_so_folder/openssl-dependencies.txt"
+cp -v "${LOG_NAME}.config.data.log" "$only_so_folder/openssl-configuration.txt"
 cd $only_so_folder
 printf $(Get-NET-RID) | tee openssl-rid.txt
 printf $ver | tee openssl-version.txt
