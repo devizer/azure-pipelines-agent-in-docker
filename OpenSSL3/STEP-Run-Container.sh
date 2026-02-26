@@ -24,6 +24,7 @@ set -eu; set -o pipefail
           -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
           -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
           -e IMAGE="$IMAGE" \
+          -e ARG_TESTS="$ARG_TESTS" \
           -e SSL_VERSION="$SSL_VERSION" \
           -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
           -w /App -v "$(pwd -P)":/App \

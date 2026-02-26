@@ -5,6 +5,14 @@ env:
 
 on:
   workflow_dispatch:
+    inputs:
+      ARG_TESTS:
+        type: choice
+        description: 'Tests on build (always benchmark)'
+        default: 'OFF'
+        options:
+        - ON
+        - OFF
   push:
     branches: [ "master" ]
 
@@ -47,6 +55,9 @@ jobs:
          tag="${tag//\//-}"
          ARTIFACT_NAME="${{ matrix.SSL_VERSION }} on $tag"
          echo "ARTIFACT_NAME=$ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+         Say "PROPAGATE input ARG_TESTS"
+         echo "ARG_TESTS=${{ github.event.inputs.ARG_TESTS }}" | tee -a $GITHUB_ENV
 
 
     - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}

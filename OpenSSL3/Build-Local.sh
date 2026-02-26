@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 
-MAKE_TEST_COMMAND="make test V=1 TESTS=-test_fuzz"
+[[ "${ARG_TESTS:-}" == ON ]] && MAKE_TEST_COMMAND="make test V=1 TESTS=-test_fuzz"
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
@@ -54,6 +54,7 @@ if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -stati
 
 # Special case: libatomic on 32 bit debian
 Say "Building Environment: Get-NET-RID() = [$(Get-NET-RID)], Get-Linux-OS-ID() = [$(Get-Linux-OS-ID)]"
+Say "ARG_TESTS = [${ARG_TESTS:-}] MAKE_TEST_COMMAND = [${MAKE_TEST_COMMAND:-}]"
 if [[ "$(Get-NET-RID)" == "linux-arm" && "$(Get-Linux-OS-ID)" == "debian:8" && "$ver" == 3* ]]; then
   # config_options="$config_options no-thread"
   Build-LIB-Atomic
