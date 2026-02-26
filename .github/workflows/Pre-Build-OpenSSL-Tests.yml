@@ -1,0 +1,45 @@
+name: Pre Build OpenSSL Tests
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "never" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Pre-Build:
+    timeout-minutes: 66
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: BUILD
+      run: bash -e -u -o pipefail ./OpenSSL3/Pre-Build-OpenSSL-Tests.sh
+
+    - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
+      run: bash -eu -o pipefail OpenSSL3/STEP-Run-Container.sh
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: OpenSSL-Tests
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 9
+
+    - name: Show-System-Stat
+      if: always()
+      run: Show-System-Stat
+

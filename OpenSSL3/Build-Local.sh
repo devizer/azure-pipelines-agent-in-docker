@@ -1,6 +1,7 @@
 set -eu; set -o pipefail
 
-[[ "${ARG_TESTS:-}" == ON || "${ARG_TESTS:-}" == true ]] && MAKE_TEST_COMMAND="make test V=1 TESTS='-test_fuzz -test_afalg -test_cms -test_srp'" && Say "Tests will be invoked"
+# Too much tests for .NET Core: '-test_fuzz -test_afalg -test_cms -test_srp'
+[[ "${ARG_TESTS:-}" == ON || "${ARG_TESTS:-}" == true ]] && MAKE_TEST_COMMAND="make test V=1 TESTS='test_evp test_ssl_* test_x509*'" && Say "Tests will be invoked"
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
