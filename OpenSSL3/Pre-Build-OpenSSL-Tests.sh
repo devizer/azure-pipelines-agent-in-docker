@@ -13,7 +13,8 @@ Pre-Build-OpenSSL-Tests() {
   export PATH="$dotnet_folder:$PATH"
 
   test_source_folder=$base_folder/source/$net_ver/Test-OpenSSL
-  mkdir -p "$test_source_folder"
+  sudo mkdir -p "$test_source_folder"
+  sudo chown -R $(whoami) "$test_source_folder"
   rm -rf "$test_source_folder"/* || true
   try-and-retry bash -e -c "rm -rf $test_source_folder/*; $dotnet_folder/dotnet new console -o $test_source_folder"
   echo "PUSHD $test_source_folder"
