@@ -12,10 +12,11 @@ Pre-Build-OpenSSL-Tests() {
   Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh $net_ver --skip-linking --target-folder "$dotnet_folder" --skip-dependencies
   export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
   export PATH="$dotnet_folder:$PATH"
+  sudo chown -R $(whoami) $base_folder
 
   test_source_folder=$base_folder/source/$net_ver/Test-OpenSSL
-  sudo mkdir -p "$test_source_folder"
-  sudo chown -R $(whoami) "$test_source_folder"
+  mkdir -p "$test_source_folder"
+  # sudo chown -R $(whoami) "$test_source_folder"
   rm -rf "$test_source_folder"/* || true
   # export LD_LIBRARY_PATH=/opt/libssl-1.1.1
   try-and-retry bash -e -c "rm -rf $test_source_folder/*; $dotnet_folder/dotnet new console -o $test_source_folder"
