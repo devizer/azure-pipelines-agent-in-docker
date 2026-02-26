@@ -46,7 +46,7 @@ rm -rf "$prefix"/*
 # EXPERIMENTAL static libatomic (only debian)
 # no-tests
 config_options="shared -O3 no-afalgeng"
-[[ -z "${MAKE_TEST_COMMAND:-}" ]] && config_options="config_options no-tests"
+[[ -z "${MAKE_TEST_COMMAND:-}" ]] && config_options="$config_options no-tests"
 # no-module was introduced on version 3
 [[ "$ver" == 3* ]] && config_options="$config_options no-module"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
