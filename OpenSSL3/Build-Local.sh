@@ -42,7 +42,9 @@ prefix=/usr/local/openssl-$suffix
 mkdir -p "$prefix"
 rm -rf "$prefix"/*
 # EXPERIMENTAL static libatomic (only debian)
-config_options="shared no-tests -O3 no-module no-afalgeng"
+config_options="shared no-tests -O3 no-afalgeng"
+# no-module was introduced on version 3
+[[ "$ver" == 3* ]] && config_options="$config_options no-module"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
 if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -static-libgcc"; fi; # else $sudo apt-get install libatomic-ops-dev -y -qq; export LDFLAGS="-static-libatomic"; fi
 
