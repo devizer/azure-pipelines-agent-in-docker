@@ -20,7 +20,7 @@ for ssl_version in $ssl_versions; do
 images_debian="multiarch/debian-debootstrap:arm64-jessie multiarch/debian-debootstrap:armhf-jessie"
 images_alpine="multiarch/alpine:armhf-v3.7 multiarch/alpine:aarch64-v3.7"
 images="$images_alpine $images_debian"
-images="multiarch/debian-debootstrap:armhf-jessie" # incorrect rid for openssl, but currect in container
+images="multiarch/debian-debootstrap:armhf-jessie $images_alpine" # incorrect rid for openssl, but currect in container
 for image in $images; do
   index=$((index+1))
   title="[$index of 20] Building $ssl_version on $image"
