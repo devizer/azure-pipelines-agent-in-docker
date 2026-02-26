@@ -9,6 +9,7 @@ Pre-Build-OpenSSL-Tests() {
   local net_ver="$1"
   base_folder=$HOME/openssl-tests
   dotnet_folder=$base_folder/dotnet/$net_ver
+  Say "Downloading [.NET $net_ver] into '$dotnet_folder'"
   Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh $net_ver --skip-linking --target-folder "$dotnet_folder" --skip-dependencies
   export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
   export PATH="$dotnet_folder:$PATH"
@@ -35,7 +36,7 @@ Pre-Build-OpenSSL-Tests() {
     try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { success_list="$success_list $rid"; mdkir -p $public_dir; cp -av "$bin_dir"/* public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
   done
   success_list=$(echo "$success_list" | sed 's/^[[:space:]]*//')
-  Say ".NET Built $(echo $success_list | wc -w) runtimes: $success_list"
+  Say ".NET $net_ver Built $(echo $success_list | wc -w) runtimes for OpenSSL Tests: $success_list"
   popd
 }
 
