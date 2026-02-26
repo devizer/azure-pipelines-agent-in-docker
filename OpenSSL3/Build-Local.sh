@@ -1,5 +1,7 @@
 set -eu; set -o pipefail
 
+MAKE_TEST_COMMAND="make test V=1 TESTS=-test_fuzz"
+
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
     Say "apt-get update"
@@ -44,6 +46,7 @@ rm -rf "$prefix"/*
 # EXPERIMENTAL static libatomic (only debian)
 # no-tests
 config_options="shared -O3 no-afalgeng"
+[[ -z "${MAKE_TEST_COMMAND:-}" ]] && config_options="config_options no-tests"
 # no-module was introduced on version 3
 [[ "$ver" == 3* ]] && config_options="$config_options no-module"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
@@ -107,7 +110,12 @@ Colorize Magenta "Is-Qemu-Process = $(Is-Qemu-Process)"
 # | tee $stdout >/dev/null
 time (
   if [[ "$(Is-Qemu-Process)" == True ]]; then make -j 3; else make -j; fi
-  Say "MAKE SUCCESS. Running make install"
+  Say "MAKE SUCCESS. Running make test ... "
+  if [[ -z "${MAKE_TEST_COMMAND:-}" ]]; then echo SKIPPING TESTS;
+  else 
+    time eval "${MAKE_TEST_COMMAND:-}"; 
+    Say "TEST SUCCESS. Running make install ... "
+  fi
   $sudo make install_sw >/dev/null ) 2>&1 | tee ${LOG_NAME}.make.install.txt
 Say "make and install sucessfully completed [$(Get-NET-RID)]"
 
