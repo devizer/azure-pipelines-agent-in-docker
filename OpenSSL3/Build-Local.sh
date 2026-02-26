@@ -50,7 +50,7 @@ if [[ "$(Get-NET-RID)" == *musl* ]]; then config_options="$config_options -stati
 
 # Special case: libatomic on 32 bit debian
 Say "Building Environment: Get-NET-RID() = [$(Get-NET-RID)], Get-Linux-OS-ID() = [$(Get-Linux-OS-ID)]"
-if [[ "$(Get-NET-RID)" == "linux-arm" && "$(Get-Linux-OS-ID)" == "debian:8" ]]; then
+if [[ "$(Get-NET-RID)" == "linux-arm" && "$(Get-Linux-OS-ID)" == "debian:8" && "$ver" == 3* ]]; then
   # config_options="$config_options no-thread"
   Build-LIB-Atomic
   if [[ -n "$PROPER_LIBATOMIC_A" ]]; then
