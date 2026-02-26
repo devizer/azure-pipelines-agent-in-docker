@@ -17,6 +17,7 @@ Pre-Build-OpenSSL-Tests() {
   sudo mkdir -p "$test_source_folder"
   sudo chown -R $(whoami) "$test_source_folder"
   rm -rf "$test_source_folder"/* || true
+  # export LD_LIBRARY_PATH=/opt/libssl-1.1.1
   try-and-retry bash -e -c "rm -rf $test_source_folder/*; $dotnet_folder/dotnet new console -o $test_source_folder"
   echo "PUSHD $test_source_folder"
   ls -la $test_source_folder || true
@@ -30,7 +31,7 @@ Pre-Build-OpenSSL-Tests() {
     try-and-retry dotnet restore
     bin_dir=$base_folder/bin/$net_ver
     public_dir="$SYSTEM_ARTIFACTSDIRECTORY/$rid/$net_ver"
-    try-and-retry dotnet publish -c Release -r $rid -o $bin_dir && { success_list="$success_list $rid"; mdkir -p $public_dir; cp -av "$bin_dir"/* public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
+    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { success_list="$success_list $rid"; mdkir -p $public_dir; cp -av "$bin_dir"/* public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
   done
   success_list=$(echo "$success_list" | sed 's/^[[:space:]]*//')
   Say ".NET Built $(echo $success_list | wc -w) runtimes: $success_list"
