@@ -10,6 +10,7 @@ Pre-Build-OpenSSL-Tests() {
   base_folder=$HOME/openssl-tests
   dotnet_folder=$base_folder/dotnet/$net_ver
   Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh $net_ver --skip-linking --target-folder "$dotnet_folder" --skip-dependencies
+  export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
   export PATH="$dotnet_folder:$PATH"
 
   test_source_folder=$base_folder/source/$net_ver/Test-OpenSSL
