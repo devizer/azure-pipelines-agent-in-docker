@@ -32,6 +32,7 @@ ver=3.6.1
 ver="${SSL_VERSION:-$ver}"
 suffix="${ver%.*}"
 export url="https://github.com/openssl/openssl/releases/download/openssl-$ver/openssl-$ver.tar.gz"
+if [[ "$ver" == "1.1.1w" ]]; then url="https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz"; suffix="1.1.1"; fi
 export file="_$(basename "$url")"
 echo "Download-File '$url' '$file' is starting ..."
 try-and-retry bash -e -c 'Download-File "$url" "$file"; gzip -t "$file"'
