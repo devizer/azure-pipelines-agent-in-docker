@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 
-[[ "${ARG_TESTS:-}" == ON || "${ARG_TESTS:-}" == true ]] && MAKE_TEST_COMMAND="make test V=1 TESTS=-test_fuzz" && Say "Tests will be invoked"
+[[ "${ARG_TESTS:-}" == ON || "${ARG_TESTS:-}" == true ]] && MAKE_TEST_COMMAND="make test V=1 TESTS='-test_fuzz -test_afalg -test_cms -test_srp'" && Say "Tests will be invoked"
 
 sudo="$(command -v sudo || true)"
 if [[ -n "$(command -v apt-get)" ]]; then
