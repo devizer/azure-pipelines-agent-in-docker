@@ -42,7 +42,8 @@ prefix=/usr/local/openssl-$suffix
 mkdir -p "$prefix"
 rm -rf "$prefix"/*
 # EXPERIMENTAL static libatomic (only debian)
-config_options="shared no-tests -O3 no-afalgeng"
+# no-tests
+config_options="shared -O3 no-afalgeng"
 # no-module was introduced on version 3
 [[ "$ver" == 3* ]] && config_options="$config_options no-module"
 [[ "$ver" == "3.6"* ]] && config_options="$config_options -std=gnu99"
