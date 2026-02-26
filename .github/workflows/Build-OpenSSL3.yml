@@ -8,7 +8,7 @@ on:
     inputs:
       ARG_TESTS:
         type: choice
-        description: 'Tests on build (always benchmark)'
+        description: 'Tests on build (benchmark run always)'
         default: 'OFF'
         options:
         - ON
