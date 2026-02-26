@@ -27,9 +27,6 @@ jobs:
     - name: BUILD
       run: bash -e -u -o pipefail ./OpenSSL3/Pre-Build-OpenSSL-Tests.sh
 
-    - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
-      run: sudo bash -eu -o pipefail OpenSSL3/STEP-Run-Container.sh
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       if: always()

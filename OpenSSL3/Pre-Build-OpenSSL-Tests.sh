@@ -33,7 +33,7 @@ Pre-Build-OpenSSL-Tests() {
     try-and-retry dotnet restore
     bin_dir=$base_folder/bin/$net_ver
     public_dir="$SYSTEM_ARTIFACTSDIRECTORY/$rid/$net_ver"
-    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { success_list="$success_list $rid"; mdkir -p $public_dir; cp -av "$bin_dir"/* public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
+    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { success_list="$success_list $rid"; mdkir -p $public_dir; cp -av "$bin_dir"/* $public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
   done
   success_list=$(echo "$success_list" | sed 's/^[[:space:]]*//')
   Say ".NET $net_ver Built $(echo $success_list | wc -w) runtimes for OpenSSL Tests: $success_list"
