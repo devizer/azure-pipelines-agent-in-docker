@@ -21,7 +21,7 @@ Build-Test-Image() {
   if [[ $IMAGE == *"arm32v7"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm/v7; fi
   if [[ $IMAGE == *"arm64v8"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm64; fi
   Say "PULL BASE IMAGE [$IMAGE]"
-  echo "DOCKER_DEFAULT_PLATFORM = [$DOCKER_DEFAULT_PLATFORM]"
+  echo "DOCKER_DEFAULT_PLATFORM = [${DOCKER_DEFAULT_PLATFORM:-}]"
   try-and-retry docker pull -q $IMAGE
   docker build --build-arg BASE_IMAGE=$IMAGE -f OpenSSL3/Dockerfile.TEST-OpenSSL3 -t openssl-test-image .
 }
