@@ -151,7 +151,7 @@ jobs:
       run: | 
         set -eu; set -o pipefail
         cd "$SYSTEM_ARTIFACTSDIRECTORY"
-        time 7z a -sdel -mx=9 -ms=on -mqs=on "TEST OpenSSL Matrix Report.7z";
+        time 7z a -sdel -mx=5 -ms=on -mqs=on "TEST OpenSSL Matrix Report.7z";
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
