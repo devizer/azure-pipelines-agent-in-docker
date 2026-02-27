@@ -102,7 +102,7 @@ jobs:
           --repo "devizer/azure-pipelines-agent-in-docker"
 
 
-    - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
+    - name: OpenSSL3/STEP-Test-OpenSSL3.sh on ${{ matrix.IMAGE }}
       run: bash -eu -o pipefail OpenSSL3/STEP-Test-OpenSSL3.sh
 
     - name: Upload artifacts

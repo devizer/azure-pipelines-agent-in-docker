@@ -22,6 +22,8 @@ Build-Test-Image() {
   docker build --build-arg BASE_IMAGE=$IMAGE -f Dockerfile.TEST-OpenSSL3 -t openssl-test-image .
 }
 
+Build-Test-Image
+
 docker run --rm openssl-test-image bash -c 'echo;
   Say "Get-NET-RID - [$(Get-NET-RID)]"
   Say "Get-Linux-OS-ID - [$(Get-Linux-OS-ID)]"
