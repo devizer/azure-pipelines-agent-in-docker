@@ -14,6 +14,7 @@ Say "FOLDER: $(pwd -P)";
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
 cp -v /install-dotnet-dependencies.log $SYSTEM_ARTIFACTSDIRECTORY/
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 summary_report_file="$SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.$(Get-NET-RID).TXT"
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do

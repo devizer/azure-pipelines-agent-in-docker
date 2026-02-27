@@ -38,6 +38,10 @@ jobs:
           "arm32v7/ubuntu:16.04",
           "arm32v7/ubuntu:14.04",
 
+          "amazonlinux:2023",
+          "amazonlinux:2",
+          "amazonlinux:1",
+
           
           "centos:8",
           "fedora:42", 
