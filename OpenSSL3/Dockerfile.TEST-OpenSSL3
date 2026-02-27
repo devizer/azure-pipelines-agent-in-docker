@@ -1,0 +1,18 @@
+ARG BASE_IMAGE=debian:jessie
+FROM ${BASE_IMAGE}
+ARG BASE_IMAGE
+RUN echo "Building on image: ${BASE_IMAGE}"
+RUN if [[ -n "$(command -v apk)" ]]; then apk update; apk update || apk update || apk update; apk install bash wget || apk install bash wget || apk install bash wget; fi
+
+WORKDIR /Work
+COPY . .
+SHELL ["/bin/bash", "-eu", "-o", "pipefail", "-c"]
+
+RUN bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-Legacy-OS-Sources
+RUN \
+  Say "Get-NET-RID - [$(Get-NET-RID)]"
+  Say "Get-Linux-OS-ID - [$(Get-Linux-OS-ID)]"
+  Say "Get-Linux-OS-Architecture - [$(Get-Linux-OS-Architecture)]"
+
+
+CMD ["bash"]

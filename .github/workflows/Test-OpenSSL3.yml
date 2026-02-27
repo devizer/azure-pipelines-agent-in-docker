@@ -1,0 +1,134 @@
+name: TEST OpenSSL 3
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+    inputs:
+      ARG_SET:
+        type: choice
+        description: 'SET Size'
+        default: 'X64_ONLY'
+        options:
+        - X64_ONLY
+        - FULL
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Test:
+    name: Test on ${{ matrix.IMAGE }}
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        IMAGE: [ 
+          "debian:jessie", 
+          "debian:stretch", 
+          "debian:buster", 
+          "debian:bullseye", 
+          "debian:bookworm", 
+          "debian:trixie", 
+
+          "multiarch/debian-debootstrap:armhf-jessie", 
+          "multiarch/debian-debootstrap:armhf-stretch", 
+          "multiarch/debian-debootstrap:armhf-buster", 
+          "multiarch/debian-debootstrap:armhf-bullseye", 
+          "multiarch/debian-debootstrap:armhf-bookworm", 
+          "multiarch/debian-debootstrap:armhf-trixie", 
+
+          "multiarch/debian-debootstrap:arm64-trixie", 
+
+          "alpine:3.7", 
+          "alpine:3.20", 
+          "alpine:3.21", 
+          "alpine:3.22", 
+          "alpine:3.23", 
+
+          "multiarch/alpine:arm64-v3.7", 
+          "multiarch/alpine:armhf-v3.7"
+        ]
+        
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Setup Variables
+      run: |
+         Say "PROPAGATE input ARG_SET"
+         ARG_SET="${{ github.event.inputs.ARG_SET }}"
+         ARG_SET="${ARG_SET:-X64_ONLY}"
+         echo "ARG_SET=$ARG_SET" | tee -a $GITHUB_ENV
+         
+         Say "PROPAGATE input matrix.IMAGE"
+         echo "IMAGE=${{ matrix.IMAGE }}" | tee -a $GITHUB_ENV
+
+         Say "CALCULATE ARTIFACT_NAME"
+         tag="${{ matrix.IMAGE }}"
+         tag="${tag//:/-}"
+         tag="${tag//\//-}"
+         ARTIFACT_NAME="$tag"
+         echo "ARTIFACT_NAME=$ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Download 'OpenSSL-Tests' Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: OpenSSL-Tests
+        workflow: Pre-Build-OpenSSL-Tests.yml
+        # run_id: ${{ github.event.workflow_run.id }} 
+        path: ${{ github.workplace }}/OpenSSL-Tests
+
+
+
+    - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}
+      run: bash -eu -o pipefail OpenSSL3/STEP-Test-OpenSSL3.sh
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 9
+
+  Combine:
+    runs-on: ubuntu-latest
+    needs: [Test]
+    if: always()
+    timeout-minutes: 45
+    steps:
+
+    - uses: actions/checkout@v4
+    - uses: devizer/devops-library@main
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v4
+      with:
+         path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+
+    - name: Pack 7z
+      shell: bash
+      run: | 
+        set -eu; set -o pipefail
+        cd "$SYSTEM_ARTIFACTSDIRECTORY"
+        time 7z a -sdel -mx=9 -ms=on -mqs=on "TEST OpenSSL Matrix Report.7z";
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'TEST OpenSSL Matrix Report.7z'
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 1
+

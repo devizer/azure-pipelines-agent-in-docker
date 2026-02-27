@@ -14,7 +14,7 @@ set -eu; set -o pipefail
       docker pull -q multiarch/qemu-user-static:register
       docker run --rm --privileged multiarch/qemu-user-static:register --reset
   fi
-      
+
 
       Say "Starting image $IMAGE"
       echo "SYSTEM_ARTIFACTSDIRECTORY = [$SYSTEM_ARTIFACTSDIRECTORY]"
