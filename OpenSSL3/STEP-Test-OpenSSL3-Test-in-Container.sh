@@ -14,7 +14,7 @@ tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
-  Say "Testing .NET $net_ver on $(Get-Linux-OS-Architecture) $(Get-Linux-OS-ID), RID='$(Get-NET-RID)'"
+  Say "Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)'"
   exe=$folder/Test-OpenSSL
   ls -la "$exe" || true
   log_name="$(Get-NET-RID)-$net_ver-$(Get-Linux-OS-ID)-$(Get-Linux-OS-Architecture)-$ARTIFACT_NAME"

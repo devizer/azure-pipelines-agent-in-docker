@@ -41,7 +41,6 @@ docker run --privileged --rm --hostname openssl-container \
            Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]";
            Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]";
            Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
-           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
            Say "FOLDER: $(pwd -P)";
 '
 
