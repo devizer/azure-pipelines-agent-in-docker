@@ -29,6 +29,7 @@ jobs:
       matrix:
         IMAGE: [ 
           # "mcr.microsoft.com/azurelinux/base/core:latest",
+          "multiarch/ubuntu-debootstrap:arm64-plucky",
           "centos:8",
           "fedora:42", 
           "fedora:41", 
@@ -54,7 +55,7 @@ jobs:
           "alpine:3.20", 
           "alpine:3.21", 
           "alpine:3.22", 
-          "alpine:3.23", 
+          "alpine:3.23",
 
           "multiarch/alpine:arm64-v3.7", 
           "multiarch/alpine:armhf-v3.7"
