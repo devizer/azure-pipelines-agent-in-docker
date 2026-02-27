@@ -22,12 +22,15 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
   Say "Starting Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)' ..."
   exe=$folder/Test-OpenSSL
-  Say-Definition "exe is" "$exe"
-  if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
-  ls -la "$exe" || true
   test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
   log_name="$(Get-Safe-File-Name "$test_title")"
-  echo "log_name = [$log_name], test_title = [$test_title]"
+  # DEBUG
+  Say-Definition "exe is" "$exe"
+  ls -la "$exe" || true
+  echo "test_title = [$test_title], log_name = [$log_name]"
+  if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
+  if [[ -n "$(command -v file)" && -f $folder/libhostfxr.so ]]; then file "$folder/libhostfxr.so" || true; fi
+  # End DEBUG
   LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name"
   Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
   pushd "$(dirname "$exe")" >/dev/null
