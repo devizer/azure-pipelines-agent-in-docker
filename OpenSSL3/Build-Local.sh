@@ -143,11 +143,12 @@ cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
 tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 
+only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
+only_bin_folder=$HOME/openssl-only-bin/$(Get-NET-RID)
+
 Say "PACK $only_so_folder UNSTRIPPED SO [$(Get-NET-RID)]"
 cd $prefix
-only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
 mkdir -p $only_so_folder; rm -rf $only_so_folder/*
-only_bin_folder=$HOME/openssl-only-bin/$(Get-NET-RID)
 mkdir -p $only_bin_folder; rm -rf $only_bin_folder/*
 ls -la
 cp -v ./bin/. $only_bin_folder/
