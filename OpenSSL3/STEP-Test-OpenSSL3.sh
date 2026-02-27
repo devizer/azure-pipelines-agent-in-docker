@@ -4,6 +4,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 Build-Test-Image() {
   Say "BUILDING 'openssl-test-image' image from $IMAGE"
+  sudo swapon 2>/dev/null || true
+
   if [[ "$(uname -m)" == x86_64 ]]; then
       Say "Check if [qemu-user-static] is installed"
       sudo try-and-retry apt-get update -qq
@@ -13,13 +15,10 @@ Build-Test-Image() {
       docker run --rm --privileged multiarch/qemu-user-static:register --reset
   fi
 
-
-  sudo swapon 2>/dev/null || true
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
-  
-  docker build --build-arg BASE_IMAGE=$IMAGE -f Dockerfile.TEST-OpenSSL3 -t openssl-test-image .
+  docker build --build-arg BASE_IMAGE=$IMAGE -f OpenSSL3/Dockerfile.TEST-OpenSSL3 -t openssl-test-image .
 }
 
 Build-Test-Image
