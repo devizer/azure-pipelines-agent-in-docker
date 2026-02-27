@@ -41,17 +41,17 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
   openssl-test-image \
   bash -c 'echo;
-           Say "Get-NET-RID = [$(Get-NET-RID)]"
-           Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
-           Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]"
-           Say "Get-Glibc-Version = [$(Get-Glibc-Version)]"
-           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]"
-           Say "FOLDER: $(pwd -P)"
+           Say "Get-NET-RID = [$(Get-NET-RID)]";
+           Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]";
+           Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]";
+           Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
+           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
+           Say "FOLDER: $(pwd -P)";
            ls -la || true;
            if [[ -d ./OpenSSL-Tests ]]; then
               Say "./OpenSSL-Tests FOLDER"; 
               ls -la OpenSSL-Tests;
-           fi
+           fi;
 '
 set +x
 
