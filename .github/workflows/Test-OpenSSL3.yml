@@ -30,6 +30,15 @@ jobs:
         IMAGE: [ 
           # "mcr.microsoft.com/azurelinux/base/core:latest",
           # "multiarch/ubuntu-debootstrap:arm64-plucky",
+          "arm32v7/ubuntu:25.10",
+          "arm32v7/ubuntu:24.04",
+          "arm32v7/ubuntu:22.04",
+          "arm32v7/ubuntu:20.04",
+          "arm32v7/ubuntu:18.04",
+          "arm32v7/ubuntu:16.04",
+          "arm32v7/ubuntu:14.04",
+
+          
           "centos:8",
           "fedora:42", 
           "fedora:41", 
@@ -45,11 +54,13 @@ jobs:
           "multiarch/debian-debootstrap:armhf-stretch", 
           "multiarch/debian-debootstrap:armhf-buster", 
           "multiarch/debian-debootstrap:armhf-bullseye", 
-          # "multiarch/debian-debootstrap:armhf-bookworm", 
-          # "multiarch/debian-debootstrap:armhf-trixie", 
+          "arm32v7/debian:bookworm",
+          "arm32v7/debian:trixie",
 
           "multiarch/debian-debootstrap:arm64-jessie", 
           "multiarch/debian-debootstrap:arm64-stretch", 
+          "arm64v8/debian:bookworm",
+          "arm64v8/debian:trixie",
 
           "alpine:3.7", 
           "alpine:3.20", 
