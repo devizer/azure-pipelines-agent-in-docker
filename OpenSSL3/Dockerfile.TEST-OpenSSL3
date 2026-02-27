@@ -2,7 +2,7 @@ ARG BASE_IMAGE=debian:jessie
 FROM ${BASE_IMAGE}
 ARG BASE_IMAGE
 RUN echo "Building on image: ${BASE_IMAGE}"
-RUN if [[ -n "$(command -v apk)" ]]; then apk update; apk update || apk update || apk update; apk install bash wget || apk install bash wget || apk install bash wget; fi
+RUN if [[ -n "$(command -v apk)" ]]; then apk update; apk update || apk update || apk update; apk add bash wget || apk add bash wget || apk add bash wget; fi
 
 WORKDIR /Work
 COPY . .

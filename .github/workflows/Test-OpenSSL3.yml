@@ -39,8 +39,8 @@ jobs:
           "multiarch/debian-debootstrap:armhf-stretch", 
           "multiarch/debian-debootstrap:armhf-buster", 
           "multiarch/debian-debootstrap:armhf-bullseye", 
-          "multiarch/debian-debootstrap:armhf-bookworm", 
-          "multiarch/debian-debootstrap:armhf-trixie", 
+          # "multiarch/debian-debootstrap:armhf-bookworm", 
+          # "multiarch/debian-debootstrap:armhf-trixie", 
 
           "multiarch/debian-debootstrap:arm64-trixie", 
 
