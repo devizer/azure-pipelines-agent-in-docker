@@ -32,7 +32,7 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
   -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
   -e IMAGE="$IMAGE" \
-  -e ARTIFACT_NAME="$ARTIFACT_NAME"
+  -e ARTIFACT_NAME="$ARTIFACT_NAME" \
   -e ARG_SET="$ARG_SET" \
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
   bash -c 'echo;
