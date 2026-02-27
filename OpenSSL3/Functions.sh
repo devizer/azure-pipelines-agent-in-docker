@@ -108,3 +108,10 @@ Pipe-With-Timer() {
     cat
   fi
 }
+
+Get-Safe-File-Name() {
+  local key="$1"
+  key="${key//:/-}"
+  key="${key//\//-}"
+  echo "$key"
+}
