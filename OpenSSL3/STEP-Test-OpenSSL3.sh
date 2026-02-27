@@ -26,9 +26,10 @@ Build-Test-Image() {
 time Build-Test-Image
 
 docker run --rm --name openssl-container --hostname openssl-container openssl-test-image bash -c 'echo;
-  Say "Get-NET-RID - [$(Get-NET-RID)]"
-  Say "Get-Linux-OS-ID - [$(Get-Linux-OS-ID)]"
-  Say "Get-Linux-OS-Architecture - [$(Get-Linux-OS-Architecture)]"
+  Say "Get-NET-RID = [$(Get-NET-RID)]"
+  Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
+  Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]"
+  Say "Get-Glibc-Version = [$(Get-Glibc-Version)]"
 '
 
 if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
