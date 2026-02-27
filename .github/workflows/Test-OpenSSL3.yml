@@ -30,6 +30,28 @@ jobs:
         IMAGE: [ 
           # "mcr.microsoft.com/azurelinux/base/core:latest",
           # "multiarch/ubuntu-debootstrap:arm64-plucky",
+          "multiarch/alpine:arm64-v3.7",
+          "multiarch/alpine:arm64-v3.8",
+          "multiarch/alpine:arm64-v3.9",
+          "multiarch/alpine:arm64-v3.10",
+          "multiarch/alpine:arm64-v3.11",
+          "multiarch/alpine:arm64-v3.12",
+          "multiarch/alpine:arm64-v3.20",
+          "multiarch/alpine:arm64-v3.21",
+          "multiarch/alpine:arm64-v3.22",
+          "multiarch/alpine:arm64-v3.23",
+          
+          "multiarch/alpine:armhf-v3.7",
+          "multiarch/alpine:armhf-v3.8",
+          "multiarch/alpine:armhf-v3.9",
+          "multiarch/alpine:armhf-v3.10",
+          "multiarch/alpine:armhf-v3.11",
+          "multiarch/alpine:armhf-v3.12",
+          "multiarch/alpine:armhf-v3.20",
+          "multiarch/alpine:armhf-v3.21",
+          "multiarch/alpine:armhf-v3.22",
+          "multiarch/alpine:armhf-v3.23"
+
           "arm32v7/ubuntu:25.10",
           "arm32v7/ubuntu:24.04",
           "arm32v7/ubuntu:22.04",
@@ -72,8 +94,6 @@ jobs:
           "alpine:3.22", 
           "alpine:3.23",
 
-          "multiarch/alpine:arm64-v3.7", 
-          "multiarch/alpine:armhf-v3.7"
         ]
         
 
