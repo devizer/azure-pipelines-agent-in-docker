@@ -36,6 +36,18 @@ jobs:
         overwrite: true
         compression-level: 9
 
+    - name: PACK
+      run: cd ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}; 7z a OpenSSL-Tests.7z -sdel -ms=on -mqs=on -mx=8
+
+    - name: Upload PACKED.7z
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: OpenSSL-Tests.7z
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 1
+
     - name: Show-System-Stat
       if: always()
       run: Show-System-Stat
