@@ -31,7 +31,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
   pushd "$(dirname "$exe")" >/dev/null
   status_title="  OK"
-  (echo $test_title; "$(basename "$exe")") 2>&1 | tee -a "$LOG_FULL_NAME.Deafult.OpenSSL.log" || (Say --Display-As=Error "FAIL: $log_name"; status_title=FAIL;)
+  (echo $test_title; "./$(basename "$exe")") 2>&1 | tee -a "$LOG_FULL_NAME.Deafult.OpenSSL.log" || (Say --Display-As=Error "FAIL: $log_name"; status_title=FAIL;)
   popd
   echo "$status_title: $test_title" | tee -a $summary_report_file
   echo " "
