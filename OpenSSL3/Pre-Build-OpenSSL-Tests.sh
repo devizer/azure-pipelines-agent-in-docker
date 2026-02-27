@@ -7,7 +7,6 @@ Run-Remote-Script https://devizer.github.io/devops-library/install-libssl-1.1.1.
 
 Pre-Build-OpenSSL-Tests() {
   local net_ver="$1"
-  base_folder=$HOME/openssl-tests
   dotnet_folder=$base_folder/dotnet/$net_ver
   Say "STEP 0: Downloading [.NET $net_ver] into '$dotnet_folder'"
   Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh $net_ver --skip-linking --target-folder "$dotnet_folder" --skip-dependencies
@@ -37,7 +36,12 @@ Pre-Build-OpenSSL-Tests() {
     try-and-retry dotnet restore
     bin_dir=$base_folder/bin/$net_ver
     public_dir="$SYSTEM_ARTIFACTSDIRECTORY/$rid/$net_ver"
-    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { success_list="$success_list $rid"; mkdir -p $public_dir; cp -av "$bin_dir/." $public_dir; } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
+    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { 
+        success_list="$success_list $rid"; 
+        mkdir -p $public_dir; 
+        cp -av "$bin_dir/." $public_dir; 
+        echo "SUCCESS $net_ver $rid" | tee $public_dir/Success.Log;
+    } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
   done
   success_list=$(echo "$success_list" | sed 's/^[[:space:]]*//')
   Say ".NET $net_ver Built $(echo $success_list | wc -w) runtimes for OpenSSL Tests: $success_list"
@@ -46,4 +50,9 @@ Pre-Build-OpenSSL-Tests() {
 
 export -f Pre-Build-OpenSSL-Tests
 
+export base_folder=$HOME/openssl-tests
+
 parallel --group --halt 0 "Pre-Build-OpenSSL-Tests {} 2>&1" ::: 2.1 3.0 3.1 5.0 6.0 7.0 8.0 9.0 10.0
+
+Say "Parallel Prebuild Complete"
+find $base_folder -name Success.Log | sort | while IFS= read -r line; do cat $line | tee -a $SYSTEM_ARTIFACTSDIRECTORY/TOTAL.SUCCESS.LOG; done
