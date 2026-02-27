@@ -30,6 +30,9 @@ docker run --rm --name openssl-container --hostname openssl-container openssl-te
   Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
   Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]"
   Say "Get-Glibc-Version = [$(Get-Glibc-Version)]"
+  Say "FOLDER: $(pwd -P)"
+  ls -la || true;
+  cd OpenSSL-Tests && { Say "./OpenSSL-Tests FOLDER"; ls -la; }
 '
 
 if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
