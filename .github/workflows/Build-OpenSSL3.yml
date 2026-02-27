@@ -13,6 +13,13 @@ on:
         options:
         - ON
         - OFF
+      ARG_SET:
+        type: choice
+        description: 'SET Size'
+        default: 'X64_ONLY'
+        options:
+        - X64_ONLY
+        - FULL
   push:
     branches: [ "master" ]
 
@@ -58,6 +65,9 @@ jobs:
 
          Say "PROPAGATE input ARG_TESTS"
          echo "ARG_TESTS=${{ github.event.inputs.ARG_TESTS }}" | tee -a $GITHUB_ENV
+
+         Say "PROPAGATE input ARG_SET"
+         echo "ARG_SET=${{ github.event.inputs.ARG_SET }}" | tee -a $GITHUB_ENV
 
 
     - name: STEP-Run-Container.sh ${{ matrix.SSL_VERSION }} on ${{ matrix.IMAGE }}

@@ -25,6 +25,7 @@ set -eu; set -o pipefail
           -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
           -e IMAGE="$IMAGE" \
           -e ARG_TESTS="$ARG_TESTS" \
+          -e ARG_SET="$ARG_SET" \
           -e SSL_VERSION="$SSL_VERSION" \
           -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
           -w /App -v "$(pwd -P)":/App \
