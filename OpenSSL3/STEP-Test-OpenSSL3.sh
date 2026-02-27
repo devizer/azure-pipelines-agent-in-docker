@@ -25,7 +25,7 @@ Build-Test-Image() {
 
 time Build-Test-Image
 
-docker run --rm openssl-test-image --name openssl-container --hostname openssl-container bash -c 'echo;
+docker run --rm --name openssl-container --hostname openssl-container openssl-test-image bash -c 'echo;
   Say "Get-NET-RID - [$(Get-NET-RID)]"
   Say "Get-Linux-OS-ID - [$(Get-Linux-OS-ID)]"
   Say "Get-Linux-OS-Architecture - [$(Get-Linux-OS-Architecture)]"
