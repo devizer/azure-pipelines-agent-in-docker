@@ -30,7 +30,7 @@ Build-Test-Image() {
 
 time Build-Test-Image
 
-docker run --privileged --rm --name openssl-container --hostname openssl-container openssl-test-image \
+docker run --privileged --rm --name openssl-container --hostname openssl-container \
   -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
   -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
@@ -38,6 +38,7 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -e ARTIFACT_NAME="$ARTIFACT_NAME" \
   -e ARG_SET="$ARG_SET" \
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
+  openssl-test-image \
   bash -c 'echo;
            Say "Get-NET-RID = [$(Get-NET-RID)]"
            Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
