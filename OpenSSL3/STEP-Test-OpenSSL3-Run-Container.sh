@@ -62,6 +62,4 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   openssl-test-image \
   bash -e -u -c "bash -e -u -o pipefail OpenSSL3/STEP-Test-OpenSSL3-Test-in-Container.sh;"
 
-set +x
-
 exit 0
