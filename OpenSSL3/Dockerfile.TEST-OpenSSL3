@@ -20,6 +20,7 @@ RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEB
 # "$(Get-Linux-OS-ID)" == "fedora:26"
 # if findutils can not be installed, then job fails later
 RUN if [[ -n "$(command -v dnf)" ]]; then try-and-retry dnf install -y findutils || true; fi
+RUN if [[ -n "$(command -v yum)" ]]; then try-and-retry yum install -y findutils || true; fi
 
 
 RUN Say "Installing .NET Dependencies"; Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet-dependencies.sh | tee -a /install-dotnet-dependencies.log
