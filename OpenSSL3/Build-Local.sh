@@ -176,10 +176,13 @@ Say "PACK $only_so_folder STRIPPED [$(Get-NET-RID)]"
 strip *.so*
 tar czf ${LOG_NAME}.runtime.libraries.tar.gz *
 tar cf - * | xz -9 > ${LOG_NAME}.runtime.libraries.tar.xz
-(echo "openssl dependencies for $(Get-NET-RID):"; ldd $only_bin_folder/openssl; echo "") 2>&1 | tee -a "$dependencies_info_file"
 
 Say "PACK $only_bin_folder STRIPPED [$(Get-NET-RID)]"
 cd $only_bin_folder
+(echo "DEPENDENCIES for $(Get-NET-RID) openssl:"; ldd $only_bin_folder/openssl; echo "") 2>&1 | tee -a "openssl-dependencies.txt"
+cp -v "$only_so_folder/openssl-configuration.txt" ./
+printf $(Get-NET-RID) | tee openssl-rid.txt
+printf $ver | tee openssl-version.txt
 strip * || true
 tar czf ${LOG_NAME}.executable.tar.gz *
 tar cf - * | xz -9 > ${LOG_NAME}.executable.tar.xz
