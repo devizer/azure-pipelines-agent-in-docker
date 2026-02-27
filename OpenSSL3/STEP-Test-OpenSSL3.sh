@@ -18,6 +18,8 @@ Build-Test-Image() {
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
+  Say "PULL BASE IMAGE [$IMAGE]"
+  try-and-retry docker pull -q $IMAGE
   docker build --build-arg BASE_IMAGE=$IMAGE -f OpenSSL3/Dockerfile.TEST-OpenSSL3 -t openssl-test-image .
 }
 
