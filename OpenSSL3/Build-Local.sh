@@ -151,7 +151,7 @@ cd $prefix
 mkdir -p $only_so_folder; rm -rf $only_so_folder/*
 mkdir -p $only_bin_folder; rm -rf $only_bin_folder/*
 ls -la
-cp -v ./bin/. $only_bin_folder/
+cp -v ./bin/* $only_bin_folder/
 dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
 rm -f "$dependencies_info_file"
 find -name '*.so.3' -or -name '*.so.1.1' | sort | while IFS= read -r file; do
