@@ -17,6 +17,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
   Say "Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)'"
   exe=$folder/Test-OpenSSL
+  if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
   ls -la "$exe" || true
   log_name="$(Get-NET-RID)-$net_ver-$(Get-Linux-OS-ID)-$(Get-Linux-OS-Architecture)-$ARTIFACT_NAME"
   log_name="${log_name//:/-}"

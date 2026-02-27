@@ -42,6 +42,7 @@ Pre-Build-OpenSSL-Tests() {
         mkdir -p $public_dir; 
         cp -av "$bin_dir/." $public_dir; 
         echo "SUCCESS: NET $net_ver for $rid" | tee $public_dir/Success.Log;
+        Say "$(file $bin_dir/Test-OpenSSL || true)"
     } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
   done
   success_list=$(echo "$success_list" | sed 's/^[[:space:]]*//')
