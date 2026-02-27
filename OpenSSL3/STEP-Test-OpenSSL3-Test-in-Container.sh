@@ -12,6 +12,7 @@ Say "FOLDER: $(pwd -P)";
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
+summary_report_file="$SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.$(Get-NET-RID).TXT"
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
@@ -21,14 +22,17 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
   ls -la "$exe" || true
   log_name="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OS=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
+  test_title="$log_name"
   log_name="${log_name//:/-}"
   log_name="${log_name//\//-}"
   Colorize Magenta "log_name = [$log_name]"
   LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name"
   Say "$log_name DEFAULT OPENSSL"
   pushd "$(dirname "$exe")" >/dev/null
-  $exe 2>&1 | tee "$LOG_FULL_NAME.Deafult.OpenSSL.log" || Say --Display-As=Error "FAIL: $log_name"
+  status_title="  OK"
+  $exe 2>&1 | tee "$LOG_FULL_NAME.Deafult.OpenSSL.log" || (Say --Display-As=Error "FAIL: $log_name"; status_title=FAIL;)
   popd
+  echo "$status_title: $test_title" | tee -a $summary_report_file
   echo " "
 done
 
