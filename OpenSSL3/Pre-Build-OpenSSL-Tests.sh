@@ -16,7 +16,8 @@ Pre-Build-OpenSSL-Tests() {
 
   export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
   export SSL_CERT_DIR=/etc/ssl/certs
-  export CLR_OPENSSL_VERSION_OVERRIDE="1.1.1"
+  export CLR_OPENSSL_VERSION_OVERRIDE="1.1"
+  export DOTNET_OPENSSL_VERSION_OVERRIDE="1.1"
   
   test_source_folder=$base_folder/source/$net_ver/Test-OpenSSL
   mkdir -p "$test_source_folder"
