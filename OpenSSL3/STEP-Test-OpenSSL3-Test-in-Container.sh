@@ -14,6 +14,7 @@ tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
+  if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
   Say "Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)'"
   exe=$folder/Test-OpenSSL
   ls -la "$exe" || true
