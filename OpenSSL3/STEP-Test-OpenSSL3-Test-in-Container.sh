@@ -12,7 +12,7 @@ Say "FOLDER: $(pwd -P)";
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
-find $tests_folder_base -maxdepth 1 -type d | while IFS= read -r folder; do
+find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
   Say "Testing .NET $net_ver on $(Get-Linux-OS-Architecture) $(Get-Linux-OS-ID), RID='$(Get-NET-RID)'"
   exe=$folder/Test-OpenSSL
@@ -24,5 +24,6 @@ find $tests_folder_base -maxdepth 1 -type d | while IFS= read -r folder; do
   LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name"
   Say "$log_name DEFAULT OPENSSL"
   $exe 2>&1 | tee "$LOG_FULL_NAME.Deafult.OpenSSL.log" || Say --Display-As=Error "FAIL: $log_name"
+  echo " "
 done
 
