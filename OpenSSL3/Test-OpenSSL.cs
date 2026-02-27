@@ -27,7 +27,7 @@ namespace OpenSslTester
             const int timeoutSeconds = 30;
             var urlStatusList = new List<UrlStatus>();
 
-            Log("Starting OpenSSL integration test in parallel ...");
+            Log($"Starting OpenSSL integration test in parallel for {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription} ...");
 
             Parallel.ForEach(urls, (url) =>
             {
