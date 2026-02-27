@@ -12,9 +12,10 @@ Say "FOLDER: $(pwd -P)";
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
-find $tests_folder_base -maxdepth 1 -type d | while IFS= read -r net_ver; do
+find $tests_folder_base -maxdepth 1 -type d | while IFS= read -r folder; do
+  net_ver="$(basename $folder)"
   Say "Testing .NET $net_ver on $(Get-Linux-OS-Architecture) $(Get-Linux-OS-ID), RID='$(Get-NET-RID)'"
-  exe=$net_ver/Test-OpenSSL
+  exe=$folder/Test-OpenSSL
   ls -la "$exe" || true
   log_name="$(Get-NET-RID)-$net_ver-$(Get-Linux-OS-ID)-$(Get-Linux-OS-Architecture)-$ARTIFACT_NAME"
   log_name="${log_name//:/-}"

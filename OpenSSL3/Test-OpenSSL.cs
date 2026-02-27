@@ -32,7 +32,7 @@ namespace OpenSslTester
             Parallel.ForEach(urls, (url) =>
             {
                 var currentStatus = new UrlStatus { Url = url, Error = "Initial state" };
-                Log($"Testing URL: {url}");
+                // Log($"Testing URL: {url}");
 
                 for (int attempt = 1; attempt <= maxRetries; attempt++)
                 {
@@ -48,7 +48,7 @@ namespace OpenSslTester
 
                             try
                             {
-                                Log($"Attempt {attempt} of {maxRetries} for {url}...");
+                                Log($"Starting attempt {attempt} of {maxRetries} for {url}...");
                                 
                                 // Execution in Parallel requires blocking call or Task.Run for async methods
                                 var response = client.GetAsync(url).ConfigureAwait(continueOnCapturedContext: false).GetAwaiter().GetResult();
