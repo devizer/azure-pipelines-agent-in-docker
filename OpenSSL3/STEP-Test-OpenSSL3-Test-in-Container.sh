@@ -16,7 +16,7 @@ summary_report_file="$SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.$(Get-NET-RID).TXT"
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
-  Say "Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)'"
+  Say "Starting Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)' ..."
   exe=$folder/Test-OpenSSL
   Say-Definition "exe is" "$exe"
   if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
@@ -30,7 +30,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   Say "$log_name DEFAULT OPENSSL"
   pushd "$(dirname "$exe")" >/dev/null
   status_title="  OK"
-  (echo $test_title; $exe) 2>&1 | tee -a "$LOG_FULL_NAME.Deafult.OpenSSL.log" || (Say --Display-As=Error "FAIL: $log_name"; status_title=FAIL;)
+  (echo $test_title; "$(basename "$exe")") 2>&1 | tee -a "$LOG_FULL_NAME.Deafult.OpenSSL.log" || (Say --Display-As=Error "FAIL: $log_name"; status_title=FAIL;)
   popd
   echo "$status_title: $test_title" | tee -a $summary_report_file
   echo " "
