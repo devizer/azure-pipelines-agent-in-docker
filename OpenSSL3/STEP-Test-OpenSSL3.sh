@@ -25,14 +25,26 @@ Build-Test-Image() {
 
 time Build-Test-Image
 
-docker run --rm --name openssl-container --hostname openssl-container openssl-test-image bash -c 'echo;
-  Say "Get-NET-RID = [$(Get-NET-RID)]"
-  Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
-  Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]"
-  Say "Get-Glibc-Version = [$(Get-Glibc-Version)]"
-  Say "FOLDER: $(pwd -P)"
-  ls -la || true;
-  cd OpenSSL-Tests && { Say "./OpenSSL-Tests FOLDER"; ls -la; }
+docker run --privileged --rm --name openssl-container --hostname openssl-container openssl-test-image \
+  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
+  -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
+  -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
+  -e IMAGE="$IMAGE" \
+  -e ARTIFACT_NAME="$ARTIFACT_NAME"
+  -e ARG_SET="$ARG_SET" \
+  -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
+  bash -c 'echo;
+           Say "Get-NET-RID = [$(Get-NET-RID)]"
+           Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]"
+           Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]"
+           Say "Get-Glibc-Version = [$(Get-Glibc-Version)]"
+           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]"
+           Say "FOLDER: $(pwd -P)"
+           ls -la || true;
+           if [[ -d ./OpenSSL-Tests ]]; then
+              Say "./OpenSSL-Tests FOLDER"; 
+              ls -la OpenSSL-Tests;
+           fi
 '
 
 if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
