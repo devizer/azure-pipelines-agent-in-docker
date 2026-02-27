@@ -15,7 +15,7 @@ SHELL ["/bin/bash", "-eu", "-o", "pipefail", "-c"]
 RUN bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-Legacy-OS-Sources
 RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEBIAN_PACKAGES -qq; fi
 
-RUN Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh
+RUN Say "Installing .NET Dependencies"; Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet.sh
 RUN Say "Deleting openssl" \
    if [[ -n "$(command -v apt-get)" ]]; then apt-get purge libssl1.1 || true; apt-get purge openssl || true; apt-get purge libssl1.0.0 || true; fi; \
    if [[ -n "$(command -v apk)" ]]; then for p in openssl libcrypto3 libssl3 libcrypto1.1 libssl1.1 libcrypto1.0 libssl1.0 openssl; do apk del $p || true; fi
