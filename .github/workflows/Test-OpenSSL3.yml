@@ -42,7 +42,8 @@ jobs:
           # "multiarch/debian-debootstrap:armhf-bookworm", 
           # "multiarch/debian-debootstrap:armhf-trixie", 
 
-          "multiarch/debian-debootstrap:arm64-trixie", 
+          "multiarch/debian-debootstrap:arm64-jessie", 
+          "multiarch/debian-debootstrap:arm64-stretch", 
 
           "alpine:3.7", 
           "alpine:3.20", 
