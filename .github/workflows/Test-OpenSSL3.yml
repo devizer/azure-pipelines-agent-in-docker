@@ -120,8 +120,8 @@ jobs:
           --repo "devizer/azure-pipelines-agent-in-docker"
 
 
-    - name: OpenSSL3/STEP-Test-OpenSSL3.sh on ${{ matrix.IMAGE }}
-      run: bash -eu -o pipefail OpenSSL3/STEP-Test-OpenSSL3.sh
+    - name: "${{ matrix.IMAGE }}: OpenSSL3/STEP-Test-OpenSSL3-Run-Container.sh"
+      run: bash -eu -o pipefail OpenSSL3/STEP-Test-OpenSSL3-Run-Container.sh
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4

@@ -30,6 +30,24 @@ Build-Test-Image() {
 
 time Build-Test-Image
 
+docker run --privileged --rm --hostname openssl-container \
+  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
+  -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
+  openssl-test-image \
+  bash -c '
+           Say "Get-NET-RID = [$(Get-NET-RID)]";
+           Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]";
+           Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]";
+           Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
+           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
+           Say "FOLDER: $(pwd -P)";
+'
+
+if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
+  echo "SKIPPING ARM on X64_ONLY Workflow"
+  exit 0
+fi
+
 set -x
 docker run --privileged --rm --name openssl-container --hostname openssl-container \
   -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
@@ -40,22 +58,14 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -e ARG_SET="$ARG_SET" \
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
   openssl-test-image \
-  bash -c 'echo;
+  bash -e -u -c 'echo;
            Say "Get-NET-RID = [$(Get-NET-RID)]";
            Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]";
            Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]";
            Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
            Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
            Say "FOLDER: $(pwd -P)";
-           ls -la || true;
-           if [[ -d ./OpenSSL-Tests ]]; then
-              Say "./OpenSSL-Tests FOLDER"; 
-              ls -la OpenSSL-Tests;
-           fi;
+           bash -e -u -o pipefail OpenSSL3/STEP-Test-OpenSSL3-Test-in-Container.sh;
 '
 set +x
 
-if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
-  echo "SKIPPING ARM on X64_ONLY Workflow"
-  exit 0
-fi
