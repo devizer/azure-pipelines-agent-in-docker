@@ -19,9 +19,9 @@ RUN bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-L
 RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEBIAN_PACKAGES -qq 2>&1 | { grep "Unpacking\|Setting" || true; }; fi
 
 RUN Say "Installing .NET Dependencies"; Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet-dependencies.sh
-RUN Say "Deleting openssl"; \
-   if [[ -n "$(command -v apt-get)" ]]; then for p in libssl1.0.2 libssl1.1 libssl1.0.0 openssl; do Say "DELETING DEBIAN PACKAGE $p"; apt-get purge $p 2>&1 | { grep Removing || true; } || true; done; Say "SSL DEBIAN PACKAGES"; list-packages | grep ssl || true; fi; \
-   if [[ -n "$(command -v apk)" ]]; then for p in openssl libcrypto3 libssl3 libcrypto1.1 libssl1.1 libcrypto1.0 libssl1.0 openssl; do Say "DELETING ALPINE PACKAGE $p"; apk del $p || true; done; fi;
+# RUN Say "Deleting openssl"; \
+#    if [[ -n "$(command -v apt-get)" ]]; then for p in libssl1.0.2 libssl1.1 libssl1.0.0 openssl; do Say "DELETING DEBIAN PACKAGE $p"; apt-get purge $p 2>&1 | { grep Removing || true; } || true; done; Say "SSL DEBIAN PACKAGES"; list-packages | grep ssl || true; fi; \
+#    if [[ -n "$(command -v apk)" ]]; then for p in openssl libcrypto3 libssl3 libcrypto1.1 libssl1.1 libcrypto1.0 libssl1.0 openssl; do Say "DELETING ALPINE PACKAGE $p"; apk del $p || true; done; fi;
 
 
 RUN \
