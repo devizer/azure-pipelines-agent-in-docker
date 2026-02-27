@@ -30,6 +30,7 @@ Build-Test-Image() {
 
 time Build-Test-Image
 
+set -x
 docker run --privileged --rm --name openssl-container --hostname openssl-container \
   -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
@@ -52,6 +53,7 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
               ls -la OpenSSL-Tests;
            fi
 '
+set +x
 
 if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
   echo "SKIPPING ARM on X64_ONLY Workflow"
