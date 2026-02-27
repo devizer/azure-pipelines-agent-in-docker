@@ -1,4 +1,4 @@
-name: Build OpenSSL 3
+name: "OpenSSL 3: Build Matrix"
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
