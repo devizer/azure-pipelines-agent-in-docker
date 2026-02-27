@@ -143,12 +143,13 @@ cd ..
 time tar czf ${LOG_NAME}.full.tar.gz "$(basename $prefix)"
 tar cf - "$(basename $prefix)" | xz -9 > ${LOG_NAME}.full.tar.xz
 
-Say "PACK BINARIES-ONLY [$(Get-NET-RID)]"
+Say "PACK $only_so_folder UNSTRIPPED SO [$(Get-NET-RID)]"
 cd $prefix
 only_so_folder=$HOME/openssl-only-so/$(Get-NET-RID)
 mkdir -p $only_so_folder; rm -rf $only_so_folder/*
 only_bin_folder=$HOME/openssl-only-bin/$(Get-NET-RID)
 mkdir -p $only_bin_folder; rm -rf $only_bin_folder/*
+ls -la
 cp -v ./bin/. $only_bin_folder/
 dependencies_info_file="${LOG_NAME}.dependencies.info.txt"
 rm -f "$dependencies_info_file"
@@ -159,7 +160,6 @@ find -name '*.so.3' -or -name '*.so.1.1' | sort | while IFS= read -r file; do
   (echo "DEPENDENCIES for $(Get-NET-RID) $so_name_only:"; ldd "$file"; echo "") | tee -a "$dependencies_info_file"
   (echo "'atomic' symbols for $(Get-NET-RID) $so_name_only"; nm -D $file | { grep "atomic" || true; }) | tee "${LOG_NAME}.symbols.atomic.txt"
   (echo "'all' the symbols for $(Get-NET-RID) $so_name_only"; nm -D $file) | tee "${LOG_NAME}.symbols.all.txt"
-  cp -av bin/. $only_bin_folder/
 done
 cp -v "$dependencies_info_file" "$only_so_folder/openssl-dependencies.txt"
 cp -v "${LOG_NAME}.config.data.log" "$only_so_folder/openssl-configuration.txt"
@@ -177,6 +177,7 @@ tar czf ${LOG_NAME}.runtime.libraries.tar.gz *
 tar cf - * | xz -9 > ${LOG_NAME}.runtime.libraries.tar.xz
 (echo "openssl dependencies for $(Get-NET-RID):"; ldd $only_bin_folder/openssl; echo "") 2>&1 | tee -a "$dependencies_info_file"
 
+Say "PACK $only_bin_folder STRIPPED [$(Get-NET-RID)]"
 cd $only_bin_folder
 strip * || true
 tar czf ${LOG_NAME}.executable.tar.gz *
