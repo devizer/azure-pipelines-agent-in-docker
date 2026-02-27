@@ -16,5 +16,12 @@ find $tests_folder_base -maxdepth 1 -type d | while IFS= read -r net_ver; do
   Say "Testing .NET $net_ver on $(Get-Linux-OS-Architecture) $(Get-Linux-OS-ID), RID='$(Get-NET-RID)'"
   exe=$net_ver/Test-OpenSSL
   ls -la "$exe" || true
+  log_name="$(Get-NET-RID)-$net_ver-$(Get-Linux-OS-ID)-$(Get-Linux-OS-Architecture)-$ARTIFACT_NAME"
+  log_name="${log_name//:/-}"
+  log_name="${log_name//\//-}"
+  Colorize Magenta "log_name = [$log_name]"
+  LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name"
+  Say "$log_name DEFAULT OPENSSL"
+  $exe 2>&1 | tee "$LOG_FULL_NAME.Deafult.OpenSSL.log" || Say --Display-As=Error "FAIL: $log_name"
 done
 
