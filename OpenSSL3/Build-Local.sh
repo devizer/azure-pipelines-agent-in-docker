@@ -2,7 +2,7 @@ set -eu; set -o pipefail
 
 if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
   echo "SKIPPING ARM on X64_ONLY Workflow"
-  return 0
+  exit 0
 fi
 
 # Too much tests for .NET Core: '-test_fuzz -test_afalg -test_cms -test_srp'
