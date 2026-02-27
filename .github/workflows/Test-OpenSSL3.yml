@@ -50,7 +50,7 @@ jobs:
           "multiarch/alpine:armhf-v3.20",
           "multiarch/alpine:armhf-v3.21",
           "multiarch/alpine:armhf-v3.22",
-          "multiarch/alpine:armhf-v3.23"
+          "multiarch/alpine:armhf-v3.23",
 
           "arm32v7/ubuntu:25.10",
           "arm32v7/ubuntu:24.04",
@@ -89,10 +89,15 @@ jobs:
           "arm64v8/debian:trixie",
 
           "alpine:3.7", 
+          "alpine:3.8", 
+          "alpine:3.9", 
+          "alpine:3.10", 
+          "alpine:3.11", 
+          "alpine:3.12", 
           "alpine:3.20", 
           "alpine:3.21", 
           "alpine:3.22", 
-          "alpine:3.23",
+          "alpine:3.23"
 
         ]
         
