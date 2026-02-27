@@ -60,15 +60,8 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -e ARG_SET="$ARG_SET" \
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
   openssl-test-image \
-  bash -e -u -c 'echo;
-           Say "Get-NET-RID = [$(Get-NET-RID)]";
-           Say "Get-Linux-OS-ID = [$(Get-Linux-OS-ID)]";
-           Say "Get-Linux-OS-Architecture = [$(Get-Linux-OS-Architecture)]";
-           Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
-           Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
-           Say "FOLDER: $(pwd -P)";
-           bash -e -u -o pipefail OpenSSL3/STEP-Test-OpenSSL3-Test-in-Container.sh;
-'
+  bash -e -u -c "bash -e -u -o pipefail OpenSSL3/STEP-Test-OpenSSL3-Test-in-Container.sh;"
+
 set +x
 
 exit 0
