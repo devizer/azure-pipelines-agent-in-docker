@@ -17,7 +17,7 @@ SHELL ["/bin/bash", "-eu", "-o", "pipefail", "-c"]
 
 RUN bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-Legacy-OS-Sources
 RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEBIAN_PACKAGES -qq 2>&1 | { grep "Unpacking\|Setting" || true; }; fi
-RUN if [[ -n "$(command -v apt-get)" && "$(Get-Linux-OS-ID)" == "fedora:26" ]]; then try-and-retry dnf install -y findutils; fi
+RUN if [[ -n "$(command -v dnf)" && "$(Get-Linux-OS-ID)" == "fedora:26" ]]; then try-and-retry dnf install -y findutils; fi
 
 
 RUN Say "Installing .NET Dependencies"; Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet-dependencies.sh
