@@ -10,15 +10,8 @@ Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
 Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
 Say "FOLDER: $(pwd -P)";
 
-ssl_versions=""
-while IFS= read -r so_file; do
-  so_name="$(basename "$so_file")"
-  ver="$so_name"
-  ver="$(echo "$ver" | sed 's/libssl\.so\.//g')"
-  ver="$(echo "$ver" | sed 's/libcrypto\.so\.//g')"
-  ssl_versions="$ssl_versions $ver"
-done < <(find /usr -name 'libssl.so*' -o -name 'libcrypto.so*' | sort -V | grep '\.so\.[0-9.]\{1,\}$')
-ssl_versions="$(echo "$ssl_versions" | sed 's/^[[:space:]]*//')"
+ssl_versions="$(Find-Lib-SSL-SO-Versions $SYSTEM_ARTIFACTSDIRECTORY/System-Lib-SSL-SO-List.txt)"
+Colorize Cyan "SYSTEM LIBSSL BINARY VERSIONS: [$ssl_versions]"
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 

@@ -143,3 +143,21 @@ Get-LibC-Name() {
     echo "musl $ver"
   fi
 }
+
+Find-Lib-SSL-SO-Versions() {
+   local dump_file="${1:-}"
+   if [[ -z "$dump_file" ]]; then dump_file="$(mktemp)"; fi
+   find /usr -name 'libssl.so*' -o -name 'libcrypto.so*' | sort -V | grep '\.so\.[0-9.]\{1,\}$' > "$dump_file"
+   local ssl_versions_file=$(mktemp)
+   while IFS= read -r so_file; do
+     so_name="$(basename "$so_file")"
+     ver="$so_name"
+     ver="$(echo "$ver" | sed 's/libssl\.so\.//g')"
+     ver="$(echo "$ver" | sed 's/libcrypto\.so\.//g')"
+     echo $ver >> "$ssl_versions_file"
+   done < <(cat $"$dump_file")
+   cat "$ssl_versions_file" | sort -V -u > "$ssl_versions_file.sorted"
+   local ssl_versions="$(tr '\n' ' ' < "$ssl_versions_file.sorted")"
+   ssl_versions="$(echo "$ssl_versions" | sed 's/^[[:space:]]*//')"
+   echo "$ssl_versions"
+}
