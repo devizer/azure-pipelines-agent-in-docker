@@ -21,6 +21,13 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   net_ver="$(basename $folder)"
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
   Say "Starting Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)' ..."
+  JSON_REPORT_FILE="$SYSTEM_ARTIFACTSDIRECTORY/REPORT.JSON"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "RID" "$(Get-NET-RID)"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "OS_ARCH" "$(Get-Linux-OS-Architecture)"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "OS_ID" "$(Get-Linux-OS-ID)"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE_PLATFORM" "$IMAGE_PLATFORM"
+
   exe=$folder/Test-OpenSSL
   test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
   log_name="$(Get-Safe-File-Name "$test_title")"
@@ -34,13 +41,14 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name"
   Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
   pushd "$(dirname "$exe")" >/dev/null
-  status_title="  OK"
+  status_title="OK"
   if ! (echo "$test_title"; "./$(basename "$exe")") 2>&1 | tee -a "$LOG_FULL_NAME.Deafult.OpenSSL.log"; then
       Say --Display-As=Error "FAIL: $log_name"
       status_title="FAIL"
   fi
   popd >/dev/null
-  echo "$status_title: $test_title" | tee -a $summary_report_file
+  echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "STATUS" "$status_title"
   echo " "
 done
 

@@ -115,3 +115,17 @@ Get-Safe-File-Name() {
   key="${key//\//-}"
   echo "$key"
 }
+
+Set-Json-File-Property() {
+   local file="$1"
+   local name="$2"
+   local value="$3"
+   local folder="$(dirname "$file")"
+   if [[ -n "$folder" && ! -d "$folder" ]]; then mkdir -p "$folder"; fi
+   if [[ ! -f "$file" ]]; then echo '{}' > "$file"; fi
+   jq --arg key "$name" --arg val "$value" '.[$key] = $val' "$file" > "$file.tmp" && mv "$file.tmp" "$file" || Say --Display-As=Error "Unable to update json file '$file' by new property '$name' = '$value'"
+}
+
+Set-Artifact-Json-File-Property() {
+   Set-Json-File-Property "$$SYSTEM_ARTIFACTSDIRECTORY/$1" "$2" "$3"
+}
