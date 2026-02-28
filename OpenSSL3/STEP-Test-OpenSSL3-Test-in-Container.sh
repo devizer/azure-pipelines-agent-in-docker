@@ -22,13 +22,14 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   net_ver="$(basename $folder)"
   if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
   Say "Starting Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)' ..."
-  JSON_REPORT_FILE="$SYSTEM_ARTIFACTSDIRECTORY/REPORT.JSON"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "RID" "$(Get-NET-RID)"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "OS_ARCH" "$(Get-Linux-OS-Architecture)"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "OS_ID" "$(Get-Linux-OS-ID)"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE_PLATFORM" "$IMAGE_PLATFORM"
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" SYSTEM_OPENSSL_VERSION "$SYSTEM_OPENSSL_VERSION"
+  JSON_REPORT_FILE="$SYSTEM_ARTIFACTSDIRECTORY/REPORT.NET-$net_ver.JSON"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "NET" "$net_ver"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "RID" "$(Get-NET-RID)"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "OS_ARCH" "$(Get-Linux-OS-Architecture)"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "OS_ID" "$(Get-Linux-OS-ID)"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "IMAGE_PLATFORM" "$IMAGE_PLATFORM"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "SYSTEM_OPENSSL_VERSION" "$SYSTEM_OPENSSL_VERSION"
 
   exe=$folder/Test-OpenSSL
   test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
