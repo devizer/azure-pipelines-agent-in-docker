@@ -63,8 +63,8 @@ Run-TestSSL-Array-On-NET-Matrix() {
       fi
       popd >/dev/null
       echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
-      Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS_DEFAULT" "$status_title"
-      Set-Json-File-Test-Report "$JSON_REPORT_FILE" "TEST_DEFAULT_${SYSTEM_OPENSSL_VERSION}" "OFF" "default" "$status_title"
+      # Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS_DEFAULT" "$status_title"
+      Set-Json-File-Test-Report "$JSON_REPORT_FILE" "TEST_${test_suffix}" "OFF" "default" "$status_title"
     done
 }
 
