@@ -22,12 +22,14 @@ namespace OpenSslTester
 
         static int Main(string[] args)
         {
+            bool needValidateCertificate = args.FirstOrDefault()?.ToLower() == "--validate-certificate";
             string[] urls = { "https://www.google.com", "https://www.mozilla.org" };
             const int maxRetries = 3;
             const int timeoutSeconds = 30;
             var urlStatusList = new List<UrlStatus>();
 
-            Log($"Starting OpenSSL integration test in parallel for {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription} ...");
+            string optionText = needValidateCertificate ? "with strict certificate falidation" : "without certificate validation";
+            Log($"Starting OpenSSL integration test in parallel for {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription} {optionText} ...");
 
             Parallel.ForEach(urls, (url) =>
             {
@@ -40,7 +42,7 @@ namespace OpenSslTester
                     using (var handler = new HttpClientHandler())
                     {
                         // Ignore all certificate validation errors as we test the OpenSSL build itself
-                        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                        if (!needValidateCertificate) handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
 
                         using (var client = new HttpClient(handler))
                         {
