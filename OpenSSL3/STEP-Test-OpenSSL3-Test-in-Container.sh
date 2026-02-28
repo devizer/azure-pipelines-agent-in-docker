@@ -60,6 +60,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   popd >/dev/null
   echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
   Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS_DEFAULT" "$status_title"
+  Set-Json-File-Test-Report "$JSON_REPORT_FILE" "TEST_DEFAULT_${SYSTEM_OPENSSL_VERSION}" "OFF" "default" "$status_title"
 done
 
 find $SYSTEM_ARTIFACTSDIRECTORY -name 'REPORT.*.JSON' | sort -V | xargs jq -s '.' > $SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.REPORT.JSON
