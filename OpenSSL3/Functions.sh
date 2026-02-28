@@ -134,15 +134,22 @@ Set-Json-File-Test-Report() {
    local verify_mode="$3"
    local ssl_version="$4"
    local test_status="$5"
+   local test_error="$6"
    local folder="$(dirname "$file")"
    if [[ -n "$folder" && ! -d "$folder" ]]; then mkdir -p "$folder"; fi
    if [[ ! -f "$file" ]]; then echo '{}' > "$file"; fi
-   jq --arg test_name "$test_name" \
+   jq --arg test_name   "$test_name" \
       --arg verify_mode "$verify_mode" \
       --arg ssl_version "$ssl_version" \
       --arg test_status "$test_status" \
-      '.[$test_name] = {"VERIFY": $verify_mode, "VERSION": $ssl_version, "STATUS": $test_status}' \
+      --arg test_error  "$test_error" \
+           '.[$test_name] = ({
+               "VERIFY": $verify_mode, 
+               "VERSION": $ssl_version, 
+               "STATUS": $test_status
+           } + (if $test_error != "" then {"ERROR": $test_error} else {} end))' \
       "$file" > "$file.tmp" && mv "$file.tmp" "$file" || Say --Display-As=Error "Unable to update json file '$file' by new test report '$test_name'"
+      # PREVIOUS '.[$test_name] = {"VERIFY": $verify_mode, "VERSION": $ssl_version, "STATUS": $test_status}' \
 }
 
 
