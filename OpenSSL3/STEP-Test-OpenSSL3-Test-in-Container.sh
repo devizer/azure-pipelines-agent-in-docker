@@ -41,9 +41,9 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   ls -la "$exe" || true
   echo "test_title = [$test_title], log_name = [$log_name]"
   (
-     echo "$test_title" 
-     if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi
-     if [[ -n "$(command -v file)" && -f $folder/libhostfxr.so ]]; then file "$folder/libhostfxr.so" || true; fi
+     echo "$test_title";
+     if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi;
+     if [[ -n "$(command -v file)" && -f $folder/libhostfxr.so ]]; then file "$folder/libhostfxr.so" || true; fi;
   ) 2>&1 | tee -a "$LOG_FULL_NAME"
   # End DEBUG
   Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
