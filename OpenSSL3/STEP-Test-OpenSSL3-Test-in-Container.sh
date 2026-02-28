@@ -10,6 +10,15 @@ Say "Get-Glibc-Version = [$(Get-Glibc-Version)]";
 Say "ARTIFACT_NAME = [$ARTIFACT_NAME]";
 Say "FOLDER: $(pwd -P)";
 
+ssl_versions=""
+while IFS= read -r so_file; do
+  so_name="$(basename "$so_file")"
+  ver="$so_name"
+  ver="$(echo "$ver" | sed 's/libssl\.so\.//g')"
+  ver="$(echo "$ver" | sed 's/libcrypto\.so\.//g')"
+  ssl_versions="$ssl_versions $ver"
+done < <(find /usr -name 'libssl.so*' -o -name 'libcrypto.so*' | sort -V | grep '\.so\.[0-9.]\{1,\}$')
+ssl_versions="$(echo $"ssl_versions" | sed 's/^[[:space:]]*//')"
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
@@ -32,6 +41,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   Set-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
   Set-Json-File-Property "$JSON_REPORT_FILE" "IMAGE_PLATFORM" "$IMAGE_PLATFORM"
   Set-Json-File-Property "$JSON_REPORT_FILE" "SYSTEM_OPENSSL_VERSION" "$SYSTEM_OPENSSL_VERSION"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "SYSTEM_LIBSSL_VERSIONS" "$ssl_versions"
 
   exe=$folder/Test-OpenSSL
   test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
