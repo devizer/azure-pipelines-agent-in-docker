@@ -27,7 +27,7 @@ Run-TestSSL-Array-On-NET-Matrix() {
     local verify_mode="$3"
     local arg_ssl_version="$4"
     find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
-      echo "LD_LIBRARY_PATH = [$LD_LIBRARY_PATH]"
+      echo "LD_LIBRARY_PATH = [${LD_LIBRARY_PATH:-}]"
       net_ver="$(basename $folder)"
       test_title="$test_suffix NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
       if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
