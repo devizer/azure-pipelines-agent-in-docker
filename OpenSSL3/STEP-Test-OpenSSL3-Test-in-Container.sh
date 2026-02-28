@@ -72,8 +72,9 @@ Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITH_VALIDATION" "--validate-certifi
 Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITHOUT_VALIDATION" ""
 Say "Deleting system libssl files"
 cat "$system_ssl_so_file_list" | while IFS= read -r so_file; do
-    Colorize Red "Deleting libssl so file [$so_file]"
-    rm -f "$so_file"
+    Colorize Red "SKIP Deleting libssl so file [$so_file]"
+    # Colorize Red "Deleting libssl so file [$so_file]"
+    # rm -f "$so_file"
 done
 for ssl_version in $SSL_VERSIONS; do
     export LD_LIBRARY_PATH="$(pwd -P)/openssl-binaries/$(Get-NET-RID)/openssl-$ssl_version"
@@ -81,6 +82,7 @@ for ssl_version in $SSL_VERSIONS; do
     ls -la "$LD_LIBRARY_PATH"
     Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITH_VALIDATION" "--validate-certificate"
     Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITHOUT_VALIDATION" ""
+    export LD_LIBRARY_PATH=""
 done
 
 
