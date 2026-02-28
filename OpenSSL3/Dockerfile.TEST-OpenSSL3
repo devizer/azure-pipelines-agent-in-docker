@@ -4,8 +4,9 @@ FROM ${BASE_IMAGE}
 COPY qemu-arm-static /usr/bin/qemu-arm-static
 COPY qemu-aarch64-static /usr/bin/qemu-aarch64-static
 
-ENV DEBIAN_PACKAGES="wget file openssl"
-ENV ALPINE_PACKAGES="bash wget libstdc++ coreutils openssl"
+ENV DEBIAN_PACKAGES="wget file openssl file"
+ENV ALPINE_PACKAGES="bash wget libstdc++ coreutils openssl file"
+ENV FEDORA_PACKAGES="findutils file"
 
 ARG BASE_IMAGE
 RUN echo "Building on image: ${BASE_IMAGE}"
@@ -19,8 +20,7 @@ RUN bash install-build-tools-bundle.sh; bash Install-DevOps-Library.sh; Repair-L
 RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEBIAN_PACKAGES -qq 2>&1 | { grep "Unpacking\|Setting" || true; }; fi
 # "$(Get-Linux-OS-ID)" == "fedora:26"
 # if findutils can not be installed, then job fails later
-RUN if [[ -n "$(command -v dnf)" ]]; then try-and-retry dnf install -y findutils || true; fi
-RUN if [[ -n "$(command -v yum)" ]]; then try-and-retry yum install -y findutils || true; fi
+RUN if [[ -n "$(command -v dnf)" ]]; then try-and-retry dnf install -y $FEDORA_PACKAGES || true; elif [[ -n "$(command -v yum)" ]]; then try-and-retry yum install -y $FEDORA_PACKAGES || true; fi
 
 RUN Say "Installing jq 1.8.1"; Run-Remote-Script https://devizer.github.io/devops-library/install-jq.sh --target-folder /usr/local/bin --version 1.8.1
 RUN Say "JQ VERSION: [$(jq --version)]"
