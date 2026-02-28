@@ -54,7 +54,7 @@ export -f Pre-Build-OpenSSL-Tests
 
 export base_folder=$HOME/openssl-tests
 
-parallel --group --halt 0 -j 4 "Pre-Build-OpenSSL-Tests {} 2>&1" ::: 2.1 3.0 3.1 5.0 6.0 7.0 8.0 9.0 10.0
+parallel --group --halt 0 -j 4 "Pre-Build-OpenSSL-Tests {} 2>&1" ::: 2.1 2.2 3.0 3.1 5.0 6.0 7.0 8.0 9.0 10.0
 
 Say "Parallel Prebuild Complete"
 find $SYSTEM_ARTIFACTSDIRECTORY -name Success.Log | sort | while IFS= read -r line; do cat $line | tee -a $SYSTEM_ARTIFACTSDIRECTORY/TOTAL.SUCCESS.LOG; done
