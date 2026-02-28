@@ -53,8 +53,13 @@ Run-TestSSL-Array-On-NET-Matrix() {
       echo "test_title = [$test_title], log_name = [$log_name]"
       (
          echo "$test_title";
+         echo "INFO '$exe'"
          if [[ -n "$(command -v file)" ]]; then file "$exe" || true; fi;
-         if [[ -n "$(command -v file)" && -f $folder/libhostfxr.so ]]; then file "$folder/libhostfxr.so" || true; fi;
+         ldd "$exe" || true
+         echo ""
+         echo "INFO '$folder/libhostfxr.so'"
+         if [[ -n "$(command -v file)" && -f "$folder/libhostfxr.so" ]]; then file "$folder/libhostfxr.so" || true; fi;
+         ldd "$folder/libhostfxr.so" || true
          echo "";
       ) 2>&1 | tee -a "$LOG_FULL_NAME"
       # End DEBUG
