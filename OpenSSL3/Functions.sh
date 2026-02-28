@@ -129,3 +129,17 @@ Set-Json-File-Property() {
 Set-Artifact-Json-File-Property() {
    Set-Json-File-Property "$SYSTEM_ARTIFACTSDIRECTORY/$1" "$2" "$3"
 }
+
+Get-LibC-Name() {
+  local ldd="$(ldd --version 2>&1)"
+  local line1="$(echo "$ldd" | head -1)"
+  local ver
+  if [[ "$line1" == *"GNU"* ]]; then
+    ver="$(echo "$line1" | awk '{ print $NF }')"
+    echo "GNU $ver"
+  elif [[ "$line1" == *"musl"* ]]; then
+    line2="$(echo "$ldd" | head -2 | tail -1)"
+    ver="$(echo "$line2" | awk '{ print $NF }')"
+    echo "musl $ver"
+  fi
+}

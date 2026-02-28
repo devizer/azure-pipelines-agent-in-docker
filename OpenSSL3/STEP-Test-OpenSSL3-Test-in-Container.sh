@@ -26,6 +26,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   JSON_REPORT_FILE="$SYSTEM_ARTIFACTSDIRECTORY/REPORT.NET-$net_ver.JSON"
   Set-Json-File-Property "$JSON_REPORT_FILE" "NET" "$net_ver"
   Set-Json-File-Property "$JSON_REPORT_FILE" "RID" "$(Get-NET-RID)"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "LIBC" "$(Get-LibC-Name)"
   Set-Json-File-Property "$JSON_REPORT_FILE" "OS_ARCH" "$(Get-Linux-OS-Architecture)"
   Set-Json-File-Property "$JSON_REPORT_FILE" "OS_ID" "$(Get-Linux-OS-ID)"
   Set-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
@@ -55,7 +56,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   fi
   popd >/dev/null
   echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
-  Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS" "$status_title"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS_DEFAULT" "$status_title"
 done
 
 find $SYSTEM_ARTIFACTSDIRECTORY -name 'REPORT.*.JSON' | sort -V | xargs jq -s '.' > $SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.REPORT.JSON
