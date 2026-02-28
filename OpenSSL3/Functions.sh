@@ -159,5 +159,6 @@ Find-Lib-SSL-SO-Versions() {
    cat "$ssl_versions_file" | sort -V -u > "$ssl_versions_file.sorted"
    local ssl_versions="$(tr '\n' ' ' < "$ssl_versions_file.sorted")"
    ssl_versions="$(echo "$ssl_versions" | sed 's/^[[:space:]]*//')"
+   ssl_versions="$(echo "$ssl_versions" | sed 's/[[:space:]]*$//')"
    echo "$ssl_versions"
 }
