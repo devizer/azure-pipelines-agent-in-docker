@@ -61,12 +61,13 @@ Run-TestSSL-Array-On-NET-Matrix() {
       Colorize Magenta "STARTING: $test_title ... "
       status_title="OK"; 
       test_error="";
-      exe_error_output=$(mktemp)
-      "$exe" $exe_arguments 2> "$exe_error_output" | tee -a "$LOG_FULL_NAME" || status_title="FAIL"
-      Colorize Red "$exe_error_output"
-      cat "$exe_error_output" >> "$LOG_FULL_NAME"
+      exe_error_output_file=$(mktemp)
+      "$exe" $exe_arguments 2> "$exe_error_output_file" | tee -a "$LOG_FULL_NAME" || status_title="FAIL"
+      exe_error_output="$(cat "$exe_error_output_file")"
+      [[ -n "$exe_error_output" ]] && Colorize Red "$exe_error_output"
+      cat "$exe_error_output_file" >> "$LOG_FULL_NAME"
       if [[ $status_title == "FAIL" ]] ; then
-          test_error="$(cat "$exe_error_output" | head -1)"
+          test_error="$(cat "$exe_error_output_file" | head -1)"
           Say --Display-As=Error "FAIL: $test_title"
       fi
       echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
