@@ -51,7 +51,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   fi
   popd >/dev/null
   echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
-  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "STATUS" "$status_title"
+  Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS" "$status_title"
   echo " "
 done
 
