@@ -26,7 +26,7 @@ Build-Test-Image() {
   for ssl_version in $ssl_versions; do
   for rid in $runtimes; do
     index=$((index+1))
-    echo "[$index of 36] Downloading openssl binaries v$ssl_versions for [linux-$rid]"
+    echo "[$index of 36] Downloading openssl $ssl_version binaries for [linux-$rid]"
     Run-Remote-Script https://devizer.github.io/devops-library/install-libssl.sh \
         $ssl_version \
         --target-folder "./openssl-binaries/linux-$rid/openssl-$ssl_version" \
