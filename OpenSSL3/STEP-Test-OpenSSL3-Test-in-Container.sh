@@ -55,3 +55,5 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   echo " "
 done
 
+find $SYSTEM_ARTIFACTSDIRECTORY -name 'REPORT.*.JSON' | sort -V | xargs jq -s '.' > $SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.REPORT.JSON
+
