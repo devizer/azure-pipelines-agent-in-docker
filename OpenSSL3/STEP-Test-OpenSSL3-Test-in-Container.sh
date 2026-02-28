@@ -24,6 +24,8 @@ summary_report_file="$SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.$(Get-NET-RID).TXT"
 Run-TestSSL-Array-On-NET-Matrix() {
     local test_suffix="$1"
     local exe_arguments="$2"
+    local verify_mode="$3"
+    local arg_ssl_version="$4"
     find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
       echo " "
       net_ver="$(basename $folder)"
@@ -55,21 +57,19 @@ Run-TestSSL-Array-On-NET-Matrix() {
       ) 2>&1 | tee -a "$LOG_FULL_NAME"
       # End DEBUG
       Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
-      pushd "$(dirname "$exe")" >/dev/null
       status_title="OK"
-      if ! "./$(basename "$exe")" 2>&1 | tee -a "$LOG_FULL_NAME"; then
+      if ! "$exe" $exe_arguments 2>&1 | tee -a "$LOG_FULL_NAME"; then
           Say --Display-As=Error "FAIL: $log_name"
           status_title="FAIL"
       fi
-      popd >/dev/null
       echo "$(printf "%4s" "$status_title"): $test_title" | tee -a $summary_report_file
       # Set-Json-File-Property "$JSON_REPORT_FILE" "STATUS_DEFAULT" "$status_title"
-      Set-Json-File-Test-Report "$JSON_REPORT_FILE" "TEST_${test_suffix}" "OFF" "default" "$status_title"
+      Set-Json-File-Test-Report "$JSON_REPORT_FILE" "TEST_${test_suffix}" "$verify_mode" "$arg_ssl_version" "$status_title"
     done
 }
 
-Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITH_VALIDATION" "--validate-certificate"
-Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITHOUT_VALIDATION" ""
+Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITH_VALIDATION" "--validate-certificate" "ON" "DEFAULT"
+Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_WITHOUT_VALIDATION" "" "OFF" "DEFAULT"
 Say "Deleting system libssl files"
 cat "$system_ssl_so_file_list" | while IFS= read -r so_file; do
     Colorize Red "SKIP Deleting libssl so file [$so_file]"
@@ -80,8 +80,8 @@ for ssl_version in $SSL_VERSIONS; do
     export LD_LIBRARY_PATH="$(pwd -P)/openssl-binaries/$(Get-NET-RID)/openssl-$ssl_version"
     Colorize Magenta "Content of LD_LIBRARY_PATH=[$LD_LIBRARY_PATH]"
     ls -la "$LD_LIBRARY_PATH"
-    Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITH_VALIDATION" "--validate-certificate"
-    Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITHOUT_VALIDATION" ""
+    Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITH_VALIDATION" "--validate-certificate" "ON" "$ssl_version"
+    Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITHOUT_VALIDATION" "" "OFF" "$ssl_version"
     export LD_LIBRARY_PATH=""
 done
 
