@@ -16,6 +16,7 @@ tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 cp -v /install-dotnet-dependencies.log $SYSTEM_ARTIFACTSDIRECTORY/
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
+SYSTEM_OPENSSL_VERSION=$(openssl version | awk '{print $2}' || true)
 summary_report_file="$SYSTEM_ARTIFACTSDIRECTORY/SUMMARY.$(Get-NET-RID).TXT"
 find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
   net_ver="$(basename $folder)"
@@ -27,6 +28,7 @@ find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folde
   Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "OS_ID" "$(Get-Linux-OS-ID)"
   Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE" "$IMAGE"
   Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" "IMAGE_PLATFORM" "$IMAGE_PLATFORM"
+  Set-Artifact-Json-File-Property "$JSON_REPORT_FILE" SYSTEM_OPENSSL_VERSION "$SYSTEM_OPENSSL_VERSION"
 
   exe=$folder/Test-OpenSSL
   test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
