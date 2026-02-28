@@ -22,6 +22,9 @@ RUN if [[ -n "$(command -v apt-get)" ]]; then try-and-retry apt-get install $DEB
 RUN if [[ -n "$(command -v dnf)" ]]; then try-and-retry dnf install -y findutils || true; fi
 RUN if [[ -n "$(command -v yum)" ]]; then try-and-retry yum install -y findutils || true; fi
 
+RUN Say "Installing jq 1.8.1"; Run-Remote-Script https://devizer.github.io/devops-library/install-jq.sh --target-folder /usr/local/bin --version 1.8.1
+RUN Say "JQ VERSION: [$(jq --version)]"
+
 
 RUN Say "Installing .NET Dependencies"; Run-Remote-Script https://devizer.github.io/devops-library/install-dotnet-dependencies.sh | tee -a /install-dotnet-dependencies.log
 # RUN Say "Deleting openssl"; \
