@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace OpenSslTester
 {
-    // Helper class to track the result of each URL test
-    class UrlStatus 
-    { 
-        public string Url; 
-        public string Error; 
+    class UrlStatus
+    {
+        public string Url;
+        public string Error;
         public bool IsSuccess => Error == null;
     }
 
@@ -51,19 +50,19 @@ namespace OpenSslTester
                             try
                             {
                                 Log($"Starting attempt {attempt} of {maxRetries} for {url}...");
-                                
+
                                 // Execution in Parallel requires blocking call or Task.Run for async methods
                                 var response = client.GetAsync(url).ConfigureAwait(continueOnCapturedContext: false).GetAwaiter().GetResult();
 
                                 Log($"Connection established. HTTP Status: {(int)response.StatusCode}. Attempt {attempt} of {maxRetries} for {url}");
-                                
+
                                 currentStatus.Error = null;
-                                break; 
+                                break;
                             }
                             catch (Exception ex)
                             {
                                 currentStatus.Error = ex.Message;
-                                Log($"Connection failed during attempt {attempt} of {maxRetries} for {url}: {ex.Message}", true);
+                                Log($"Connection failed during attempt {attempt} of {maxRetries} for {url}: {GetExeptionDigest(ex)}", true);
                             }
                         }
                     }
@@ -119,5 +118,18 @@ namespace OpenSslTester
                 }
             }
         }
+
+        public static string GetExeptionDigest(Exception ex)
+        {
+            List<string> ret = new List<string>();
+            while (ex != null)
+            {
+                ret.Add("[" + ex.GetType().Name + "] " + ex.Message);
+                ex = ex.InnerException;
+            }
+
+            return string.Join(" --> ", ret);
+        }
+
     }
 }
