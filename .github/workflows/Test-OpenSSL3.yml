@@ -30,6 +30,21 @@ jobs:
         IMAGE: [ 
           # "mcr.microsoft.com/azurelinux/base/core:latest",
           # "multiarch/ubuntu-debootstrap:arm64-plucky",
+          "alpine:3.7",
+          "alpine:3.8", 
+          "alpine:3.9", 
+          "alpine:3.10", 
+          "alpine:3.11", 
+          "alpine:3.12", 
+          "alpine:3.13", 
+          "alpine:3.14", 
+          "alpine:3.15", 
+          "alpine:3.16", 
+          "alpine:3.20", 
+          "alpine:3.21", 
+          "alpine:3.22", 
+          "alpine:3.23",
+
           "multiarch/alpine:arm64-v3.7",
           "multiarch/alpine:arm64-v3.8",
           "multiarch/alpine:arm64-v3.9",
@@ -40,6 +55,22 @@ jobs:
           "multiarch/alpine:arm64-v3.21",
           "multiarch/alpine:arm64-v3.22",
           "multiarch/alpine:arm64-v3.23",
+
+          "alpine:3.7 linux/arm/v7",
+          "alpine:3.8 linux/arm/v7",
+          "alpine:3.9 linux/arm/v7",
+          "alpine:3.10 linux/arm/v7",
+          "alpine:3.11 linux/arm/v7",
+          "alpine:3.12 linux/arm/v7",
+          "alpine:3.13 linux/arm/v7", 
+          "alpine:3.14 linux/arm/v7", 
+          "alpine:3.15 linux/arm/v7", 
+          "alpine:3.16 linux/arm/v7", 
+          "alpine:3.20 linux/arm/v7", 
+          "alpine:3.21 linux/arm/v7", 
+          "alpine:3.22 linux/arm/v7", 
+          "alpine:3.23 linux/arm/v7",
+
           
           "multiarch/alpine:armhf-v3.7",
           "multiarch/alpine:armhf-v3.8",
@@ -86,18 +117,8 @@ jobs:
           "multiarch/debian-debootstrap:arm64-jessie", 
           "multiarch/debian-debootstrap:arm64-stretch", 
           "arm64v8/debian:bookworm",
-          "arm64v8/debian:trixie",
+          "arm64v8/debian:trixie"
 
-          "alpine:3.7", 
-          "alpine:3.8", 
-          "alpine:3.9", 
-          "alpine:3.10", 
-          "alpine:3.11", 
-          "alpine:3.12", 
-          "alpine:3.20", 
-          "alpine:3.21", 
-          "alpine:3.22", 
-          "alpine:3.23"
 
         ]
         
@@ -117,8 +138,11 @@ jobs:
          ARG_SET="${ARG_SET:-X64_ONLY}"
          echo "ARG_SET=$ARG_SET" | tee -a $GITHUB_ENV
          
-         Say "PROPAGATE input matrix.IMAGE"
-         echo "IMAGE=${{ matrix.IMAGE }}" | tee -a $GITHUB_ENV
+         Say "PROPAGATE input matrix.IMAGE = [${{ matrix.IMAGE }}]"
+         IMAGE=$(echo ${{ matrix.IMAGE }} | awk '{print $1}')
+         IMAGE_PLATFORM=$(echo ${{ matrix.IMAGE }} | awk '{print $2}')
+         echo "IMAGE=$IMAGE" | tee -a $GITHUB_ENV
+         echo "IMAGE_PLATFORM=$IMAGE_PLATFORM" | tee -a $GITHUB_ENV
 
          Say "CALCULATE ARTIFACT_NAME"
          tag="${{ matrix.IMAGE }}"

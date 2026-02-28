@@ -22,6 +22,7 @@ Build-Test-Image() {
 
   if [[ $IMAGE == *"arm32v7"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm/v7; fi
   if [[ $IMAGE == *"arm64v8"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm64; fi
+  if [[ -n "${IMAGE_PLATFORM:-}" ]]; then export DOCKER_DEFAULT_PLATFORM="${IMAGE_PLATFORM:-}"; fi
   cp -v /usr/bin/qemu-arm-static ./
   cp -v /usr/bin/qemu-aarch64-static ./
   Say "PULL BASE IMAGE [$IMAGE]"
@@ -55,6 +56,7 @@ docker run --privileged --rm --name openssl-container --hostname openssl-contain
   -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
   -v "$SYSTEM_ARTIFACTSDIRECTORY:$SYSTEM_ARTIFACTSDIRECTORY" \
   -e IMAGE="$IMAGE" \
+  -e IMAGE_PLATFORM=$IMAGE_PLATFORM \
   -e ARTIFACT_NAME="$ARTIFACT_NAME" \
   -e ARG_SET="$ARG_SET" \
   -e SYSTEM_ARTIFACTSDIRECTORY="$SYSTEM_ARTIFACTSDIRECTORY" \
