@@ -35,12 +35,12 @@ Pre-Build-OpenSSL-Tests() {
     Say "BUILDING .NET $net_ver OpenSSL Tests for $rid"
     df -h -T
     try-and-retry dotnet restore
-    bin_dir=$base_folder/bin/$net_ver
+    bin_dir=$base_folder/bin/$rid/$net_ver
     public_dir="$SYSTEM_ARTIFACTSDIRECTORY/$rid/$net_ver"
-    try-and-retry dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { 
-        success_list="$success_list $rid"; 
-        mkdir -p $public_dir; 
-        cp -av "$bin_dir/." $public_dir; 
+    try-and-retry $dotnet_folder/dotnet publish -c Release --self-contained -r $rid -o $bin_dir && { 
+        success_list="$success_list $rid";
+        mkdir -p $public_dir;
+        cp -av "$bin_dir/." $public_dir;
         echo "SUCCESS: NET $net_ver for $rid" | tee $public_dir/Success.Log;
         Say "$(file $bin_dir/Test-OpenSSL || true)"
     } || Say --Display-As=Error "RID $rid is not supported by .NET $net_ver"
