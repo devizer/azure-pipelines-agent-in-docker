@@ -27,10 +27,12 @@ Run-TestSSL-Array-On-NET-Matrix() {
     local verify_mode="$3"
     local arg_ssl_version="$4"
     find $tests_folder_base -maxdepth 1 -type d | sort -V | while IFS= read -r folder; do
-      echo " "
+      echo "LD_LIBRARY_PATH = [$LD_LIBRARY_PATH]"
       net_ver="$(basename $folder)"
+      test_title="$test_suffix NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
       if [[ ! $net_ver =~ ^[1-9] ]]; then continue; fi
-      Say "Starting Testing .NET=[$net_ver] on arch=[$(Get-Linux-OS-Architecture)] OS=[$(Get-Linux-OS-ID)], RID='$(Get-NET-RID)' ..."
+      Say "Starting $test_title ..."
+      echo ""
       JSON_REPORT_FILE="$SYSTEM_ARTIFACTSDIRECTORY/REPORT.NET-$net_ver.JSON"
       Set-Json-File-Property "$JSON_REPORT_FILE" "NET" "$net_ver"
       Set-Json-File-Property "$JSON_REPORT_FILE" "RID" "$(Get-NET-RID)"
@@ -43,7 +45,6 @@ Run-TestSSL-Array-On-NET-Matrix() {
       Set-Json-File-Property "$JSON_REPORT_FILE" "SYSTEM_LIBSSL_VERSIONS" "$system_ssl_versions"
 
       exe=$folder/Test-OpenSSL
-      test_title="$test_suffix NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
       log_name="$(Get-Safe-File-Name "$test_title")"
       LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name.$test_suffix.OpenSSL.log"
       # DEBUG
@@ -57,7 +58,7 @@ Run-TestSSL-Array-On-NET-Matrix() {
          echo "";
       ) 2>&1 | tee -a "$LOG_FULL_NAME"
       # End DEBUG
-      Colorize Magenta "STARTING TEST WITH DEFAULT OPENSSL: $test_title ... "
+      Colorize Magenta "STARTING: $test_title ... "
       status_title="OK"
       if ! "$exe" $exe_arguments 2>&1 | tee -a "$LOG_FULL_NAME"; then
           Say --Display-As=Error "FAIL: $log_name"
