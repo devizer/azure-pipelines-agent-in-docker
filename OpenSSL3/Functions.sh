@@ -127,5 +127,5 @@ Set-Json-File-Property() {
 }
 
 Set-Artifact-Json-File-Property() {
-   Set-Json-File-Property "$$SYSTEM_ARTIFACTSDIRECTORY/$1" "$2" "$3"
+   Set-Json-File-Property "$SYSTEM_ARTIFACTSDIRECTORY/$1" "$2" "$3"
 }
