@@ -20,10 +20,9 @@ Build-Test-Image() {
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
-  ssl_versions="1.1.1w 3.5.5 3.0.19 3.3.6 3.4.4 3.6.1"
   runtimes="arm arm64 x64 musl-arm musl-arm64 musl-x64"
   index=0;
-  for ssl_version in $ssl_versions; do
+  for ssl_version in $SSL_VERSIONS; do
   for rid in $runtimes; do
     index=$((index+1))
     echo "[$index of 36] Downloading openssl $ssl_version binaries for [linux-$rid]"

@@ -1,3 +1,5 @@
+export SSL_VERSIONS="1.1.1w 3.5.5 3.0.19 3.3.6 3.4.4 3.6.1"
+
 Benchmark-OpenSSL()
 {
     local openssl_executable="$1"
