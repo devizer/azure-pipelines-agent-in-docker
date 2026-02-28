@@ -76,7 +76,7 @@ cat "$system_ssl_so_file_list" | while IFS= read -r so_file; do
     rm -f "$so_file"
 done
 for ssl_version in $SSL_VERSIONS; do
-    export LD_LIBRARY_PATH="$(pwd -P)/openssl-binaries/linux-$(Get-NET-RID)/openssl-$ssl_version"
+    export LD_LIBRARY_PATH="$(pwd -P)/openssl-binaries/$(Get-NET-RID)/openssl-$ssl_version"
     Colorize Magenta "Content of LD_LIBRARY_PATH=[$LD_LIBRARY_PATH]"
     ls -la "$LD_LIBRARY_PATH"
     Run-TestSSL-Array-On-NET-Matrix "SSL_${ssl_version}_WITH_VALIDATION" "--validate-certificate"
