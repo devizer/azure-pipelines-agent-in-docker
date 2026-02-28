@@ -70,7 +70,7 @@ namespace OpenSslTester
 
                     if (attempt < maxRetries && !currentStatus.IsSuccess)
                     {
-                        Task.Delay(2000).Wait();
+                        Task.Delay(200).Wait();
                     }
                 }
 

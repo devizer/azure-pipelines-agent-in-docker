@@ -1,4 +1,4 @@
-name: "OpenSSL 3: TESTS 34 Images * 6 Arch"
+name: "OpenSSL 3: TESTS 95 Images * 6 Arch"
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
