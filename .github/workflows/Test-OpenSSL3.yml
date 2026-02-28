@@ -167,6 +167,8 @@ jobs:
          ARTIFACT_NAME="$tag"
          echo "ARTIFACT_NAME=$ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
+    - name: install tree
+      run: try-and-retry sudo apt-get update -y -qq; try-and-retry sudo apt-get install -y tree -qq
     - name: Download 'OpenSSL-Tests' Artifact
       env:
         GH_TOKEN: ${{ github.token }}

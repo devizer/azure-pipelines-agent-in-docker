@@ -20,6 +20,22 @@ Build-Test-Image() {
   Download-File https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh install-build-tools-bundle.sh
   Download-File https://devizer.github.io/Install-DevOps-Library.sh Install-DevOps-Library.sh
 
+  ssl_versions="1.1.1w 3.5.5 3.0.19 3.3.6 3.4.4 3.6.1"
+  runtimes="arm arm64 x64 musl-arm musl-arm64 musl-x64"
+  index=0;
+  for ssl_version in $ssl_versions; do
+  for rid in $runtimes; do
+    index=$((index+1))
+    echo "[$index of 36] Downloading openssl binaries v$ssl_versions for [linux-$rid]"
+    Run-Remote-Script https://devizer.github.io/devops-library/install-libssl.sh \
+        $ssl_version \
+        --target-folder "./openssl-binaries/linux-$rid/openssl-$ssl_version" \
+        --rid "linux-$rid"
+  done
+  done
+  tree -h ./openssl-binaries
+
+
   if [[ $IMAGE == *"arm32v7"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm/v7; fi
   if [[ $IMAGE == *"arm64v8"* ]]; then export DOCKER_DEFAULT_PLATFORM=linux/arm64; fi
   if [[ -n "${IMAGE_PLATFORM:-}" ]]; then export DOCKER_DEFAULT_PLATFORM="${IMAGE_PLATFORM:-}"; fi
@@ -45,7 +61,7 @@ docker run --privileged --rm --hostname openssl-container \
            Say "FOLDER: $(pwd -P)";
 '
 
-if [[ "${ARG_SET:-}" == "X64_ONLY" && "${IMAGE:-}" == *":arm"* ]]; then
+if [[ "${ARG_SET:-}" == "X64_ONLY" ]] && [[ "${IMAGE:-}" == *":arm"* || $IMAGE_PLATFORM == *"arm"* ]]; then
   echo "SKIPPING ARM on X64_ONLY Workflow"
   exit 0
 fi
