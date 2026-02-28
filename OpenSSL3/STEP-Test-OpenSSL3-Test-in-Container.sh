@@ -45,7 +45,7 @@ Run-TestSSL-Array-On-NET-Matrix() {
       exe=$folder/Test-OpenSSL
       test_title="NET=${net_ver} ARCH=$(Get-Linux-OS-Architecture) RID=$(Get-NET-RID) OSID=$(Get-Linux-OS-ID) $ARTIFACT_NAME"
       log_name="$(Get-Safe-File-Name "$test_title")"
-      LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name.Deafult.OpenSSL.log"
+      LOG_FULL_NAME="$SYSTEM_ARTIFACTSDIRECTORY/$log_name.$test_suffix.OpenSSL.log"
       # DEBUG
       Say-Definition "exe is" "$exe"
       ls -la "$exe" || true
