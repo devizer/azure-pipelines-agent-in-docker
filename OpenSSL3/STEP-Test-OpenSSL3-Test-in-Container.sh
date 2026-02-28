@@ -18,7 +18,7 @@ while IFS= read -r so_file; do
   ver="$(echo "$ver" | sed 's/libcrypto\.so\.//g')"
   ssl_versions="$ssl_versions $ver"
 done < <(find /usr -name 'libssl.so*' -o -name 'libcrypto.so*' | sort -V | grep '\.so\.[0-9.]\{1,\}$')
-ssl_versions="$(echo $"ssl_versions" | sed 's/^[[:space:]]*//')"
+ssl_versions="$(echo "$ssl_versions" | sed 's/^[[:space:]]*//')"
 
 tests_folder_base="./OpenSSL-Tests/$(Get-NET-RID)"
 
