@@ -154,11 +154,15 @@ Find-Lib-SSL-SO-Versions() {
      ver="$so_name"
      ver="$(echo "$ver" | sed 's/libssl\.so\.//g')"
      ver="$(echo "$ver" | sed 's/libcrypto\.so\.//g')"
-     echo $ver >> "$ssl_versions_file"
+     if [[ $ver == "1"* || $ver == "3"* || $ver == "0"* ]]; then
+         echo $ver >> "$ssl_versions_file"
+     fi
    done < <(cat $"$dump_file")
    cat "$ssl_versions_file" | sort -V -u > "$ssl_versions_file.sorted"
+   # Next works everywhere
    local ssl_versions="$(tr '\n' ' ' < "$ssl_versions_file.sorted")"
    ssl_versions="$(echo "$ssl_versions" | sed 's/^[[:space:]]*//')"
    ssl_versions="$(echo "$ssl_versions" | sed 's/[[:space:]]*$//')"
+   rm -f $ssl_versions_file* || true
    echo "$ssl_versions"
 }
