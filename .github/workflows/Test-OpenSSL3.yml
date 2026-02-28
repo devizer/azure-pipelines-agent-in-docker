@@ -30,6 +30,25 @@ jobs:
         IMAGE: [ 
           # "mcr.microsoft.com/azurelinux/base/core:latest",
           # "multiarch/ubuntu-debootstrap:arm64-plucky",
+
+          "alpine:3.7 linux/arm64/v8",
+          "alpine:3.8 linux/arm64/v8",
+          "alpine:3.9 linux/arm64/v8",
+          "alpine:3.10 linux/arm64/v8",
+          "alpine:3.11 linux/arm64/v8",
+          "alpine:3.12 linux/arm64/v8",
+          "alpine:3.13 linux/arm64/v8", 
+          "alpine:3.14 linux/arm64/v8", 
+          "alpine:3.15 linux/arm64/v8", 
+          "alpine:3.16 linux/arm64/v8", 
+          "alpine:3.17 linux/arm64/v8", 
+          "alpine:3.18 linux/arm64/v8", 
+          "alpine:3.19 linux/arm64/v8", 
+          "alpine:3.20 linux/arm64/v8", 
+          "alpine:3.21 linux/arm64/v8", 
+          "alpine:3.22 linux/arm64/v8", 
+          "alpine:3.23 linux/arm64/v8",
+
           "alpine:3.7",
           "alpine:3.8", 
           "alpine:3.9", 
@@ -40,6 +59,9 @@ jobs:
           "alpine:3.14", 
           "alpine:3.15", 
           "alpine:3.16", 
+          "alpine:3.17", 
+          "alpine:3.18", 
+          "alpine:3.19", 
           "alpine:3.20", 
           "alpine:3.21", 
           "alpine:3.22", 
@@ -62,11 +84,13 @@ jobs:
           "alpine:3.14 linux/arm/v7", 
           "alpine:3.15 linux/arm/v7", 
           "alpine:3.16 linux/arm/v7", 
+          "alpine:3.17 linux/arm/v7", 
+          "alpine:3.18 linux/arm/v7", 
+          "alpine:3.19 linux/arm/v7", 
           "alpine:3.20 linux/arm/v7", 
           "alpine:3.21 linux/arm/v7", 
           "alpine:3.22 linux/arm/v7", 
           "alpine:3.23 linux/arm/v7",
-
           
           "multiarch/alpine:armhf-v3.7",
           "multiarch/alpine:armhf-v3.8",
@@ -84,13 +108,14 @@ jobs:
           "arm32v7/ubuntu:14.04",
 
           "amazonlinux:2023",
+          "amazonlinux:2023 linux/arm64/v8",
           "amazonlinux:2",
+          "amazonlinux:2 linux/arm64/v8",
           "amazonlinux:1",
 
-          
           "centos:8",
-          "fedora:42", 
-          "fedora:41", 
+          "fedora:42",
+          "fedora:41",
           "fedora:26",
           "debian:jessie", 
           "debian:stretch", 
@@ -102,7 +127,7 @@ jobs:
           "multiarch/debian-debootstrap:armhf-jessie", 
           "multiarch/debian-debootstrap:armhf-stretch", 
           "multiarch/debian-debootstrap:armhf-buster", 
-          "multiarch/debian-debootstrap:armhf-bullseye", 
+          "multiarch/debian-debootstrap:armhf-bullseye",
           "arm32v7/debian:bookworm",
           "arm32v7/debian:trixie",
 
@@ -110,7 +135,6 @@ jobs:
           "multiarch/debian-debootstrap:arm64-stretch", 
           "arm64v8/debian:bookworm",
           "arm64v8/debian:trixie"
-
 
         ]
         
