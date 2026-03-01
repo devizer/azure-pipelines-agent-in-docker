@@ -14,7 +14,7 @@ set -eu; set -o pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd $SCRIPT_DIR
 mkdir -p Artifacts
-for platform in linux/amd64 linux/arm/v5 linux/arm/v7 linux/arm64; do
+for platform in linux/amd64 linux/arm/v7 linux/arm64; do
   export DOCKER_DEFAULT_PLATFORM=$platform
   docker run -t --rm \
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \

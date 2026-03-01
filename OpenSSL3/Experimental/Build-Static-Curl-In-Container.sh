@@ -43,6 +43,6 @@ strip /opt/curl-8/bin/curl; echo; ls -lah /opt/curl-8/bin/curl
 
 public_name="curl-$(apk info --print-arch)-static"
 cp -v /opt/curl-8/bin/curl "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name"
-(file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version; echo; ldd /opt/curl-8/bin/curl || true) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-version.txt"
+(file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version;) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-version.txt"
+ldd ldd /opt/curl-8/bin/curl > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-alpine-dependencies.txt" || true
 apk info --print-arch > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-arch.txt"
-
