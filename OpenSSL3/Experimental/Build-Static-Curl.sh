@@ -12,7 +12,6 @@ set -eu; set -o pipefail
 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-. "$SCRIPT_DIR/Functions.sh"
 cd $SCRIPT_DIR
 
 mkdir -p Artifacts
