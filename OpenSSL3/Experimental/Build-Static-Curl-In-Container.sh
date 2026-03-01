@@ -15,7 +15,7 @@ cd curl*
 export OPENSSL_USE_STATIC_LIBS=TRUE
 export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
 
-ARTIFACTS_SUFFIX="{ARTIFACTS_SUFFIX:-$(apk info --print-arch)}"
+ARTIFACTS_SUFFIX="${ARTIFACTS_SUFFIX:-$(apk info --print-arch)}"
 public_name="curl-$ARTIFACTS_SUFFIX-static"
 
 
@@ -54,5 +54,3 @@ apk info --print-arch > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-arch.txt"
 echo "PLATFORM: $PLATFORM" > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-platform.txt"
 
 
--- Looking for LIBRESSL_VERSION_NUMBER - not found
--- Could NOT find ZLIB (missing: ZLIB_INCLUDE_DIR)
