@@ -15,6 +15,9 @@ cd curl*
 export OPENSSL_USE_STATIC_LIBS=TRUE
 export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
 
+public_name="curl-$(apk info --print-arch)-static"
+
+
 cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=/opt/curl-8 \
@@ -33,7 +36,7 @@ cmake -S . -B build \
   -DCURL_DISABLE_LDAP=ON \
   -DCURL_DISABLE_RTSP=ON \
   -DCURL_DISABLE_PROXY=OFF \
-  -DCMAKE_EXE_LINKER_FLAGS="-static"
+  -DCMAKE_EXE_LINKER_FLAGS="-static" | tee "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-configure.log"
 
 cmake --build build --config Release -j$(nproc)
 cmake --install build
@@ -41,7 +44,6 @@ echo; file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version; echo; /op
 
 strip /opt/curl-8/bin/curl; echo; ls -lah /opt/curl-8/bin/curl
 
-public_name="curl-$(apk info --print-arch)-static"
 cp -v /opt/curl-8/bin/curl "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name"
 (file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version;) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-version.txt"
 ldd ldd /opt/curl-8/bin/curl > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-alpine-dependencies.txt" || true
