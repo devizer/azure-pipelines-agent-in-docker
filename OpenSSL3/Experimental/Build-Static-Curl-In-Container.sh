@@ -15,7 +15,8 @@ cd curl*
 export OPENSSL_USE_STATIC_LIBS=TRUE
 export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
 
-public_name="curl-$(apk info --print-arch)-static"
+ARTIFACTS_SUFFIX="{ARTIFACTS_SUFFIX:-$(apk info --print-arch)}"
+public_name="curl-$ARTIFACTS_SUFFIX-static"
 
 
 cmake -S . -B build \
@@ -45,6 +46,7 @@ echo; file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version; echo; /op
 strip /opt/curl-8/bin/curl; echo; ls -lah /opt/curl-8/bin/curl
 
 cp -v /opt/curl-8/bin/curl "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name"
-(/opt/curl-8/bin/curl --version; echo; file /opt/curl-8/bin/curl;) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-version.txt"
+(echo "PLATFORM: $PLATFORM"; echo; /opt/curl-8/bin/curl --version; echo; file /opt/curl-8/bin/curl;) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-version.txt"
 ldd /opt/curl-8/bin/curl 2>&1 > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-alpine-dependencies.txt" || true
 apk info --print-arch > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-arch.txt"
+echo "PLATFORM: $PLATFORM" > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-platform.txt"

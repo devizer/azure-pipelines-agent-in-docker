@@ -19,13 +19,16 @@ Invoke-Build-Curl() {
   local platform="$2"
   pushd $SCRIPT_DIR
 
-  artifacts="$(pwd -P)/Artifacts-$(Get-Safe-File-Name "$platform")"
+  ARTIFACTS_SUFFIX=$(Get-Safe-File-Name "$platform")
+  artifacts="$(pwd -P)/Artifacts"
   mkdir -p $artifacts
   export DOCKER_DEFAULT_PLATFORM=$platform
   docker run -t --rm \
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
     -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
     -e SYSTEM_ARTIFACTSDIRECTORY=/Artifacts \
+    -e ARTIFACTS_SUFFIX=$ARTIFACTS_SUFFIX \
+    -e PLATFORM=$platform \
     -v $artifacts:/Artifacts \
     -w /job -v $(pwd -P):/job \
     alpine:3.23 sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
