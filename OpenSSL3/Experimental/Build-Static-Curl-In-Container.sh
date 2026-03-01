@@ -4,7 +4,7 @@ apk add wget clang lld libc-dev cmake openssl-dev openssl-libs-static zlib-dev z
 apk add nghttp2-dev nghttp2-static
 apk add libssh2-dev libssh2-static
 
-# apk add libunistring-static libunistring-dev libidn2-static libidn2-dev libpsl-static libpsl-dev 
+apk add libunistring-static libunistring-dev libidn2-static libidn2-dev libpsl-static libpsl-dev 
 
 echo '
 curl 8.18.0 (x86_64-pc-linux-gnu) libcurl/8.18.0 OpenSSL/3.6.0 zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 c-ares/1.34.6 libidn2/2.3.8 libpsl/0.21.5 libssh2/1.11.1 nghttp2/1.68.0 nghttp3/1.14.0
@@ -44,20 +44,18 @@ cmake -S . -B build \
   -DZLIB_LIBRARY=/usr/lib/libz.a \
   -DZLIB_INCLUDE_DIR=/usr/include \
   -DUSE_BROTLI=ON \
+  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
   -DUSE_LIBIDN2=OFF \
   -DUSE_LIBPSL=OFF \
-  -DCURL_USE_LIBPSL=OFF \
-  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
   -DCMAKE_EXE_LINKER_FLAGS="-static" \
   -DUSE_ZSTD=ON \
+  -DCURL_USE_LIBPSL=OFF \
   -DHTTP_ONLY=OFF \
   -DCURL_DISABLE_FTP=OFF \
   -DCURL_DISABLE_FILE=OFF \
   -DCURL_DISABLE_LDAP=OFF \
   -DCURL_DISABLE_RTSP=OFF \
   -DCURL_DISABLE_PROXY=OFF \
-  -DCMAKE_C_FLAGS="-fno-lto" \
-  -DCMAKE_CXX_FLAGS="-fno-lto" \
   | tee "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-configure.log"
 
 cmake --build build --config Release -j$(nproc)
