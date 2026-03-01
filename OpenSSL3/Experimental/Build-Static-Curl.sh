@@ -15,7 +15,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$SCRIPT_DIR/../Functions.sh"
 
 artifacts="$(pwd -P)/Artifacts"
-rm -rf $artifacts/.
+rm -rf $artifacts/*
 
 Invoke-Build-Curl() {
   local image="$1"
