@@ -12,10 +12,9 @@ set -eu; set -o pipefail
 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $SCRIPT_DIR
-
+pushd $SCRIPT_DIR
 mkdir -p Artifacts
-for platform in linux/amd64 linux/arm/v7 linux/arm64; do
+for platform in linux/amd64 linux/arm/v5 linux/arm/v7 linux/arm64; do
   export DOCKER_DEFAULT_PLATFORM=$platform
   docker run -t --rm \
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
@@ -25,3 +24,4 @@ for platform in linux/amd64 linux/arm/v7 linux/arm64; do
     -w /job -v $(pwd -P):/job \
     alpine:3.23 sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
 done 
+popd
