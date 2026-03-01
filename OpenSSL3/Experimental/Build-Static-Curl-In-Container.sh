@@ -28,7 +28,9 @@ cmake -S . -B build \
   -DUSE_OPENSSL=ON \
   -DUSE_NGHTTP2=ON \
   -DUSE_ZLIB=ON \
-  -DUSE_BROTLI=ON \
+  -DZLIB_LIBRARY=/usr/lib/libz.a \
+  -DZLIB_INCLUDE_DIR=/usr/include \  -DUSE_BROTLI=ON \
+  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
   -DUSE_ZSTD=ON \
   -DCURL_USE_LIBPSL=OFF \
   -DHTTP_ONLY=OFF \
