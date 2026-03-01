@@ -35,33 +35,21 @@ cmake -S . -B build \
   -DCMAKE_INSTALL_PREFIX=/opt/curl-8 \
   -DBUILD_SHARED_LIBS=OFF \
   -DCURL_STATICLIB=ON \
-  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
-  -DCMAKE_EXE_LINKER_FLAGS="-static" \
-  \
   -DOPENSSL_USE_STATIC_LIBS=TRUE \
   -DUSE_OPENSSL=ON \
-  \
   -DUSE_NGHTTP2=ON \
   -DNGHTTP2_LIBRARY=/usr/lib/libnghttp2.a \
   -DNGHTTP2_INCLUDE_DIR=/usr/include \
-  \
   -DUSE_ZLIB=ON \
   -DZLIB_LIBRARY=/usr/lib/libz.a \
   -DZLIB_INCLUDE_DIR=/usr/include \
-  \
   -DUSE_BROTLI=ON \
-  \
-  -DUSE_ZSTD=ON \
-  \
+  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
   -DUSE_LIBIDN2=ON \
-  -DLIBIDN2_LIBRARY=/usr/lib/libidn2.a \
-  -DLIBIDN2_INCLUDE_DIR=/usr/include \
-  \
   -DUSE_LIBPSL=ON \
-  -DLIBPSL_LIBRARY=/usr/lib/libpsl.a \
-  \
+  -DCMAKE_EXE_LINKER_FLAGS="-static -Wl,--start-group /usr/lib/libidn2.a /usr/lib/libunistring.a /usr/lib/libpsl.a -Wl,--end-group" \
+  -DUSE_ZSTD=ON \
   -DCURL_USE_LIBPSL=ON \
-  \
   -DHTTP_ONLY=OFF \
   -DCURL_DISABLE_FTP=OFF \
   -DCURL_DISABLE_FILE=OFF \
