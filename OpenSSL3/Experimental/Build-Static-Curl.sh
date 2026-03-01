@@ -14,13 +14,15 @@ set -eu; set -o pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$SCRIPT_DIR/../Functions.sh"
 
+artifacts="$(pwd -P)/Artifacts"
+rm -rf $artifacts/*
+
 Invoke-Build-Curl() {
   local image="$1"
   local platform="$2"
   pushd $SCRIPT_DIR
 
   ARTIFACTS_SUFFIX=$(Get-Safe-File-Name "$platform")
-  artifacts="$(pwd -P)/Artifacts"
   mkdir -p $artifacts
   export DOCKER_DEFAULT_PLATFORM=$platform
   docker run -t --rm \
