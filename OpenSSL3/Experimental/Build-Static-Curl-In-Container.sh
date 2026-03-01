@@ -43,5 +43,5 @@ strip /opt/curl-8/bin/curl; echo; ls -lah /opt/curl-8/bin/curl
 
 public_name="curl-$(apk info --print-arch)"
 cp -v /opt/curl-8/bin/curl "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name"
-/opt/curl-8/bin/curl --version > "${SYSTEM_ARTIFACTSDIRECTORY:-}/curl-version.txt"
+(file /opt/curl-8/bin/curl; echo; /opt/curl-8/bin/curl --version) > "${SYSTEM_ARTIFACTSDIRECTORY:-}/curl-version.txt"
 apk info --print-arch > "${SYSTEM_ARTIFACTSDIRECTORY:-}/curl-arch.txt"
