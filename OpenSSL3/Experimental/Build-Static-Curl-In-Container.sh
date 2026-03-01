@@ -47,6 +47,7 @@ cmake -S . -B build \
   -DZLIB_INCLUDE_DIR=/usr/include \
   -DUSE_BROTLI=ON \
   -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
+  -DCMAKE_EXE_LINKER_FLAGS="-static -Wl,--start-group -lidn2 -lunistring -lpsl -Wl,--end-group" \
   -DUSE_ZSTD=ON \
   -DCURL_USE_LIBPSL=ON \
   -DHTTP_ONLY=OFF \
@@ -55,7 +56,7 @@ cmake -S . -B build \
   -DCURL_DISABLE_LDAP=OFF \
   -DCURL_DISABLE_RTSP=OFF \
   -DCURL_DISABLE_PROXY=OFF \
-  -DCMAKE_EXE_LINKER_FLAGS="-static" | tee "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-configure.log"
+  | tee "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-configure.log"
 
 cmake --build build --config Release -j$(nproc)
 cmake --install build
