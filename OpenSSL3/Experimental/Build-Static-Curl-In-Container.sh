@@ -35,41 +35,30 @@ cmake -S . -B build \
   -DCMAKE_INSTALL_PREFIX=/opt/curl-8 \
   -DBUILD_SHARED_LIBS=OFF \
   -DCURL_STATICLIB=ON \
-  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
-  -DCMAKE_EXE_LINKER_FLAGS="-static" \
-  \
   -DOPENSSL_USE_STATIC_LIBS=TRUE \
   -DUSE_OPENSSL=ON \
-  \
   -DUSE_NGHTTP2=ON \
   -DNGHTTP2_LIBRARY=/usr/lib/libnghttp2.a \
   -DNGHTTP2_INCLUDE_DIR=/usr/include \
-  \
   -DUSE_ZLIB=ON \
   -DZLIB_LIBRARY=/usr/lib/libz.a \
   -DZLIB_INCLUDE_DIR=/usr/include \
-  \
   -DUSE_BROTLI=ON \
-  \
-  -DUSE_ZSTD=ON \
-  \
   -DUSE_LIBIDN2=ON \
-  -DUSE_LIBIDN2=ON \
-  -DLIBIDN2_LIBRARY=/usr/lib/libidn2.a \
+  -DUSE_LIBPSL=ON \
   -DLIBUNISTRING_LIBRARY=/usr/lib/libunistring.a \
-  -DLIBIDN2_INCLUDE_DIR=/usr/include \
-  \
-  -DUSE_LIBPSL=OFF \
-  -DLIBPSL_LIBRARY=/usr/lib/libpsl.a \
-  \
   -DCURL_USE_LIBPSL=ON \
-  \
+  -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
+  -DCMAKE_EXE_LINKER_FLAGS="-static -Wl,--start-group /usr/lib/libidn2.a /usr/lib/libunistring.a /usr/lib/libpsl.a -Wl,--end-group" \
+  -DUSE_ZSTD=ON \
   -DHTTP_ONLY=OFF \
   -DCURL_DISABLE_FTP=OFF \
   -DCURL_DISABLE_FILE=OFF \
   -DCURL_DISABLE_LDAP=OFF \
   -DCURL_DISABLE_RTSP=OFF \
   -DCURL_DISABLE_PROXY=OFF \
+  -DCMAKE_C_FLAGS="-fno-lto" \
+  -DCMAKE_CXX_FLAGS="-fno-lto" \
   | tee "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-configure.log"
 
 cmake --build build --config Release -j$(nproc)
