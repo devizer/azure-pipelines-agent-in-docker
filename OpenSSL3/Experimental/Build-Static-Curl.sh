@@ -33,12 +33,12 @@ Invoke-Build-Curl() {
     -e PLATFORM=$platform \
     -v $artifacts:/Artifacts \
     -w /job -v $(pwd -P):/job \
-    alpine:3.23 sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
+    $image sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
   popd
 }
 
-Invoke-Build-Curl alpine:3.23 linux/i386
 Invoke-Build-Curl alpine:3.23 linux/amd64
+Invoke-Build-Curl alpine:3.23 linux/i386
 Invoke-Build-Curl alpine:3.23 linux/arm/v6
 Invoke-Build-Curl alpine:3.23 linux/arm/v7
 Invoke-Build-Curl alpine:3.23 linux/arm64
