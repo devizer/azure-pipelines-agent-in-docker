@@ -4,10 +4,8 @@ apk add wget clang lld libc-dev cmake openssl-dev openssl-libs-static zlib-dev z
 apk add nghttp2-dev nghttp2-static
 apk add libssh2-dev libssh2-static
 
-apk add \
-        libunistring-static libunistring-dev \
-        libidn2-static libidn2-dev \
-        libpsl-static libpsl-dev 
+# apk add libunistring-static libunistring-dev libidn2-static libidn2-dev libpsl-static libpsl-dev 
+
 echo '
 curl 8.18.0 (x86_64-pc-linux-gnu) libcurl/8.18.0 OpenSSL/3.6.0 zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 c-ares/1.34.6 libidn2/2.3.8 libpsl/0.21.5 libssh2/1.11.1 nghttp2/1.68.0 nghttp3/1.14.0
 Release-Date: 2026-01-07
