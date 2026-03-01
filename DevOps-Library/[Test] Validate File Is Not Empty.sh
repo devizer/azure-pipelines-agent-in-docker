@@ -1441,8 +1441,10 @@ CENTOS6_REPO
 }
 
 # Include File: [\Includes\Retry-On-Fail.sh]
-function Echo-Red-Error() { 
-  Colorize Red "\n$*\n"; 
+Echo-Red-Error() { 
+  echo ""
+  Colorize Red "$*"
+  echo ""
 }
 
 function Retry-On-Fail() { 
