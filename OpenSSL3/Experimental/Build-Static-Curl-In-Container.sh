@@ -54,10 +54,12 @@ cmake -S . -B build \
   -DUSE_ZSTD=ON \
   \
   -DUSE_LIBIDN2=ON \
+  -DUSE_LIBIDN2=ON \
   -DLIBIDN2_LIBRARY=/usr/lib/libidn2.a \
+  -DLIBUNISTRING_LIBRARY=/usr/lib/libunistring.a \
   -DLIBIDN2_INCLUDE_DIR=/usr/include \
   \
-  -DUSE_LIBPSL=ON \
+  -DUSE_LIBPSL=OFF \
   -DLIBPSL_LIBRARY=/usr/lib/libpsl.a \
   \
   -DCURL_USE_LIBPSL=ON \
