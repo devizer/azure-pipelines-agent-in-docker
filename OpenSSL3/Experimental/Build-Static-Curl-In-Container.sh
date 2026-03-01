@@ -1,6 +1,6 @@
 set -eu; set -o pipefail
 
-apk add wget clang lld libc-dev cmake openssl-dev openssl-libs-static zlib-static brotli-static zstd-dev zstd-static make file
+apk add wget clang lld libc-dev cmake openssl-dev openssl-libs-static zlib-dev zlib-static brotli-static zstd-dev zstd-static make file
 
 work=$HOME/build/curl
 mkdir -p $work
@@ -50,3 +50,7 @@ cp -v /opt/curl-8/bin/curl "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name"
 ldd /opt/curl-8/bin/curl 2>&1 > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-alpine-dependencies.txt" || true
 apk info --print-arch > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-arch.txt"
 echo "PLATFORM: $PLATFORM" > "${SYSTEM_ARTIFACTSDIRECTORY:-}/$public_name-platform.txt"
+
+
+-- Looking for LIBRESSL_VERSION_NUMBER - not found
+-- Could NOT find ZLIB (missing: ZLIB_INCLUDE_DIR)
