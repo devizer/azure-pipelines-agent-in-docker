@@ -15,8 +15,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR
 
 mkdir -p Artifacts
-for platofrm in linux/amd64 linux/arm/v7 linux/arm64; do
-  export DOCKER_DEFAULT_PLATFORM=linux/arm64
+for platform in linux/amd64 linux/arm/v7 linux/arm64; do
+  export DOCKER_DEFAULT_PLATFORM=$platform
   docker run --rm \
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
     -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
