@@ -21,7 +21,7 @@ for platform in linux/amd64 linux/arm/v7 linux/arm64; do
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
     -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
     -e SYSTEM_ARTIFACTSDIRECTORY=/Artifacts \
-    -v $(pwd)/Artifacts:/Artifacts \
+    -v $(pwd -P)/Artifacts:/Artifacts \
     -w /job -v $(pwd -P):/job \
     alpine:3.23 sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
 done 

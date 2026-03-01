@@ -1,3 +1,5 @@
+set -eu; set -o pipefail
+
 apk add wget clang lld libc-dev cmake openssl-dev openssl-libs-static zlib-static brotli-static zstd-static make file
 
 work=$HOME/build/curl
