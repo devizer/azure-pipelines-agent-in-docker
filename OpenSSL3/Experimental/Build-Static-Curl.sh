@@ -14,7 +14,7 @@ set -eu; set -o pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$SCRIPT_DIR/../Functions.sh"
 
-artifacts="$(pwd -P)/Artifacts"
+artifacts="$SCRIPT_DIR/Artifacts"
 rm -rf $artifacts/*
 
 Invoke-Build-Curl() {
