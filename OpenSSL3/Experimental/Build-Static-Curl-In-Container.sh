@@ -44,9 +44,9 @@ cmake -S . -B build \
   -DZLIB_LIBRARY=/usr/lib/libz.a \
   -DZLIB_INCLUDE_DIR=/usr/include \
   -DUSE_BROTLI=ON \
-  -DUSE_LIBIDN2=ON \
-  -DUSE_LIBPSL=ON \
-  -DCURL_USE_LIBPSL=ON \
+  -DUSE_LIBIDN2=OFF \
+  -DUSE_LIBPSL=OFF \
+  -DCURL_USE_LIBPSL=OFF \
   -DCMAKE_FIND_LIBRARY_SUFFIXES=".a" \
   -DCMAKE_EXE_LINKER_FLAGS="-static" \
   -DUSE_ZSTD=ON \
