@@ -12,16 +12,29 @@ set -eu; set -o pipefail
 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-pushd $SCRIPT_DIR
-mkdir -p Artifacts
-for platform in linux/amd64 linux/arm/v7 linux/arm64; do
+. "$SCRIPT_DIR/../Functions.sh"
+
+Invoke-Build-Curl() {
+  local image="$1"
+  local platform="$2"
+  pushd $SCRIPT_DIR
+
+  artifacts="$(pwd -P)/Artifacts-$(Get-Safe-File-Name "$platform")"
+  mkdir -p $artifacts
   export DOCKER_DEFAULT_PLATFORM=$platform
   docker run -t --rm \
     -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
     -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
     -e SYSTEM_ARTIFACTSDIRECTORY=/Artifacts \
-    -v $(pwd -P)/Artifacts:/Artifacts \
+    -v $artifacts:/Artifacts \
     -w /job -v $(pwd -P):/job \
     alpine:3.23 sh -c "apk add bash; bash Build-Static-Curl-In-Container.sh"
-done 
-popd
+  popd
+}
+
+Invoke-Build-Curl alpine:3.23 linux/i386
+Invoke-Build-Curl alpine:3.23 linux/arm/v6
+Invoke-Build-Curl alpine:3.23 linux/arm/v7
+Invoke-Build-Curl alpine:3.23 linux/amd64
+Invoke-Build-Curl alpine:3.23 linux/arm64
+
