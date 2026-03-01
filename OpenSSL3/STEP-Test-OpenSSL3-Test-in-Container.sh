@@ -85,9 +85,13 @@ Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL_Plus_Cert_Validation" "--validate-ce
 Run-TestSSL-Array-On-NET-Matrix "DEFAULTSSL" "" "OFF" "DEFAULT"
 Say "Deleting system libssl files"
 cat "$system_ssl_so_file_list" | while IFS= read -r so_file; do
-    Colorize Red "SKIP Deleting libssl so file [$so_file]"
-    # Colorize Red "Deleting libssl so file [$so_file]"
-    # rm -f "$so_file"
+    alpine_version=$(echo "$(Get-Linux-OS-ID)" | awk -F'[:.]' '/^alpine:[0-9]+\.[0-9]+/ { if ($2 > 0 && $3 > 0) { print ($2 * 1000) + $3; } }')
+    if [ "$alpine_version" -ge 3019]; then
+       Colorize Red "SKIP Deleting libssl so file [$so_file] because of alpine 3.19+"
+    else
+       Colorize Red "Deleting libssl so file [$so_file]"
+       rm -f "$so_file"
+    fi
 done
 for ssl_version in $SSL_VERSIONS; do
     export LD_LIBRARY_PATH="$(pwd -P)/openssl-binaries/$(Get-NET-RID)/openssl-$ssl_version"
