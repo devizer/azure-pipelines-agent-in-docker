@@ -38,8 +38,8 @@ Invoke-Build-Curl() {
 }
 
 Invoke-Build-Curl alpine:3.23 linux/i386
+Invoke-Build-Curl alpine:3.23 linux/amd64
 Invoke-Build-Curl alpine:3.23 linux/arm/v6
 Invoke-Build-Curl alpine:3.23 linux/arm/v7
-Invoke-Build-Curl alpine:3.23 linux/amd64
 Invoke-Build-Curl alpine:3.23 linux/arm64
 
