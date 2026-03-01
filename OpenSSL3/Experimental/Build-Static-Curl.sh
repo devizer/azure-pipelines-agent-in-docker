@@ -1,14 +1,14 @@
 # work=$HOME/build/curl; mkdir -p $work; cd $work; git clone https://github.com:/devizer/azure-pipelines-agent-in-docker; cd azure-pipelines-agent-in-docker; git pull; time bash OpenSSL3/Experimental/Build-Static-Curl.sh
 set -eu; set -o pipefail
 
-  if [[ "$(uname -m)" == x86_64 ]]; then
+  if [[ "$(uname -m)" == x86_64 && -z "$(command -v qemu-arm-static)" ]]; then
       Say "Check if [qemu-user-static] is installed"
       sudo try-and-retry apt-get update -qq
       sudo try-and-retry apt-get install qemu-user-static -y -qq >/dev/null
+  fi
       Say "Register qemu user static"
       docker pull -q multiarch/qemu-user-static:register
       docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  fi
 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
