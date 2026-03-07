@@ -255,6 +255,239 @@ Download-File-Failover() {
   return 55;
 }
 
+# Include File: [\Includes\Download-Github-Release-Assets.sh]
+Query-Github-Api() {
+  local url="$1"
+  local file="$2"
+  local arg_binary="$(To-Lower-Case "${3:-}")"
+  is_binary=False; [[ "$arg_binary" == "--b"* ]] && is_binary=True;
+  local header_auth_wget=""; # and aria2
+  local header_auth_curl="";
+  if [[ -n "${GH_TOKEN:-}" ]]; then 
+     header_auth_curl=' -H "Authorization: Bearer '$GH_TOKEN'"'
+     header_auth_wget=' --header="Authorization: Bearer '$GH_TOKEN'"'
+  fi
+  local api_version="2022-11-28"
+  local header_accept_value="Accept: application/vnd.github+json"
+  local header_accept_curl=' -H "'$header_accept_value'"'
+  local header_accept_wget=' --header="'$header_accept_value'"'
+  if [[ "$is_binary" == True ]]; then header_accept_curl=""; header_accept_wget=""; fi
+  local header_version="X-GitHub-Api-Version: 2022-11-28"
+  local headers_curl="$header_accept_curl$header_auth_curl"' -H "'$header_version'"'
+  local headers_wget="$header_accept_wget$header_auth_wget"' --header="'$header_version'"'
+  cmd="false";
+  if [[ -n "$(command -v curl)" ]]; then
+    cmd="$cmd || curl -skfSL -o \"$file\"$headers_curl \"$url\""
+  fi
+  if [[ -n "$(command -v wget)" ]]; then
+    cmd="$cmd || wget -q -nv --no-check-certificate$headers_wget -O \"$file\" \"$url\""
+  fi
+  Colorize Cyan "$cmd"
+
+  # set -x
+  eval "$cmd" || eval "$cmd" || eval "$cmd" || { Say --Display-As=Error "Query-Github-Api Error: Query '$url' failed"; return 1; }
+  # set +x
+  return;
+}
+
+Download-Github-Release-Assets() {
+  # --repo stunnel/static-curl --folder "folder" --tag tag --before "Is-Download-Allowed {}" --after "Extract {}" --skip-integrity-check
+
+  local arg_repo="";
+  local arg_folder=""
+  local arg_tag=""
+  local arg_before=""
+  local arg_after="";
+  local arg_skip_integrity_check="False";
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h|--help)
+        echo 'Example:
+Download-Github-Release-Assets \
+    --repo "stunnel/static-curl" \
+    --folder "$HOME/.cache/curl-static-8.18" \
+   [--tag 8.18.0] \
+   [--before "Is-Download-Allowed"] \
+   [--after "Extract"] \
+   [--skip-integrity-check]'
+        return;
+        ;;
+      --repo)
+        if [ $# -lt 2 ]; then
+          echo "Download-Github-Release-Assets Error: --repo requires an argument (even if empty)" >&2
+          return 1
+        fi
+        arg_repo="$2"
+        shift 2
+        ;;
+      --folder)
+        if [ $# -lt 2 ]; then
+          echo "Download-Github-Release-Assets Error: --folder requires an argument (even if empty)" >&2
+          return 1;
+        fi
+        arg_folder="$2"
+        shift 2
+        ;;
+      --tag)
+        if [ $# -lt 2 ]; then
+          echo "Download-Github-Release-Assets Error: --tag requires an argument (even if empty)" >&2
+          return 1;
+        fi
+        arg_tag="$2"
+        shift 2
+        ;;
+      --before)
+        if [ $# -lt 2 ]; then
+          echo "Download-Github-Release-Assets Error: --before requires an argument (even if empty)" >&2
+          return 1;
+        fi
+        arg_before="$2"
+        shift 2
+        ;;
+      --after)
+        if [ $# -lt 2 ]; then
+          echo "Download-Github-Release-Assets Error: --after requires an argument (even if empty)" >&2
+          return 1;
+        fi
+        arg_after="$2"
+        shift 2
+        ;;
+       --skip-integrity-check)
+        arg_skip_integrity_check="True"
+        shift 2
+        ;;
+      *)
+        echo "Download-Github-Release-Assets Warning: unknown parameter $1"
+        shift
+        ;;
+    esac
+  done
+
+  local arg_ok=True
+  if [[ -z "${arg_repo:-}" ]]; then echo "Download-Github-Release-Assets Error: missing --repo parameter" >&2; arg_ok=False; fi
+  if [[ -z "${arg_folder:-}" ]]; then echo "Download-Github-Release-Assets Error: missing --folder parameter" >&2; arg_ok=False; fi
+  if [[ $arg_ok != True ]]; then return 2; fi
+
+  local tag_title="tag=[$arg_tag]"; [[ -z "$arg_tag" ]] && tag_title="latest release"
+  local download_to="$arg_folder"
+  local REPO="$arg_repo"
+  local TAG="$arg_tag"
+  local complete_command="${arg_after}"
+  local is_required_command="${arg_before}"
+
+  local cache_folder="$download_to"
+  Colorize Magenta "Starting download all the assets of '$REPO' $tag_title to $download_to"
+  mkdir -p "$cache_folder/.hidden.metadata"
+  local cache_assets_file=$cache_folder/.hidden.metadata/__assets.json
+  if [[ -f "$cache_assets_file" && -f "$cache_assets_file.ok" ]]; then
+    echo "json assets file $cache_assets_file already exists"
+  else
+    # https://docs.github.com/ru/rest/releases/releases?apiVersion=2022-11-28#get-a-release-by-tag-name
+    local url_assets="https://api.github.com/repos/$REPO/releases/tags/$TAG"
+    if [[ -z "$TAG" ]]; then url_assets="https://api.github.com/repos/$REPO/releases/latest"; fi
+    echo "Downloading assets by $url_assets ... "
+    # curl -skfSL "$url_assets" > "$cache_assets_file" && touch "$cache_assets_file.ok"
+    Query-Github-Api "$url_assets" "$cache_assets_file" && touch "$cache_assets_file.ok"
+  fi
+
+  local name_list_file="$cache_folder/.hidden.metadata/__ASSETS.PLAIN.TEXT"
+  cat "$cache_assets_file" | jq -r '.assets[].name' > "$name_list_file"
+  local table_file="$cache_folder/.hidden.metadata/__ASSETS.TABLE"
+  local jq_code='.assets | map({"name":.name|tostring, "size":.size|tostring, "url":.browser_download_url?, "state":.state, "digest":.digest}) | map([.name, .size, .url, .state, .digest] | join("|")) | join("\n") '
+  cat "$cache_assets_file" | jq -r "$jq_code" > "$table_file"
+
+  local count=$(cat $name_list_file | wc -l)
+  echo "TOTAL ASSETS COUNT [$count] for '$REPO'"
+  local index=0
+  while IFS="|" read -r asset_name asset_size asset_url asset_state asset_digest_raw; do
+    local asset_digest="${asset_digest_raw%$'\r'}"
+    index=$((index+1))
+    local url="https://github.com/$REPO/releases/download/$TAG/$asset_name"
+    url="$asset_url"
+    local cache_file="$cache_folder/$asset_name"
+    local cache_done_file="$cache_folder/.hidden.metadata/$asset_name.ok"
+    local is_skipped=False
+    if [[ -f "$cache_file" && -f "$cache_done_file" ]]; then
+      echo "[$index of $count] ASSET $asset_name already downloaded"
+    else
+      # Query Is Required
+      if [[ -n "$arg_before" ]]; then
+        if ! eval "$arg_before \"$cache_file\""; then is_skipped=True; fi
+      fi
+      if [[ "$is_skipped" == True ]]; then
+        Colorize Cyan "[$index of $count] Skipping [$asset_name] (size is $(Format-Thousand "$asset_size")) from '$url'"
+      else
+        Say "[$index of $count] Downloading asset [$asset_name] (size is $(Format-Thousand "$asset_size")) from '$url'"
+        # try-and-retry curl -sfSL -o "$cache_file" "$url" && touch "$cache_done_file"
+        # Download-File "$url" "$cache_file" && touch "$cache_done_file"
+        Query-Github-Api "$url" "$cache_file" --binary && touch "$cache_done_file"
+      fi
+    fi
+    if [[ "$is_skipped" == True ]]; then continue; fi
+    # echo "[Debug] DIGEST=[$asset_digest] for '$asset_name'"
+    local hash_type="$(echo "$asset_digest" | awk -F":" '{print $1}')"
+    local hash_value_expected="$(echo "$asset_digest" | awk -F":" '{print $2}')"
+    # echo "[Debug] hash_type=[$hash_type] hash_value_expected=[$hash_value_expected]"
+    local hash_value_actual=""
+    if [[ -n "$hash_type" ]]; then 
+       hash_value_actual=$(Get-Hash-Of-File "$hash_type" "$cache_file")
+       # echo "[Debug] hash_value_actual=[$hash_value_actual]"
+    fi
+    printf %s " ... testing sha-integrity for $asset_name: "
+    if [[ -n "$hash_value_expected" && -n "$hash_value_actual" && "$hash_value_expected" == "$hash_value_actual" ]]; then
+      Colorize Green OK
+    elif [[ -n "$hash_value_expected" && -n "$hash_value_actual" && "$hash_value_expected" != "$hash_value_actual" ]]; then
+      Colorize Red "BAD, Not OK"
+    else
+      echo "not supported"
+    fi
+
+    # Test Integrity
+    local asset_name_lower_case="$(To-Lower-Case "$asset_name")"
+    if [[ "$arg_skip_integrity_check" == False ]]; then
+      if [[ "$asset_name_lower_case" == *".xz" || "$asset_name_lower_case" == *".txz" ]]; then
+         printf %s " ... testing xz-integrity for $asset_name: "
+         if [[ -n "$(command -v xz)" ]]; then
+           if xz -t "$cache_file"; then Colorize Green OK; else Colorize Red "BAD, Not OK"; fi
+         else
+           echo "Skip. xz command not found"
+         fi
+      elif [[ "$asset_name_lower_case" == *".gz" || "$asset_name_lower_case" == *".tgz" ]]; then
+         printf %s " ... testing gzip-integrity for $asset_name: "
+         if gz -t "$cache_file"; then Colorize Green OK; else Colorize Red "BAD, Not OK"; fi
+      elif [[ "$asset_name_lower_case" == *".7z" ]]; then
+         exe_7z="$(Find-7z-For-Unpack "7z")"
+         if [[ -n "$exe_7z" ]]; then
+           printf %s " ... testing 7z-integrity for $asset_name: "
+           if "$exe_7z" -t "$cache_file" >/dev/null; then Colorize Green OK; else Colorize Red "BAD, Not OK"; fi
+         else
+           echo "Skip. Proper 7z not found"
+         fi
+      elif [[ "$asset_name_lower_case" == *".zip" ]]; then
+         exe_7z="$(Find-7z-For-Unpack "zip")"
+         if [[ -n "$exe_7z" ]]; then
+           printf %s " ... testing zip-integrity for $asset_name: "
+           if "$exe_7z" -t "$cache_file" >/dev/null; then Colorize Green OK; else Colorize Red "BAD, Not OK"; fi
+         else
+           echo "Skip. 7z for zip-achive not found"
+         fi 
+      fi
+    fi
+    # Trigger After
+    if [[ -n "$complete_command" ]]; then 
+      # eval "$complete_command \"$cache_file\""; 
+      local complete_command_full="$(Substitute-Command "$complete_command" "$cache_file")"
+      Colorize Cyan "$complete_command_full"
+      eval "$complete_command_full"
+    fi
+    
+  done < "$table_file"
+
+  Say "Successfully completed: Assets of $arg_repo repo $tag_title downloaded"
+}
+
+
 # Include File: [\Includes\Extract-Archive.sh]
 # archive-file and toFolder support relative paths
 Extract-Archive() {
@@ -408,7 +641,7 @@ function Find-Decompressor() {
 }
 
 # Include File: [\Includes\Find-Hash-Algorithm.sh]
-function Find-Hash-Algorithm() {
+Find-Hash-Algorithm() {
   local alg; local hash
   local algs="${EXISTING_HASH_ALGORITHMS:-sha512 sha384 sha256 sha224 sha1 md5}"
   if [[ "$(Get-OS-Platform)" == MacOS ]]; then
@@ -434,7 +667,7 @@ function Find-Hash-Algorithm() {
 }
 
 # returns empty string if $alg is not supported by the os
-function Get-Hash-Of-File() {
+Get-Hash-Of-File() {
   local alg="${1:-md5}"
   local file="${2:-}"
   if [[ "$(Get-OS-Platform)" == MacOS ]]; then
@@ -1478,6 +1711,45 @@ Say-Definition() {
   local colorValue="${VALUE_COLOR:-Green}"
   Colorize --NoNewLine "$colorTitle" "${title}"
   Colorize "$colorValue" "${value}"
+}
+
+# Include File: [\Includes\Substitute-Command.sh]
+Substitute-Command() {
+  local cmd="$1"
+  local file="$2"
+  
+  awk -v cmd="$cmd" -v file="$file" 'BEGIN {
+    q_file = "\"" file "\""
+    
+    if (index(cmd, "{}") > 0) {
+        s = cmd
+        result = ""
+        counter = 0
+        while ((p = index(s, "{}")) > 0 && counter < 1000) {
+            result = result substr(s, 1, p-1) q_file
+            s = substr(s, p+2)
+            counter++
+        }
+        result = result s
+    } else {
+        result = (cmd == "" ? q_file : cmd " " q_file)
+    }
+    
+    print result
+  }'
+}
+
+Test-Substitute-Command() {
+   printf "1: "; Substitute-Command "echo" "test 1 implicit"
+   printf "2: "; Substitute-Command "echo {}" "test 2 explicit"
+   printf "3: "; Substitute-Command "echo {}{}" "test 3 double"
+   printf "4: "; Substitute-Command "echo {},{}" "test 4 two"
+   printf "5: "; Substitute-Command "{}" "test 5"
+   printf "6.1: "; Substitute-Command "echo {" "test 6.1"
+   printf "6.2: "; Substitute-Command "echo }" "test 6.2"
+   printf "7.1: "; Substitute-Command "}" "test 7.1"
+   printf "7.2: "; Substitute-Command "{" "test 7.2"
+   printf "8: "; Substitute-Command "" "test 8"
 }
 
 # Include File: [\Includes\Test-Has-Command.sh]

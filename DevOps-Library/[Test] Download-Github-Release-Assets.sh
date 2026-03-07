@@ -1872,49 +1872,76 @@ Wait-For-HTTP() {
 }
 
 
-Say-Definition "Get-OS-Platform() =" "'$(Get-OS-Platform)'"
-Say-Definition "Get-NET-RID() =" "'$(Get-NET-RID)'"
-Say-Definition "Is-Qemu-VM() =" "'$(Is-Qemu-VM)'"
-Say-Definition "Is-Termux() =" "'$(Is-Termux)'"
-Say-Definition "Is-Windows() =" "'$(Is-Windows)'"
-Say-Definition "Is-WSL() =" "'$(Is-WSL)'"
+My-Quote() {
+  echo "«$*»"
+}
 
-ProductId="S5 Dashboard"
-Clean-Up-My-Temp-Folders-and-Files-on-Exit "$ProductId Setup Temp Files"
 
-# Just For Info: Display latest release version
-versionUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/VERSION.TXT"
-versionFile="$(MkTemp-File-Smarty "S5 Dashboard Version.txt")"
-Download-File-Failover "$versionFile" "$versionUrl"
-version="$(cat "$versionFile")"
-Say-Definition "Installing or Upgrading S5 Dashboard version" "'$version'"
-# rm -f "$versionFile"
+REPACK_ROOT="$HOME/STATIC-CURL-REPACK"
+REPACK_PLAIN_FOLDER="$REPACK_ROOT/plain"
+FILES_INFO_FILE="$REPACK_ROOT/files.info.txt"
+rm -f $FILES_INFO_FILE || true
 
-for forceGZip in tRue fAlse; do
-  eval $(FORCE_FAST_COMPRESSION=$forceGZip Find-Decompressor)
-  rid="$(Get-NET-RID)"
-  fileNameOnly="sqlinsights-dashboard-$rid.tar.${COMPRESSOR_EXT}"
-  if [[ "$(Get-OS-Platform)" == Windows ]]; then fileNameOnly="sqlinsights-dashboard-$rid.${COMPRESSOR_EXT}"; fi
-  fileUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/$fileNameOnly"
-  fullFileName="$(MkTemp-Folder-Smarty "$ProductId Setup Archive")/$fileNameOnly"
-  Colorize Magenta "Lets Rock: $fileNameOnly"
-  hashDictionaryUrl="https://github.com/devizer/Universe.SqlInsights/releases/latest/download/hash-sums.txt"
-  Fetch-Distribution-File "S5 Dashboard" "$fileNameOnly" "$fullFileName" "$hashDictionaryUrl" "$fileUrl"
-  
-  extractTo="$(Get-Tmp-Folder)/Extracted $fileNameOnly"
-  echo "Extracting [$fullFileName] --> '$extractTo'"
-  Extract-Archive "$fullFileName" "$extractTo" --Reset-Target-Folder
-  rm -f "$fullFileName" 2>/dev/null || true
-  probeFile="$extractTo"/Universe.SqlInsights.W3Api.dll
-  if [[ -f "$probeFile" ]]; then
-    Colorize Green "EXTRACT SUCCESS. File Exists: $probeFile"
+Log-File-Info() {
+  local full_name="$(realpath "$1")"
+  local title="$full_name"
+  if [[ "$title" == "$REPACK_PLAIN_FOLDER"* ]]; then
+      title="${title:${#REPACK_PLAIN_FOLDER}+1}"
+      # echo "TITLE: [$title]"
+      pushd "$REPACK_PLAIN_FOLDER" >/dev/null
+      file "$title" 2>&1 >> "$FILES_INFO_FILE"
+      popd >/dev/null
   else
-    Colorize Red "EXTRACT ERROR. File Not Found: $probeFile"
+      file "$(realpath "$1")" 2>&1 >> "$FILES_INFO_FILE"
   fi
-  Validate-File-Is-Not-Empty "$probeFile" "EXTRACT SUCCESS. File Exists: %s. Size is" "EXTRACT ERROR. File Not Found: $probeFile"
-  # Colorize Red "SIMULATE FAIL (for tests)"; exit 55
+}
 
-  echo
-done
-# Fetch_Distribution_File
-# https://github.com/devizer/Universe.SqlInsights/releases/latest/download/hash-sums.txt
+Pack-GZip() {
+  rm -f "$2"; cat "$1" | 7z a -tgzip -mx=9 -si -bd -bsp0 -bso0 "$2"
+  Log-File-Info "$1"
+}
+
+Handle-Static-File() {
+  local full_file_name="$1"
+  local file_name="$(basename "$full_file_name")"
+  Colorize Green "Re-compress curl/trurl/openssl release file '$file_name'"
+  local name_only="$file_name"
+  name_only="${name_only%.*}"; name_only="${name_only%.*}"; 
+  local extract_to="$REPACK_PLAIN_FOLDER/$name_only"
+  local public_folder="$REPACK_ROOT"
+  mkdir -p "$extract_to" 2>/dev/null
+  tar xJf "$full_file_name" -C "$extract_to"
+  # os: macos|windows|linux
+  local os=$(echo $name_only | awk -F"-" '{print $2}')
+  # ....
+  local arch=$(echo $name_only | awk -F"-" '{print $3}')
+  if [[ $name_only == *"-dev-"* ]]; then
+    # echo "[Debug] DEV NAME: [$name_only]"
+    local openssl_file="$extract_to/bin/openssl"
+    for candidate in openssl openssl.exe; do
+      openssl_file="$(ls -1 $extract_to/curl*/bin/$candidate 2>/dev/null || true)"
+      if [[ -f "$openssl_file" ]]; then
+        Pack-GZip "$openssl_file" "$public_folder/$os-$arch-openssl.gz"
+      fi
+    done
+  elif [[ $name_only != *"-glibc-"* ]]; then
+    pushd $extract_to >/dev/null
+    if [[ "$os" == windows ]]; then
+      7z a -tzip -mx=9 "$public_folder/$os-$arch-curl.zip" -bd -bsp0 -bso0
+      Log-File-Info "curl.exe" 
+    else
+      for candidate in curl trurl; do if [[ -f $candidate ]]; then
+        Pack-GZip "$candidate" "$public_folder/$os-$arch-$candidate.gz"
+      fi; done
+    fi
+    popd >/dev/null
+  fi
+}
+
+
+# cygpath -w "$HOME/.cache/stunnel-static-curl-8.18.0"
+
+# Download-Github-Release-Assets --folder "$HOME/.cache/stunnel-static-curl-8.18.0" --repo stunnel/static-curl --tag 8.18.0 --after "Handle-Static-File"
+Download-Github-Release-Assets --folder "$HOME/.cache/stunnel-static-curl-latest" --repo stunnel/static-curl --tag "" --before true --after "Handle-Static-File"
+Download-Github-Release-Assets -h
+
