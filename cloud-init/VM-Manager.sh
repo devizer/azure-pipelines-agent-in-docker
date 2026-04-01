@@ -291,6 +291,13 @@ function Launch-VM() {
   VM_CPU_FLAGS_Internal="${VM_CPU_FLAGS_Internal#,}"
   if [[ -n "$VM_CPU_FLAGS_Internal" ]]; then VM_CPU_FLAGS_Internal=",$VM_CPU_FLAGS_Internal"; fi
 
+  set +e;
+  Say "$location/initrd.img"
+  file "$location/initrd.img"
+  Say "$location/vmlinuz"
+  file "$location/vmlinuz"
+  set -e
+
   if [[ "$arch" == "armel" ]]; then
           # https://serverfault.com/a/868278
           # 6.2 (22.04): -audiodev id=none,driver=none \
