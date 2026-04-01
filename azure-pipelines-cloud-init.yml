@@ -120,7 +120,8 @@ jobs:
         # crashes: http://cloud-images-archive.ubuntu.com/releases/noble/release-20240821/ubuntu-24.04-server-cloudimg-arm64.img
         # IMAGEURL: "http://cloud-images-archive.ubuntu.com/releases/noble/release-20240423/ubuntu-24.04-server-cloudimg-arm64.img"
         # IMAGEURL: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-arm64.img" - kernel does not start
-        IMAGEURL: "https://cloud-images.ubuntu.com/resolute/20260328/resolute-server-cloudimg-arm64.img"
+        # IMAGEURL: "https://cloud-images.ubuntu.com/resolute/20260328/resolute-server-cloudimg-arm64.img" - kernel does not start
+        IMAGEURL: "https://cloud-images.ubuntu.com/resolute/20260209/resolute-server-cloudimg-arm64.img"
         KEY: 26.04-generic-arm64
         THEARCH: arm64
         AGENT_IMAGE: 'ubuntu-24.04'

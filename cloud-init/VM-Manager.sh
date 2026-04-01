@@ -295,6 +295,7 @@ function Launch-VM() {
           # https://serverfault.com/a/868278
           # 6.2 (22.04): -audiodev id=none,driver=none \
           # cpu: arm926 (arm926ejs), arm1136, cortex-a8
+          set -x
           qemu-system-arm -M versatilepb -m 256M -name armel32vm \
             $qemuAccell \
             -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
@@ -303,13 +304,15 @@ function Launch-VM() {
             -net nic,macaddr=22:33:99:44:55:66 -net user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-} \
             -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" -nographic -no-reboot &
 
-        pid=$!
+          set +x
+          pid=$!
   fi
 
   local defaultCpu;
   if [[ "$arch" == "arm" ]]; then
       defaultCpu=cortex-a15
       local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
+      set -x
       qemu-system-arm -name arm32vm \
           $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
@@ -325,7 +328,8 @@ function Launch-VM() {
           -append "console=ttyAMA0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
-        pid=$!
+      set +x
+      pid=$!
   fi
 
   # $ -blockdev driver=file,node-name=f0,filename=/path/to/floppy.img -device floppy,drive=f0
@@ -333,6 +337,7 @@ function Launch-VM() {
   if [[ "$arch" == "arm64" ]]; then
       defaultCpu=cortex-a57
       local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
+      set -x
       qemu-system-aarch64 -name arm64vm \
           $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M virt -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}"  \
@@ -347,14 +352,16 @@ function Launch-VM() {
           \
           -netdev user,hostfwd=tcp::$VM_SSH_PORT-:22${VM_FORWARD_PORTS:-},id=net0 -device virtio-net-device,netdev=net0 \
           -nographic -no-reboot &
-
-        pid=$! # virtio-net-device
+      
+      set +x
+      pid=$! # virtio-net-device
   fi
 
   if [[ "$arch" == "x64" ]]; then
       # qemu-system-x86_64-microvm needs kvm
       defaultCpu=core2duo
       local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
+      set -x
       qemu-system-x86_64 -name x64vm \
           -smp $VM_CPUS -m $VM_MEM -M pc -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
           -kernel "$location/vmlinuz" -initrd "$location/initrd.img" \
@@ -364,7 +371,8 @@ function Launch-VM() {
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
-        pid=$!
+      set +x
+      pid=$!
   fi
 
   if [[ "$arch" == "i386" ]]; then
@@ -373,6 +381,7 @@ function Launch-VM() {
       # -nic user,id=vmnic,hostfwd=tcp::60022-:22 \
       local defaultCpu=coreduo
       local VM_CPU_NAME_Internal="${VM_CPU_NAME:-$defaultCpu}"
+      set -x
       qemu-system-i386 -name i386vm \
           $qemuAccell \
           -smp $VM_CPUS -m $VM_MEM -M pc -cpu "${VM_CPU_NAME_Internal}${VM_CPU_FLAGS_Internal}" \
@@ -383,7 +392,8 @@ function Launch-VM() {
           -append "console=ttyS0 root=/dev/sda${root_partition_index:-1}" \
           -nographic -no-reboot &
         
-        pid=$!
+      set +x
+      pid=$!
   fi
 
   if [[ -n "$pid" ]]; then
@@ -406,25 +416,25 @@ function Shutdown-VM-and-CleapUP() {
   local lauch_options="$1"
   source "$lauch_options/variables"
   echo '
-     set +eu; set -o pipefail
+     set +eu; set -o pipefail;
      Say CLEAN UP journal;
-     journalctl --flush --rotate --vacuum-time=1s || journalctl --vacuum-time=1s
-     journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --vacuum-time=1s
-     journalctl --vacuum-size=4K
+     journalctl --flush --rotate --vacuum-time=1s || journalctl --vacuum-time=1s;
+     journalctl --user --flush --rotate --vacuum-time=1s || journalctl --user --vacuum-time=1s;
+     journalctl --vacuum-size=4K;
      Say CLEAN UP folders;
-     try-and-retry rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build
+     try-and-retry rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /root/provisia /etc/provisia /root/build;
      Say FINALLY SHUTDOWN;
      if [[ "$(dpkg --print-architecture)" = armel ]]; then
-       shutdown -r now
+       shutdown -r now;
      else
-       shutdown -P now || shutdown -H now || shutdown now
+       shutdown -P now || shutdown -H now || shutdown now;
      fi
      ' > "$lauch_options/shutdown.sh"
 
   Say "Shutdown VM"
   echo "Content of launch options [$lauch_options]"
   ls -lah "$lauch_options"
-  cp -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
+  cp -v -f "$lauch_options/shutdown.sh" "$lauch_options/fs/tmp/shutdown.sh"
   # It normally fails three times because on first ssh server stops
   try-and-retry sshpass -p "pass" ssh -o StrictHostKeyChecking=no "root@127.0.0.1" -p "${VM_SSH_PORT}" "bash /tmp/shutdown.sh" || true
   sleep 20
