@@ -87,6 +87,7 @@ function Disbale-Unattended() {
     for s in unattended-upgrades apt-daily-upgrade.timer apt-daily.timer; do
       Say "Disable $s"
       systemctl disable $s || Say --Display-As=Error "Can't disable $s. It's ok."
+      systemctl stop $s
     done
   fi
 }

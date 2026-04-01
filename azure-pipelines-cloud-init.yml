@@ -191,6 +191,31 @@ jobs:
       #  KEY: 13-generic-daily-arm64
       #  THEARCH: arm64
 
+      'x64-ubuntu-26.04':
+        # IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img"
+        KEY: 26.04-generic-x64
+        THEARCH: x64
+        AGENT_IMAGE: 'ubuntu-24.04'
+      'armhf-ubuntu-26.04':
+        # IMAGEURL: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-armhf.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-armhf.img"
+        KEY: 26.04-generic-armhf
+        THEARCH: arm
+        AGENT_IMAGE: 'ubuntu-24.04'
+      'arm64-ubuntu-26.04':
+        # can't mount root during boot: https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img
+        # IMAGEURL: "https://cloud-images.ubuntu.com/daily/server/noble/current/noble-server-cloudimg-arm64.img"
+        # crashes: http://cloud-images-archive.ubuntu.com/releases/noble/release-20240821/ubuntu-24.04-server-cloudimg-arm64.img
+        # IMAGEURL: "http://cloud-images-archive.ubuntu.com/releases/noble/release-20240423/ubuntu-24.04-server-cloudimg-arm64.img"
+        IMAGEURL: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-arm64.img"
+        KEY: 26.04-generic-arm64
+        THEARCH: arm64
+        AGENT_IMAGE: 'ubuntu-24.04'
+
+
+      
+
         
 
       'x64-ubuntu-24.04':
