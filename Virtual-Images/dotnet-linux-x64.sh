@@ -66,5 +66,5 @@ Run-Remote-Script https://raw.githubusercontent.com/devizer/test-and-build/maste
 
 
 level=9
-Compress-Folder-as-Compressed-VMDK $SYSTEM_ARTIFACTSDIRECTORY/dotnet.zstd${level}.vmdk /usr/share/dotnet dotnet zstd:${level}
-# Compress-Folder-as-Compressed-VMDK $SYSTEM_ARTIFACTSDIRECTORY/dotnet.lzo.vmdk          /usr/share/dotnet dotnet lzo
+  Compress-Folder-as-Compressed-VMDK $SYSTEM_ARTIFACTSDIRECTORY/dotnet-6.0-8.0-10.0.zstd${level}.vmdk /usr/share/dotnet dotnet zstd:${level}
+# Compress-Folder-as-Compressed-VMDK $SYSTEM_ARTIFACTSDIRECTORY/dotnet-6.0-8.0-10.0.lzo.vmdk          /usr/share/dotnet dotnet lzo
