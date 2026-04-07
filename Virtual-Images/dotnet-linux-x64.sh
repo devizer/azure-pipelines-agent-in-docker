@@ -20,7 +20,7 @@ Compress-Folder-as-Compressed-VMDK() {
     local GUEST_OUTPUT
     set +x;
     export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
-    GUEST_OUTPUT=$(sudo guestfish -a "$IMAGE_NAME" <<EOF
+    GUEST_OUTPUT=$(sudo -E guestfish -a "$IMAGE_NAME" <<EOF
       run
       
       # 3. Partitioning
