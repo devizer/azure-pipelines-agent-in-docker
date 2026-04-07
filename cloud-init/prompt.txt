@@ -1,0 +1,18 @@
+qemu-system-aarch64 -name arm64vm -smp 2 -m 2048M -M virt -cpu cortex-a57 -initrd /transient-builds/run/initrd.img -kernel /transient-builds/run/vmlinuz -append 'console=ttyAMA0 root=/dev/sda3' -global virtio-blk-device.scsi=off -device virtio-scsi-device,id=scsi -drive file=/transient-builds/run/disk.qcow2,id=root,if=none -device scsi-hd,drive=root -drive file=/tmp/provisia/cloud-config.qcow2,id=cdrom,if=none,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom -netdev user,hostfwd=tcp::2345-:22,id=net0 -device virtio-net-device,netdev=net0 -nographic -no-reboot
+при этом система не стартует, ничего не выводится на консоль
+/transient-builds/run/initrd.img и /transient-builds/run/vmlinuz взяты из образа 
+
+я пробовал несколько версий убунты 26.04
+  IMAGEURL: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-arm64.img"
+  IMAGEURL: "https://cloud-images.ubuntu.com/resolute/20260328/resolute-server-cloudimg-arm64.img" - kernel does not start
+  IMAGEURL: "https://cloud-images.ubuntu.com/resolute/20260209/resolute-server-cloudimg-arm64.img"
+
+
+такая же команда отлично работает для образов Ubuntu 16 ... 24 и дебиан 10 .... 13
+
+На самом образе 
+
+
+vmlinuz и initrd.img только одна копия. так что я не мог взять кривое ядро
+
+может процессор cortex-a57 слишком слабый? или console=ttyAMA0 не правильно?

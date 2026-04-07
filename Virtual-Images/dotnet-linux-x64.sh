@@ -20,7 +20,7 @@ Compress-Folder-as-Compressed-VMDK() {
     local GUEST_OUTPUT
     set +x;
     export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
-    GUEST_OUTPUT=$(sudo -E guestfish -a "$IMAGE_NAME" <<EOF
+    GUEST_OUTPUT=$(sudo guestfish -a "$IMAGE_NAME" <<EOF
       run
       
       # 3. Partitioning
@@ -31,7 +31,9 @@ Compress-Folder-as-Compressed-VMDK() {
       mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
       # sh "mkfs.btrfs -L '$LABEL' -O ^extref,^skinny-metadata -U '$MY_UUID' /dev/sda1"
 
-      btrfs-set-uuid /dev/sda1 $MY_UUID
+      sh "ls /bin /sbin /usr/bin /usr/sbin"
+
+      # btrfs-set-uuid /dev/sda1 $MY_UUID
 
 
       
