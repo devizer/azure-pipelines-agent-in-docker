@@ -16,6 +16,8 @@ Compress-Folder-as-Compressed-VMDK() {
 
     # 2. Use guestfish and capture all output to extract the UUID
     local GUEST_OUTPUT
+    set +x;
+    export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
     GUEST_OUTPUT=$(guestfish -a "$IMAGE_NAME" <<EOF
       run
       
