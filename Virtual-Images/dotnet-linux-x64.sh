@@ -18,7 +18,7 @@ Compress-Folder-as-Compressed-VMDK() {
     local GUEST_OUTPUT
     set +x;
     export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
-    GUEST_OUTPUT=$(guestfish -a "$IMAGE_NAME" <<EOF
+    GUEST_OUTPUT=$(sudo guestfish -a "$IMAGE_NAME" <<EOF
       run
       
       # 3. Partitioning
@@ -42,6 +42,8 @@ Compress-Folder-as-Compressed-VMDK() {
       exit
 EOF
 )
+    
+    sudo chown $USER:$USER "$IMAGE_NAME"
 
     # 9. Final messages using your custom functions
     Say "Compression '$SRC_FOLDER' complete as [$IMAGE_NAME] (compressed size is $(Format-Thousand "$(Get-File-Size "$IMAGE_NAME")") bytes)"
