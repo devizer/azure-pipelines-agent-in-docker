@@ -1,0 +1,44 @@
+name: "Build .NET x64 VMDK"
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Build:
+    name: Build
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+        
+
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+
+    - name: Build VMDK 1
+      run: bash -eu -o pipefail Virtual-Images/dotnet-linux-x64.sh
+
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'dotnet vmdk'
+        path: ${{ env.SYSTEM_ARTIFACTSDIRECTORY }}
+        overwrite: true
+        compression-level: 2
+
