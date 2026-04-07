@@ -28,8 +28,11 @@ Compress-Folder-as-Compressed-VMDK() {
       part-add /dev/sda p 2048 -1
       
       # 4. Create Btrfs with compatibility features
-      # mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
-      sh "mkfs.btrfs -L '$LABEL' -O ^extref,^skinny-metadata -U '$MY_UUID' /dev/sda1"
+      mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
+      # sh "mkfs.btrfs -L '$LABEL' -O ^extref,^skinny-metadata -U '$MY_UUID' /dev/sda1"
+
+      btrfs-set-uuid /dev/sda1 $MY_UUID
+
 
       
       # 5. Mount with forced compression and options
