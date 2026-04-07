@@ -1,5 +1,3 @@
-MY_UUID="2b0f72d6-1c52-43de-93b4-b9345ae9a656"
-
 Compress-Folder-as-Compressed-VMDK() {
     if [ "$#" -lt 2 ]; then
         echo "Usage: Compress-Folder-as-Compressed-VMDK <output_image> <source_folder> [compress_mode]"
@@ -28,7 +26,7 @@ Compress-Folder-as-Compressed-VMDK() {
       part-add /dev/sda p 2048 -1
       
       # 4. Create Btrfs with compatibility features
-      mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata uuid:$MY_UUID
+      mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
       
       # 5. Mount with forced compression and options
       mount-options "compress-force=$COMPRESS_MODE,nodiratime,noatime" /dev/sda1 /
