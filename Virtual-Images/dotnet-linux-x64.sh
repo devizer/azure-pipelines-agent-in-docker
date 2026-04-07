@@ -28,7 +28,7 @@ Compress-Folder-as-Compressed-VMDK() {
       part-add /dev/sda p 2048 -1
       
       # 4. Create Btrfs with compatibility features
-      mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
+      # mkfs-opts btrfs /dev/sda1 label:$LABEL features:^extref,^skinny-metadata
       debug sh "ls /bin /sbin /usr/bin /usr/sbin"
       debug sh "mkfs.btrfs -L '$LABEL' -O ^extref,^skinny-metadata -U '$MY_UUID' /dev/sda1"
 
