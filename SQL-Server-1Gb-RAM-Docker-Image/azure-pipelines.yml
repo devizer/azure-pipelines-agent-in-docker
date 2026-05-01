@@ -106,9 +106,9 @@ jobs:
       echo "COMPRESSION_LEVEL: [${COMPRESSION_LEVEL}]"
       7z | head -1
       Say "Saving [$LOCAL_TAG] as [$file.tar.gz]"
-      time docker save $LOCAL_TAG | gzip -${COMPRESSION_LEVEL} > $file.tar.gz
+      time (docker save $LOCAL_TAG | gzip -${COMPRESSION_LEVEL} > $file.tar.gz)
       Say "Saving [$LOCAL_TAG] as [$file.tar.xz]"
-      time docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz
+      time (docker save $LOCAL_TAG | 7za a dummy -txz -mx=${COMPRESSION_LEVEL} -mmt=$(nproc) -si -so > $file.tar.xz)
       ls -lah $file.tar*
       cp -av $file.tar* "$SYSTEM_ARTIFACTSDIRECTORY/"
     displayName: 'Save Offline Image'

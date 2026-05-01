@@ -24,6 +24,10 @@ COPY --from=build /opt/mssql-memorypolicy-muter/ /opt/mssql-memorypolicy-muter/
 # It works
 RUN cp -f /opt/mssql-memorypolicy-muter/sqlcmd.sh /usr/local/bin/sqlcmd;
 
+# 
+RUN echo UPDATING APT FOR 'eatmydata'; apt-get update -qq; apt-get install eatmydata -y -qq; ls -la /usr/lib/x86_64-linux-gnu/libeatmydata.so; \
+    rm -rf /var/cache/apt/*; rm -rf /var/lib/apt/*; rm -rf /tmp/*; 
+
 # It is not tested
 # RUN \
 #  exe="$(ls -1 /opt/mssql-tools*/bin/sqlcmd 2>/dev/null | head -1)"
